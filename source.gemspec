@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.date = Date.today.to_s
   s.summary = %q{Multi-dimensional and uniform Ruby arrays}
-  s.description = %q{This gem provides multi-dimensional Ruby arrays with elements of same type. The classes are designed to be mostly compatible with Masahiro Tanaka\'s NArray. However it allows the definition of custom element types and operations on them. This work was also inspired by Ronald Garcia\'s boost::multi_array and by Todd Veldhuizen\'s Blitz++.}
+  s.description = %q{This gem provides multi-dimensional Ruby arrays with elements of same type. The classes are designed to be mostly compatible with Masahiro Tanaka's NArray. However it allows the definition of custom element types and operations on them. This work was also inspired by Ronald Garcia's boost::multi_array and by Todd Veldhuizen's Blitz++.}
   s.author = %q{Jan Wedekind}
   s.email = %q{jan@wedesoft.de}
   s.homepage = %q{http://wedesoft.github.com/multiarray/}
