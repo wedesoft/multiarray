@@ -36,6 +36,10 @@ module MultiArray
       @data.read bytesize
     end
 
+    def +( offset )
+      Memory.new @data + offset
+    end
+
   end
 
 end

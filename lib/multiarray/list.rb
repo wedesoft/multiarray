@@ -14,6 +14,8 @@ module MultiArray
 
     end
 
+    attr_accessor :offset
+
     def initialize( arr )
       super arr
       @offset = 0
@@ -35,6 +37,11 @@ module MultiArray
       @data[ @offset ... @offset + size ]
     end
 
+    def +( offset )
+      retval = List.new @data
+      retval.offset = @offset + offset
+      retval
+    end
 
   end
 

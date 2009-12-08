@@ -60,6 +60,12 @@ class TC_Int < Test::Unit::TestCase
     end
   end
 
+  def test_basetype
+    @@types.each do |t|
+      assert_equal t, t.basetype
+    end
+  end
+
   def test_get_set
     @@types.each do |t|
       i = t.new 0

@@ -12,6 +12,10 @@ module MultiArray
         self
       end
 
+      def basetype
+        self
+      end
+
     end
 
     def bytesize
@@ -20,6 +24,10 @@ module MultiArray
 
     def typecode
       self.class.typecode
+    end
+
+    def basetype
+      self.class.basetype
     end
 
     def initialize( value = nil )

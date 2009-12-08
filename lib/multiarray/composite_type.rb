@@ -17,6 +17,14 @@ module MultiArray
 
     end
 
+    def element_type
+      self.class.element_type
+    end
+
+    def num_elements
+      self.class.num_elements
+    end
+
     def sel( *indices )
       if indices.empty?
         super
