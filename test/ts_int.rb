@@ -69,4 +69,11 @@ class TC_Int < Test::Unit::TestCase
     end
   end
 
+  def test_op
+    @@types.each do |t|
+      i = t.new 1
+      assert_equal 3, i.op( 2 ) { |x| set get + x }.get
+    end
+  end
+
 end
