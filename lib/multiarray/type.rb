@@ -46,6 +46,6 @@ module MultiArray
 
   end
 
-  Type.class_eval { include ScalarOperation }
+  Type.class_eval { include TypeOperation }
 
 end

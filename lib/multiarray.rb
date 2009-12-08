@@ -2,10 +2,13 @@ require 'malloc'
 require 'multiarray/storage'
 require 'multiarray/list'
 require 'multiarray/memory'
-require 'multiarray/scalar_operation'
+require 'multiarray/type_operation'
 require 'multiarray/type'
 require 'multiarray/descriptortype'
 require 'multiarray/int'
+require 'multiarray/sequence_operation'
+require 'multiarray/composite_type'
+require 'multiarray/sequence'
 
 class Proc
 

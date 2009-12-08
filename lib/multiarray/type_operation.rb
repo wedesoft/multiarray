@@ -1,6 +1,6 @@
 module MultiArray
 
-  module ScalarOperation
+  module TypeOperation
 
     def op( *args, &action )
       instance_exec *args, &action
