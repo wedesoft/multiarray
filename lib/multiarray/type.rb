@@ -29,6 +29,7 @@ module MultiArray
 
     def set( value = typecode.default )
       @memory.store self.class, value
+      value
     end
 
     def get

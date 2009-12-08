@@ -44,8 +44,9 @@ class TC_Int < Test::Unit::TestCase
 
   def test_get_set
     @@types.each do |t|
-      i = t.new
-      i.set 42
+      i = t.new 0
+      assert_equal 0, i.get
+      assert_equal 42, i.set( 42 )
       assert_equal 42, i.get
     end
   end
