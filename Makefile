@@ -36,7 +36,7 @@ uninstall::
 	$(RM) $(addprefix $(SITELIBDIR)/,$(notdir $(LIB))) $(addprefix $(SITELIBDIR)/multiarray/,$(notdir $(PKG_LIB)))
 
 install-gem:: multiarray-$(MULTIARRAY_VERSION).gem
-	$(GEM) install $<
+	$(GEM) install --local $<
 
 uninstall-gem::
 	$(GEM) uninstall multiarray || echo Nothing to uninstall

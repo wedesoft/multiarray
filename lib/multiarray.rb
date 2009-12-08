@@ -1,4 +1,7 @@
 require 'malloc'
+require 'multiarray/storage'
+require 'multiarray/list'
+require 'multiarray/memory'
 require 'multiarray/type'
 require 'multiarray/descriptortype'
 require 'multiarray/int'

@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.files = [ 'source.gemspec', 'Makefile', 'README', 'COPYING' ] +
               Dir.glob( 'lib/*.rb' ) +
               Dir.glob( 'lib/multiarray/*.rb' ) +
-              [ 'test/ts_multiarray.rb' ]
-  s.test_files = [ 'test/ts_multiarray.rb' ]
+              Dir.glob( 'test/ts_*.rb' )
+  s.test_files = Dir.glob( 'test/ts_*.rb' )
   s.require_paths = [ 'lib' ]
   s.rubyforge_project = %q{hornetseye}
   s.has_rdoc = true
