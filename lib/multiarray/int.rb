@@ -15,6 +15,10 @@ module MultiArray
         bits / 8
       end
 
+      def inspect
+        to_s
+      end
+
       def to_s
         case [ bits, signed ]
         when [  8, true  ]

@@ -18,7 +18,7 @@ class TC_Int < Test::Unit::TestCase
     @@types = nil
   end
 
-  def test_to_s
+  def test_int_to_s
     assert_equal 'UBYTE', MultiArray::UBYTE.to_s
     assert_equal 'BYTE' , MultiArray::BYTE.to_s
     assert_equal 'USINT', MultiArray::USINT.to_s
@@ -27,6 +27,24 @@ class TC_Int < Test::Unit::TestCase
     assert_equal 'INT'  , MultiArray::INT.to_s
     assert_equal 'ULONG', MultiArray::ULONG.to_s
     assert_equal 'LONG' , MultiArray::LONG.to_s
+  end
+
+  def test_int_inspect
+    @@types.each do |t|
+      assert_equal t.to_s, t.inspect
+    end
+  end
+
+  def test_to_s
+    @@types.each do |t|
+      assert_equal '42', t.new( 42 ).to_s
+    end
+  end
+
+  def test_inspect
+    @@types.each do |t|
+      assert_equal "#{t.inspect}(42)", t.new( 42 ).inspect
+    end
   end
 
   def test_bytesize

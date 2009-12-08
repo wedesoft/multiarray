@@ -14,17 +14,25 @@ module MultiArray
 
     end
 
-    def initialize( value = nil )
-      @memory = self.class.alloc
-      set value unless value.nil?
-    end
-
     def bytesize
       self.class.bytesize
     end
 
     def typecode
       self.class.typecode
+    end
+
+    def initialize( value = nil )
+      @memory = self.class.alloc
+      set value unless value.nil?
+    end
+
+    def inspect
+      "#{self.class.inspect}(#{to_s})"
+    end
+
+    def to_s
+      get.to_s
     end
 
     def set( value = typecode.default )
