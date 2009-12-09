@@ -16,6 +16,10 @@ module Hornetseye
         self
       end
 
+      def empty?
+        size == 0
+      end
+
       def shape
         []
       end
@@ -38,6 +42,10 @@ module Hornetseye
 
     def basetype
       self.class.basetype
+    end
+    
+    def empty?
+      self.class.empty?
     end
 
     def shape

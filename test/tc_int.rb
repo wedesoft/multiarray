@@ -41,18 +41,6 @@ class TC_Int < Test::Unit::TestCase
     end
   end
 
-  def test_to_s
-    for t in @@types
-      assert_equal '42', t.new( 42 ).to_s
-    end
-  end
-
-  def test_inspect
-    for t in @@types
-      assert_equal "#{t.inspect}(42)", t.new( 42 ).inspect
-    end
-  end
-
   def test_bytesize
     for i in [ 8, 16, 32, 64 ]
       assert_equal i, 8 * Hornetseye::INT( i, Hornetseye::UNSIGNED ).bytesize
@@ -75,6 +63,18 @@ class TC_Int < Test::Unit::TestCase
   def test_size
     for t in @@types
       assert_equal 1, t.size
+    end
+  end
+
+  def test_to_s
+    for t in @@types
+      assert_equal '42', t.new( 42 ).to_s
+    end
+  end
+
+  def test_inspect
+    for t in @@types
+      assert_equal "#{t.inspect}(42)", t.new( 42 ).inspect
     end
   end
 

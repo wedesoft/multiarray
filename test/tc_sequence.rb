@@ -49,6 +49,13 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_empty
+    for t in @@types
+      assert Hornetseye::Sequence( t, 0 ).new.empty?
+      assert !Hornetseye::Sequence( t, 3 ).new.empty?
+    end
+  end
+
   def test_shape
     for t in @@types
       assert_equal [ 3 ], Hornetseye::Sequence( t, 3 ).shape
@@ -58,6 +65,14 @@ class TC_Sequence < Test::Unit::TestCase
   def test_size
     for t in @@types
       assert_equal 3, Hornetseye::Sequence( t, 3 ).size
+    end
+  end
+
+  def test_inspect
+    for t in @@types
+      s = Hornetseye::Sequence( t, 3 ).new
+      s[] = [ 1, 2, 3 ]
+      assert_equal "Sequence(#{t.inspect},3):\n[ 1, 2, 3 ]", s.inspect
     end
   end
 
