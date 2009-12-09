@@ -9,6 +9,7 @@ require 'multiarray/int'
 require 'multiarray/sequence_operation'
 require 'multiarray/composite_type'
 require 'multiarray/sequence'
+require 'multiarray/multiarray'
 
 class Proc
 
