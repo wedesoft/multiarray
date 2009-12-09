@@ -1,4 +1,4 @@
-module MultiArray
+module Hornetseye
 
   class DescriptorType < Type
 
