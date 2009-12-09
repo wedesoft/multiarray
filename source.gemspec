@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.extra_rdoc_files = [ 'README' ]
   s.rdoc_options = %w{--exclude=/Makefile|.*\.(rb)/ --main README}
-  s.add_dependency %q<malloc>, [ '~> 0.1' ]
+  s.add_dependency %q<malloc>, [ '~> 0.2' ]
 end
