@@ -16,7 +16,17 @@ module Hornetseye
         self
       end
 
+      def shape
+        []
+      end
+
+      def size
+        shape.inject( 1 ) { |a,b| a * b }
+      end
+
     end
+
+    attr_accessor :memory
 
     def bytesize
       self.class.bytesize
@@ -30,8 +40,19 @@ module Hornetseye
       self.class.basetype
     end
 
-    def initialize( value = nil )
-      @memory = self.class.alloc
+    def shape
+      self.class.shape
+    end
+
+    def size
+      self.class.size
+    end
+
+    def initialize( *args )
+      options = args.last.is_a?( Hash ) ? args.pop : {}
+      raise ArgumentError.new( 'Too many arguments' ) unless args.size <= 1
+      value = args.empty? ? nil : args.first
+      @memory = options[ :memory ] ? options[ :memory ] : self.class.alloc
       set value unless value.nil?
     end
 
@@ -50,6 +71,10 @@ module Hornetseye
 
     def get
       @memory.load self.class
+    end
+
+    def sel
+      self
     end
 
   end

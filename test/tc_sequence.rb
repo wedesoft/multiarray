@@ -31,4 +31,28 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_bytesize
+    for t in @@types
+      assert_equal t.bytesize * 3, Hornetseye::Sequence( t, 3 ).bytesize
+    end
+  end
+
+  def test_typecode
+    for t in @@types
+      assert_equal t, Hornetseye::Sequence( t, 3 ).typecode
+    end
+  end
+
+  def test_shape
+    for t in @@types
+      assert_equal [ 3 ], Hornetseye::Sequence( t, 3 ).shape
+    end
+  end
+
+  def test_size
+    for t in @@types
+      assert_equal 3, Hornetseye::Sequence( t, 3 ).size
+    end
+  end
+
 end

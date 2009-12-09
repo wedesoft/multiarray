@@ -15,6 +15,10 @@ module Hornetseye
         element_type.bytesize * num_elements
       end
 
+      def basetype
+        element_type.basetype
+      end
+
     end
 
     def element_type
@@ -23,18 +27,6 @@ module Hornetseye
 
     def num_elements
       self.class.num_elements
-    end
-
-    def sel( *indices )
-      if indices.empty?
-        super
-      else
-        unless ( 0 ... num_elements ).member? indices.last
-          raise "Index must be in 0 ... #{num_elements} (was #{indices.last.inspect})"
-        end
-        element_type.new( @memory + indices.last * basetype.bytesize ).
-          sel *indices[ 0 ... -1 ]
-      end
     end
 
   end

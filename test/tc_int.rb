@@ -60,9 +60,15 @@ class TC_Int < Test::Unit::TestCase
     end
   end
 
-  def test_basetype
+  def test_shape
     for t in @@types
-      assert_equal t, t.basetype
+      assert_equal [], t.shape
+    end
+  end
+
+  def test_size
+    for t in @@types
+      assert_equal 1, t.size
     end
   end
 
