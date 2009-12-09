@@ -30,19 +30,19 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_int_inspect
-    @@types.each do |t|
+    for t in @@types
       assert_equal t.to_s, t.inspect
     end
   end
 
   def test_to_s
-    @@types.each do |t|
+    for t in @@types
       assert_equal '42', t.new( 42 ).to_s
     end
   end
 
   def test_inspect
-    @@types.each do |t|
+    for t in @@types
       assert_equal "#{t.inspect}(42)", t.new( 42 ).inspect
     end
   end
@@ -55,19 +55,19 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_typecode
-    @@types.each do |t|
+    for t in @@types
       assert_equal t, t.typecode
     end
   end
 
   def test_basetype
-    @@types.each do |t|
+    for t in @@types
       assert_equal t, t.basetype
     end
   end
 
   def test_get_set
-    @@types.each do |t|
+    for t in @@types
       i = t.new 0
       assert_equal 0, i.get
       assert_equal 42, i.set( 42 )
@@ -76,7 +76,7 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_op
-    @@types.each do |t|
+    for t in @@types
       i = t.new 1
       assert_equal 3, i.op( 2 ) { |x| set get + x }.get
     end
