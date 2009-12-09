@@ -18,6 +18,12 @@ class TC_Int < Test::Unit::TestCase
     @@types = nil
   end
 
+  def test_int_default
+    for t in @@types
+      assert_equal 0, t.default
+    end
+  end
+
   def test_int_to_s
     assert_equal 'UBYTE', Hornetseye::UBYTE.to_s
     assert_equal 'BYTE' , Hornetseye::BYTE.to_s
@@ -78,6 +84,8 @@ class TC_Int < Test::Unit::TestCase
       assert_equal 0, i.get
       assert_equal 42, i.set( 42 )
       assert_equal 42, i.get
+      assert_equal 0, i.set
+      assert_equal 0, i.get
     end
   end
 

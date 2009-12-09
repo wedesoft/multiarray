@@ -10,6 +10,12 @@ module Hornetseye
         to_s
       end
 
+      def default
+        retval = new
+        retval.set
+        retval
+      end
+
       def to_s
         "Sequence(#{element_type.to_s},#{num_elements.to_s})"
       end
@@ -35,6 +41,17 @@ module Hornetseye
       end
     end
 
+    def set( value = typecode.default )
+      if value.is_a? Array
+        for i in 0 ... num_elements
+          assign i, i < value.size ? value[ i ] : typecode.default
+        end
+      else
+        op( value ) { |x| set x }
+      end
+      value
+    end
+
     def get
       self
     end
@@ -53,6 +70,8 @@ module Hornetseye
     end
 
   end
+
+  Sequence_.class_eval { include SequenceOperation }
 
   def Sequence( element_type, num_elements,
                 stride = element_type.size )

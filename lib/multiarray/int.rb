@@ -15,6 +15,10 @@ module Hornetseye
         bits / 8
       end
 
+      def default
+        0
+      end
+
       def inspect
         to_s
       end
