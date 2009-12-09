@@ -26,13 +26,14 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_sequence_to_s
     for t in @@types
-      assert_equal "Sequence(#{t.to_s},3)", Hornetseye::Sequence( t, 3 ).to_s
+      assert_equal "Sequence.#{t.to_s.downcase}(3)",
+                   Hornetseye::Sequence( t, 3 ).to_s
     end
   end
 
   def test_sequence_inspect
     for t in @@types
-      assert_equal "Sequence(#{t.inspect},3)",
+      assert_equal "Sequence.#{t.inspect.downcase}(3)",
                    Hornetseye::Sequence( t, 3 ).inspect
     end
   end
@@ -72,7 +73,7 @@ class TC_Sequence < Test::Unit::TestCase
     for t in @@types
       s = Hornetseye::Sequence( t, 3 ).new
       s[] = [ 1, 2, 3 ]
-      assert_equal "Sequence(#{t.inspect},3):\n[ 1, 2, 3 ]", s.inspect
+      assert_equal "Sequence.#{t.inspect.downcase}(3):\n[ 1, 2, 3 ]", s.inspect
     end
   end
 
