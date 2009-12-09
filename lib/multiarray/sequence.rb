@@ -17,7 +17,17 @@ module Hornetseye
       end
 
       def to_s
-        "Sequence(#{element_type.to_s},#{num_elements.to_s})"
+        if element_type
+          shortcut = element_type < Sequence_ ? 'MultiArray' : 'Sequence'
+          typename = typecode.to_s
+          if typename =~ /^[A-Z]+$/
+            "#{shortcut}.#{typename.downcase}(#{shape.join ','})"
+          else
+            "#{shortcut}(#{typename},#{shape.join ','})"
+          end
+        else
+          'Sequence_'
+        end
       end
 
       def typecode
