@@ -42,7 +42,7 @@ uninstall-gem::
 	$(GEM) uninstall multiarray || echo Nothing to uninstall
 
 check:: $(LIB) $(PKG_LIB) $(TEST)
-	$(RUBY) -rrubygems -Ilib $(TEST)
+	$(RUBY) -rrubygems -Ilib -Itest test/ts_multiarray.rb
 
 push-gem:: multiarray-$(MULTIARRAY_VERSION).gem
 	echo Pushing $< in 3 seconds!
