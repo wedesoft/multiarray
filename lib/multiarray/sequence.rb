@@ -28,6 +28,13 @@ module Hornetseye
       self.class.stride
     end
 
+    def to_a
+      ( 0 ... num_elements ).collect do |i|
+        x = at i
+        x.is_a?( Sequence_ ) ? x.to_a : x
+      end
+    end
+
     def get
       self
     end

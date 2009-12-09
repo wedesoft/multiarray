@@ -55,7 +55,12 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def test_get_set
+  def test_to_a
+    for t in @@types
+      s = Hornetseye::Sequence( t, 3 ).new
+      s[ 0 ], s[ 1 ], s[ 2 ] = 1, 2, 3
+      assert_equal [ 1, 2, 3 ], s.to_a
+    end
   end
 
   def test_at_assign

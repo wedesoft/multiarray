@@ -64,6 +64,10 @@ module Hornetseye
       get.to_s
     end
 
+    def to_a
+      get.to_a
+    end
+
     def set( value = typecode.default )
       @memory.store self.class, value
       value
