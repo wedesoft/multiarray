@@ -77,6 +77,18 @@ module Hornetseye
       self
     end
 
+    def at( *indices )
+      sel( *indices ).get
+    end
+
+    alias_method :[], :at
+
+    def assign( *args )
+      sel( *args[ 0 ... -1 ] ).set args.last
+    end
+
+    alias_method :[]=, :assign
+
   end
 
   Type.class_eval { include TypeOperation }

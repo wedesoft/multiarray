@@ -55,4 +55,28 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_get_set
+  end
+
+  def test_at_assign
+    for t in @@types
+      s = Hornetseye::Sequence( t, 3 ).new
+      s[ 0 ], s[ 1 ], s[ 2 ] = 0, 0, 0
+      assert_equal [ 0, 0, 0 ], [ s.at( 0 ), s.at( 1 ), s.at( 2 ) ]
+      assert_equal [ 1, 2, 3 ], [ s.assign( 0, 1 ),
+                                  s.assign( 1, 2 ),
+                                  s.assign( 2, 3 ) ]
+      assert_equal [ 1, 2, 3 ], [ s.at( 0 ), s.at( 1 ), s.at( 2 ) ]
+      assert_raise( ArgumentError ) { s.at 0, 0 }
+      assert_nothing_raised { s.at }
+      s = Hornetseye::Sequence( t, 3 ).new
+      s[ 0 ], s[ 1 ], s[ 2 ] = 0, 0, 0
+      assert_equal [ 0, 0, 0 ], [ s[ 0 ], s[ 1 ], s[ 2 ] ]
+      assert_equal [ 1, 2, 3 ], [ s[ 0 ] = 1, s[ 1 ] = 2, s[ 2 ] = 3 ]
+      assert_equal [ 1, 2, 3 ], [ s[ 0 ], s[ 1 ], s[ 2 ] ]
+      assert_raise( ArgumentError ) { s[ 0, 0 ] }
+      assert_nothing_raised { s[] }
+    end
+  end
+
 end

@@ -81,6 +81,23 @@ class TC_Int < Test::Unit::TestCase
     end
   end
 
+  def test_at_assign
+    for t in @@types
+      i = t.new 0
+      assert_equal 0, i.at
+      assert_equal 42, i.assign( 42 )
+      assert_equal 42, i.at
+      assert_raise( ArgumentError ) { i.at 0 }
+      assert_raise( ArgumentError ) { i.assign 0, 0 }
+      i = t.new 0
+      assert_equal 0, i[]
+      assert_equal 42, i[] = 42 
+      assert_equal 42, i[]
+      assert_raise( ArgumentError ) { i[ 0 ] }
+      assert_raise( ArgumentError ) { i[ 0 ] = 0 }
+    end
+  end
+
   def test_op
     for t in @@types
       i = t.new 1

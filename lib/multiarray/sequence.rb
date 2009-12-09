@@ -28,6 +28,10 @@ module Hornetseye
       self.class.stride
     end
 
+    def get
+      self
+    end
+
     def sel( *indices )
       if indices.empty?
         super *indices
