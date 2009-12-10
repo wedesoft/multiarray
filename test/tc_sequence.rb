@@ -24,6 +24,14 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_sequence_new
+    for t in @@types
+      s = Hornetseye::Sequence.new t, 3
+      s.set
+      assert_equal [ 0, 0, 0 ], s.to_a
+    end
+  end
+
   def test_sequence_to_s
     for t in @@types
       assert_equal "Sequence.#{t.to_s.downcase}(3)",

@@ -103,6 +103,4 @@ module Hornetseye
 
   end
 
-  Type.class_eval { include TypeOperation }
-
 end

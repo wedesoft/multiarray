@@ -14,4 +14,6 @@ module Hornetseye
 
   end
 
+  Sequence_.class_eval { include SequenceOperation }
+
 end
