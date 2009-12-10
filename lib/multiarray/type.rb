@@ -76,19 +76,6 @@ module Hornetseye
       get.to_a
     end
 
-#    def set( value = typecode.default )
-#      @memory.store self.class, value
-#      value
-#    end
-
-#    def get
-#      @memory.load self.class
-#    end
-
-    def sel
-      self
-    end
-
     def at( *indices )
       sel( *indices ).get
     end
