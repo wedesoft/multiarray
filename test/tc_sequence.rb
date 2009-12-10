@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'multiarray'
+Kernel::require 'multiarray'
 
 class TC_Sequence < Test::Unit::TestCase
 
