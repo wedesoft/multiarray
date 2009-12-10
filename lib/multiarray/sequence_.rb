@@ -96,6 +96,10 @@ module Hornetseye
       prepend + retval
     end
 
+    def to_s
+      to_a.to_s
+    end
+
     def to_a
       ( 0 ... num_elements ).collect do |i|
         x = at i
