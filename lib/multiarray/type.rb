@@ -76,14 +76,14 @@ module Hornetseye
       get.to_a
     end
 
-    def set( value = typecode.default )
-      @memory.store self.class, value
-      value
-    end
+#    def set( value = typecode.default )
+#      @memory.store self.class, value
+#      value
+#    end
 
-    def get
-      @memory.load self.class
-    end
+#    def get
+#      @memory.load self.class
+#    end
 
     def sel
       self
