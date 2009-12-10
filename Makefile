@@ -5,10 +5,12 @@ RUBY_VERSION = 1.8
 MULTIARRAY_VERSION = 0.2.0
 
 CP = cp
-RM = rm -f
+RM = rm -Rf
 MKDIR = mkdir -p
 GEM = gem$(RUBY_VERSION)
 RUBY = ruby$(RUBY_VERSION)
+YARDOC = yardoc
+RI = ri$(RUBY_VERSION)
 TAR = tar
 GIT = git
 SITELIBDIR = $(shell $(RUBY) -r mkmf -e "puts \"\#{Config::CONFIG['sitelibdir']}\"")
@@ -41,6 +43,9 @@ install-gem:: multiarray-$(MULTIARRAY_VERSION).gem
 uninstall-gem::
 	$(GEM) uninstall multiarray || echo Nothing to uninstall
 
+yardoc:: README $(LIB)
+	$(YARDOC)
+
 check:: $(LIB) $(PKG_LIB) $(TEST)
 	$(RUBY) -rrubygems -Ilib -Itest test/ts_multiarray.rb
 
@@ -70,4 +75,4 @@ multiarray-$(MULTIARRAY_VERSION).tar.bz2: $(SOURCES)
 	$(TAR) cjf $@ $(SOURCES)
 
 clean::
-	rm -f *~ lib/*~ lib/multiarray/*~ test/*~ doc/*~ *.gem
+	$(RM) *~ lib/*~ lib/multiarray/*~ test/*~ *.gem doc

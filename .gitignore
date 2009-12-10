@@ -1,3 +1,5 @@
+doc
 multiarray-*.tar.*
+.yardoc
 *.gem
 

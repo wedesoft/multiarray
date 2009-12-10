@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir.glob( 'test/tc_*.rb' )
   s.require_paths = [ 'lib' ]
   s.rubyforge_project = %q{hornetseye}
-  s.has_rdoc = true
-  s.extra_rdoc_files = [ 'README' ]
-  s.rdoc_options = %w{--exclude=/Makefile|.*\.(rb)/ --main README}
+  s.has_rdoc = 'yard'
+  # s.extra_rdoc_files = [ 'README' ]
+  # s.rdoc_options = %w{--exclude=/Makefile|.*\.(rb)/ --main README}
   s.add_dependency %q<malloc>, [ '~> 0.2' ]
 end
