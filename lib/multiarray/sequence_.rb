@@ -107,34 +107,6 @@ module Hornetseye
       end
     end
 
-    def set( value = typecode.default )
-      if value.is_a? Array
-        for i in 0 ... num_elements
-          assign i, i < value.size ? value[ i ] : typecode.default
-        end
-      else
-        op( value ) { |x| set x }
-      end
-      value
-    end
-
-    def get
-      self
-    end
-
-    def sel( *indices )
-      if indices.empty?
-        super *indices
-      else
-        unless ( 0 ... num_elements ).member? indices.last
-          raise "Index must be in 0 ... #{num_elements} " +
-                "(was #{indices.last.inspect})"
-        end
-        element_memory = @memory + indices.last * stride * typecode.bytesize
-        element_type.new( :memory => element_memory ).sel *indices[ 0 ... -1 ]
-      end
-    end
-
   end
 
 end

@@ -8,6 +8,10 @@ module Hornetseye
         memory.alloc bytesize
       end
 
+      def wrap( memory )
+        new :memory => memory
+      end
+
       def typecode
         self
       end
