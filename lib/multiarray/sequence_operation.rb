@@ -3,6 +3,7 @@ module Hornetseye
   module SequenceOperation
 
     def op( *args, &action )
+      puts 'Sequence_#sel'
       for i in 0 ... num_elements
         sub_args = args.collect do |arg|
           arg.is_a?( Sequence_ ) ? arg[ i ] : arg
