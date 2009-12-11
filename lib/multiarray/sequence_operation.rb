@@ -1,7 +1,9 @@
 module Hornetseye
 
+  # @private
   module SequenceOperation
 
+    # @private
     def set( value = typecode.default )
       if value.is_a? Array
         for i in 0 ... num_elements
@@ -13,10 +15,12 @@ module Hornetseye
       value
     end
 
+    # @private
     def get
       self
     end
 
+    # @private
     def sel( *indices )
       if indices.empty?
         super *indices
@@ -30,6 +34,7 @@ module Hornetseye
       end
     end
 
+    # @private
     def op( *args, &action )
       for i in 0 ... num_elements
         sub_args = args.collect do |arg|

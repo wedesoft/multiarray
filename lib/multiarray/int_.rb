@@ -1,5 +1,7 @@
 module Hornetseye
 
+  # @private
+  # @abstract
   class INT_ < DescriptorType
 
     class << self
@@ -7,6 +9,7 @@ module Hornetseye
       attr_accessor :bits
       attr_accessor :signed
 
+      # @private
       def memory
         Memory
       end
@@ -15,6 +18,7 @@ module Hornetseye
         bits / 8
       end
 
+      # @private
       def default
         0
       end
@@ -46,6 +50,7 @@ module Hornetseye
         end
       end
 
+      # @private
       def descriptor
         case [ bits, signed ]
         when [  8, true  ]
@@ -74,6 +79,7 @@ module Hornetseye
   end
 
   UNSIGNED = false
+
   SIGNED   = true
 
   def INT( bits, signed )

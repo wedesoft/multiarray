@@ -15,6 +15,7 @@ module Hornetseye
       # @return [Memory] The new +Memory+ object.
       #
       # @see Malloc
+      # @private
       def alloc( bytesize )
         Memory.new Malloc.new( bytesize )
       end
@@ -25,6 +26,7 @@ module Hornetseye
       # @param [String] str A Ruby string with data to write to memory.
       # object.
       # @return [Memory] The new +Memory+ object initialised with the data.
+      # @private
       def import( str )
         retval = alloc str.bytesize
         retval.import str
@@ -36,6 +38,7 @@ module Hornetseye
     # Create zero-offset view on a +Malloc+ object.
     #
     # @param [Malloc] ptr A +Malloc+ object with the raw data.
+    # @private
     def initialize( ptr )
       super ptr
     end
@@ -48,6 +51,7 @@ module Hornetseye
     #
     # @see #store
     # @see List#load
+    # @private
     def load( typecode )
       typecode.unpack export( typecode.bytesize )
     end
@@ -60,6 +64,7 @@ module Hornetseye
     #
     # @see #load
     # @see List#store
+    # @private
     def store( typecode, value )
       import typecode.pack( value )
       value
@@ -72,6 +77,7 @@ module Hornetseye
     #
     # @see #export
     # @see List#import
+    # @private
     def import( data )
       @data.write data
     end
@@ -83,6 +89,7 @@ module Hornetseye
     #
     # @see #import
     # @see List#export
+    # @private
     def export( bytesize )
       @data.read bytesize
     end
@@ -93,6 +100,7 @@ module Hornetseye
     # @return [Memory] A new view for the specified part of the memory.
     #
     # @see List#+
+    # @private
     def +( offset )
       Memory.new @data + offset
     end

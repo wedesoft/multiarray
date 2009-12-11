@@ -14,6 +14,7 @@ module Hornetseye
       # @param [Integer] size Number of elements the new Ruby array should
       # have.
       # @return [List] The new +List+ object.
+      # @private
       def alloc( size )
         new Array.new( size )
       end
@@ -22,6 +23,7 @@ module Hornetseye
       #
       # @param [Array] arr Existing Ruby array.
       # @return [List] The new +List+ object.
+      # @private
       def import( arr )
         new arr
       end
@@ -29,11 +31,13 @@ module Hornetseye
     end
 
     # Offset of this view.
+    # @private
     attr_accessor :offset
 
     # Create zero-offset view on a Ruby array.
     #
     # @param [Array] arr A Ruby array.
+    # @private
     def initialize( arr )
       super arr
       @offset = 0
@@ -46,6 +50,7 @@ module Hornetseye
     #
     # @see #store
     # @see Memory#load
+    # @private
     def load( typecode )
       @data[ @offset ]
     end
@@ -58,6 +63,7 @@ module Hornetseye
     #
     # @see #load
     # @see Memory#store
+    # @private
     def store( typecode, value )
       @data[ @offset ] = value
     end
@@ -69,6 +75,7 @@ module Hornetseye
     #
     # @see #export
     # @see Memory#import
+    # @private
     def import( data )
       @data[ @offset ... @offset + data.size ] = data
     end
@@ -80,6 +87,7 @@ module Hornetseye
     #
     # @see #import
     # @see Memory#export
+    # @private
     def export( size )
       @data[ @offset ... @offset + size ]
     end
@@ -90,6 +98,7 @@ module Hornetseye
     # @return [List] A new view for the specified part of the array.
     #
     # @see Memory#+
+    # @private
     def +( offset )
       retval = List.new @data
       retval.offset = @offset + offset

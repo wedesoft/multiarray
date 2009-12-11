@@ -1,9 +1,12 @@
 module Hornetseye
 
+  # @private
+  # @abstract
   class Sequence_ < CompositeType
 
     class << self
 
+      # @private
       attr_accessor :stride
 
       def inspect
@@ -44,6 +47,7 @@ module Hornetseye
 
     end
 
+    # @private
     def stride
       self.class.stride
     end

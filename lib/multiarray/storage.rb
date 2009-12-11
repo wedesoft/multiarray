@@ -11,6 +11,7 @@ module Hornetseye
     # Create storage object based on raw data or Ruby array.
     #
     # @param [Malloc,Array] data Delegate object for storing the data.
+    # @private
     def initialize( data )
       @data = data
     end

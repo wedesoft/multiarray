@@ -1,13 +1,16 @@
 module Hornetseye
 
+  # @abstract
   class Type
 
     class << self
 
+      # @private
       def alloc
         memory.alloc bytesize
       end
 
+      # @private
       def wrap( memory )
         new :memory => memory
       end
@@ -16,6 +19,7 @@ module Hornetseye
         self
       end
 
+      # @private
       def basetype
         self
       end
@@ -34,6 +38,7 @@ module Hornetseye
 
     end
 
+    # @private
     attr_accessor :memory
 
     def bytesize
@@ -44,6 +49,7 @@ module Hornetseye
       self.class.typecode
     end
 
+    # @private
     def basetype
       self.class.basetype
     end
@@ -60,6 +66,7 @@ module Hornetseye
       self.class.size
     end
 
+    # @private
     def initialize( *args )
       options = args.last.is_a?( Hash ) ? args.pop : {}
       raise ArgumentError.new( 'Too many arguments' ) unless args.size <= 1

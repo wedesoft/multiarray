@@ -1,12 +1,15 @@
 module Hornetseye
 
+  # @abstract
   class CompositeType < Type
 
     class << self
 
       attr_accessor :element_type
+
       attr_accessor :num_elements
 
+      # @private
       def memory
         element_type.memory
       end
@@ -15,6 +18,7 @@ module Hornetseye
         element_type.bytesize * num_elements
       end
 
+      # @private
       def basetype
         element_type.basetype
       end
