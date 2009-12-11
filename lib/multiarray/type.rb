@@ -83,6 +83,8 @@ module Hornetseye
     # Get number of bytes memory required to store the data of an instance
     #
     # @return [Integer] Number of bytes.
+    #
+    # @private
     def bytesize
       self.class.bytesize
     end
@@ -138,7 +140,7 @@ module Hornetseye
       self.class.size
     end
 
-    # Create new instance of this type.
+    # Create new instance of this type
     #
     # @param value [Object] Optional initial value for this instance.
     # @option options [Storage] :memory (self.class.alloc) Use specified
@@ -152,28 +154,28 @@ module Hornetseye
       set value unless value.nil?
     end
 
-    # Display type and value of this instance.
+    # Display type and value of this instance
     #
     # @return [String] Returns string with information about type and value.
     def inspect
       "#{self.class.inspect}(#{to_s})"
     end
 
-    # Display value of this instance.
+    # Display value of this instance
     #
     # @return [String] Returns string with the value of this instance.
     def to_s
       get.to_s
     end
 
-    # Convert value of this instance to array.
+    # Convert value of this instance to array
     #
     # @return [Array] Result of calling +to_a+ on value of this instance.
     def to_a
       get.to_a
     end
 
-    # Retrieve element of array.
+    # Retrieve element of array
     #
     # @return [Object,Type] Ruby object with value of element.
     #
@@ -184,7 +186,7 @@ module Hornetseye
 
     alias_method :[], :at
 
-    # Assign value to element of array.
+    # Assign value to element of array
     #
     # @param args Index/indices to access element. The last element of +args+
     # is the new value to store in the array.
