@@ -9,7 +9,6 @@ module Hornetseye
   # @see Array#pack
   # @see String#unpack
   #
-  # @private
   # @abstract
   class DescriptorType < Type
 
