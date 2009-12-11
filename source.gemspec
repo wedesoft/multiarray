@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.author = %q{Jan Wedekind}
   s.email = %q{jan@wedesoft.de}
   s.homepage = %q{http://wedesoft.github.com/multiarray/}
-  s.files = [ 'source.gemspec', 'Makefile', 'README', 'COPYING' ] +
+  s.files = [ 'source.gemspec', 'Makefile', 'README', 'COPYING',
+              '.document' ] +
               Dir.glob( 'lib/*.rb' ) +
               Dir.glob( 'lib/multiarray/*.rb' ) +
               Dir.glob( 'test/*.rb' )

@@ -15,7 +15,7 @@ TAR = tar
 GIT = git
 SITELIBDIR = $(shell $(RUBY) -r mkmf -e "puts \"\#{Config::CONFIG['sitelibdir']}\"")
 
-MAIN = Makefile source.gemspec README COPYING
+MAIN = Makefile source.gemspec README COPYING .document
 LIB = $(wildcard lib/*.rb)
 PKG_LIB = $(wildcard lib/multiarray/*.rb)
 TEST = $(wildcard test/*.rb)
