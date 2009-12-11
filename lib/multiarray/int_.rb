@@ -1,14 +1,33 @@
 module Hornetseye
 
+  # Abstract class for representing native integers.
+  #
+  # @see #INT
   # @private
   # @abstract
   class INT_ < DescriptorType
 
     class << self
 
+      # The number of bits of native integers represented by this class.
+      #
+      # @return [Integer] Number of bits of native integer.
+      #
+      # @see signed
       attr_accessor :bits
+
+      # A boolean indicating whether this is a signed integer or not.
+      #
+      # @return [FalseClass,TrueClass] Boolean indicating whether this is a
+      # signed integer.
+      #
+      # @see bits
       attr_accessor :signed
 
+      # Returns the type of storage object for storing values.
+      #
+      # @return [Class] Returns +Memory+.
+      #
       # @private
       def memory
         Memory
@@ -82,6 +101,14 @@ module Hornetseye
 
   SIGNED   = true
 
+  # Create a class deriving from +INT_+. The parameters +bits+ and +signed+
+  # are assigned to the corresponding attributes of the resulting class.
+  #
+  # @return [Class] A class deriving from +INT_+.
+  #
+  # @see INT_
+  # @see INT_.bits
+  # @see INT_.signed
   def INT( bits, signed )
     retval = Class.new INT_
     retval.bits   = bits
