@@ -22,7 +22,7 @@ module Hornetseye
       #
       # @private
       def wrap( memory )
-        new :memory => memory
+        new nil, :memory => memory
       end
 
       # Returns the element type for arrays. Otherwise it returns +self+
@@ -140,12 +140,14 @@ module Hornetseye
 
     # Create new instance of this type.
     #
-    # @param args Optional Ruby object as initial value. Optional hash with
-    # +:memory+ value specifying +Storage+ object to use.
-    def initialize( *args )
-      options = args.last.is_a?( Hash ) ? args.pop : {}
-      raise ArgumentError.new( 'Too many arguments' ) unless args.size <= 1
-      value = args.empty? ? nil : args.first
+    # @param value [Object] Optional initial value for this instance.
+    # @option options [Storage] :memory (self.class.alloc) Use specified
+    # +Storage+ object instead of creating a new one.
+    #
+    # @see alloc
+    #
+    # @private
+    def initialize( value = nil, options = {} )
       @memory = options[ :memory ] ? options[ :memory ] : self.class.alloc
       set value unless value.nil?
     end
