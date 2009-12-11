@@ -22,7 +22,7 @@ module Hornetseye
 
       # Create a +List+ object viewing an existing Ruby array
       #
-      # @param [Array] arr Existing Ruby array.
+      # @param [Array<Object>] arr Existing Ruby array.
       # @return [List] The new +List+ object.
       #
       # @private
@@ -39,7 +39,7 @@ module Hornetseye
 
     # Create zero-offset view on a Ruby array
     #
-    # @param [Array] arr A Ruby array.
+    # @param [Array<Object>] arr A Ruby array.
     #
     # @private
     def initialize( arr )
@@ -74,8 +74,8 @@ module Hornetseye
 
     # Store multiple elements in the array
     #
-    # @param [Array] data A Ruby array with the new data.
-    # @return [Array] The parameter +data+.
+    # @param [Array<Object>] data A Ruby array with the new data.
+    # @return [Array<Object>] The parameter +data+.
     #
     # @see #export
     # @see Memory#import
@@ -87,7 +87,7 @@ module Hornetseye
     # Retrieve multiple elements from the array
     #
     # @param [Integer] size Number of elements to retrieve
-    # @return [Array] A Ruby array with the elements.
+    # @return [Array<Object>] A Ruby array with the elements.
     #
     # @see #import
     # @see Memory#export

@@ -56,7 +56,7 @@ module Hornetseye
       #
       # Returns +[]+ if this is not an array.
       #
-      # @return [Array] Returns +[]+.
+      # @return [Array<Integer>] Returns +[]+.
       def shape
         []
       end
@@ -125,7 +125,8 @@ module Hornetseye
     #
     # Returns +[]+ if this is not an array.
     #
-    # @return [Array] Returns shape of array or +[]+ if this is not an array.
+    # @return [Array<Integer>] Returns shape of array or +[]+ if this is not
+    # an array.
     def shape
       self.class.shape
     end
@@ -177,6 +178,7 @@ module Hornetseye
 
     # Retrieve element of array
     #
+    # @param *indices [Array<Integer>] Index/indices to access element.
     # @return [Object,Type] Ruby object with value of element.
     #
     # @see #[]
@@ -188,8 +190,8 @@ module Hornetseye
 
     # Assign value to element of array
     #
-    # @param args Index/indices to access element. The last element of +args+
-    # is the new value to store in the array.
+    # @param *args [Array<Integer,Object>] Index/indices to access element.
+    # The last element of +args+ is the new value to store in the array.
     #
     # @return [Object] Returns +args.last+.
     def assign( *args )

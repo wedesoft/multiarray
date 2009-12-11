@@ -9,16 +9,12 @@ module Hornetseye
 
       # Type of elements this type is composed of
       #
-      # @return [Type] The element type of this type.
-      #
-      # @private
+      # @return [Type,Sequence_] The element type of this type.
       attr_accessor :element_type
 
       # Number of elements this type is composed of
       #
       # @return [Integer] The number of elements this type is composed of.
-      #
-      # @private
       attr_accessor :num_elements
 
       # Returns the type of storage object for storing values
@@ -53,9 +49,7 @@ module Hornetseye
 
     # The element type of this object's type
     #
-    # @return [Type] The element type of this object's type.
-    #
-    # @private
+    # @return [Type,Sequence_] The element type of this object's type.
     def element_type
       self.class.element_type
     end
@@ -64,8 +58,6 @@ module Hornetseye
     #
     # @return [Integer] The number of elements this object's type is composed
     # of.
-    #
-    # @private
     def num_elements
       self.class.num_elements
     end
