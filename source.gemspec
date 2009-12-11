@@ -1,7 +1,7 @@
 require 'date'
 Gem::Specification.new do |s|
   s.name = %q{multiarray}
-  s.version = '0.2.1'
+  s.version = '0.2.2'
   s.platform = Gem::Platform::RUBY
   s.date = Date.today.to_s
   s.summary = %q{Multi-dimensional and uniform Ruby arrays}
