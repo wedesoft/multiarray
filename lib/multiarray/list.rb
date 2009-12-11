@@ -42,6 +42,8 @@ module Hornetseye
     # Retrieve an element from the array.
     #
     # @param [Type] typecode This parameter is ignored.
+    # @return [Object] The element from the array.
+    #
     # @see #store
     # @see Memory#load
     def load( typecode )
@@ -53,6 +55,7 @@ module Hornetseye
     # @param [Type] typecode This parameter is ignored.
     # @param [Object] value The Ruby object to store.
     # @return [Object] Returns the parameter +value+.
+    #
     # @see #load
     # @see Memory#store
     def store( typecode, value )
@@ -62,6 +65,8 @@ module Hornetseye
     # Store multiple elements in the array.
     #
     # @param [Array] data A Ruby array with the new data.
+    # @return [Array] The parameter +data+.
+    #
     # @see #export
     # @see Memory#import
     def import( data )
@@ -71,6 +76,8 @@ module Hornetseye
     # Retrieve multiple elements from the array.
     #
     # @param [Integer] size Number of elements to retrieve
+    # @return [Array] A Ruby array with the elements.
+    #
     # @see #import
     # @see Memory#export
     def export( size )
@@ -81,6 +88,7 @@ module Hornetseye
     #
     # @param [Integer] offset A non-negative offset.
     # @return [List] A new view for the specified part of the array.
+    #
     # @see Memory#+
     def +( offset )
       retval = List.new @data
