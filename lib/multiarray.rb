@@ -12,8 +12,10 @@ require 'multiarray/sequence'
 require 'multiarray/sequence_operation'
 require 'multiarray/multiarray'
 
+# @private
 class Proc
 
+  # @private
   unless method_defined? :bind
     def bind( object )
       block, time = self, Time.now
@@ -29,8 +31,10 @@ class Proc
 
 end
 
+# @private
 class Object
 
+  # @private
   unless method_defined? :instance_exec
     def instance_exec( *arguments, &block )
       block.bind( self )[ *arguments ]
