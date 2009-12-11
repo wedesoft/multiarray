@@ -44,7 +44,7 @@ uninstall-gem::
 	$(GEM) uninstall multiarray || echo Nothing to uninstall
 
 yardoc:: README $(LIB)
-	$(YARDOC)
+	$(YARDOC) --no-private
 
 check:: $(LIB) $(PKG_LIB) $(TEST)
 	$(RUBY) -rrubygems -Ilib -Itest test/ts_multiarray.rb
