@@ -26,6 +26,8 @@ module Hornetseye
       # Default value for Ruby objects.
       #
       # @return [Object] Returns +nil+. 
+      #
+      # @private
       def default
         nil
       end
