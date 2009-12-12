@@ -1,0 +1,51 @@
+module Hornetseye
+
+  # Class for representing Ruby objects
+  class OBJECT < Type
+
+    class << self
+
+      # Returns the type of storage object for storing values
+      #
+      # @return [Class] Returns +List+.
+      #
+      # @private
+      def memory
+        List
+      end
+
+      # Number of storage elements for storing an object of this type
+      #
+      # @return [Integer] Returns +1+.
+      #
+      # @private
+      def bytesize
+        1
+      end
+
+      # Default value for Ruby objects.
+      #
+      # @return [Object] Returns +nil+. 
+      def default
+        nil
+      end
+
+      # Get string with information about this type
+      #
+      # @return [String] Returns +'OBJECT'+.
+      def to_s
+        'OBJECT'
+      end
+
+      # Get string with information about this type
+      #
+      # @return [String] Returns +'OBJECT'+.
+      def inspect
+        to_s
+      end
+
+    end
+
+  end
+
+end

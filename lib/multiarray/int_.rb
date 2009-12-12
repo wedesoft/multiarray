@@ -49,7 +49,7 @@ module Hornetseye
 
       # Default value for integers
       #
-      # @return [Integer] Returns +0+.
+      # @return [Object] Returns +0+.
       #
       # @private
       def default

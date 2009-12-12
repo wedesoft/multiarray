@@ -4,7 +4,8 @@ Kernel::require 'multiarray'
 class TC_Sequence < Test::Unit::TestCase
 
   def setup
-    @@types = [ Hornetseye::UBYTE,
+    @@types = [ Hornetseye::OBJECT,
+                Hornetseye::UBYTE,
                 Hornetseye::BYTE,
                 Hornetseye::USINT,
                 Hornetseye::SINT,
@@ -28,7 +29,7 @@ class TC_Sequence < Test::Unit::TestCase
     for t in @@types
       s = Hornetseye::Sequence.new t, 3
       s.set
-      assert_equal [ 0, 0, 0 ], s.to_a
+      assert_equal [ t.default ] * 3, s.to_a
     end
   end
 
@@ -105,13 +106,13 @@ class TC_Sequence < Test::Unit::TestCase
     for t in @@types
       s1 = Hornetseye::Sequence( t, 3 ).new
       s1[] = 2
-      assert_equal 0, s1.set
-      assert_equal [ 0, 0, 0 ], s1.get.to_a
-      assert_equal [ 0, 0, 0 ], s1.to_a
+      assert_equal t.default, s1.set
+      assert_equal [ t.default ] * 3, s1.get.to_a
+      assert_equal [ t.default ] * 3, s1.to_a
       assert_equal 1, s1.set( 1 )
       assert_equal [ 1, 1, 1 ], s1.to_a
       assert_equal [ 2, 3 ], s1.set( [ 2, 3 ] )
-      assert_equal [ 2, 3, 0 ], s1.to_a
+      assert_equal [ 2, 3, t.default ], s1.to_a
       s2 = Hornetseye::Sequence( t, 3 ).new
       s2[] = [ 1, 2, 3 ]
       s1[] = s2

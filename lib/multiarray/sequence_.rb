@@ -32,7 +32,7 @@ module Hornetseye
 
       # Get default value for this array type.
       #
-      # @return [Sequence_] Returns a multi-dimensional array filled with the
+      # @return [Object] Returns a multi-dimensional array filled with the
       # default value of the element type.
       #
       # @private

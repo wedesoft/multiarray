@@ -11,8 +11,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://wedesoft.github.com/multiarray/}
   s.files = [ 'source.gemspec', 'Makefile', 'README', 'COPYING',
               '.document' ] +
-              Dir.glob( 'lib/*.rb' ) +
-              Dir.glob( 'lib/multiarray/*.rb' ) +
+              Dir.glob( 'lib/**/*.rb' ) +
               Dir.glob( 'test/*.rb' )
   s.test_files = Dir.glob( 'test/tc_*.rb' )
   s.require_paths = [ 'lib' ]
