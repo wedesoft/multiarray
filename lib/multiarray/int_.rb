@@ -33,7 +33,7 @@ module Hornetseye
       # @return [Class] Returns +Memory+.
       #
       # @private
-      def memory
+      def storage
         Memory
       end
 

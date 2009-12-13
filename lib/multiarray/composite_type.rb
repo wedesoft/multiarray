@@ -22,8 +22,8 @@ module Hornetseye
       # @return [Class] Returns the storage type for the element type.
       #
       # @private
-      def memory
-        element_type.memory
+      def storage
+        element_type.storage
       end
 
       # Number of bytes for storing an object of this type

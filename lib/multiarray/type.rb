@@ -13,7 +13,7 @@ module Hornetseye
       #
       # @private
       def alloc
-        memory.alloc bytesize
+        storage.alloc bytesize
       end
 
       # Create new instance viewing the data of the indicated +Storage+ object
@@ -21,8 +21,8 @@ module Hornetseye
       # @return [Type] Object of this class.
       #
       # @private
-      def wrap( memory )
-        new nil, :memory => memory
+      def wrap( storage )
+        new nil, :storage => storage
       end
 
       # Returns the element type for arrays. Otherwise it returns +self+
@@ -78,7 +78,7 @@ module Hornetseye
     # @return [Storage]
     #
     # @private
-    attr_accessor :memory
+    attr_accessor :storage
 
     # Get number of bytes memory required to store the data of an instance
     #
@@ -144,14 +144,14 @@ module Hornetseye
     # Create new instance of this type
     #
     # @param value [Object] Optional initial value for this instance.
-    # @option options [Storage] :memory (self.class.alloc) Use specified
+    # @option options [Storage] :storage (self.class.alloc) Use specified
     # +Storage+ object instead of creating a new one.
     #
     # @see alloc
     #
     # @private
     def initialize( value = nil, options = {} )
-      @memory = options[ :memory ] ? options[ :memory ] : self.class.alloc
+      @storage = options[ :storage ] ? options[ :storage ] : self.class.alloc
       set value unless value.nil?
     end
 

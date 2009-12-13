@@ -5,13 +5,13 @@ module Hornetseye
 
     # @private
     def set( value = typecode.default )
-      @memory.store self.class, value
+      @storage.store self.class, value
       value
     end
 
     # @private
     def get
-      @memory.load self.class
+      @storage.load self.class
     end
 
     # @private

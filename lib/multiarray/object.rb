@@ -10,7 +10,7 @@ module Hornetseye
       # @return [Class] Returns +List+.
       #
       # @private
-      def memory
+      def storage
         List
       end
 

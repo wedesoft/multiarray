@@ -29,8 +29,8 @@ module Hornetseye
           raise "Index must be in 0 ... #{num_elements} " +
                 "(was #{indices.last.inspect})"
         end
-        element_memory = @memory + indices.last * stride * typecode.bytesize
-        element_type.wrap( element_memory ).sel *indices[ 0 ... -1 ]
+        element_storage = @storage + indices.last * stride * typecode.bytesize
+        element_type.wrap( element_storage ).sel *indices[ 0 ... -1 ]
       end
     end
 
