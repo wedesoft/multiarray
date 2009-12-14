@@ -6,7 +6,7 @@ require 'rake/packagetask'
 require 'rbconfig'
 
 PKG_NAME = 'multiarray'
-PKG_VERSION = '0.2.3'
+PKG_VERSION = '0.2.4'
 RB_FILES = FileList[ 'lib/**/*.rb' ]
 TC_FILES = FileList[ 'test/tc_*.rb' ]
 TS_FILES = FileList[ 'test/ts_*.rb' ]
