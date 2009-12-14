@@ -20,7 +20,10 @@ HOMEPAGE = %q{http://wedesoft.github.com/multiarray/}
 
 $SITELIBDIR = Config::CONFIG[ 'sitelibdir' ]
 
-task :default do
+task :default => :all
+
+desc 'Do nothing (default)'
+task :all do
 end
 
 desc 'Install Ruby extension'
