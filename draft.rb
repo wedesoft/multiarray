@@ -19,21 +19,26 @@
 class Scalar
   class << self
     def new
-      ( Thread.current[ :mode ] || Ruby ).const_get( :Scalar ).new
+      target = ( Thread.current[ :mode ] || Ruby ).const_get :Scalar
+      if self == target
+        super
+      else
+        target.new
+      end
     end
   end
 end
 
 module Ruby
 
-  class Scalar
+  class Scalar < ::Scalar
   end
 
 end
 
 module JIT
 
-  class Scalar
+  class Scalar < ::Scalar
   end
 
 end
