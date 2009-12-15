@@ -1,11 +1,11 @@
 #!/usr/bin/ruby -Ilib
-require 'rubygems'
-require 'multiarray'
+#require 'rubygems'
+#require 'multiarray'
+# include Hornetseye
 
-# * ruby
-# * jit+cache
-# * lazy
-# * parallel
+# * ruby, jit+cache, lazy, parallel, tensor
+# * scalars, arrays
+# instance_exec for programms?
 
 # factory: jit+cache or Ruby
 # factory: lazy
@@ -15,29 +15,37 @@ require 'multiarray'
 # composite_type.rb, sequence_.rb, multiarray.rb, sequence.rb
 # list.rb, memory.rb, storage.rb
 
-include Hornetseye
 
-class OBJECT
-  module Lazy
-    def alloc
-      :lazy
+class Scalar
+  class << self
+    def new
+      ( Thread.current[ :mode ] || Ruby ).const_get( :Scalar ).new
     end
-    module_function :alloc
-  end
-  module Ruby
-    def alloc
-      :Ruby
-    end
-    module_function :alloc
-  end
-  def initialize
-    @delegate = self.class.const_get( Thread.current[ :multiarray ] ).alloc
   end
 end
 
-Thread.current[ :multiarray ] = :Lazy
-puts OBJECT.new.inspect
-#m = OBJECT.new; m.set 1
-#n = OBJECT.new; n.set 2
-#r = OBJECT.new.op( m.get, n.get ) { |x,y| set x + y }
-#puts "#{m} + #{n} = #{r}"
+module Ruby
+
+  class Scalar
+  end
+
+end
+
+module JIT
+
+  class Scalar
+  end
+
+end
+
+def jit( &action )
+  Thread.current[ :mode ] = JIT
+  action.call
+  Thread.current[ :mode ] = nil
+end
+
+puts Scalar.new
+
+jit do
+  puts Scalar.new
+end
