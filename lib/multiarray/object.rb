@@ -10,18 +10,18 @@ module Hornetseye
       # @return [Class] Returns +List+.
       #
       # @private
-      def storage
-        List
-      end
+      #def storage
+      #  List
+      #end
 
       # Number of storage elements for storing an object of this type
       #
       # @return [Integer] Returns +1+.
       #
       # @private
-      def bytesize
-        1
-      end
+      #def bytesize
+      #  1
+      #end
 
       # Default value for Ruby objects.
       #

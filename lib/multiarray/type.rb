@@ -12,25 +12,25 @@ module Hornetseye
       # @return [Storage] Object for storing a value of this type.
       #
       # @private
-      def alloc
-        storage.alloc bytesize
-      end
+      #def alloc
+      #  storage.alloc bytesize
+      #end
 
       # Create new instance viewing the data of the indicated +Storage+ object
       #
       # @return [Type] Object of this class.
       #
       # @private
-      def wrap( storage )
-        new nil, :storage => storage
-      end
+      #def wrap( storage )
+      #  new nil, :storage => storage
+      #end
 
       # Returns the element type for arrays. Otherwise it returns +self+
       #
       # @return [Class] Returns +self+.
-      def typecode
-        self
-      end
+      #def typecode
+      #  self
+      #end
 
       # Returns the element type for arrays and composite numbers
       #
@@ -39,27 +39,27 @@ module Hornetseye
       # @return [Class] Returns +self+.
       #
       # @private
-      def basetype
-        self
-      end
+      #def basetype
+      #  self
+      #end
 
       # Check whether an array is empty or not
       #
       # Returns +false+ if this is not an array.
       #
       # @return [FalseClass,TrueClass] Returns +false+.
-      def empty?
-        size == 0
-      end
+      #def empty?
+      #  size == 0
+      #end
 
       # Get shape of multi-dimensional array
       #
       # Returns +[]+ if this is not an array.
       #
       # @return [Array<Integer>] Returns +[]+.
-      def shape
-        []
-      end
+      #def shape
+      #  []
+      #end
 
       # Get number of elements of multi-dimensional array
       #
@@ -67,9 +67,9 @@ module Hornetseye
       #
       # @return [Integer] Number of elements of array. +1+ if this is not an
       # array.
-      def size
-        shape.inject( 1 ) { |a,b| a * b }
-      end
+      #def size
+      #  shape.inject( 1 ) { |a,b| a * b }
+      #end
 
     end
 
@@ -78,16 +78,16 @@ module Hornetseye
     # @return [Storage]
     #
     # @private
-    attr_accessor :storage
+    #attr_accessor :storage
 
     # Get number of bytes memory required to store the data of an instance
     #
     # @return [Integer] Number of bytes.
     #
     # @private
-    def bytesize
-      self.class.bytesize
-    end
+    #def bytesize
+    #  self.class.bytesize
+    #end
 
     # Returns the element type for arrays
     #
@@ -95,9 +95,9 @@ module Hornetseye
     #
     # @return [Class] Element type for arrays. Returns +self.class+ if this is
     # not an array.
-    def typecode
-      self.class.typecode
-    end
+    #def typecode
+    #  self.class.typecode
+    #end
 
     # Returns the element type for arrays and composite numbers
     #
@@ -107,9 +107,9 @@ module Hornetseye
     # +self.class+ if this is not an array.
     #
     # @private
-    def basetype
-      self.class.basetype
-    end
+    #def basetype
+    #  self.class.basetype
+    #end
     
     # Check whether an array is empty or not
     #
@@ -117,9 +117,9 @@ module Hornetseye
     #
     # @return [FalseClass,TrueClass] Returns boolean indicating whether the
     # array is empty or not. Returns +false+ if this is not an array.
-    def empty?
-      self.class.empty?
-    end
+    #def empty?
+    #  self.class.empty?
+    #end
 
     # Get shape of multi-dimensional array
     #
@@ -127,9 +127,9 @@ module Hornetseye
     #
     # @return [Array<Integer>] Returns shape of array or +[]+ if this is not
     # an array.
-    def shape
-      self.class.shape
-    end
+    #def shape
+    #  self.class.shape
+    #end
 
     # Get number of elements of multi-dimensional array
     #
@@ -137,9 +137,9 @@ module Hornetseye
     #
     # @return [Integer] Number of elements of array. +1+ if this is not an
     # array.
-    def size
-      self.class.size
-    end
+    #def size
+    #  self.class.size
+    #end
 
     # Create new instance of this type
     #
@@ -150,10 +150,10 @@ module Hornetseye
     # @see alloc
     #
     # @private
-    def initialize( value = nil, options = {} )
-      @storage = options[ :storage ] ? options[ :storage ] : self.class.alloc
-      set value unless value.nil?
-    end
+    #def initialize( value = nil, options = {} )
+    #  @storage = options[ :storage ] ? options[ :storage ] : self.class.alloc
+    #  set value unless value.nil?
+    #end
 
     # Display type and value of this instance
     #
@@ -166,7 +166,8 @@ module Hornetseye
     #
     # @return [String] Returns string with the value of this instance.
     def to_s
-      get.to_s
+      # get.to_s
+      @delegate.to_s
     end
 
     # Convert value of this instance to array
@@ -182,11 +183,11 @@ module Hornetseye
     # @return [Object,Type] Ruby object with value of element.
     #
     # @see #[]
-    def at( *indices )
-      sel( *indices ).get
-    end
+    #def at( *indices )
+    #  sel( *indices ).get
+    #end
 
-    alias_method :[], :at
+    #alias_method :[], :at
 
     # Assign value to element of array
     #
@@ -194,11 +195,11 @@ module Hornetseye
     # The last element of +args+ is the new value to store in the array.
     #
     # @return [Object] Returns +args.last+.
-    def assign( *args )
-      sel( *args[ 0 ... -1 ] ).set args.last
-    end
+    #def assign( *args )
+    #  sel( *args[ 0 ... -1 ] ).set args.last
+    #end
 
-    alias_method :[]=, :assign
+    #alias_method :[]=, :assign
 
   end
 

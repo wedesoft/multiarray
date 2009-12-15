@@ -7,51 +7,54 @@ Kernel::require 'multiarray'
 
 class TC_Object < Test::Unit::TestCase
 
-  def setup
-    @@t = Hornetseye::OBJECT
-  end
+#   def setup
+#     @@t = Hornetseye::OBJECT
+#   end
 
   def teardown
     @@t = nil
   end
 
-  def test_object_default
+  def test_first
+  end
+
+  def xtest_object_default
     assert_nil @@t.default
   end
 
-  def test_int_to_s
+  def xtest_int_to_s
     assert_equal 'OBJECT', @@t.to_s
   end
 
-  def test_int_inspect
+  def xtest_int_inspect
     assert_equal @@t.to_s, @@t.inspect
   end
 
-  def test_bytesize
+  def xtest_bytesize
     assert_equal 1, @@t.bytesize
   end
 
-  def test_typecode
+  def xtest_typecode
     assert_equal @@t, @@t.typecode
   end
 
-  def test_shape
+  def xtest_shape
     assert_equal [], @@t.shape
   end
 
-  def test_size
+  def xtest_size
     assert_equal 1, @@t.size
   end
 
-  def test_to_s
+  def xtest_to_s
     assert_equal '42', @@t.new( 42 ).to_s
   end
 
-  def test_inspect
+  def xtest_inspect
     assert_equal "OBJECT(42)", @@t.new( 42 ).inspect
   end
 
-  def test_get_set
+  def xtest_get_set
     i = @@t.new nil
     assert_nil i.get
     assert_equal 42, i.set( 42 )
@@ -60,7 +63,7 @@ class TC_Object < Test::Unit::TestCase
     assert_nil i.get
   end
 
-  def test_at_assign
+  def xtest_at_assign
     i = @@t.new nil
     assert_nil i.at
     assert_equal 42, i.assign( 42 )
