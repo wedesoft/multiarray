@@ -1,4 +1,8 @@
 require 'test/unit'
+begin
+  require 'rubygems'
+rescue LoadError
+end
 Kernel::require 'multiarray'
 
 class TC_Object < Test::Unit::TestCase
@@ -69,11 +73,6 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 42, i[]
     assert_raise( ArgumentError ) { i[ 0 ] }
     assert_raise( ArgumentError ) { i[ 0 ] = nil }
-  end
-
-  def test_op
-    i = @@t.new 1
-    assert_equal 3, i.op( 2 ) { |x| set get + x }.get
   end
 
 end

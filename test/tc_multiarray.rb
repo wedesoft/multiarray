@@ -1,4 +1,8 @@
 require 'test/unit'
+begin
+  require 'rubygems'
+rescue LoadError
+end
 Kernel::require 'multiarray'
 
 class TC_MultiArray < Test::Unit::TestCase
