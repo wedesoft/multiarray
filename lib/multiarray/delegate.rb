@@ -1,9 +1,9 @@
 module Hornetseye
 
-  # Abstract class inherited by +Memory+ and +List+
+  # Abstract class inherited by +Ruby::Memory+ and +Ruby::List+
   #
-  # @see Memory
-  # @see List
+  # @see Ruby::Memory
+  # @see Ruby::List
   #
   # @private
   # @abstract
@@ -11,7 +11,8 @@ module Hornetseye
 
     # Create storage object based on raw data or Ruby array
     #
-    # @param [Malloc,Array] data Delegate object for storing the data.
+    # @param [Ruby::Memory,Ruby::List] data Delegate object for storing the
+    # data.
     #
     # @private
     def initialize( data )

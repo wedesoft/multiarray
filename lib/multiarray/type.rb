@@ -7,13 +7,23 @@ module Hornetseye
 
     class << self
 
-      # Allocate +Storage+ object for storing a value
+      def new( *args )
+        class_name = name.split( '::' ).last
+        target = ( Thread.current[ :mode ] || Ruby ).const_get class_name
+        if self == target
+          super *args
+        else
+          target.new *args
+        end
+      end
+
+      # Create +Delegate+ object for storing a value
       #
-      # @return [Storage] Object for storing a value of this type.
+      # @return [Delegate] Object for storing a value of this type.
       #
       # @private
       #def alloc
-      #  storage.alloc bytesize
+      #  delegate.alloc delegate_size
       #end
 
       # Create new instance viewing the data of the indicated +Storage+ object
@@ -28,9 +38,9 @@ module Hornetseye
       # Returns the element type for arrays. Otherwise it returns +self+
       #
       # @return [Class] Returns +self+.
-      #def typecode
-      #  self
-      #end
+      def typecode
+        self
+      end
 
       # Returns the element type for arrays and composite numbers
       #
@@ -151,23 +161,26 @@ module Hornetseye
     #
     # @private
     #def initialize( value = nil, options = {} )
-    #  @storage = options[ :storage ] ? options[ :storage ] : self.class.alloc
+    #  @delegate = options[ :delegate ] || self.class.alloc
     #  set value unless value.nil?
     #end
+
+    def initialize( value = nil )
+      set value unless value.nil?
+    end
 
     # Display type and value of this instance
     #
     # @return [String] Returns string with information about type and value.
     def inspect
-      "#{self.class.inspect}(#{to_s})"
+      "#{self.class.inspect}(#{get.inspect})"
     end
 
     # Display value of this instance
     #
     # @return [String] Returns string with the value of this instance.
     def to_s
-      # get.to_s
-      @delegate.to_s
+      get.to_s
     end
 
     # Convert value of this instance to array

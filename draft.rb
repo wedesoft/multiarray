@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -Ilib
-#require 'rubygems'
-#require 'multiarray'
-# include Hornetseye
+require 'rubygems'
+require 'multiarray'
+include Hornetseye
 
 # * ruby, jit+cache, lazy, parallel, tensor
 # * scalars, arrays
@@ -15,42 +15,17 @@
 # composite_type.rb, sequence_.rb, multiarray.rb, sequence.rb
 # list.rb, memory.rb, storage.rb
 
-
-class Scalar
-  class << self
-    def new
-      target = ( Thread.current[ :mode ] || Ruby ).const_get :Scalar
-      if self == target
-        super
-      else
-        target.new
-      end
-    end
-  end
-end
-
-module Ruby
-
-  class Scalar < ::Scalar
-  end
-
-end
-
 module JIT
-
-  class Scalar < ::Scalar
-  end
-
 end
 
-def jit( &action )
+def lazy( &action )
   Thread.current[ :mode ] = JIT
   action.call
   Thread.current[ :mode ] = nil
 end
 
-puts Scalar.new
+puts OBJECT.new( 3 ).inspect
 
-jit do
-  puts Scalar.new
-end
+#lazy do
+#  puts OBJECT.new.inspect
+#end

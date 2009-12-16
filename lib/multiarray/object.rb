@@ -14,12 +14,12 @@ module Hornetseye
       #  List
       #end
 
-      # Number of storage elements for storing an object of this type
+      # Number of elements for storing an object of this type
       #
       # @return [Integer] Returns +1+.
       #
       # @private
-      #def bytesize
+      #def delegate_size
       #  1
       #end
 
