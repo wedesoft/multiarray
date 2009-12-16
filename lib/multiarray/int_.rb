@@ -5,7 +5,7 @@ module Hornetseye
   # @see #INT
   #
   # @abstract
-  class INT_ < DescriptorType
+  class INT_ < Compact
 
     class << self
 
@@ -33,9 +33,9 @@ module Hornetseye
       # @return [Class] Returns +Memory+.
       #
       # @private
-      def storage
-        Memory
-      end
+      #def storage
+      #  Memory
+      #end
 
       # Number of bytes for storing an object of this type
       #
@@ -87,35 +87,6 @@ module Hornetseye
       # @return [String] Information about this integer type.
       def inspect
         to_s
-      end
-
-      # Get descriptor for packing/unpacking native values
-      #
-      # @see DescriptorType.pack
-      # @see DescriptorType.unpack
-      #
-      # @private
-      def descriptor
-        case [ bits, signed ]
-        when [  8, true  ]
-          'c'
-        when [  8, false ]
-          'C'
-        when [ 16, true  ]
-          's'
-        when [ 16, false ]
-          'S'
-        when [ 32, true  ]
-          'i'
-        when [ 32, false ]
-          'I'
-        when [ 64, true  ]
-          'q'
-        when [ 64, false ]
-          'Q'
-        else
-          raise "No descriptor for packing/unpacking #{self}"
-        end
       end
 
     end

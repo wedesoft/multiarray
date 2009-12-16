@@ -8,12 +8,16 @@ module Hornetseye
     class << self
 
       def new( *args )
-        class_name = name.split( '::' ).last
-        target = ( Thread.current[ :mode ] || Ruby ).const_get class_name
-        if self == target
+        if name.empty?
           super *args
         else
-          target.new *args
+          class_name = name.split( '::' ).last
+          target = ( Thread.current[ :mode ] || Ruby ).const_get class_name
+          if self == target
+            super *args
+          else
+            target.new *args
+          end
         end
       end
 
@@ -105,9 +109,9 @@ module Hornetseye
     #
     # @return [Class] Element type for arrays. Returns +self.class+ if this is
     # not an array.
-    #def typecode
-    #  self.class.typecode
-    #end
+    def typecode
+      self.class.typecode
+    end
 
     # Returns the element type for arrays and composite numbers
     #

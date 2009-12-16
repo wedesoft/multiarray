@@ -1,3 +1,16 @@
+class Module
+
+  unless method_defined? :alias_method_chain
+
+    def alias_method_chain( target, feature, vocalize = target )
+      alias_method "#{vocalize}_without_#{feature}", target
+      alias_method target, "#{vocalize}_with_#{feature}"
+    end
+
+  end
+
+end
+
 require 'malloc'
 require 'multiarray/delegate'
 #require 'multiarray/list'
@@ -6,8 +19,10 @@ require 'multiarray/type'
 #require 'multiarray/descriptortype'
 require 'multiarray/object'
 require 'multiarray/ruby/object'
-#require 'multiarray/int_'
-#require 'multiarray/int'
+require 'multiarray/compact'
+require 'multiarray/int_'
+require 'multiarray/ruby/int_'
+require 'multiarray/int'
 #require 'multiarray/composite_type'
 #require 'multiarray/sequence_'
 #require 'multiarray/sequence'

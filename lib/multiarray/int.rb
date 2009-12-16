@@ -27,7 +27,8 @@ module Hornetseye
   # @see INT_.bits
   # @see INT_.signed
   def INT( bits, signed )
-    retval = Class.new INT_
+    target = ( Thread.current[ :mode ] || Ruby ).const_get :INT_
+    retval = Class.new target
     retval.bits   = bits
     retval.signed = signed
     retval
@@ -35,28 +36,33 @@ module Hornetseye
 
   module_function :INT
 
-  # 8-bit signed integer
-  BYTE  = INT  8, SIGNED
+end
 
-  # 8-bit unsigned integer
-  UBYTE = INT  8, UNSIGNED
+class Module
 
-  # 16-bit signed integer
-  SINT  = INT 16, SIGNED
+  def const_missing_with_int( name )
+    case name
+    when :BYTE
+      Hornetseye::INT  8,   SIGNED
+    when :UBYTE
+      Hornetseye::INT  8, UNSIGNED
+    when :SINT
+      Hornetseye::INT 16,   SIGNED
+    when :USINT
+      Hornetseye::INT 16, UNSIGNED
+    when :INT
+      Hornetseye::INT 32,   SIGNED
+    when :UINT
+      Hornetseye::INT 32, UNSIGNED
+    when :LONG
+      Hornetseye::INT 64,   SIGNED
+    when :ULONG
+      Hornetseye::INT 64, UNSIGNED
+    else
+      const_missing_without_int name
+    end
+  end
 
-  # 16-bit unsigned integer
-  USINT = INT 16, UNSIGNED
-
-  # 32-bit signed integer
-  INT   = INT 32, SIGNED
-
-  # 32-bit unsigned integer
-  UINT  = INT 32, UNSIGNED
-
-  # 64-bit signed integer
-  LONG  = INT 64, SIGNED
-
-  # 64-bit unsigned integer
-  ULONG = INT 64, UNSIGNED
+  alias_method_chain :const_missing, :int
 
 end
