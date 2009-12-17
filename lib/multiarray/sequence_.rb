@@ -8,9 +8,19 @@ module Hornetseye
   # @see MultiArray
   #
   # @abstract
-  class Sequence_ < CompositeType
+  class Sequence_ < Compact
 
     class << self
+
+      # Type of elements this type is composed of
+      #
+      # @return [Type,Sequence_] The element type of this type.
+      attr_accessor :element_type
+
+      # Number of elements this type is composed of
+      #
+      # @return [Integer] The number of elements this type is composed of.
+      attr_accessor :num_elements
 
       # Distance of two consecutive elements divided by size of single element
       #
@@ -22,6 +32,16 @@ module Hornetseye
       #
       # @private
       attr_accessor :stride
+
+      # Number of bytes for storing an object of this type
+      #
+      # @return [Integer] Number of bytes to store +num_elements+ elements of
+      # type +element_type+.
+      #
+      # @private
+      def bytesize
+        element_type.bytesize * num_elements
+      end
 
       # Get string with information about this type
       #
@@ -36,11 +56,11 @@ module Hornetseye
       # default value of the element type.
       #
       # @private
-      def default
-        retval = new
-        retval.set
-        retval
-      end
+      #def default
+      #  retval = new
+      #  retval.set
+      #  retval
+      #end
 
       # Get string with information about this type
       #
@@ -70,9 +90,9 @@ module Hornetseye
       #
       # @return [FalseClass,TrueClass] Returns boolean indicating whether
       # arrays of this type are empty or not.
-      def empty?
-        num_elements == 0
-      end
+      #def empty?
+      #  num_elements == 0
+      #end
 
       # Get shape of multi-dimensional array
       #
@@ -81,6 +101,21 @@ module Hornetseye
         element_type.shape + [ num_elements ]
       end
 
+    end
+
+    # The element type of this object's type
+    #
+    # @return [Type,Sequence_] The element type of this object's type.
+    def element_type
+      self.class.element_type
+    end
+
+    # The number of elements this object's type is composed of
+    #
+    # @return [Integer] The number of elements this object's type is composed
+    # of.
+    def num_elements
+      self.class.num_elements
     end
 
     # Distance of two consecutive elements divided by size of single element
@@ -92,16 +127,16 @@ module Hornetseye
     # @see Memory#+
     #
     # @private
-    def stride
-      self.class.stride
-    end
+    #def stride
+    #  self.class.stride
+    #end
 
     # Display type and values of this array
     #
     # @return [String] Returns string with information about the type and the
     # values of this array.
-    def inspect( indent = nil, lines = nil )
-      if indent
+   def inspect( indent = nil, lines = nil )
+     if indent
         prepend = ''
       else
         prepend = "#{self.class.inspect}:\n"

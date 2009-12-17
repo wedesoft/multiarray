@@ -42,7 +42,8 @@ module Hornetseye
   # @see CompositeType.num_elements
   def Sequence( element_type, num_elements,
                 stride = element_type.size )
-    retval = Class.new Sequence_
+    target = ( Thread.current[ :mode ] || Ruby ).const_get :Sequence_
+    retval = Class.new target
     retval.element_type = element_type
     retval.num_elements = num_elements
     retval.stride = stride

@@ -47,6 +47,10 @@ module Hornetseye
         @malloc.write [ value ].pack( descriptor )
       end
 
+      def sel
+        self
+      end
+
       # @private
       def descriptor
         self.class.descriptor

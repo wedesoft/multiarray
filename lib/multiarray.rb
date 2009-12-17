@@ -55,8 +55,9 @@ require 'multiarray/int_'
 require 'multiarray/ruby/int_'
 require 'multiarray/int'
 #require 'multiarray/composite_type'
-#require 'multiarray/sequence_'
-#require 'multiarray/sequence'
+require 'multiarray/sequence_'
+require 'multiarray/ruby/sequence_'
+require 'multiarray/sequence'
 #require 'multiarray/multiarray'
 
 # module Hornetseye
