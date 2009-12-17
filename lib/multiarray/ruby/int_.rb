@@ -6,6 +6,11 @@ module Hornetseye
 
       class << self
 
+        # @private
+        def alloc( n = 1 )
+          Malloc.new n * bytesize
+        end
+
         # Get descriptor for packing/unpacking native values
         #
         # @private
@@ -35,7 +40,7 @@ module Hornetseye
       end
 
       def initialize( value = nil, options = {} )
-        @malloc = options[ :malloc ] || Malloc.new( bytesize )
+        @malloc = options[ :malloc ] || alloc
         super value
       end
 

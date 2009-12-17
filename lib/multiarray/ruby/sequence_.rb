@@ -4,8 +4,17 @@ module Hornetseye
 
     class Sequence_ < Hornetseye::Sequence_
 
+      class << self
+
+        def alloc( n = 1 )
+          element_type.alloc n * num_elements
+        end
+
+      end
+
       def initialize( value = nil, options = {} )
-        @malloc = options[ :malloc ] || Malloc.new( bytesize )
+        @malloc = options[ :malloc ] || alloc
+        raise 'What about array and offset?'
         super value
       end
 

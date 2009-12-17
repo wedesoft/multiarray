@@ -6,14 +6,14 @@ module Hornetseye
 
       class << self
 
-        #def delegate
-        #  List
-        #end
+        def alloc( n = 1 )
+          Array.new n
+        end
 
       end
 
       def initialize( value = nil, options = {} )
-        @array = options[ :array ] || [ nil ]
+        @array = options[ :array ] || alloc
         @offset = options[ :offset ] || 0
         super value
       end

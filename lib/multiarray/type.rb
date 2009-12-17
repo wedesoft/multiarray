@@ -113,6 +113,11 @@ module Hornetseye
       self.class.typecode
     end
 
+    # @private
+    def alloc( n = 1 )
+      self.class.alloc n
+    end
+
     # Returns the element type for arrays and composite numbers
     #
     # Otherwise it returns +self.class+.
