@@ -2,9 +2,15 @@ module Hornetseye
 
   module Ruby
 
-    class Sequence_ < Hornetseye::Sequence_
+    class Sequence_
 
       class << self
+
+        attr_accessor :element_type
+
+        attr_accessor :num_elements
+
+        attr_accessor :stride
 
         def alloc( n = 1 )
           element_type.alloc n * num_elements
@@ -12,10 +18,13 @@ module Hornetseye
 
       end
 
-      def initialize( value = nil, options = {} )
-        @malloc = options[ :malloc ] || alloc
-        raise 'What about array and offset?'
-        super value
+      def initialize( options = {} )
+        @array = options[ :array ] || alloc
+        @offset = options[ :offset ] || 0
+      end
+
+      def alloc( n = 1 )
+        self.class.element_type.alloc n * self.class.num_elements
       end
 
       # @private

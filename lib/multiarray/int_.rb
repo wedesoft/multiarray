@@ -5,7 +5,7 @@ module Hornetseye
   # @see #INT
   #
   # @abstract
-  class INT_ < Compact
+  class INT_ < Type
 
     class << self
 
@@ -38,11 +38,9 @@ module Hornetseye
       #end
 
       # @private
-      def delegate( options = {} )
+      def delegate
         mode = ( Thread.current[ :mode ] || Ruby )
-        target = mode.const_get :INT_
-        raise "No delegate #{mode}::INT_" if self == target
-        target.new self, options
+        mode.send :INT, bits, signed
       end
 
       # Number of bytes for storing an object of this type
@@ -51,9 +49,9 @@ module Hornetseye
       # type.
       #
       # @private
-      def bytesize
-        ( bits + 7 ).div 8
-      end
+      #def bytesize
+      #  ( bits + 7 ).div 8
+      #end
 
       # Default value for integers
       #

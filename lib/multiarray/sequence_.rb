@@ -8,7 +8,7 @@ module Hornetseye
   # @see MultiArray
   #
   # @abstract
-  class Sequence_ < Compact
+  class Sequence_ < Type
 
     class << self
 
@@ -39,8 +39,14 @@ module Hornetseye
       # type +element_type+.
       #
       # @private
-      def bytesize
-        element_type.bytesize * num_elements
+      #def bytesize
+      #  element_type.bytesize * num_elements
+      #end
+
+      # @private
+      def delegate
+        mode = ( Thread.current[ :mode ] || Ruby )
+        mode.send :Sequence, element_type.delegate, num_elements, stride
       end
 
       # Get string with information about this type

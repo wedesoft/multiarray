@@ -4,21 +4,33 @@ module Hornetseye
 
     class INT_
 
-      def initialize( typecode, options = {} )
-        @typecode = typecode
-        @malloc = options[ :malloc ] || alloc
+      class << self
+
+        attr_accessor :bits
+
+        attr_accessor :signed
+
+        # @private
+        def alloc( n = 1 )
+          Malloc.new n * bytesize
+        end
+
+        # @private
+        def bytesize
+          ( bits + 7 ).div 8
+        end
+
       end
 
-      # @private
-      def alloc( n = 1 )
-        Malloc.new n * @typecode.bytesize
+      def initialize( options = {} )
+        @malloc = options[ :malloc ] || self.class.alloc
       end
 
       # Get descriptor for packing/unpacking native values
       #
       # @private
       def descriptor
-        case [ @typecode.bits, @typecode.signed ]
+        case [ self.class.bits, self.class.signed ]
         when [  8, true  ]
           'c'
         when [  8, false ]
@@ -41,7 +53,7 @@ module Hornetseye
       end
 
       def get
-        @malloc.read( @typecode.bytesize ).unpack( descriptor ).first
+        @malloc.read( self.class.bytesize ).unpack( descriptor ).first
       end
 
       def set( value )
