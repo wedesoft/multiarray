@@ -26,8 +26,8 @@ end
 
 puts OBJECT.inspect
 puts OBJECT.new( 3 ).inspect
-#puts SINT
-#puts SINT.new( 3 ).inspect
+puts SINT
+puts SINT.new( 3 ).inspect
 #puts Sequence( OBJECT, 3 ).inspect
 #puts Sequence( OBJECT, 3 ).new.inspect
 #puts Sequence( INT, 3 ).inspect

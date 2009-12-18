@@ -28,7 +28,7 @@ module Hornetseye
         mode = ( Thread.current[ :mode ] || Ruby )
         target = mode.const_get :OBJECT
         raise "No delegate #{mode}::OBJECT" if self == target
-        target.new options
+        target.new self, options
       end
 
       # Default value for Ruby objects.

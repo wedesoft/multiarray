@@ -4,24 +4,20 @@ module Hornetseye
 
     class OBJECT
 
-      class << self
-
-        def alloc( n = 1 )
-          Array.new n
-        end
-
+      def initialize( typecode, options = {} )
+        @array = options[ :array ] || alloc
+        @offset = options[ :offset ] || 0
       end
 
-      def initialize( value = nil, options = {} )
-        @array = options[ :array ] || self.class.alloc
-        @offset = options[ :offset ] || 0
+      def alloc( n = 1 )
+        Array.new n
       end
 
       def get
         @array[ @offset ]
       end
 
-      def set( value = typecode.default )
+      def set( value )
         @array[ @offset ] = value
       end
 

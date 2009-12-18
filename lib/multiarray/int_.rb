@@ -37,6 +37,14 @@ module Hornetseye
       #  Memory
       #end
 
+      # @private
+      def delegate( options = {} )
+        mode = ( Thread.current[ :mode ] || Ruby )
+        target = mode.const_get :INT_
+        raise "No delegate #{mode}::INT_" if self == target
+        target.new self, options
+      end
+
       # Number of bytes for storing an object of this type
       #
       # @return [Integer] Number of bytes to store a native integer of this
