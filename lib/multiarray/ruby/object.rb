@@ -2,7 +2,7 @@ module Hornetseye
 
   module Ruby
 
-    class OBJECT < Hornetseye::OBJECT
+    class OBJECT
 
       class << self
 
@@ -13,9 +13,8 @@ module Hornetseye
       end
 
       def initialize( value = nil, options = {} )
-        @array = options[ :array ] || alloc
+        @array = options[ :array ] || self.class.alloc
         @offset = options[ :offset ] || 0
-        super value
       end
 
       def get

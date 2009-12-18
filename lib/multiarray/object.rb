@@ -23,6 +23,14 @@ module Hornetseye
       #  1
       #end
 
+      # @private
+      def delegate( options = {} )
+        mode = ( Thread.current[ :mode ] || Ruby )
+        target = mode.const_get :OBJECT
+        raise "No delegate #{mode}::OBJECT" if self == target
+        target.new options
+      end
+
       # Default value for Ruby objects.
       #
       # @return [Object] Returns +nil+. 

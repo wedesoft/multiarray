@@ -7,19 +7,19 @@ module Hornetseye
 
     class << self
 
-      def new( *args )
-        if name.empty?
-          super *args
-        else
-          class_name = name.split( '::' ).last
-          target = ( Thread.current[ :mode ] || Ruby ).const_get class_name
-          if self == target
-            super *args
-          else
-            target.new *args
-          end
-        end
-      end
+      #def new( *args )
+      #  if name.empty?
+      #    super *args
+      #  else
+      #    class_name = name.split( '::' ).last
+      #    target = ( Thread.current[ :mode ] || Ruby ).const_get class_name
+      #    if self == target
+      #      super *args
+      #    else
+      #      target.new *args
+      #    end
+      #  end
+      #end
 
       # Create +Delegate+ object for storing a value
       #
@@ -62,18 +62,18 @@ module Hornetseye
       # Returns +false+ if this is not an array.
       #
       # @return [FalseClass,TrueClass] Returns +false+.
-      def empty?
-        size == 0
-      end
+      #def empty?
+      #  size == 0
+      #end
 
       # Get shape of multi-dimensional array
       #
       # Returns +[]+ if this is not an array.
       #
       # @return [Array<Integer>] Returns +[]+.
-      def shape
-        []
-      end
+      #def shape
+      #  []
+      #end
 
       # Get number of elements of multi-dimensional array
       #
@@ -81,9 +81,9 @@ module Hornetseye
       #
       # @return [Integer] Number of elements of array. +1+ if this is not an
       # array.
-      def size
-        shape.inject( 1 ) { |a,b| a * b }
-      end
+      #def size
+      #  shape.inject( 1 ) { |a,b| a * b }
+      #end
 
     end
 
@@ -114,9 +114,9 @@ module Hornetseye
     end
 
     # @private
-    def alloc( n = 1 )
-      self.class.alloc n
-    end
+    #def alloc( n = 1 )
+    #  self.class.alloc n
+    #end
 
     # Returns the element type for arrays and composite numbers
     #
@@ -136,9 +136,9 @@ module Hornetseye
     #
     # @return [FalseClass,TrueClass] Returns boolean indicating whether the
     # array is empty or not. Returns +false+ if this is not an array.
-    def empty?
-      self.class.empty?
-    end
+    #def empty?
+    #  self.class.empty?
+    #end
 
     # Get shape of multi-dimensional array
     #
@@ -146,9 +146,9 @@ module Hornetseye
     #
     # @return [Array<Integer>] Returns shape of array or +[]+ if this is not
     # an array.
-    def shape
-      self.class.shape
-    end
+    #def shape
+    #  self.class.shape
+    #end
 
     # Get number of elements of multi-dimensional array
     #
@@ -156,9 +156,9 @@ module Hornetseye
     #
     # @return [Integer] Number of elements of array. +1+ if this is not an
     # array.
-    def size
-      self.class.size
-    end
+    #def size
+    #  self.class.size
+    #end
 
     # Create new instance of this type
     #
@@ -174,8 +174,17 @@ module Hornetseye
     #  set value unless value.nil?
     #end
 
-    def initialize( value = nil )
+    def initialize( value = nil, options = {} )
+      @delegate = self.class.delegate options
       set value unless value.nil?
+    end
+
+    def get
+      @delegate.get
+    end
+
+    def set( value = typecode.default )
+      @delegate.set value
     end
 
     # Display type and value of this instance
@@ -205,11 +214,11 @@ module Hornetseye
     # @return [Object,Type] Ruby object with value of element.
     #
     # @see #[]
-    def at( *indices )
-      sel( *indices ).get
-    end
+    #def at( *indices )
+    #  sel( *indices ).get
+    #end
 
-    alias_method :[], :at
+    #alias_method :[], :at
 
     # Assign value to element of array
     #
@@ -217,11 +226,11 @@ module Hornetseye
     # The last element of +args+ is the new value to store in the array.
     #
     # @return [Object] Returns +args.last+.
-    def assign( *args )
-      sel( *args[ 0 ... -1 ] ).set args.last
-    end
+    #def assign( *args )
+    #  sel( *args[ 0 ... -1 ] ).set args.last
+    #end
 
-    alias_method :[]=, :assign
+    #alias_method :[]=, :assign
 
   end
 
