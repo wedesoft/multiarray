@@ -23,7 +23,7 @@ module Hornetseye
       end
 
       def initialize( options = {} )
-        @malloc = options[ :malloc ] || self.class.alloc
+        @storage = options[ :storage ] || self.class.alloc
       end
 
       # Get descriptor for packing/unpacking native values
@@ -53,11 +53,11 @@ module Hornetseye
       end
 
       def get
-        @malloc.read( self.class.bytesize ).unpack( descriptor ).first
+        @storage.read( self.class.bytesize ).unpack( descriptor ).first
       end
 
       def set( value )
-        @malloc.write [ value ].pack( descriptor )
+        @storage.write [ value ].pack( descriptor )
       end
 
       def sel

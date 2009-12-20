@@ -44,11 +44,11 @@ end
 
 require 'malloc'
 #require 'multiarray/delegate'
-#require 'multiarray/list'
 #require 'multiarray/memory'
 require 'multiarray/type'
 #require 'multiarray/descriptortype'
 require 'multiarray/object'
+require 'multiarray/ruby/list'
 require 'multiarray/ruby/object'
 # require 'multiarray/compact'
 require 'multiarray/int_'

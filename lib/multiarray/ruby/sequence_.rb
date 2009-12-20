@@ -19,12 +19,7 @@ module Hornetseye
       end
 
       def initialize( options = {} )
-        @array = options[ :array ] || alloc
-        @offset = options[ :offset ] || 0
-      end
-
-      def alloc( n = 1 )
-        self.class.element_type.alloc n * self.class.num_elements
+        @storage = options[ :storage ] || self.class.alloc
       end
 
       # @private
@@ -40,7 +35,7 @@ module Hornetseye
         if indices.empty?
           self
         else
-          unless ( 0 ... num_elements ).member? indices.last
+          unless ( 0 ... self.class.num_elements ).member? indices.last
             raise "Index must be in 0 ... #{num_elements} " +
                   "(was #{indices.last.inspect})"
           end

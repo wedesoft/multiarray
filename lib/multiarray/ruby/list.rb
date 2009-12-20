@@ -5,45 +5,15 @@ module Hornetseye
   # @see Storage
   # @see Memory
   # @private
-  class List < Storage
-
-    class << self
-
-      # Create a +List+ object viewing a new Ruby array
-      #
-      # @param [Integer] size Number of elements the new Ruby array should
-      # have.
-      # @return [List] The new +List+ object.
-      #
-      # @private
-      def alloc( size )
-        new Array.new( size )
-      end
-
-      # Create a +List+ object viewing an existing Ruby array
-      #
-      # @param [Array<Object>] arr Existing Ruby array.
-      # @return [List] The new +List+ object.
-      #
-      # @private
-      def import( arr )
-        new arr
-      end
-
-    end
-
-    # Offset of this view
-    #
-    # @private
-    attr_accessor :offset
+  class List
 
     # Create zero-offset view on a Ruby array
     #
     # @param [Array<Object>] arr A Ruby array.
     #
     # @private
-    def initialize( arr )
-      super arr
+    def initialize( size, options = {} )
+      @array = options[ :array ] || [ nil ] * size
       @offset = 0
     end
 
@@ -55,8 +25,8 @@ module Hornetseye
     # @see #store
     # @see Memory#load
     # @private
-    def load( typecode )
-      @data[ @offset ]
+    def read
+      @array[ @offset ]
     end
 
     # Store an element in the array
@@ -68,8 +38,9 @@ module Hornetseye
     # @see #load
     # @see Memory#store
     # @private
-    def store( typecode, value )
-      @data[ @offset ] = value
+    def write( value )
+      @array[ @offset ] = value
+      value
     end
 
     # Store multiple elements in the array
@@ -80,9 +51,9 @@ module Hornetseye
     # @see #export
     # @see Memory#import
     # @private
-    def import( data )
-      @data[ @offset ... @offset + data.size ] = data
-    end
+    #def import( data )
+    #  @data[ @offset ... @offset + data.size ] = data
+    #end
 
     # Retrieve multiple elements from the array
     #
@@ -92,9 +63,9 @@ module Hornetseye
     # @see #import
     # @see Memory#export
     # @private
-    def export( size )
-      @data[ @offset ... @offset + size ]
-    end
+    #def export( size )
+    #  @data[ @offset ... @offset + size ]
+    #end
 
     # Create a new view with the specified offset
     #
@@ -103,11 +74,11 @@ module Hornetseye
     #
     # @see Memory#+
     # @private
-    def +( offset )
-      retval = List.new @data
-      retval.offset = @offset + offset
-      retval
-    end
+    #def +( offset )
+    #  retval = List.new @data
+    #  retval.offset = @offset + offset
+    #  retval
+    #end
 
   end
 

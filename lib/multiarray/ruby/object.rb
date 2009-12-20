@@ -7,22 +7,21 @@ module Hornetseye
       class << self
 
         def alloc( n = 1 )
-          Array.new n
+          List.new n
         end
 
       end
 
       def initialize( options = {} )
-        @array = options[ :array ] || self.class.alloc
-        @offset = options[ :offset ] || 0
+        @storage = options[ :storage ] || self.class.alloc
       end
 
       def get
-        @array[ @offset ]
+        @storage.read
       end
 
       def set( value )
-        @array[ @offset ] = value
+        @storage.write value
       end
 
     end

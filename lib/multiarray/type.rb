@@ -187,6 +187,10 @@ module Hornetseye
       @delegate.set value
     end
 
+    def sel( *indices )
+      @delegate.sel *indices
+    end
+
     # Display type and value of this instance
     #
     # @return [String] Returns string with information about type and value.
