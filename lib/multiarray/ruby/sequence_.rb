@@ -66,7 +66,7 @@ module Hornetseye
       def op( *args, &action )
         for i in 0 ... self.class.num_elements
           sub_args = args.collect do |arg|
-            arg.is_a?( Sequence_ ) ? arg.sel( i ).get : arg
+            arg.is_a?( Hornetseye::Sequence_ ) ? arg.sel( i ).get : arg
           end
           sel( i ).op *sub_args, &action
         end
