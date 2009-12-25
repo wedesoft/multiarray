@@ -58,9 +58,9 @@ module Hornetseye
       # @return [Object] Returns +0+.
       #
       # @private
-      def default
-        0
-      end
+      #def default
+      #  0
+      #end
 
       # Get string with information about this type
       #

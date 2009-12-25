@@ -36,10 +36,11 @@ module Hornetseye
         self
       end
 
-      def set( value = @parent.typecode.default )
+      def set( value = self.class.typecode.default )
         if value.is_a? Array
           for i in 0 ... self.class.num_elements
-            sel( i ).set i < value.size ? value[ i ] : @parent.typecode.default
+            sel( i ).set i < value.size ?
+                         value[ i ] : self.class.typecode.default
           end
         else
           op( value ) { |x| set x }
@@ -57,6 +58,7 @@ module Hornetseye
           end
           element_storage = @storage + indices.last * self.class.stride *
                             self.class.typecode.storage_size
+          # parent?
           self.class.element_type.new( nil, :storage => element_storage ).
             sel *indices.first( indices.size - 1 )
         end

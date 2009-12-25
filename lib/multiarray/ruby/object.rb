@@ -18,6 +18,10 @@ module Hornetseye
           1
         end
 
+        def default
+          nil
+        end
+
       end
 
       def initialize( parent, options = {} )
@@ -28,7 +32,7 @@ module Hornetseye
         @storage.read
       end
 
-      def set( value )
+      def set( value = self.class.default )
         @storage.write value
       end
 

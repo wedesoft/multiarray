@@ -62,11 +62,11 @@ module Hornetseye
       # default value of the element type.
       #
       # @private
-      #def default
-      #  retval = new
-      #  retval.set
-      #  retval
-      #end
+      # def default
+      #   retval = new
+      #   retval.set
+      #   retval
+      # end
 
       # Get string with information about this type
       #

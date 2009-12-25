@@ -24,6 +24,10 @@ module Hornetseye
           ( bits + 7 ).div 8
         end
 
+        def default
+          0
+        end
+
       end
 
       def initialize( parent, options = {} )
@@ -60,7 +64,7 @@ module Hornetseye
         @storage.read( self.class.storage_size ).unpack( descriptor ).first
       end
 
-      def set( value )
+      def set( value = self.class.default )
         @storage.write [ value ].pack( descriptor )
         value
       end

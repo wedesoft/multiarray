@@ -85,6 +85,10 @@ module Hornetseye
         shape.inject( 1 ) { |a,b| a * b }
       end
 
+      def default
+        delegate.default
+      end
+
     end
 
     # Get +Storage+ object used to store the data of this instance
@@ -183,8 +187,8 @@ module Hornetseye
       @delegate.get
     end
 
-    def set( value = typecode.default )
-      @delegate.set value
+    def set( *args )
+      @delegate.set *args
     end
 
     def sel( *indices )

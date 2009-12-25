@@ -34,9 +34,9 @@ module Hornetseye
       # @return [Object] Returns +nil+. 
       #
       # @private
-      def default
-        nil
-      end
+      #def default
+      #  nil
+      #end
 
       # Get string with information about this type
       #
