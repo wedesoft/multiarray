@@ -179,7 +179,7 @@ module Hornetseye
     #end
 
     def initialize( value = nil, options = {} )
-      @delegate = self.class.delegate.new self, options
+      @delegate = self.class.delegate.new( self, options )
       set value unless value.nil?
     end
 

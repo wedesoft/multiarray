@@ -189,9 +189,9 @@ module Hornetseye
       prepend + retval
     end
 
-    def get
-      self
-    end
+    # def get
+    #   self
+    # end
 
     # Display values of this array
     #

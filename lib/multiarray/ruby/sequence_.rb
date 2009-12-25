@@ -33,7 +33,7 @@ module Hornetseye
 
       # @private
       def get
-        self
+        @parent
       end
 
       def set( value = self.class.typecode.default )
@@ -58,8 +58,7 @@ module Hornetseye
           end
           element_storage = @storage + indices.last * self.class.stride *
                             self.class.typecode.storage_size
-          # parent?
-          self.class.element_type.new( nil, :storage => element_storage ).
+          @parent.class.element_type.new( nil, :storage => element_storage ).
             sel *indices.first( indices.size - 1 )
         end
       end
