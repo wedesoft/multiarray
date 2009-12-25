@@ -16,6 +16,10 @@ module Hornetseye
           element_type.alloc n * num_elements
         end
 
+        def typecode
+          element_type.typecode
+        end
+
       end
 
       def initialize( options = {} )
@@ -39,9 +43,10 @@ module Hornetseye
             raise "Index must be in 0 ... #{num_elements} " +
                   "(was #{indices.last.inspect})"
           end
-          raise 'not implemented'
-          #element_storage = @storage + indices.last * stride * typecode.bytesize
-          #element_type.wrap( element_storage ).sel *indices[ 0 ... -1 ]
+          element_storage = @storage + indices.last * self.class.stride *
+                            self.class.typecode.storage_size
+          self.class.element_type.new( :storage => element_storage ).
+            sel *indices.first( indices.size - 1 )
         end
       end
 

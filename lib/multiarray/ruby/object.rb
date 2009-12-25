@@ -10,6 +10,14 @@ module Hornetseye
           List.new n
         end
 
+        def typecode
+          self
+        end
+
+        def storage_size
+          1
+        end
+
       end
 
       def initialize( options = {} )
@@ -22,6 +30,10 @@ module Hornetseye
 
       def set( value )
         @storage.write value
+      end
+
+      def sel
+        self
       end
 
     end

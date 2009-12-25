@@ -14,7 +14,7 @@ module Hornetseye
     # @private
     def initialize( size, options = {} )
       @array = options[ :array ] || [ nil ] * size
-      @offset = 0
+      @offset = options[ :offset ] || 0
     end
 
     # Retrieve an element from the array
@@ -74,11 +74,9 @@ module Hornetseye
     #
     # @see Memory#+
     # @private
-    #def +( offset )
-    #  retval = List.new @data
-    #  retval.offset = @offset + offset
-    #  retval
-    #end
+    def +( offset )
+      List.new 0, :array => @array, :offset => @offset + offset
+    end
 
   end
 

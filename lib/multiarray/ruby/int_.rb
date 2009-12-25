@@ -12,11 +12,15 @@ module Hornetseye
 
         # @private
         def alloc( n = 1 )
-          Malloc.new n * bytesize
+          Malloc.new n * storage_size
+        end
+
+        def typecode
+          self
         end
 
         # @private
-        def bytesize
+        def storage_size
           ( bits + 7 ).div 8
         end
 
@@ -53,7 +57,7 @@ module Hornetseye
       end
 
       def get
-        @storage.read( self.class.bytesize ).unpack( descriptor ).first
+        @storage.read( self.class.storage_size ).unpack( descriptor ).first
       end
 
       def set( value )
