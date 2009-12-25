@@ -189,6 +189,10 @@ module Hornetseye
       prepend + retval
     end
 
+    def get
+      self
+    end
+
     # Display values of this array
     #
     # @return [String] Returns string with the values of this array.

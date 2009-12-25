@@ -33,10 +33,10 @@ module Hornetseye
 
       # @private
       def get
-        @parent
+        self
       end
 
-      def set( value = typecode.default )
+      def set( value = @parent.typecode.default )
         if value.is_a? Array
           for i in 0 ... self.class.num_elements
             sel( i ).set i < value.size ? value[ i ] : @parent.typecode.default
