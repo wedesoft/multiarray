@@ -62,6 +62,7 @@ module Hornetseye
 
       def set( value )
         @storage.write [ value ].pack( descriptor )
+        value
       end
 
       def sel
