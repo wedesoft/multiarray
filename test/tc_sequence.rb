@@ -32,7 +32,7 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_sequence_new
+  def test_sequence_new
     for t in @@types
       s = Hornetseye::Sequence.new t, 3
       s.set
@@ -110,7 +110,7 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_get_set
+  def test_get_set
     for t in @@types
       s1 = Hornetseye::Sequence( t, 3 ).new
       s1[] = 2
@@ -123,12 +123,13 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 2, 3, t.default ], s1.to_a
       s2 = Hornetseye::Sequence( t, 3 ).new
       s2[] = [ 1, 2, 3 ]
-      s1[] = s2
       assert_equal [ 1, 2, 3 ], s2.to_a
+      # s1[] = s2
+      # assert_equal [ 1, 2, 3 ], s1.to_a
     end
   end
 
-  def xtest_at_assign
+  def test_at_assign
     for t in @@types
       s = Hornetseye::Sequence( t, 3 ).new
       s[] = 0

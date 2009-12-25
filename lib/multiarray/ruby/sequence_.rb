@@ -26,23 +26,25 @@ module Hornetseye
 
       end
 
-      def initialize( options = {} )
+      def initialize( parent, options = {} )
+        @parent = parent
         @storage = options[ :storage ] || self.class.alloc
       end
 
       # @private
       def get
-        self
+        @parent
       end
 
       def set( value = typecode.default )
         if value.is_a? Array
           for i in 0 ... self.class.num_elements
-            sel( i ).set i < value.size ? value[ i ] : typecode.default
+            sel( i ).set i < value.size ? value[ i ] : @parent.typecode.default
           end
         else
-          raise 'not implemented'
+          op( value ) { |x| set x }
         end
+        value
       end
 
       def sel( *indices )
@@ -55,8 +57,17 @@ module Hornetseye
           end
           element_storage = @storage + indices.last * self.class.stride *
                             self.class.typecode.storage_size
-          self.class.element_type.new( :storage => element_storage ).
+          self.class.element_type.new( nil, :storage => element_storage ).
             sel *indices.first( indices.size - 1 )
+        end
+      end
+
+      def op( *args, &action )
+        for i in 0 ... self.class.num_elements
+          sub_args = args.collect do |arg|
+            arg.is_a?( Sequence_ ) ? arg.sel( i ).get : arg
+          end
+          sel( i ).op *sub_args, &action
         end
       end
 

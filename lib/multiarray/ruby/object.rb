@@ -20,7 +20,7 @@ module Hornetseye
 
       end
 
-      def initialize( options = {} )
+      def initialize( parent, options = {} )
         @storage = options[ :storage ] || self.class.alloc
       end
 
@@ -33,6 +33,11 @@ module Hornetseye
       end
 
       def sel
+        self
+      end
+
+      def op( *args, &action )
+        instance_exec *args, &action
         self
       end
 
