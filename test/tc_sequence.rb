@@ -54,9 +54,10 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_bytesize
+  def test_storage_size
     for t in @@types
-      assert_equal t.bytesize * 3, Hornetseye::Sequence( t, 3 ).bytesize
+      assert_equal t.delegate.storage_size * 3,
+                   Hornetseye::Sequence( t, 3 ).delegate.storage_size
     end
   end
 
@@ -85,7 +86,7 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_inspect
+  def test_inspect
     for t in @@types
       s = Hornetseye::Sequence( t, 3 ).new
       s[] = [ 1, 2, 3 ]
@@ -93,7 +94,7 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_to_s
+  def test_to_s
     for t in @@types
       s = Hornetseye::Sequence( t, 3 ).new
       s[] = [ 1, 2, 3 ]
@@ -101,7 +102,7 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_to_a
+  def test_to_a
     for t in @@types
       s = Hornetseye::Sequence( t, 3 ).new
       s[] = [ 1, 2, 3 ]

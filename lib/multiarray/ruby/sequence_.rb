@@ -20,6 +20,10 @@ module Hornetseye
           element_type.typecode
         end
 
+        def storage_size
+          element_type.storage_size * num_elements
+        end
+
       end
 
       def initialize( options = {} )
@@ -32,7 +36,13 @@ module Hornetseye
       end
 
       def set( value = typecode.default )
-        raise 'not implemented'
+        if value.is_a? Array
+          for i in 0 ... self.class.num_elements
+            sel( i ).set i < value.size ? value[ i ] : typecode.default
+          end
+        else
+          raise 'not implemented'
+        end
       end
 
       def sel( *indices )
