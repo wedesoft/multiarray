@@ -7,21 +7,21 @@ Kernel::require 'multiarray'
 
 class TC_Sequence < Test::Unit::TestCase
 
-#   def setup
-#     @@types = [ Hornetseye::OBJECT,
-#                 Hornetseye::UBYTE,
-#                 Hornetseye::BYTE,
-#                 Hornetseye::USINT,
-#                 Hornetseye::SINT,
-#                 Hornetseye::UINT,
-#                 Hornetseye::INT,
-#                 Hornetseye::ULONG,
-#                 Hornetseye::LONG ]
-#   end
-# 
-#   def teardown
-#     @@types = nil
-#   end
+  def setup
+    @@types = [ Hornetseye::OBJECT,
+                Hornetseye::UBYTE,
+                Hornetseye::BYTE,
+                Hornetseye::USINT,
+                Hornetseye::SINT,
+                Hornetseye::UINT,
+                Hornetseye::INT,
+                Hornetseye::ULONG,
+                Hornetseye::LONG ]
+  end
+
+  def teardown
+    @@types = nil
+  end
 
   def test_first
   end
@@ -40,14 +40,14 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_sequence_to_s
+  def test_sequence_to_s
     for t in @@types
       assert_equal "Sequence.#{t.to_s.downcase}(3)",
                    Hornetseye::Sequence( t, 3 ).to_s
     end
   end
 
-  def xtest_sequence_inspect
+  def test_sequence_inspect
     for t in @@types
       assert_equal "Sequence.#{t.inspect.downcase}(3)",
                    Hornetseye::Sequence( t, 3 ).inspect
@@ -60,26 +60,26 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
-  def xtest_typecode
+  def test_typecode
     for t in @@types
       assert_equal t, Hornetseye::Sequence( t, 3 ).typecode
     end
   end
 
-  def xtest_empty
+  def test_empty
     for t in @@types
       assert Hornetseye::Sequence( t, 0 ).new.empty?
       assert !Hornetseye::Sequence( t, 3 ).new.empty?
     end
   end
 
-  def xtest_shape
+  def test_shape
     for t in @@types
       assert_equal [ 3 ], Hornetseye::Sequence( t, 3 ).shape
     end
   end
 
-  def xtest_size
+  def test_size
     for t in @@types
       assert_equal 3, Hornetseye::Sequence( t, 3 ).size
     end
