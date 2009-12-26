@@ -28,6 +28,10 @@ module Hornetseye
           0
         end
 
+        def front
+          Hornetseye::INT bits, signed
+        end
+
       end
 
       def initialize( parent, options = {} )

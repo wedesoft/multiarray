@@ -60,7 +60,7 @@ require 'multiarray/sequence_'
 require 'multiarray/ruby/sequence_'
 require 'multiarray/ruby/sequence'
 require 'multiarray/sequence'
-#require 'multiarray/multiarray'
+require 'multiarray/multiarray'
 
 # module Hornetseye
 # 
@@ -143,6 +143,3 @@ require 'multiarray/sequence'
 #   Sequence_.class_eval { include SequenceOperation }
 # 
 # end
-
-
-

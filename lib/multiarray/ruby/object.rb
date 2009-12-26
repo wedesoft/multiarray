@@ -22,6 +22,10 @@ module Hornetseye
           nil
         end
 
+        def front
+          Hornetseye::OBJECT
+        end
+
       end
 
       def initialize( parent, options = {} )

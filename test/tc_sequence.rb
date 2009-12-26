@@ -26,7 +26,7 @@ class TC_Sequence < Test::Unit::TestCase
   def test_first
   end
 
-  def xtest_default
+  def test_default
     for t in @@types
       assert_equal [ t.default ] * 3, Hornetseye::Sequence( t, 3 ).default.to_a
     end

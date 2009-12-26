@@ -24,6 +24,16 @@ module Hornetseye
           element_type.storage_size * num_elements
         end
 
+        def default
+          retval = front.new
+          retval.set
+          retval
+        end
+
+        def front
+          Hornetseye::Sequence element_type.front, num_elements
+        end
+
       end
 
       def initialize( parent, options = {} )
