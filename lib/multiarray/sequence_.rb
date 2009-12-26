@@ -46,7 +46,7 @@ module Hornetseye
       # @private
       def delegate
         mode = ( Thread.current[ :mode ] || Ruby )
-        mode.send :Sequence, element_type.delegate, num_elements, stride
+        mode.send :Sequence, self
       end
 
       # Get string with information about this type

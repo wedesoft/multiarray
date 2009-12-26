@@ -2,10 +2,9 @@ module Hornetseye
 
   module Ruby
 
-    def INT( bits, signed )
+    def INT( front )
       retval = Class.new INT_
-      retval.bits   = bits
-      retval.signed = signed
+      retval.front = front
       retval
     end
 

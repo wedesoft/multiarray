@@ -6,32 +6,24 @@ module Hornetseye
 
       class << self
 
-        attr_accessor :element_type
-
-        attr_accessor :num_elements
-
-        attr_accessor :stride
+        attr_accessor :front
 
         def alloc( n = 1 )
-          element_type.alloc n * num_elements
+          @front.element_type.delegate.alloc n * @front.num_elements
         end
 
         def typecode
-          element_type.typecode
+          @front.element_type.typecode.delegate
         end
 
         def storage_size
-          element_type.storage_size * num_elements
+          @front.element_type.delegate.storage_size * @front.num_elements
         end
 
         def default
-          retval = front.new
+          retval = @front.new
           retval.set
           retval
-        end
-
-        def front
-          Hornetseye::Sequence element_type.front, num_elements
         end
 
       end
@@ -48,7 +40,7 @@ module Hornetseye
 
       def set( value = self.class.typecode.default )
         if value.is_a? Array
-          for i in 0 ... self.class.num_elements
+          for i in 0 ... self.class.front.num_elements
             sel( i ).set i < value.size ?
                          value[ i ] : self.class.typecode.default
           end
@@ -62,11 +54,11 @@ module Hornetseye
         if indices.empty?
           self
         else
-          unless ( 0 ... self.class.num_elements ).member? indices.last
+          unless ( 0 ... self.class.front.num_elements ).member? indices.last
             raise "Index must be in 0 ... #{num_elements} " +
                   "(was #{indices.last.inspect})"
           end
-          element_storage = @storage + indices.last * self.class.stride *
+          element_storage = @storage + indices.last * self.class.front.stride *
                             self.class.typecode.storage_size
           @parent.class.element_type.new( nil, :storage => element_storage ).
             sel *indices.first( indices.size - 1 )
@@ -74,7 +66,7 @@ module Hornetseye
       end
 
       def op( *args, &action )
-        for i in 0 ... self.class.num_elements
+        for i in 0 ... self.class.front.num_elements
           sub_args = args.collect do |arg|
             arg.is_a?( Hornetseye::Sequence_ ) ? arg.sel( i ).get : arg
           end

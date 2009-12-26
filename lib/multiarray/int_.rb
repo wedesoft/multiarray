@@ -40,7 +40,7 @@ module Hornetseye
       # @private
       def delegate
         mode = ( Thread.current[ :mode ] || Ruby )
-        mode.send :INT, bits, signed
+        mode.send :INT, self
       end
 
       # Number of bytes for storing an object of this type

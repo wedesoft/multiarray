@@ -6,9 +6,7 @@ module Hornetseye
 
       class << self
 
-        attr_accessor :bits
-
-        attr_accessor :signed
+        attr_accessor :front
 
         # @private
         def alloc( n = 1 )
@@ -21,15 +19,11 @@ module Hornetseye
 
         # @private
         def storage_size
-          ( bits + 7 ).div 8
+          ( @front.bits + 7 ).div 8
         end
 
         def default
           0
-        end
-
-        def front
-          Hornetseye::INT bits, signed
         end
 
       end
@@ -42,7 +36,7 @@ module Hornetseye
       #
       # @private
       def descriptor
-        case [ self.class.bits, self.class.signed ]
+        case [ self.class.front.bits, self.class.front.signed ]
         when [  8, true  ]
           'c'
         when [  8, false ]
