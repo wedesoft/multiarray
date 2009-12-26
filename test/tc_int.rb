@@ -22,9 +22,6 @@ class TC_Int < Test::Unit::TestCase
     @@types = nil
   end
 
-  def test_first
-  end
-
   def test_int_default
     for t in @@types
       assert_equal 0, t.default
