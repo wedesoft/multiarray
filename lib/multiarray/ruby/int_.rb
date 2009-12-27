@@ -26,6 +26,11 @@ module Hornetseye
           ( @front.bits + 7 ).div 8
         end
 
+        # Default value for integers
+        #
+        # @return [Object] Returns +0+.
+        #
+        # @private
         def default
           0
         end

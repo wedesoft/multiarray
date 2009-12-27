@@ -33,16 +33,9 @@ module Hornetseye
       # @private
       attr_accessor :stride
 
-      # Number of bytes for storing an object of this type
+      # Get delegate class to this class
       #
-      # @return [Integer] Number of bytes to store +num_elements+ elements of
-      # type +element_type+.
-      #
-      # @private
-      #def bytesize
-      #  element_type.bytesize * num_elements
-      #end
-
+      # @return [Class] Delegate class.
       # @private
       def delegate
         mode = ( Thread.current[ :mode ] || Ruby )
@@ -55,18 +48,6 @@ module Hornetseye
       def inspect
         to_s
       end
-
-      # Get default value for this array type.
-      #
-      # @return [Object] Returns a multi-dimensional array filled with the
-      # default value of the element type.
-      #
-      # @private
-      # def default
-      #   retval = new
-      #   retval.set
-      #   retval
-      # end
 
       # Get string with information about this type
       #
@@ -133,9 +114,9 @@ module Hornetseye
     # @see Memory#+
     #
     # @private
-    #def stride
-    #  self.class.stride
-    #end
+    def stride
+      self.class.stride
+    end
 
     # Display type and values of this array
     #
@@ -188,10 +169,6 @@ module Hornetseye
       end
       prepend + retval
     end
-
-    # def get
-    #   self
-    # end
 
     # Display values of this array
     #

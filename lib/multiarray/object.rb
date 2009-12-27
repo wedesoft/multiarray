@@ -5,38 +5,14 @@ module Hornetseye
 
     class << self
 
-      # Returns the type of storage object for storing values
+      # Get delegate class to this class
       #
-      # @return [Class] Returns +List+.
-      #
-      # @private
-      #def storage
-      #  List
-      #end
-
-      # Number of elements for storing an object of this type
-      #
-      # @return [Integer] Returns +1+.
-      #
-      # @private
-      #def delegate_size
-      #  1
-      #end
-
+      # @return [Class] Delegate class.
       # @private
       def delegate
         mode = ( Thread.current[ :mode ] || Ruby )
         mode.const_get :OBJECT
       end
-
-      # Default value for Ruby objects.
-      #
-      # @return [Object] Returns +nil+. 
-      #
-      # @private
-      #def default
-      #  nil
-      #end
 
       # Get string with information about this type
       #

@@ -14,6 +14,11 @@ module Hornetseye
           self
         end
 
+        # Size of storage required to store an element of this type.
+        #
+        # @return [Integer] Size of storage required. Returns +1+.
+        #
+        # @private
         def storage_size
           1
         end

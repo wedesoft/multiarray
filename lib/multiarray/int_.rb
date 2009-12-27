@@ -28,39 +28,15 @@ module Hornetseye
       # @private
       attr_accessor :signed
 
-      # Returns the type of storage object for storing values
+      # Get delegate class to this class
       #
-      # @return [Class] Returns +Memory+.
+      # @return [Class] Delegate class.
       #
-      # @private
-      #def storage
-      #  Memory
-      #end
-
       # @private
       def delegate
         mode = ( Thread.current[ :mode ] || Ruby )
         mode.send :INT, self
       end
-
-      # Number of bytes for storing an object of this type
-      #
-      # @return [Integer] Number of bytes to store a native integer of this
-      # type.
-      #
-      # @private
-      #def bytesize
-      #  ( bits + 7 ).div 8
-      #end
-
-      # Default value for integers
-      #
-      # @return [Object] Returns +0+.
-      #
-      # @private
-      #def default
-      #  0
-      #end
 
       # Get string with information about this type
       #
