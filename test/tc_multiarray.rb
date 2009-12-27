@@ -60,7 +60,28 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_typecode
     for t in @@types
-      assert_equal t, Hornetseye::MultiArray( t, 3, 2 ).typecode
+      assert_equal t, Hornetseye::MultiArray( t, 3, 2 ).new.typecode
+    end
+  end
+
+  def test_empty
+    for t in @@types
+      assert Hornetseye::MultiArray( t, 0, 0 ).new.empty?
+      assert Hornetseye::MultiArray( t, 0, 2 ).new.empty?
+      assert Hornetseye::MultiArray( t, 3, 0 ).new.empty?
+      assert !Hornetseye::MultiArray( t, 3, 2 ).new.empty?
+    end
+  end
+
+  def test_shape
+    for t in @@types
+      assert_equal [ 3, 2 ], Hornetseye::MultiArray( t, 3, 2 ).new.shape
+    end
+  end
+
+  def test_size
+    for t in @@types
+      assert_equal 3 * 2, Hornetseye::MultiArray( t, 3, 2 ).new.size
     end
   end
 

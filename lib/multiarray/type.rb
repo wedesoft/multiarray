@@ -7,55 +7,12 @@ module Hornetseye
 
     class << self
 
-      #def new( *args )
-      #  if name.empty?
-      #    super *args
-      #  else
-      #    class_name = name.split( '::' ).last
-      #    target = ( Thread.current[ :mode ] || Ruby ).const_get class_name
-      #    if self == target
-      #      super *args
-      #    else
-      #      target.new *args
-      #    end
-      #  end
-      #end
-
-      # Create +Delegate+ object for storing a value
-      #
-      # @return [Delegate] Object for storing a value of this type.
-      #
-      # @private
-      #def alloc
-      #  delegate.alloc delegate_size
-      #end
-
-      # Create new instance viewing the data of the indicated +Storage+ object
-      #
-      # @return [Type] Object of this class.
-      #
-      # @private
-      #def wrap( storage )
-      #  new nil, :storage => storage
-      #end
-
       # Returns the element type for arrays. Otherwise it returns +self+
       #
       # @return [Class] Returns +self+.
       def typecode
         self
       end
-
-      # Returns the element type for arrays and composite numbers
-      #
-      # Otherwise it returns +self+.
-      #
-      # @return [Class] Returns +self+.
-      #
-      # @private
-      #def basetype
-      #  self
-      #end
 
       # Check whether an array is empty or not
       #
@@ -85,27 +42,17 @@ module Hornetseye
         shape.inject( 1 ) { |a,b| a * b }
       end
 
+      # Get default value for native datatype.
+      #
+      # @return [Object] Default (Ruby) value for the native data type.
+      #
+      # @private
       def default
         delegate.default
       end
 
     end
 
-    # Get +Storage+ object used to store the data of this instance
-    #
-    # @return [Storage]
-    #
-    # @private
-    #attr_accessor :storage
-
-    # Get number of bytes memory required to store the data of an instance
-    #
-    # @return [Integer] Number of bytes.
-    #
-    # @private
-    #def bytesize
-    #  self.class.bytesize
-    #end
 
     # Returns the element type for arrays
     #
@@ -117,23 +64,6 @@ module Hornetseye
       self.class.typecode
     end
 
-    # @private
-    #def alloc( n = 1 )
-    #  self.class.alloc n
-    #end
-
-    # Returns the element type for arrays and composite numbers
-    #
-    # Otherwise it returns +self.class+.
-    #
-    # @return [Class] Element type for arrays and composite numbers. Returns
-    # +self.class+ if this is not an array.
-    #
-    # @private
-    #def basetype
-    #  self.class.basetype
-    #end
-    
     # Check whether an array is empty or not
     #
     # Returns +false+ if this is not an array.
@@ -150,9 +80,9 @@ module Hornetseye
     #
     # @return [Array<Integer>] Returns shape of array or +[]+ if this is not
     # an array.
-    #def shape
-    #  self.class.shape
-    #end
+    def shape
+      self.class.shape
+    end
 
     # Get number of elements of multi-dimensional array
     #
@@ -160,29 +90,25 @@ module Hornetseye
     #
     # @return [Integer] Number of elements of array. +1+ if this is not an
     # array.
-    #def size
-    #  self.class.size
-    #end
+    def size
+      self.class.size
+    end
 
     # Create new instance of this type
     #
     # @param value [Object] Optional initial value for this instance.
-    # @option options [Storage] :storage (self.class.alloc) Use specified
-    # +Storage+ object instead of creating a new one.
-    #
-    # @see alloc
-    #
-    # @private
-    #def initialize( value = nil, options = {} )
-    #  @delegate = options[ :delegate ] || self.class.alloc
-    #  set value unless value.nil?
-    #end
-
+    # @option options [Object] :storage Use specified storage object instead
+    # of creating a new one.
     def initialize( value = nil, options = {} )
       @delegate = self.class.delegate.new( self, options )
       set value unless value.nil?
     end
 
+    # Retrieve Ruby value of object
+    #
+    # @return [Object] Ruby value of native data type.
+    #
+    # @private
     def get
       @delegate.get
     end

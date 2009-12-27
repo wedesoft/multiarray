@@ -1,8 +1,13 @@
+# Proc#bind is defined if it does not exist already.
+#
 # @private
 class Proc
 
-  # @private
   unless method_defined? :bind
+
+    # Proc#bind is defined if it does not exist already.
+    #
+    # @private
     def bind( object )
       block, time = self, Time.now
       ( class << object; self end ).class_eval do
@@ -13,26 +18,39 @@ class Proc
         method
       end.bind object
     end
+
   end
 
 end
 
+# Object#instance_exec is defined if it does not exist already.
+#
 # @private
 class Object
 
-  # @private
   unless method_defined? :instance_exec
+
+    # Object#instance_exec is defined if it does not exist already.
+    #
+    # @private
     def instance_exec( *arguments, &block )
       block.bind( self )[ *arguments ]
     end
+
   end
 
 end
 
+# Module#alias_method_chain is defined.
+#
+# @private
 class Module
 
   unless method_defined? :alias_method_chain
 
+    # Method for creating alias chains.
+    #
+    # @private
     def alias_method_chain( target, feature, vocalize = target )
       alias_method "#{vocalize}_without_#{feature}", target
       alias_method target, "#{vocalize}_with_#{feature}"
@@ -43,19 +61,14 @@ class Module
 end
 
 require 'malloc'
-#require 'multiarray/delegate'
-#require 'multiarray/memory'
 require 'multiarray/type'
-#require 'multiarray/descriptortype'
 require 'multiarray/object'
 require 'multiarray/ruby/list'
 require 'multiarray/ruby/object'
-# require 'multiarray/compact'
 require 'multiarray/int_'
 require 'multiarray/ruby/int_'
 require 'multiarray/ruby/int'
 require 'multiarray/int'
-#require 'multiarray/composite_type'
 require 'multiarray/sequence_'
 require 'multiarray/ruby/sequence_'
 require 'multiarray/ruby/sequence'

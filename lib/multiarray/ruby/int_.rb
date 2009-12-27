@@ -17,6 +17,10 @@ module Hornetseye
           self
         end
 
+        # Get number of bytes memory required to store integer
+        #
+        # @return [Integer] Number of bytes.
+        #
         # @private
         def storage_size
           ( @front.bits + 7 ).div 8

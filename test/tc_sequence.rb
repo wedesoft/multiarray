@@ -60,7 +60,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_typecode
     for t in @@types
-      assert_equal t, Hornetseye::Sequence( t, 3 ).typecode
+      assert_equal t, Hornetseye::Sequence( t, 3 ).new.typecode
     end
   end
 
@@ -73,13 +73,13 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_shape
     for t in @@types
-      assert_equal [ 3 ], Hornetseye::Sequence( t, 3 ).shape
+      assert_equal [ 3 ], Hornetseye::Sequence( t, 3 ).new.shape
     end
   end
 
   def test_size
     for t in @@types
-      assert_equal 3, Hornetseye::Sequence( t, 3 ).size
+      assert_equal 3, Hornetseye::Sequence( t, 3 ).new.size
     end
   end
 
