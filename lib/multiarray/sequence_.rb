@@ -28,7 +28,7 @@ module Hornetseye
       #
       # @see #Sequence
       # @see List#+
-      # @see Memory#+
+      # @see Malloc#+
       #
       # @private
       attr_accessor :stride
@@ -36,6 +36,7 @@ module Hornetseye
       # Get delegate class to this class
       #
       # @return [Class] Delegate class.
+      #
       # @private
       def delegate
         mode = ( Thread.current[ :mode ] || Ruby )
@@ -73,14 +74,6 @@ module Hornetseye
         element_type.typecode
       end
 
-      # Check whether arrays of this type are empty or not
-      #
-      # @return [FalseClass,TrueClass] Returns boolean indicating whether
-      # arrays of this type are empty or not.
-      #def empty?
-      #  num_elements == 0
-      #end
-
       # Get shape of multi-dimensional array
       #
       # @return [Array<Integer>] Ruby array with the shape of this array type.
@@ -111,7 +104,7 @@ module Hornetseye
     #
     # @see #Sequence
     # @see List#+
-    # @see Memory#+
+    # @see Malloc#+
     #
     # @private
     def stride
