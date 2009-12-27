@@ -113,6 +113,13 @@ module Hornetseye
       @delegate.get
     end
 
+    # Set Ruby value of object.
+    #
+    # @overload set
+    #   Set to default value
+    # @overload set( value )
+    #   Set to specified value
+    #   @param [Object] New Ruby value for native data type.
     def set( *args )
       @delegate.set *args
     end
