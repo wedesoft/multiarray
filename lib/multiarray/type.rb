@@ -119,13 +119,18 @@ module Hornetseye
     #   Set to default value
     # @overload set( value )
     #   Set to specified value
-    #   @param [Object] New Ruby value for native data type.
+    #   @param value [Object] New Ruby value for native data type.
     def set( *args )
       @delegate.set *args
     end
 
-    def sel( *indices )
-      @delegate.sel *indices
+    # Get view for array element with specified index
+    #
+    # @param indices [Array<Integer>] Index/indices of array element.
+    #
+    # @private
+    def element( *indices )
+      @delegate.element *indices
     end
 
     # Display type and value of this instance
@@ -152,11 +157,10 @@ module Hornetseye
     # Retrieve element of array
     #
     # @param *indices [Array<Integer>] Index/indices to access element.
-    # @return [Object,Type] Ruby object with value of element.
     #
-    # @see #[]
+    # @return [Object,Type] Ruby object with value of element.
     def at( *indices )
-      sel( *indices ).get
+      element( *indices ).get
     end
 
     alias_method :[], :at
@@ -168,7 +172,7 @@ module Hornetseye
     #
     # @return [Object] Returns +args.last+.
     def assign( *args )
-      sel( *args[ 0 ... -1 ] ).set args.last
+      element( *args[ 0 ... -1 ] ).set args.last
     end
 
     alias_method :[]=, :assign

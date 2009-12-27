@@ -40,7 +40,7 @@ module Hornetseye
         @storage.write value
       end
 
-      def sel
+      def element
         self
       end
 

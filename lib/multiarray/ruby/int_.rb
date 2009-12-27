@@ -71,7 +71,7 @@ module Hornetseye
         value
       end
 
-      def sel
+      def element
         self
       end
 
