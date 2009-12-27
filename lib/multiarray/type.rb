@@ -53,7 +53,6 @@ module Hornetseye
 
     end
 
-
     # Returns the element type for arrays
     #
     # Otherwise it returns +self.class+.
@@ -126,7 +125,7 @@ module Hornetseye
 
     # Get view for array element with specified index
     #
-    # @param indices [Array<Integer>] Index/indices of array element.
+    # @param *indices [Array<Integer>] Index/indices of array element.
     #
     # @private
     def element( *indices )
@@ -167,10 +166,12 @@ module Hornetseye
 
     # Assign value to element of array
     #
-    # @param *args [Array<Integer,Object>] Index/indices to access element.
-    # The last element of +args+ is the new value to store in the array.
+    # @overload assign( *indices, value )
+    #   Assign a value to an element of an array
+    #   @param *indices [Array<Integer>] Index/indices to specify the element.
+    #   @param value [Object] Ruby object with new value.
     #
-    # @return [Object] Returns +args.last+.
+    # @return [Object] Returns the value.
     def assign( *args )
       element( *args[ 0 ... -1 ] ).set args.last
     end

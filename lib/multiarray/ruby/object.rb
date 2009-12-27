@@ -2,6 +2,9 @@ module Hornetseye
 
   module Ruby
 
+    # Delegate class for Ruby objects.
+    #
+    # @private
     class OBJECT
 
       class << self
@@ -23,6 +26,11 @@ module Hornetseye
           1
         end
 
+        # Default value for Ruby objects
+        #
+        # @return [Object] Returns +nil+.
+        #
+        # @private
         def default
           nil
         end
