@@ -1,9 +1,9 @@
-# Proc#bind is defined if it does not exist already.
+# Proc#bind is defined if it does not exist already
 class Proc
 
   unless method_defined? :bind
 
-    # Proc#bind is defined if it does not exist already.
+    # Proc#bind is defined if it does not exist already
     #
     # @private
     def bind( object )
@@ -21,12 +21,12 @@ class Proc
 
 end
 
-# Object#instance_exec is defined if it does not exist already.
+# Object#instance_exec is defined if it does not exist already
 class Object
 
   unless method_defined? :instance_exec
 
-    # Object#instance_exec is defined if it does not exist already.
+    # Object#instance_exec is defined if it does not exist already
     #
     # @private
     def instance_exec( *arguments, &block )
