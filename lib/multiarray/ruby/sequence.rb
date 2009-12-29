@@ -5,6 +5,7 @@ module Hornetseye
     # Create a delegate class deriving from +Sequence_+
     #
     # @param [Class] front The proxy class this class is a delegate of.
+    # @return [Sequence_] The delegate class.
     #
     # @see Sequence_
     # @see Hornetseye::Sequence_

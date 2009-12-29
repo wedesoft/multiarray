@@ -5,6 +5,7 @@ module Hornetseye
     # Create a delegate class deriving from +INT_+
     #
     # @param [Class] front The proxy class this class is a delegate of.
+    # @return [Class] A class deriving from +INT_+.
     #
     # @see INT_
     # @see Hornetseye::INT_

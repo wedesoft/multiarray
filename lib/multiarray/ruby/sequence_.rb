@@ -32,7 +32,7 @@ module Hornetseye
           @front.element_type.delegate.alloc n * @front.num_elements
         end
 
-        # Returns the delegate for element type of arrays or +self+.
+        # Returns the delegate for element type of arrays or +self+
         #
         # @return [Class] Returns delegate for element type.
         #
@@ -41,7 +41,7 @@ module Hornetseye
           @front.element_type.typecode.delegate
         end
 
-        # Size of storage required for this array.
+        # Size of storage required for this array
         #
         # @return [Integer] Size of storage for storing the elements of this
         # array.
@@ -51,7 +51,7 @@ module Hornetseye
           @front.element_type.delegate.storage_size * @front.num_elements
         end
 
-        # Get default value for this array type.
+        # Get default value for this array type
         #
         # @return [Object] Returns a multi-dimensional array filled with the
         # default value of the element type.

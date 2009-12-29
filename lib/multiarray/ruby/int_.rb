@@ -31,7 +31,7 @@ module Hornetseye
           Malloc.new n * storage_size
         end
 
-        # Returns the delegate for element type of arrays or +self+.
+        # Returns the delegate for element type of arrays or +self+
         #
         # @return [Class] Returns +self+.
         #
@@ -135,6 +135,10 @@ module Hornetseye
       end
 
       # Perform operation on the data type
+      #
+      # @param [Array<Object>] *args Parameters of operation.
+      # @param [Proc] &action The operation to perform.
+      # @return [INT_] Returns +self+.
       #
       # @private
       def op( *args, &action )

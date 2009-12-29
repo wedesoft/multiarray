@@ -42,7 +42,7 @@ module Hornetseye
         shape.inject( 1 ) { |a,b| a * b }
       end
 
-      # Get default value for native datatype.
+      # Get default value for native datatype
       #
       # @return [Object] Default (Ruby) value for the native data type.
       #
@@ -112,13 +112,14 @@ module Hornetseye
       @delegate.get
     end
 
-    # Set Ruby value of object.
+    # Set Ruby value of object
     #
     # @overload set
     #   Set to default value
     # @overload set( value )
     #   Set to specified value
     #   @param [Object] value New Ruby value for native data type.
+    # @return [Object] The parameter +value+ or the default value.
     def set( *args )
       @delegate.set *args
     end
@@ -126,6 +127,7 @@ module Hornetseye
     # Get view for array element with specified index
     #
     # @param [Array<Integer>] *indices Index/indices of array element.
+    # @return [Object] The view for the specified element.
     #
     # @private
     def element( *indices )
@@ -162,6 +164,7 @@ module Hornetseye
       element( *indices ).get
     end
 
+    # Retrieve element of array
     alias_method :[], :at
 
     # Assign value to element of array
@@ -176,6 +179,7 @@ module Hornetseye
       element( *args[ 0 ... -1 ] ).set args.last
     end
 
+    # Assign value to element of array
     alias_method :[]=, :assign
 
   end

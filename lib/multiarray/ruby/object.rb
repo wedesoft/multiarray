@@ -1,5 +1,8 @@
 module Hornetseye
 
+  # Namespace with objects for performing computations in Ruby
+  #
+  # @private
   module Ruby
 
     # Delegate class for handling Ruby objects
@@ -21,7 +24,7 @@ module Hornetseye
           List.new n
         end
 
-        # Returns the delegate for element type of arrays or +self+.
+        # Returns the delegate for element type of arrays or +self+
         #
         # @return [Class] Returns +self+.
         #
@@ -30,7 +33,7 @@ module Hornetseye
           self
         end
 
-        # Size of storage required to store an element of this type.
+        # Size of storage required to store an element of this type
         #
         # @return [Integer] Size of storage required. Returns +1+.
         #
@@ -83,7 +86,7 @@ module Hornetseye
         @storage.read
       end
 
-      # Set the Ruby value.
+      # Set the Ruby value
       #
       # @param [Object] value Ruby value to set delegate to.
       # @return [Object] The parameter +value+.
