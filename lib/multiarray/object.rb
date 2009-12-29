@@ -7,7 +7,9 @@ module Hornetseye
 
       # Get delegate class to this class
       #
-      # @return [Ruby::OBJECT] Delegate class.
+      # @return [Class] Delegate class.
+      #
+      # @see Hornetseye::Ruby::OBJECT
       #
       # @private
       def delegate

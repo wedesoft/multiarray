@@ -95,7 +95,7 @@ module Hornetseye
 
     # Create new instance of this type
     #
-    # @param value [Object] Optional initial value for this instance.
+    # @param [Object] value Optional initial value for this instance.
     # @option options [Object] :storage Use specified storage object instead
     # of creating a new one.
     def initialize( value = nil, options = {} )
@@ -118,14 +118,14 @@ module Hornetseye
     #   Set to default value
     # @overload set( value )
     #   Set to specified value
-    #   @param value [Object] New Ruby value for native data type.
+    #   @param [Object] value New Ruby value for native data type.
     def set( *args )
       @delegate.set *args
     end
 
     # Get view for array element with specified index
     #
-    # @param *indices [Array<Integer>] Index/indices of array element.
+    # @param [Array<Integer>] *indices Index/indices of array element.
     #
     # @private
     def element( *indices )
@@ -155,7 +155,7 @@ module Hornetseye
 
     # Retrieve element of array
     #
-    # @param *indices [Array<Integer>] Index/indices to access element.
+    # @param [Array<Integer>] *indices Index/indices to access element.
     #
     # @return [Object,Type] Ruby object with value of element.
     def at( *indices )
@@ -168,8 +168,8 @@ module Hornetseye
     #
     # @overload assign( *indices, value )
     #   Assign a value to an element of an array
-    #   @param *indices [Array<Integer>] Index/indices to specify the element.
-    #   @param value [Object] Ruby object with new value.
+    #   @param [Array<Integer>] *indices Index/indices to specify the element.
+    #   @param [Object] value Ruby object with new value.
     #
     # @return [Object] Returns the value.
     def assign( *args )

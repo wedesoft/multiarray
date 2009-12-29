@@ -9,9 +9,9 @@ module Hornetseye
 
       # Create zero-offset view on a Ruby array
       #
-      # @param size Number of elements of the view.
-      # @option options [Array<Object>] :array The Ruby array.
-      # @option options [Integer] :offset Offset of the view.
+      # @param [Integer] size Number of elements of the view.
+      # @option options [Array<Object>] :array ([nil] * size) The Ruby array.
+      # @option options [Integer] :offset (0) Offset of the view.
       #
       # @private
       def initialize( size, options = {} )
@@ -24,7 +24,7 @@ module Hornetseye
       # @return [Object] The element from the array.
       #
       # @see #write
-      # @see Malloc#read
+      # @see Hornetseye::Malloc#read
       #
       # @private
       def read
@@ -37,7 +37,7 @@ module Hornetseye
       # @return [Object] Returns the parameter +value+.
       #
       # @see #read
-      # @see Malloc#write
+      # @see Hornetseye::Malloc#write
       #
       # @private
       def write( value )
@@ -50,7 +50,7 @@ module Hornetseye
       # @param [Integer] offset A non-negative offset.
       # @return [List] A new view for the specified part of the array.
       #
-      # @see Memory#+
+      # @see Hornetseye::Malloc#+
       # @private
       def +( offset )
         List.new 0, :array => @array, :offset => @offset + offset

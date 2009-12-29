@@ -2,6 +2,14 @@ module Hornetseye
 
   module Ruby
 
+    # Create a delegate class deriving from +INT_+
+    #
+    # @param [Class] front The proxy class this class is a delegate of.
+    #
+    # @see INT_
+    # @see Hornetseye::INT_
+    #
+    # @private
     def INT( front )
       retval = Class.new INT_
       retval.front = front

@@ -32,6 +32,8 @@ module Hornetseye
       #
       # @return [Class] Delegate class.
       #
+      # @see Hornetseye::Ruby::INT_
+      #
       # @private
       def delegate
         mode = ( Thread.current[ :mode ] || Ruby )

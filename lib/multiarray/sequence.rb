@@ -38,8 +38,6 @@ module Hornetseye
   #
   # @see Sequence.new
   # @see #MultiArray
-  # @see CompositeType.element_type
-  # @see CompositeType.num_elements
   def Sequence( element_type, num_elements, stride = element_type.size )
     retval = Class.new Sequence_
     retval.element_type = element_type

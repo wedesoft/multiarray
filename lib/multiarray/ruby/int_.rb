@@ -2,17 +2,40 @@ module Hornetseye
 
   module Ruby
 
+    # Delegate class for handling native integers in Ruby
+    #
+    # @see Hornetseye::INT_
+    #
+    # @abstract
+    # @private
     class INT_
 
       class << self
 
+        # Return the proxy class which this class is a delegate of
+        #
+        # @return [Class] The proxy class.
+        #
+        # @see Hornetseye::INT_
+        #
+        # @private
         attr_accessor :front
 
+        # Allocate storage for delegate object
+        #
+        # @param [Integer] n Number of elements to store.
+        # @return [Hornetseye::Malloc] Object for storing the element(s).
+        #
         # @private
         def alloc( n = 1 )
           Malloc.new n * storage_size
         end
 
+        # Returns the delegate for element type of arrays or +self+.
+        #
+        # @return [Class] Returns +self+.
+        #
+        # @private
         def typecode
           self
         end
@@ -37,11 +60,22 @@ module Hornetseye
 
       end
 
+      # Construct delegate object for storing native integers
+      #
+      # @param [Hornetseye::INT_] parent Proxy object for this delegate.
+      # @option options [Hornetseye::Malloc] :storage (self.class.alloc) View
+      # on Ruby array to store delegate objects.
+      #
+      # @private
       def initialize( parent, options = {} )
         @storage = options[ :storage ] || self.class.alloc
       end
 
       # Get descriptor for packing/unpacking native values
+      #
+      # The descriptor is used when calling +Array#pack+ or +String#unpack+.
+      #
+      # @return [String] Descriptor for packing/unpacking native values.
       #
       # @private
       def descriptor
@@ -67,19 +101,42 @@ module Hornetseye
         end
       end
 
+      # Retrieve the native integer and convert to Ruby value
+      #
+      # @return [Integer] Ruby value of delegate.
+      #
+      # @see #set
+      #
+      # @private
       def get
         @storage.read( self.class.storage_size ).unpack( descriptor ).first
       end
 
+      # Convert Ruby value to native integer and store it
+      #
+      # @param [Integer] value Ruby value to set delegate to.
+      # @return [Integer] The parameter +value+.
+      #
+      # @see #get
+      #
+      # @private
       def set( value = self.class.default )
         @storage.write [ value ].pack( descriptor )
         value
       end
 
+      # Get view for an element or return +self+ if this is not an array
+      #
+      # @return [INT_] Returns +self+.
+      #
+      # @private
       def element
         self
       end
 
+      # Perform operation on the data type
+      #
+      # @private
       def op( *args, &action )
         instance_exec *args, &action
         self
