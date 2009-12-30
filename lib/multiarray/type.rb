@@ -120,6 +120,8 @@ module Hornetseye
     #   Set to specified value
     #   @param [Object] value New Ruby value for native data type.
     # @return [Object] The parameter +value+ or the default value.
+    #
+    # @private
     def set( *args )
       @delegate.set *args
     end
