@@ -85,5 +85,13 @@ class TC_MultiArray < Test::Unit::TestCase
     end
   end
 
+  def test_at_assign
+    for t in @@types
+      m = Hornetseye::MultiArray.new t, 3, 2
+      m[] = 0
+      assert_equal [ [ 0, 0, 0 ], [ 0, 0, 0 ] ], m.to_a
+    end
+  end
+
 end
 
