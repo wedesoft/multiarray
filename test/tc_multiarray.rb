@@ -60,7 +60,20 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_at_assign
-    # !!!
+    m = M.new O, 3, 2
+    for j in 0 ... 2
+      for i in 0 ... 3
+        assert_equal i + j * 3 + 1, m[ j ][ i ] = i + j * 3 + 1
+      end
+    end
+    for j in 0 ... 2
+      for i in 0 ... 3
+        assert_equal i + j * 3 + 1, m[ j ][ i ]
+      end
+    end
+    assert_equal [ 4, 5, 6 ], m[ 1 ].to_a
+    assert_equal 7, m[ 1 ] = 7
+    assert_equal [ [ 1, 2, 3 ], [ 7, 7, 7 ] ], m.to_a
   end
 
   def test_equal
