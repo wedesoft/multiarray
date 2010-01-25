@@ -73,7 +73,27 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_lazy
-    # !!!
+    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    u = lazy { -m }
+    assert_equal 'MultiArray.object(3,2):<delayed>', u.inspect
+    assert_equal [ [ -1, -2, -3 ], [ -4, -5, -6 ] ], u.force.to_a
+    u = lazy { --m }
+    assert_equal 'MultiArray.object(3,2):<delayed>', u.inspect
+    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ], u.force.to_a
+    u = -lazy { -m }
+    assert_equal "MultiArray.object(3,2):\n[ [ 1, 2, 3 ],\n  [ 4, 5, 6 ] ]",
+                 u.inspect
+    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ], u.to_a
+    u = lazy { -lazy { -m } }
+    assert_equal 'MultiArray.object(3,2):<delayed>', u.inspect
+    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ], u.force.to_a
+    u = eager { lazy { -m } }
+    assert_equal 'MultiArray.object(3,2):<delayed>', u.inspect
+    assert_equal [ [ -1, -2, -3 ], [ -4, -5, -6 ] ], u.force.to_a
+    u = lazy { eager { -lazy { -m } } }
+    assert_equal "MultiArray.object(3,2):\n[ [ 1, 2, 3 ],\n  [ 4, 5, 6 ] ]",
+      u.inspect
+    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ], u.to_a
   end
 
 end
