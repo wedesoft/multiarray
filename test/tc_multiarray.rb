@@ -7,90 +7,73 @@ Kernel::require 'multiarray'
 
 class TC_MultiArray < Test::Unit::TestCase
 
+  O = Hornetseye::OBJECT
+  M = Hornetseye::MultiArray
+
+  def lazy( &action )
+    Hornetseye::lazy &action
+  end
+
+  def eager( &action )
+    Hornetseye::eager &action
+  end
+
   def setup
-    @@types = [ Hornetseye::UBYTE,
-                Hornetseye::BYTE,
-                Hornetseye::USINT,
-                Hornetseye::SINT,
-                Hornetseye::UINT,
-                Hornetseye::INT,
-                Hornetseye::ULONG,
-                Hornetseye::LONG ]
   end
 
   def teardown
-    @@types = nil
+  end
+
+  def M( *args )
+    Hornetseye::MultiArray *args
   end
 
   def test_default
-    for t in @@types
-      m = Hornetseye::MultiArray( t, 3, 2 ).default
-      assert_equal [ [ 0, 0, 0 ], [ 0, 0, 0 ] ], m.to_a
-    end
-  end
-
-  def test_multiarray_new
-    for t in @@types
-      m = Hornetseye::MultiArray.new t, 3, 2
-      m.set
-      assert_equal [ [ 0, 0, 0 ], [ 0, 0, 0 ] ], m.to_a
-    end
-  end
-
-  def test_multiarray_to_s
-    for t in @@types
-      assert_equal "MultiArray.#{t.to_s.downcase}(3,2)",
-                   Hornetseye::MultiArray( t, 3, 2 ).to_s
-    end
+    assert_equal [ [ nil ] * 3 ] * 2, M( O, 3, 2 ).new.to_a
   end
 
   def test_multiarray_inspect
-    for t in @@types
-      assert_equal "MultiArray.#{t.inspect.downcase}(3,2)",
-                   Hornetseye::MultiArray( t, 3, 2 ).inspect
-    end
+    assert_equal 'MultiArray.object(3,2)', M( O, 3, 2 ).inspect
   end
 
-  def test_storage_size
-    for t in @@types
-      assert_equal t.delegate.storage_size * 3 * 2,
-                   Hornetseye::MultiArray( t, 3, 2 ).delegate.storage_size
-    end
+  def test_multiarray_to_s
+    assert_equal 'MultiArray.object(3,2)', M( O, 3, 2 ).to_s
   end
 
-  def test_typecode
-    for t in @@types
-      assert_equal t, Hornetseye::MultiArray( t, 3, 2 ).new.typecode
-    end
+  def test_multiarray_assign
+    assert_equal [ [ :a, :b, :c ], [ :d, :e, :f ] ],
+                 M[ [ :a, :b, :c ], [ :d, :e, :f ] ].to_a
+    assert_equal [ [ :a, nil ], [ :b, :c ] ],
+                 M[ [ :a ], [ :b, :c ] ].to_a
+    assert_equal [ [ :a, :b ], [ :c, :c ] ],
+                 M[ [ :a, :b ], :c ].to_a
   end
 
-  def test_empty
-    for t in @@types
-      assert Hornetseye::MultiArray( t, 0, 0 ).new.empty?
-      assert Hornetseye::MultiArray( t, 0, 2 ).new.empty?
-      assert Hornetseye::MultiArray( t, 3, 0 ).new.empty?
-      assert !Hornetseye::MultiArray( t, 3, 2 ).new.empty?
-    end
+  def test_inspect
+    assert_equal "MultiArray.object(3,2):\n" + 
+                 "[ [ :a, :b, :c ],\n  [ :d, :e, :f ] ]",
+                 M[ [ :a, :b, :c ], [ :d, :e, :f ] ].inspect
   end
 
-  def test_shape
-    for t in @@types
-      assert_equal [ 3, 2 ], Hornetseye::MultiArray( t, 3, 2 ).new.shape
-    end
-  end
-
-  def test_size
-    for t in @@types
-      assert_equal 3 * 2, Hornetseye::MultiArray( t, 3, 2 ).new.size
-    end
+  def test_to_s
+    # !!!
   end
 
   def test_at_assign
-    for t in @@types
-      m = Hornetseye::MultiArray.new t, 3, 2
-      m[] = 0
-      assert_equal [ [ 0, 0, 0 ], [ 0, 0, 0 ] ], m.to_a
-    end
+    # !!!
+  end
+
+  def test_equal
+    # !!!
+  end
+
+  def test_negate
+    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    assert_equal [ [ -1, -2, -3 ], [ -4, -5, -6 ] ], ( -m ).to_a
+  end
+
+  def test_lazy
+    # !!!
   end
 
 end

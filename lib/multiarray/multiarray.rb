@@ -21,6 +21,24 @@ module Hornetseye
         Hornetseye::MultiArray( element_type, *shape ).new
       end
 
+      def []( *args )
+        probe = proc do |s,a|
+          if a.is_a? Array
+            if s.empty?
+              a.inject( [], &probe ) + [ a.size ]
+            else
+              a.inject( s[ 0 ... -1 ], &probe ) + [ [ a.size, s.last ].max ]
+            end
+          else
+            s
+          end
+        end
+        shape = probe.call [], args
+        retval = MultiArray.new OBJECT, *shape
+        retval[] = args
+        retval
+      end
+
     end
 
   end
@@ -33,7 +51,7 @@ module Hornetseye
   # @param [Class] element_type Element type of the array type. Should derive
   # from +Type+.
   # @param [Array<Integer>] *shape The dimensions of the array type.
-  # @return [Class] A class deriving from +Type+ or +Sequence_+.
+  # @return [Class] A class deriving from +Pointer_+.
   #
   # @see MultiArray.new
   # @see #Sequence

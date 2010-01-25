@@ -7,72 +7,81 @@ Kernel::require 'multiarray'
 
 class TC_Object < Test::Unit::TestCase
 
+  O = Hornetseye::OBJECT
+
+  def lazy( &action )
+    Hornetseye::lazy &action
+  end
+
+  def eager( &action )
+    Hornetseye::eager &action
+  end
+
   def setup
-    @@t = Hornetseye::OBJECT
   end
 
   def teardown
-    @@t = nil
   end
 
   def test_object_default
-    assert_nil @@t.default
+    assert_nil O.new.get
   end
 
-  def test_int_to_s
-    assert_equal 'OBJECT', @@t.to_s
+  def test_object_inspect
+    assert_equal 'OBJECT', O.inspect
   end
 
-  def test_int_inspect
-    assert_equal @@t.to_s, @@t.inspect
-  end
-
-  def test_storage_size
-    assert_equal 1, @@t.delegate.storage_size
-  end
-
-  def test_typecode
-    assert_equal @@t, @@t.typecode
-  end
-
-  def test_shape
-    assert_equal [], @@t.shape
-  end
-
-  def test_size
-    assert_equal 1, @@t.size
-  end
-
-  def test_to_s
-    assert_equal '42', @@t.new( 42 ).to_s
+  def test_object_to_s
+    assert_equal 'OBJECT', O.to_s
   end
 
   def test_inspect
-    assert_equal "OBJECT(42)", @@t.new( 42 ).inspect
+    assert_equal "OBJECT(42)", O.new( 42 ).inspect
   end
 
-  def test_get_set
-    i = @@t.new nil
-    assert_nil i.get
-    assert_equal 42, i.set( 42 )
-    assert_equal 42, i.get
-    assert_nil i.set
-    assert_nil i.get
+  def test_to_s
+    assert_equal '42', O.new( 42 ).to_s
+  end
+
+  def test_marshal
+    assert_equal O.new( 42 ), Marshal.load( Marshal.dump( O.new( 42 ) ) )
   end
 
   def test_at_assign
-    i = @@t.new nil
-    assert_nil i.at
-    assert_equal 42, i.assign( 42 )
-    assert_equal 42, i.at
-    assert_raise( ArgumentError ) { i.at 0 }
-    assert_raise( ArgumentError ) { i.assign 0, nil }
-    i = @@t.new nil
-    assert_nil i[]
-    assert_equal 42, i[] = 42 
-    assert_equal 42, i[]
-    assert_raise( ArgumentError ) { i[ 0 ] }
-    assert_raise( ArgumentError ) { i[ 0 ] = nil }
+    o = O.new 3
+    assert_equal 3, o[]
+    assert_equal 42, o[] = 42
+    assert_equal 42, o[]
+    assert_nil O.new[]
+  end
+
+  def test_equal
+    assert_not_equal O.new( 3 ), O.new( 4 )
+    assert_equal O.new( 3 ), O.new( 3 )
+  end
+
+  def test_negate
+    o = O.new( 5 )
+    assert_equal O.new( -5 ), -o
+  end
+
+  def test_lazy
+    o = lazy { -O.new( 3 ) }
+    assert_not_equal O.new( -3 ), o
+    assert_equal 'OBJECT(<delayed>)', o.inspect
+    assert_equal O.new( -3 ), o.force
+    o = lazy { --O.new( 3 ) }
+    assert_equal 'OBJECT(<delayed>)', o.inspect
+    assert_equal O.new( 3 ), o.force
+    o = -lazy { -O.new( 3 ) }
+    assert_equal O.new( 3 ), o
+    o = lazy { -lazy { -O.new( 3 ) } }
+    assert_equal 'OBJECT(<delayed>)', o.inspect
+    assert_equal O.new( 3 ), o.force
+    o = eager { lazy { -O.new( 3 ) } }
+    assert_equal 'OBJECT(<delayed>)', o.inspect
+    o = lazy { eager { -lazy { -O.new( 3 ) } } }
+    assert_equal O.new( 3 ), o
   end
 
 end

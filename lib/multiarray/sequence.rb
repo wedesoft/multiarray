@@ -20,11 +20,17 @@ module Hornetseye
         Hornetseye::Sequence( element_type, num_elements ).new
       end
 
+      def []( *args )
+        retval = Hornetseye::Sequence( OBJECT, args.size ).new
+        retval[] = args
+        retval
+      end
+
     end
 
   end
 
-  # Create a class deriving from +Sequence_+
+  # Create an array class
   #
   # The parameters +element_type+, +num_elements+, and +stride+ are assigned
   # to the corresponding attributes of the resulting class.
@@ -34,16 +40,17 @@ module Hornetseye
   # @param [Integer] num_elements Number of elements of the array type.
   # @param [Integer] stride Optional stride size for transposed or
   # non-contiguous array types.
-  # @return [Class] A class deriving from +Sequence_+.
+  # @return [Class] An array class deriving from +Pointer_+.
   #
   # @see Sequence.new
   # @see #MultiArray
-  def Sequence( element_type, num_elements, stride = element_type.size )
-    retval = Class.new Sequence_
-    retval.element_type = element_type
-    retval.num_elements = num_elements
-    retval.stride = stride
-    retval
+  def Sequence( element_type, num_elements,
+                stride = element_type.dereference.size )
+    sequence = Class.new Sequence_
+    sequence.element_type = element_type.dereference
+    sequence.num_elements = num_elements
+    sequence.stride = stride
+    Pointer sequence
   end
 
   module_function :Sequence

@@ -7,144 +7,91 @@ Kernel::require 'multiarray'
 
 class TC_Sequence < Test::Unit::TestCase
 
+  O = Hornetseye::OBJECT
+  S = Hornetseye::Sequence
+
+  def lazy( &action )
+    Hornetseye::lazy &action
+  end
+
+  def eager( &action )
+    Hornetseye::eager &action
+  end
+
   def setup
-    @@types = [ Hornetseye::OBJECT,
-                Hornetseye::UBYTE,
-                Hornetseye::BYTE,
-                Hornetseye::USINT,
-                Hornetseye::SINT,
-                Hornetseye::UINT,
-                Hornetseye::INT,
-                Hornetseye::ULONG,
-                Hornetseye::LONG ]
   end
 
   def teardown
-    @@types = nil
+  end
+
+  def S( *args )
+    Hornetseye::Sequence *args
   end
 
   def test_default
-    for t in @@types
-      assert_equal [ t.default ] * 3, Hornetseye::Sequence( t, 3 ).default.to_a
-    end
-  end
-
-  def test_sequence_new
-    for t in @@types
-      s = Hornetseye::Sequence.new t, 3
-      s.set
-      assert_equal [ t.default ] * 3, s.to_a
-    end
-  end
-
-  def test_sequence_to_s
-    for t in @@types
-      assert_equal "Sequence.#{t.to_s.downcase}(3)",
-                   Hornetseye::Sequence( t, 3 ).to_s
-    end
+    assert_equal [ nil, nil, nil ], S( O, 3 ).new.to_a
   end
 
   def test_sequence_inspect
-    for t in @@types
-      assert_equal "Sequence.#{t.inspect.downcase}(3)",
-                   Hornetseye::Sequence( t, 3 ).inspect
-    end
+    assert_equal 'Sequence.object(3)', S( O, 3 ).inspect
   end
 
-  def test_storage_size
-    for t in @@types
-      assert_equal t.delegate.storage_size * 3,
-                   Hornetseye::Sequence( t, 3 ).delegate.storage_size
-    end
+  def test_sequence_to_s
+    assert_equal 'Sequence.object(3)', S( O, 3 ).to_s
   end
 
-  def test_typecode
-    for t in @@types
-      assert_equal t, Hornetseye::Sequence( t, 3 ).new.typecode
-    end
-  end
-
-  def test_empty
-    for t in @@types
-      assert Hornetseye::Sequence( t, 0 ).new.empty?
-      assert !Hornetseye::Sequence( t, 3 ).new.empty?
-    end
-  end
-
-  def test_shape
-    for t in @@types
-      assert_equal [ 3 ], Hornetseye::Sequence( t, 3 ).new.shape
-    end
-  end
-
-  def test_size
-    for t in @@types
-      assert_equal 3, Hornetseye::Sequence( t, 3 ).new.size
-    end
+  def test_sequence_assign
+    assert_equal [ :a, :b, :c ], S[ :a, :b, :c ].to_a
   end
 
   def test_inspect
-    for t in @@types
-      s = Hornetseye::Sequence( t, 3 ).new
-      s[] = [ 1, 2, 3 ]
-      assert_equal "Sequence.#{t.inspect.downcase}(3):\n[ 1, 2, 3 ]", s.inspect
-    end
+    assert_equal "Sequence.object(3):\n[ :a, :b, :c ]", S[ :a, :b, :c ].inspect
   end
 
   def test_to_s
-    for t in @@types
-      s = Hornetseye::Sequence( t, 3 ).new
-      s[] = [ 1, 2, 3 ]
-      assert_equal '123', s.to_s
-    end
-  end
-
-  def test_to_a
-    for t in @@types
-      s = Hornetseye::Sequence( t, 3 ).new
-      s[] = [ 1, 2, 3 ]
-      assert_equal [ 1, 2, 3 ], s.to_a
-    end
-  end
-
-  def test_get_set
-    for t in @@types
-      s1 = Hornetseye::Sequence( t, 3 ).new
-      s1[] = 2
-      assert_equal t.default, s1.set
-      assert_equal [ t.default ] * 3, s1.get.to_a
-      assert_equal [ t.default ] * 3, s1.to_a
-      assert_equal 1, s1.set( 1 )
-      assert_equal [ 1, 1, 1 ], s1.to_a
-      assert_equal [ 2, 3 ], s1.set( [ 2, 3 ] )
-      assert_equal [ 2, 3, t.default ], s1.to_a
-      s2 = Hornetseye::Sequence( t, 3 ).new
-      s2[] = [ 1, 2, 3 ]
-      assert_equal [ 1, 2, 3 ], s2.to_a
-      s1[] = s2
-      assert_equal [ 1, 2, 3 ], s1.to_a
-    end
+    # !!!
   end
 
   def test_at_assign
-    for t in @@types
-      s = Hornetseye::Sequence( t, 3 ).new
-      s[] = 0
-      assert_equal [ 0, 0, 0 ], [ s.at( 0 ), s.at( 1 ), s.at( 2 ) ]
-      assert_equal [ 1, 2, 3 ], [ s.assign( 0, 1 ),
-                                  s.assign( 1, 2 ),
-                                  s.assign( 2, 3 ) ]
-      assert_equal [ 1, 2, 3 ], [ s.at( 0 ), s.at( 1 ), s.at( 2 ) ]
-      assert_raise( ArgumentError ) { s.at 0, 0 }
-      assert_nothing_raised { s.at }
-      s = Hornetseye::Sequence( t, 3 ).new
-      s[] = 0
-      assert_equal [ 0, 0, 0 ], [ s[ 0 ], s[ 1 ], s[ 2 ] ]
-      assert_equal [ 1, 2, 3 ], [ s[ 0 ] = 1, s[ 1 ] = 2, s[ 2 ] = 3 ]
-      assert_equal [ 1, 2, 3 ], [ s[ 0 ], s[ 1 ], s[ 2 ] ]
-      assert_raise( ArgumentError ) { s[ 0, 0 ] }
-      assert_nothing_raised { s[] }
+    s = S.new O, 3
+    for i in 0 ... 3
+      assert_equal i + 1, s[ i ] = i + 1
     end
+    assert_equal [ 1, 2, 3 ], s[].to_a
+    for i in 0 ... 3
+      assert_equal i + 1, s[ i ]
+    end
+  end
+
+  def test_equal
+    # !!!
+  end
+
+  def test_negate
+    s = S[ 1, 2, 3 ]
+    assert_equal [ -1, -2, -3 ], ( -s ).to_a
+  end
+
+  def test_lazy
+    s = S[ 1, 2, 3 ]
+    u = lazy { -s }
+    assert_equal 'Sequence.object(3):<delayed>', u.inspect
+    assert_equal [ -1, -2, -3 ], u.force.to_a
+    u = lazy { --s }
+    assert_equal 'Sequence.object(3):<delayed>', u.inspect
+    assert_equal [ 1, 2, 3 ], u.force.to_a
+    u = -lazy { -s }
+    assert_equal "Sequence.object(3):\n[ 1, 2, 3 ]", u.inspect
+    assert_equal [ 1, 2, 3 ], u.to_a
+    u = lazy { -lazy { -s } }
+    assert_equal 'Sequence.object(3):<delayed>', u.inspect
+    assert_equal [ 1, 2, 3 ], u.force.to_a
+    u = eager { lazy { -s } }
+    assert_equal 'Sequence.object(3):<delayed>', u.inspect
+    assert_equal [ -1, -2, -3 ], u.force.to_a
+    u = lazy { eager { -lazy { -s } } }
+    assert_equal "Sequence.object(3):\n[ 1, 2, 3 ]", u.inspect
+    assert_equal [ 1, 2, 3 ], u.to_a
   end
 
 end

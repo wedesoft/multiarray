@@ -7,6 +7,16 @@ module Hornetseye
 
     class << self
 
+      # Returns the dereferenced type for pointers
+      #
+      # Returns the dereferenced type for pointers.
+      # Otherwise it returns +self+.
+      #
+      # @return [Class] Returns +self+.
+      def dereference
+        self
+      end
+
       # Returns the element type for arrays. Otherwise it returns +self+
       #
       # @return [Class] Returns +self+.
@@ -14,133 +24,24 @@ module Hornetseye
         self
       end
 
-      # Check whether an array is empty or not
-      #
-      # Returns +false+ if this is not an array.
-      #
-      # @return [FalseClass,TrueClass] Returns +false+.
-      def empty?
-        size == 0
-      end
-
-      # Get shape of multi-dimensional array
-      #
-      # Returns +[]+ if this is not an array.
-      #
-      # @return [Array<Integer>] Returns +[]+.
       def shape
         []
       end
 
-      # Get number of elements of multi-dimensional array
-      #
-      # Returns +1+ if this is not an array.
-      #
-      # @return [Integer] Number of elements of array. +1+ if this is not an
-      # array.
-      def size
-        shape.inject( 1 ) { |a,b| a * b }
-      end
-
-      # Get default value for native datatype
-      #
-      # @return [Object] Default (Ruby) value for the native data type.
-      #
-      # @private
-      def default
-        delegate.default
-      end
-
-    end
-
-    # Returns the element type for arrays
-    #
-    # Otherwise it returns +self.class+.
-    #
-    # @return [Class] Element type for arrays. Returns +self.class+ if this is
-    # not an array.
-    def typecode
-      self.class.typecode
-    end
-
-    # Check whether an array is empty or not
-    #
-    # Returns +false+ if this is not an array.
-    #
-    # @return [FalseClass,TrueClass] Returns boolean indicating whether the
-    # array is empty or not. Returns +false+ if this is not an array.
-    def empty?
-      self.class.empty?
-    end
-
-    # Get shape of multi-dimensional array
-    #
-    # Returns +[]+ if this is not an array.
-    #
-    # @return [Array<Integer>] Returns shape of array or +[]+ if this is not
-    # an array.
-    def shape
-      self.class.shape
-    end
-
-    # Get number of elements of multi-dimensional array
-    #
-    # Returns +1+ if this is not an array.
-    #
-    # @return [Integer] Number of elements of array. +1+ if this is not an
-    # array.
-    def size
-      self.class.size
     end
 
     # Create new instance of this type
     #
     # @param [Object] value Optional initial value for this instance.
-    # @option options [Object] :storage Use specified storage object instead
-    # of creating a new one.
-    def initialize( value = nil, options = {} )
-      @delegate = self.class.delegate.new( self, options )
-      set value unless value.nil?
-    end
-
-    # Retrieve Ruby value of object
-    #
-    # @return [Object] Ruby value of native data type.
-    #
-    # @private
-    def get
-      @delegate.get
-    end
-
-    # Set Ruby value of object
-    #
-    # @overload set
-    #   Set to default value
-    # @overload set( value )
-    #   Set to specified value
-    #   @param [Object] value New Ruby value for native data type.
-    # @return [Object] The parameter +value+ or the default value.
-    #
-    # @private
-    def set( *args )
-      @delegate.set *args
-    end
-
-    # Get view for array element with specified index
-    #
-    # @param [Array<Integer>] *indices Index/indices of array element.
-    # @return [Object] The view for the specified element.
-    #
-    # @private
-    def element( *indices )
-      @delegate.element *indices
+    def initialize( value = nil )
+      set value if value
     end
 
     # Display type and value of this instance
     #
     # @return [String] Returns string with information about type and value.
     def inspect
-      "#{self.class.inspect}(#{get.inspect})"
+      "#{self.class.inspect}(#{@value.inspect})"
     end
 
     # Display value of this instance
@@ -150,39 +51,106 @@ module Hornetseye
       get.to_s
     end
 
-    # Convert value of this instance to array
+    # Retrieve Ruby value of object
     #
-    # @return [Array] Result of calling +to_a+ on value of this instance.
-    def to_a
-      get.to_a
+    # @return [Object] Ruby value of native data type.
+    def []
+      get
     end
 
-    # Retrieve element of array
+    # Set Ruby value of object
     #
-    # @param [Array<Integer>] *indices Index/indices to access element.
+    # @param [Object] value New Ruby value for native data type.
     #
-    # @return [Object,Type] Ruby object with value of element.
-    def at( *indices )
-      element( *indices ).get
+    # @return [Object] The parameter +value+ or the default value.
+    def []=( value )
+      set value
     end
 
-    # Retrieve element of array
-    alias_method :[], :at
-
-    # Assign value to element of array
+    # Retrieve Ruby value of object
     #
-    # @overload assign( *indices, value )
-    #   Assign a value to an element of an array
-    #   @param [Array<Integer>] *indices Index/indices to specify the element.
-    #   @param [Object] value Ruby object with new value.
+    # @return [Object] Ruby value of native data type.
     #
-    # @return [Object] Returns the value.
-    def assign( *args )
-      element( *args[ 0 ... -1 ] ).set args.last
+    # @private
+    def get
+      delay.instance_exec { @value }
     end
 
-    # Assign value to element of array
-    alias_method :[]=, :assign
+    # Set Ruby value of object
+    #
+    # Set to specified value.
+    #
+    # @param [Object] value New Ruby value for native data type.
+    #
+    # @return [Object] The parameter +value+ or the default value.
+    #
+    # @private
+    def set( value )
+      @value = value
+    end
+
+    def fetch
+      self
+    end
+
+    def operation( *args, &action )
+      instance_exec *args.collect { |arg| arg.force.fetch.get }, &action
+      self
+    end
+
+    def delay
+      if not Thread.current[ :lazy ] or @value.is_a? Lazy
+        self
+      else
+        self.class.new Lazy.new( self )
+      end
+    end
+
+    def force
+      if Thread.current[ :lazy ] or not @value.is_a? Lazy
+        self
+      else
+        @value.force
+      end
+    end
+
+    def -@
+      if is_a?( Pointer_ ) and self.class.primitive < Sequence_
+        retval = self.class.new
+      else
+        retval = self.class.dereference.new
+      end
+      retval.operation( self ) { |x| set -x }
+      retval
+    end
+
+    def +@
+      self
+    end
+
+    def +( other )
+      if is_a?( Pointer_ ) and self.class.primitive < Sequence_
+        retval = self.class.new
+      else
+        retval = self.class.dereference.new
+      end
+      retval.operation( self, other ) { |x,y| set x + y }
+      retval
+    end
+
+    def match( value, context = nil )
+      retval = fit value
+      retval = retval.align context if context
+      retval
+    end
+
+    def ==( other )
+      if other.class == self.class
+        other.get == get
+      else
+        false
+      end
+    end
 
   end
 
