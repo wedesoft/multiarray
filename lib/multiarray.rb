@@ -37,6 +37,40 @@ class Object
 
 end
 
+# Range#min and Range#max are replaced for performance reasons
+class Range
+
+  public
+
+  alias_method :orig_min, :min
+
+  alias_method :orig_max, :max
+
+  # For performance reasons a specialised method for integers is added
+  def min
+    if self.begin.is_a? Integer
+      self.begin
+    else
+      orig_min
+    end
+  end
+
+  # For performance reasons a specialised method for integers is added.
+  def max
+    if self.end.is_a? Integer
+      exclude_end? ? self.end - 1 : self.end
+    else
+      orig_max
+    end
+  end
+
+  # Compute the size of a range.
+  def size
+    max + 1 - min
+  end
+
+end
+
 # Module#alias_method_chain is defined.
 #
 # @private

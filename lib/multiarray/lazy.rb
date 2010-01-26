@@ -29,8 +29,13 @@ module Hornetseye
     end
 
     def element( index )
-      elements = @values.collect { |value| value.element index }
-      Lazy.new( *( elements + [ :action => @action ] ) )
+      values = @values.collect { |value| value.element index }
+      Lazy.new( *( values + [ :action => @action ] ) )
+    end
+
+    def elements( range )
+      values = @values.collect { |value| value.elements range }
+      Lazy.new( *( values + [ :action => @action ] ) )
     end
 
     def -@

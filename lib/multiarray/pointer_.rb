@@ -119,7 +119,12 @@ module Hornetseye
         end
       else
         index = args.pop
-        element( index )[ *args ]
+        case index
+        when Range
+          elements( index )[ *args ]
+        else
+          element( index )[ *args ]
+        end
       end
     end
 
@@ -182,13 +187,25 @@ module Hornetseye
     end
 
     def element( index )
+      target = Hornetseye::Pointer self.class.primitive.element_type
       if @value.is_a? Lazy
-        Hornetseye::Pointer( self.class.primitive.element_type ).
-          new @value.element( index )
+        target.new @value.element( index )
       else
         pointer = @value + index * self.class.primitive.stride *
           self.class.primitive.typecode.storage_size
-        Hornetseye::Pointer( self.class.primitive.element_type ).new pointer
+        target.new pointer
+      end
+    end
+
+    def elements( range )
+      target = Sequence self.class.primitive.element_type, range.size,
+                        self.class.primitive.stride
+      if @value.is_a? Lazy
+        target.new @value.elements( range )
+      else
+        pointer = @value + range.min * self.class.primitive.stride *
+          self.class.primitive.typecode.storage_size
+        target.new pointer
       end
     end
 
