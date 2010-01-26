@@ -7,8 +7,30 @@ Kernel::require 'multiarray'
 
 class TC_Sequence < Test::Unit::TestCase
 
-  O = Hornetseye::OBJECT
-  S = Hornetseye::Sequence
+  O   = Hornetseye::OBJECT
+  U8  = Hornetseye::UBYTE
+  S8  = Hornetseye::BYTE
+  U16 = Hornetseye::USINT
+  S16 = Hornetseye::SINT
+  U32 = Hornetseye::UINT
+  S32 = Hornetseye::INT
+  U64 = Hornetseye::ULONG
+  S64 = Hornetseye::LONG
+  S   = Hornetseye::Sequence
+
+  T = [ O, U8, S8, U16, S16, U32, S32 ]
+  INSPECT = {
+    O => 'OBJECT',
+    U8 => 'UBYTE', S8 => 'BYTE',
+    U16 => 'USINT', S16 => 'SINT',
+    U32 => 'UINT', S32 => 'INT'
+  }
+  SIGNED = {
+    O => true,
+    U8 => false, S8 => true,
+    U16 => false, S16 => true,
+    U32 => false, S32 => true
+  }
 
   def lazy( &action )
     Hornetseye::lazy &action
@@ -29,15 +51,23 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_default
-    assert_equal [ nil, nil, nil ], S( O, 3 ).new.to_a
+    T.each do |t|
+      s = S( t, 3 ).new
+      s[] = t.new[]
+      assert_equal [ t.new[] ] * 3, s.to_a
+    end
   end
 
   def test_sequence_inspect
-    assert_equal 'Sequence.object(3)', S( O, 3 ).inspect
+    T.each do |t|
+      assert_equal "Sequence.#{t.inspect.downcase}(3)", S( t, 3 ).inspect
+    end
   end
 
   def test_sequence_to_s
-    assert_equal 'Sequence.object(3)', S( O, 3 ).to_s
+    T.each do |t|
+      assert_equal "Sequence.#{t.to_s.downcase}(3)", S( t, 3 ).to_s
+    end
   end
 
   def test_sequence_assign
