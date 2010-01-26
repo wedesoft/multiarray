@@ -42,7 +42,8 @@ module Hornetseye
       elsif Thread.current[ :lazy ]
         super Lazy.new( :action => proc { self.class.primitive.typecode.new } )
       else
-        super List.new( self.class.primitive.storage_size )
+        super self.class.primitive.memory.new( self.class.primitive.
+                                               storage_size )
       end
     end
 
@@ -150,7 +151,8 @@ module Hornetseye
     end
 
     def set( value )
-      unless value.is_a?( List ) or value.is_a?( Lazy )
+      unless value.is_a?( List ) or value.is_a?( Malloc ) or
+          value.is_a?( Lazy )
         store self.class.primitive.new( value )
       else
         super value

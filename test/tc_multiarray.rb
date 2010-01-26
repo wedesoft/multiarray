@@ -110,4 +110,3 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
 end
-

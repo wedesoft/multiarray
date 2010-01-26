@@ -12,6 +12,17 @@ module Hornetseye
 
     class << self
 
+      # Get memory type for storing objects of this type
+      #
+      # @return [Class] Returns +element_type.memory+.
+      #
+      # @see Malloc
+      #
+      # @private
+      def memory
+        element_type.memory
+      end
+
       # Type of elements this type is composed of
       #
       # @return [Type,Sequence_] The element type of this type.

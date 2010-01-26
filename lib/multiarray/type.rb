@@ -17,15 +17,31 @@ module Hornetseye
         self
       end
 
-      # Returns the element type for arrays. Otherwise it returns +self+
+      # Returns the element type for arrays
+      #
+      # Returns +self+ if this is not an array.
       #
       # @return [Class] Returns +self+.
       def typecode
         self
       end
 
+      # Dimensions of arrays
+      #
+      # Returns +[]+ if this is not an array.
+      #
+      # @return [Array] Returns +[]+.
       def shape
         []
+      end
+
+      # Number of elements
+      #
+      # @return [Integer] Number of elements
+      #
+      # @return [Integer] Returns +1+.
+      def size
+        shape.inject( 1 ) { |a,b| a * b }
       end
 
     end
