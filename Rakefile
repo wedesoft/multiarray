@@ -6,7 +6,7 @@ require 'rake/packagetask'
 require 'rbconfig'
 
 PKG_NAME = 'multiarray'
-PKG_VERSION = '0.3.0'
+PKG_VERSION = '0.4.0'
 RB_FILES = FileList[ 'lib/**/*.rb' ]
 TC_FILES = FileList[ 'test/tc_*.rb' ]
 TS_FILES = FileList[ 'test/ts_*.rb' ]
@@ -18,7 +18,7 @@ AUTHOR = %q{Jan Wedekind}
 EMAIL = %q{jan@wedesoft.de}
 HOMEPAGE = %q{http://wedesoft.github.com/multiarray/}
 
-SITELIBDIR = Config::CONFIG[ 'sitelibdir' ]
+$SITELIBDIR = Config::CONFIG[ 'sitelibdir' ]
 
 task :default => :all
 
