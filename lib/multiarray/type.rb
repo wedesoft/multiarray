@@ -44,13 +44,17 @@ module Hornetseye
         shape.inject( 1 ) { |a,b| a * b }
       end
 
+      def ===( other )
+        ( other == self ) or ( other.is_a? self ) or ( other.class == self )
+      end
+
     end
 
     # Create new instance of this type
     #
     # @param [Object] value Optional initial value for this instance.
-    def initialize( value = nil )
-      set value if value
+    def initialize( value = self.class.default )
+      set value
     end
 
     # Display type and value of this instance

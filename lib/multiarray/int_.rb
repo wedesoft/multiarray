@@ -20,6 +20,10 @@ module Hornetseye
         Malloc
       end
 
+      def import( str )
+        new str.unpack( descriptor ).first
+      end
+
       # The number of bits of native integers represented by this class
       #
       # @return [Integer] Number of bits of native integer.
@@ -43,7 +47,7 @@ module Hornetseye
       #
       # @return [String] Information about this integer type.
       def to_s
-        if bits and signed
+        if bits and signed != nil
           case [ bits, signed ]
           when [  8, true  ]
             'BYTE'
@@ -99,12 +103,41 @@ module Hornetseye
         to_s
       end
 
-      def fetch( ptr )
-        new ptr.read( storage_size ).unpack( descriptor ).first
+      # Default value for Ruby objects
+      #
+      # @return [Integer] Returns +0+.
+      #
+      # @private
+      def default
+        0
       end
+
+      #def fetch( ptr )
+      #  new ptr.read( storage_size ).unpack( descriptor ).first
+      #end
 
       def storage_size
         ( bits + 7 ).div 8
+      end
+
+      def ==( other )
+        if other.is_a? Class
+          if other < INT_ and bits == other.bits and signed == other.signed
+            true
+          else
+            false
+          end
+        else
+          false
+        end
+      end
+
+      def hash
+        [ :INT_, bits, signed ].hash
+      end
+
+      def eql?( other )
+        self == other
       end
       
     end

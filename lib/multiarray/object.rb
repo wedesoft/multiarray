@@ -30,10 +30,6 @@ module Hornetseye
         to_s
       end
 
-      def fetch( ptr )
-        new ptr.read
-      end
-
       # Default value for Ruby objects
       #
       # @return [Object] Returns +nil+.

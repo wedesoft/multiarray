@@ -24,6 +24,14 @@ module Hornetseye
       "List(#{@array.size - @offset})"
     end
 
+    # Retrieve and map element from the array
+    #
+    # @param [Class] type Native data type to create
+    # @return [Type] The mapped element.
+    def fetch( type )
+      type.new read
+    end
+
     # Retrieve an element from the array
     #
     # @return [Object] The element from the array.

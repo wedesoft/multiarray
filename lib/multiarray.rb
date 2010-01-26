@@ -59,6 +59,7 @@ end
 require 'malloc'
 require 'multiarray/lazy'
 require 'multiarray/list'
+require 'multiarray/malloc'
 require 'multiarray/type'
 require 'multiarray/object'
 require 'multiarray/int_'

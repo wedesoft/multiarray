@@ -24,8 +24,8 @@ module Hornetseye
       @action.call *@values.collect { |value| value.force }
     end
 
-    def read
-      Lazy.new self, :action => proc { |x| x.fetch }
+    def fetch( type )
+      type.new Lazy.new( self, :action => proc { |x| x.fetch } )
     end
 
     def element( index )

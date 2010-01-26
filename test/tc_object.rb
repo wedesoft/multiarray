@@ -24,7 +24,7 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_object_default
-    assert_nil O.new.get
+    assert_nil O.new[]
   end
 
   def test_object_inspect
@@ -36,7 +36,7 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal "OBJECT(42)", O.new( 42 ).inspect
+    assert_equal 'OBJECT(42)', O.new( 42 ).inspect
   end
 
   def test_to_s
@@ -52,7 +52,6 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 3, o[]
     assert_equal 42, o[] = 42
     assert_equal 42, o[]
-    assert_nil O.new[]
   end
 
   def test_equal
@@ -61,7 +60,7 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_negate
-    o = O.new( 5 )
+    o = O.new 5
     assert_equal O.new( -5 ), -o
   end
 

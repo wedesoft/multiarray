@@ -29,22 +29,19 @@ module Hornetseye
           super
         end
       end
+      
+      def default
+        if Thread.current[ :lazy ]
+          Lazy.new :action => proc { self.class.primitive.typecode.new }
+        else
+          primitive.memory.new primitive.storage_size
+        end
+      end
 
       def dereference
         primitive.dereference
       end
 
-    end
-
-    def initialize( value = nil )
-      if value
-        super value
-      elsif Thread.current[ :lazy ]
-        super Lazy.new( :action => proc { self.class.primitive.typecode.new } )
-      else
-        super self.class.primitive.memory.new( self.class.primitive.
-                                               storage_size )
-      end
     end
 
     def inspect( indent = nil, lines = nil )
@@ -164,7 +161,7 @@ module Hornetseye
       if self.class.primitive < Sequence_
         delay
       else
-        self.class.primitive.fetch get
+        get.fetch self.class.primitive
       end
     end
 

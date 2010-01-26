@@ -44,10 +44,6 @@ module Hornetseye
       # @private
       attr_accessor :stride
 
-      def fetch( ptr )
-        new ptr
-      end
-
       # Get string with information about this type
       #
       # @return [String] Information about this array type.
