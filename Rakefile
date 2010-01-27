@@ -10,7 +10,7 @@ PKG_VERSION = '0.4.0'
 RB_FILES = FileList[ 'lib/**/*.rb' ]
 TC_FILES = FileList[ 'test/tc_*.rb' ]
 TS_FILES = FileList[ 'test/ts_*.rb' ]
-PKG_FILES = [ 'Rakefile', 'README', 'COPYING', '.document' ] +
+PKG_FILES = [ 'Rakefile', 'README', 'COPYING', 'TODO', '.document' ] +
             RB_FILES + TS_FILES + TC_FILES
 SUMMARY = %q{Multi-dimensional and uniform Ruby arrays}
 DESCRIPTION = %q{This Ruby-extension defines Hornetseye::MultiArray and other native datatypes. Hornetseye::MultiArray provides multi-dimensional Ruby arrays with elements of same type. The extension is designed to be mostly compatible with Masahiro Tanaka's NArray. However it allows the definition of custom element types and operations on them. This work was also inspired by Ronald Garcia's boost::multi_array and by Todd Veldhuizen's Blitz++.}
