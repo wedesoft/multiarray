@@ -52,6 +52,23 @@ module Hornetseye
         typecode
       end
 
+      def coercion( other )
+        if self == other
+          self
+        else
+          x, y = other.coerce self
+          x.coercion y
+        end
+      end
+
+      def coerce( other )
+        if self == other
+          return other, self
+        else
+          raise "Cannot coerce #{self} and #{other.inspect}"
+        end
+      end
+
       def ===( other )
         ( other == self ) or ( other.is_a? self ) or ( other.class == self )
       end
@@ -161,10 +178,11 @@ module Hornetseye
     end
 
     def +( other )
-      if is_a?( Pointer_ ) and self.class.primitive < Sequence_
-        retval = self.class.new
+      target = self.class.coercion( other.class )
+      if target < Pointer_ and target.primitive < Sequence_
+        retval = target.new
       else
-        retval = self.class.dereference.new
+        retval = target.dereference.new
       end
       retval.operation( self, other ) { |x,y| set x + y }
       retval

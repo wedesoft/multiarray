@@ -46,6 +46,22 @@ module Hornetseye
         Hornetseye::Pointer primitive.to_type( typecode, options )
       end
 
+      def coercion( other )
+        if other < Pointer_
+          Hornetseye::Pointer primitive.coercion( other.primitive )
+        else
+          Hornetseye::Pointer primitive.coercion( other )
+        end
+      end
+
+      def coerce( other )
+        if other < Pointer_
+          return other, self
+        else
+          super other
+        end
+      end
+
     end
 
     def inspect( indent = nil, lines = nil )

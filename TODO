@@ -1,13 +1,12 @@
-implicit type conversions in 'store', test type conversions
-binary operations (coercions of return value for scalar + array)
+coercions, binary operations (coercions of return value for scalar + array)
 ranges (rolling, lazy rolling)
 tensor indices to enable transpose of lazy array
 test lazyness
 lazy ranges
 sums/injections? nesting? tensors?
 JIT?
-
-values: Malloc, List, Ruby, JIT-variable?
+test type conversions
+fancy README
 
 a = lazy( 16 ) { |i| i }
 a = lazy( 16 ) { |i| i }[ 4 ... 12 ]  # offsets: apply sel-operation to all
@@ -23,6 +22,7 @@ a = array( :dim => [ b.size ] ) { |i| -b[i] }
 a = -b
 array { |i| sum { |j| a[i,j] } }
 lazy { |i| sum { |j| a[i,j] } }
+parallel { ... }
 lazy { |i| lazy { |j| a[i,j] } }
 array { lazy { |i| sum { |j| a[i,j] } } }
 
@@ -50,17 +50,11 @@ Lazy( Sequence( INT, 3 ) )
 interpretation: type coercion, actual operation, jit,
 collection of jit arguments (e.g. tensor)
 
-storage: handled by aggregated member (memory,array,lazy)
-operations: handled by thread-global interpreter (jit,ruby,parallel)
-
 proc { |i| proc { |j| i+j } }.call( 5 ).call 3
-
-also see rubyconf prototype code
 
 gem install flay: http://ruby.sadi.st/Flay.html
 
-How to nest mode-environments?
-How to cascade delegates?
+How to nest/cascade mode-environments?
 (how to specify nested modes for recursive algorithms and called algorithms?)
 ruby and jit compiles, lazy and parallel forwards
 

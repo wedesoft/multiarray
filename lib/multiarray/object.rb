@@ -48,6 +48,18 @@ module Hornetseye
         1
       end
 
+      def coercion( other )
+        if other < Sequence_
+          other.coercion self
+        else
+          self
+        end
+      end
+
+      def coerce( other )
+        return self, self
+      end
+
     end
 
     def store( ptr )

@@ -105,10 +105,27 @@ module Hornetseye
         options = { :preserve_strides => false }.merge options
         target_element = element_type.to_type typecode, options
         target_stride = options[ :preserve_strides ] ?
-                        stride : target_element.dereference.size
-        Hornetseye::Sequence( target_element.dereference,
-                              num_elements,
+                        stride : target_element.size
+        Hornetseye::Sequence( target_element, num_elements,
                               target_stride ).dereference
+      end
+
+      def coercion( other )
+        if other < Sequence_
+          Hornetseye::Sequence( element_type.coercion( other.element_type ),
+                                num_elements ).primitive
+        else
+          Hornetseye::Sequence( element_type.coercion( other ),
+                                num_elements ).primitive
+        end
+      end
+
+      def coerce( other )
+        if other < Sequence_
+          return other, self
+        else
+          return Hornetseye::Sequence( other, num_elements ), self
+        end
       end
 
     end

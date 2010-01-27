@@ -120,6 +120,22 @@ module Hornetseye
         ( bits + 7 ).div 8
       end
 
+      def coercion( other )
+        if other < INT_
+          Hornetseye::INT [ bits, other.bits ].max, ( signed or other.signed )
+        else
+          super other
+        end
+      end
+
+      def coerce( other )
+        if other < INT_
+          return other, self
+        else
+          super other
+        end
+      end
+
       def ==( other )
         if other.is_a? Class
           if other < INT_ and bits == other.bits and signed == other.signed
