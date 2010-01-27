@@ -55,16 +55,18 @@ module Hornetseye
       self
     end
 
-  end
+    raise '\'multiarray/object\' must be loaded first' if Type.respond_to? :fit
 
-  module RubyMatching
+    module RubyMatching
 
-    def fit( *value )
-      OBJECT
+      def fit( *values )
+        OBJECT
+      end
+
     end
 
-  end
+    Type.extend RubyMatching
 
-  Type.extend RubyMatching
+  end
 
 end

@@ -42,6 +42,10 @@ module Hornetseye
         primitive.dereference
       end
 
+      def to_type( typecode, options = {} )
+        Hornetseye::Pointer primitive.to_type( typecode, options )
+      end
+
     end
 
     def inspect( indent = nil, lines = nil )

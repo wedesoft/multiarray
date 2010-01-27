@@ -147,6 +147,36 @@ module Hornetseye
       self
     end
 
+    module RubyMatching
+
+      def fit( *values )
+        if values.all? { |value| value.is_a? Integer }
+          bits = 8
+          ubits = 8
+          signed = false
+          values.each do |value|
+            bits *= 2 until ( -2**(bits-1) ... 2**(bits-1) ).include? value
+            if value < 0
+              signed = true
+            else
+              ubits *= 2 until ( 0 ... 2**ubits ).include? value
+            end
+          end
+          bits = signed ? bits : ubits
+          if bits <= 64
+            Hornetseye::INT bits, signed
+          else
+            super *values
+          end
+        else
+          super *values
+        end
+      end
+
+    end
+
+    Type.extend RubyMatching
+
   end
 
 end

@@ -35,6 +35,10 @@ module Hornetseye
         []
       end
 
+      def dimension
+        0
+      end
+
       # Number of elements
       #
       # @return [Integer] Number of elements
@@ -42,6 +46,10 @@ module Hornetseye
       # @return [Integer] Returns +1+.
       def size
         shape.inject( 1 ) { |a,b| a * b }
+      end
+
+      def to_type( typecode, options = {} )
+        typecode
       end
 
       def ===( other )
@@ -132,6 +140,10 @@ module Hornetseye
       else
         @value.force
       end
+    end
+
+    def to_type( target, options = {} )
+      self.class.to_type( target, options ).new.operation( self ) { |x| set x }
     end
 
     def -@

@@ -21,7 +21,11 @@ module Hornetseye
       end
 
       def []( *args )
-        retval = Hornetseye::Sequence( OBJECT, args.size ).new
+        target = Type.fit args
+        if target.primitive.dimension > 1
+          target = Hornetseye::Sequence OBJECT, args.size
+        end
+        retval = target.new
         retval[] = args
         retval
       end

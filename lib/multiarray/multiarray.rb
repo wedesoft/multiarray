@@ -22,19 +22,7 @@ module Hornetseye
       end
 
       def []( *args )
-        probe = proc do |s,a|
-          if a.is_a? Array
-            if s.empty?
-              a.inject( [], &probe ) + [ a.size ]
-            else
-              a.inject( s[ 0 ... -1 ], &probe ) + [ [ a.size, s.last ].max ]
-            end
-          else
-            s
-          end
-        end
-        shape = probe.call [], args
-        retval = MultiArray.new OBJECT, *shape
+        retval = Type.fit( args ).new
         retval[] = args
         retval
       end

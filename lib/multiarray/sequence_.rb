@@ -93,11 +93,45 @@ module Hornetseye
         element_type.shape + [ num_elements ]
       end
 
+      def dimension
+        element_type.dimension.succ
+      end
+
       def storage_size
         element_type.storage_size * num_elements
       end
 
+      def to_type( typecode, options = {} )
+        options = { :preserve_strides => false }.merge options
+        target_element = element_type.to_type typecode, options
+        target_stride = options[ :preserve_strides ] ?
+                        stride : target_element.dereference.size
+        Hornetseye::Sequence( target_element.dereference,
+                              num_elements,
+                              target_stride ).dereference
+      end
+
     end
+
+    module RubyMatching
+
+      def fit( *values )
+        n = values.inject( 0 ) do |size,value|
+          value.is_a?( Array ) ? [ size, value.size ].max : size
+        end
+        if n > 0
+          subvalues = values.inject( [] ) do |flat,value|
+            flat + ( value.is_a?( Array ) ? value : [ value ] )
+          end
+          Hornetseye::Sequence fit( *subvalues ), n
+        else
+          super *values
+        end
+      end
+
+    end
+
+    Type.extend RubyMatching
 
   end
 

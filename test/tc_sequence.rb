@@ -72,6 +72,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_sequence_assign
     assert_equal [ :a, :b, :c ], S[ :a, :b, :c ].to_a
+    assert_equal [ :a, :b, [ :c ] ], S[ :a, :b, [ :c ] ].to_a
   end
 
   def test_inspect
@@ -98,12 +99,12 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_negate
-    s = S[ 1, 2, 3 ]
+    s = S[ 1, 2, 3 ].to_type O
     assert_equal [ -1, -2, -3 ], ( -s ).to_a
   end
 
   def test_lazy
-    s = S[ 1, 2, 3 ]
+    s = S[ 1, 2, 3 ].to_type O
     u = lazy { -s }
     assert_equal 'Sequence.object(3):<delayed>', u.inspect
     assert_equal [ -1, -2, -3 ], u.force.to_a

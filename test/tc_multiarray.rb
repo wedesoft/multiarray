@@ -81,12 +81,12 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_negate
-    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].to_type O
     assert_equal [ [ -1, -2, -3 ], [ -4, -5, -6 ] ], ( -m ).to_a
   end
 
   def test_lazy
-    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].to_type O
     u = lazy { -m }
     assert_equal 'MultiArray.object(3,2):<delayed>', u.inspect
     assert_equal [ [ -1, -2, -3 ], [ -4, -5, -6 ] ], u.force.to_a
