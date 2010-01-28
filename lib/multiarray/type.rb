@@ -199,7 +199,7 @@ module Hornetseye
       unless other.is_a? Type
         other = Type.match( other, self.class.typecode ).new other
       end
-      target = self.class.coercion( other.class )
+      target = self.class.coercion other.class
       if target < Pointer_ and target.primitive < Sequence_
         retval = target.new
       else

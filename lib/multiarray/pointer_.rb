@@ -59,7 +59,7 @@ module Hornetseye
           super other
         else
           x, y = primitive.coerce other
-          return x, Hornetseye::Pointer( y )
+          return x, y
         end
       end
 

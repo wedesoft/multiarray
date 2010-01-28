@@ -29,7 +29,14 @@ module Hornetseye
     end
 
     def element( index )
-      values = @values.collect { |value| value.element index }
+      values = @values.collect do |value|
+        if value.is_a? Lazy or
+           ( value.is_a? Pointer_ and value.class.primitive < Sequence_ )
+          value.element index
+        else
+          value
+        end
+      end
       Lazy.new( *( values + [ :action => @action ] ) )
     end
 

@@ -132,4 +132,14 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 1, 2, 3 ], u.to_a
   end
 
+  def test_lazy_binary
+    s = S[ 1, 2, 3 ].to_type O
+    u = lazy { s + 1 }
+    assert_not_equal s + 1, u
+    assert_equal 'Sequence.object(3):<delayed>', u.inspect
+    assert_equal [ 2, 3, 4 ], u.force.to_a
+    assert_equal [ 3, 4, 5 ], ( u + 1 ).to_a # don't use to_a!!!
+    assert_equal [ 3, 4, 5 ], ( 1 + u ).to_a # don't use to_a!!!
+  end
+
 end
