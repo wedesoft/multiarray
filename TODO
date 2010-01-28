@@ -1,8 +1,6 @@
-coercions, binary operations (coercions of return value for scalar + array)
-ranges (rolling, lazy rolling)
+ranges (rolling, lazy rolling, lazy ranges)
 tensor indices to enable transpose of lazy array
 test lazyness
-lazy ranges
 sums/injections? nesting? tensors?
 JIT?
 test type conversions
