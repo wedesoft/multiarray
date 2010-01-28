@@ -64,7 +64,13 @@ class TC_Object < Test::Unit::TestCase
     assert_equal O.new( -5 ), -o
   end
 
-  def test_lazy
+  def test_plus
+    v = O.new 3
+    w = O.new 5
+    assert_equal O.new( 3 + 5 ), v + w
+  end
+
+  def test_lazy_unary
     o = lazy { -O.new( 3 ) }
     assert_not_equal O.new( -3 ), o
     assert_equal 'OBJECT(<delayed>)', o.inspect
@@ -81,6 +87,17 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 'OBJECT(<delayed>)', o.inspect
     o = lazy { eager { -lazy { -O.new( 3 ) } } }
     assert_equal O.new( 3 ), o
+  end
+
+  def test_lazy_binary
+    v = O.new 3
+    w = O.new 5
+    o = lazy { v + w }
+    assert_not_equal v + w, o
+    assert_equal 'OBJECT(<delayed>)', o.inspect
+    assert_equal O.new( 8 ), o.force
+    assert_equal O.new( 9 ), o + O.new( 1 )
+    assert_equal O.new( 9 ), O.new( 1 ) + o
   end
 
 end
