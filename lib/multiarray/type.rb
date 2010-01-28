@@ -69,6 +69,16 @@ module Hornetseye
         end
       end
 
+      def align( context )
+        self
+      end
+
+      def match( value, context = nil )
+        retval = fit value
+        retval = retval.align context if context
+        retval
+      end
+
       def ===( other )
         ( other == self ) or ( other.is_a? self ) or ( other.class == self )
       end
@@ -110,6 +120,14 @@ module Hornetseye
     # @return [Object] The parameter +value+ or the default value.
     def []=( value )
       set value
+    end
+
+    def coerce( other )
+      if other.is_a? Type
+        return other, self
+      else
+        return Type.match( other, self.class.typecode ).new( other ), self
+      end
     end
 
     # Retrieve Ruby value of object
@@ -178,6 +196,9 @@ module Hornetseye
     end
 
     def +( other )
+      unless other.is_a? Type
+        other = Type.match( other, self.class.typecode ).new other
+      end
       target = self.class.coercion( other.class )
       if target < Pointer_ and target.primitive < Sequence_
         retval = target.new

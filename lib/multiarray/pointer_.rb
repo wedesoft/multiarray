@@ -56,9 +56,10 @@ module Hornetseye
 
       def coerce( other )
         if other < Pointer_
-          return other, self
-        else
           super other
+        else
+          x, y = primitive.coerce other
+          return x, Hornetseye::Pointer( y )
         end
       end
 

@@ -106,8 +106,8 @@ class TC_Sequence < Test::Unit::TestCase
   def test_plus
     s = S[ 1, 2, 3 ].to_type O
     assert_equal [ 2, 4, 6 ], ( s + s ).to_a
-    assert_equal [ 2, 3, 4 ], ( s + O.new( 1 ) ).to_a
-    assert_equal [ 2, 3, 4 ], ( O.new( 1 ) + s ).to_a
+    assert_equal [ 2, 3, 4 ], ( s + 1 ).to_a
+    assert_equal [ 2, 3, 4 ], ( 1 + s ).to_a
   end
 
   def test_lazy_unary
