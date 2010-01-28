@@ -49,7 +49,7 @@ module Hornetseye
       end
 
       def coercion( other )
-        if other < Sequence_
+        if other < Pointer_
           other.coercion self
         else
           self

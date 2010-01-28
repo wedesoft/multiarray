@@ -94,7 +94,15 @@ class TC_Int < Test::Unit::TestCase
     end
   end
 
-  def test_lazy
+  def test_plus
+    T.each do |t1|
+      T.each do |t2|
+        assert_equal 5, ( t1.new( 3 ) + t2.new( 2 ) )[]
+      end
+    end
+  end
+
+  def test_lazy_unary
     T.select { |t| SIGNED[ t ] }.each do |t|
       i = lazy { -t.new( 3 ) }
       assert_not_equal t.new( -3 ), i
@@ -114,5 +122,17 @@ class TC_Int < Test::Unit::TestCase
       assert_equal t.new( 3 ), i
     end
   end
+
+  def test_lazy_binary
+    a = U16.new 3
+    b = S8.new -5
+    i = lazy { a + b }
+    assert_not_equal a + b, i
+    assert_equal 'SINT(<delayed>)', i.inspect
+    assert_equal S16.new( -2 ), i.force
+    assert_equal S32.new( -1 ), i + S32.new( 1 )
+    assert_equal S32.new( -1 ), S32.new( 1 ) + i
+  end
+
 
 end
