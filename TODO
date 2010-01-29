@@ -1,7 +1,17 @@
-ranges (rolling, lazy rolling, lazy ranges)
+lazy { s } -> s
+lazy { -s } -> lazy { |i| -s[i] }
+lazy { |i,j| s[i,j] }
+lazy { |i| lazy { |j| s[i,j] } }
+lazy( n ) { |i| i }
+lazy( n, m ) { |i,j| i + j }
+lazy( n ) { |i| lazy( m ) { |j| i + j } }
+eager( n ) { |i| i }
+...
+
 tensor indices to enable transpose of lazy array
+ranges (rolling, lazy rolling, lazy ranges)
 test lazyness
-sums/injections? nesting? tensors?
+sums/injections (equality for arrays)? nesting? tensors?
 JIT?
 test type conversions
 fancy README
