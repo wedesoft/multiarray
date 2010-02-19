@@ -1,3 +1,4 @@
+lazy { a * b } -> lazy { |i,j| lazy { |i,j| a[i,j] * b[i,j] }[i,j] } # ?
 lazy { s } -> s
 lazy { -s } -> lazy { |i| -s[i] }
 lazy { |i,j| s[i,j] }
