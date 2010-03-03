@@ -93,6 +93,10 @@ module Hornetseye
         element_type.shape + [ num_elements ]
       end
 
+      def strides
+        element_type.strides + [ stride ]
+      end
+
       def dimension
         element_type.dimension.succ
       end
@@ -133,11 +137,11 @@ module Hornetseye
     module RubyMatching
 
       def fit( *values )
-        n = values.inject( 0 ) do |size,value|
+        n = values.inject 0 do |size,value|
           value.is_a?( Array ) ? [ size, value.size ].max : size
         end
         if n > 0
-          subvalues = values.inject( [] ) do |flat,value|
+          subvalues = values.inject [] do |flat,value|
             flat + ( value.is_a?( Array ) ? value : [ value ] )
           end
           Hornetseye::Sequence fit( *subvalues ), n

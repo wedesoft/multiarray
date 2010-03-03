@@ -35,6 +35,10 @@ module Hornetseye
         []
       end
 
+      def strides
+        []
+      end
+
       def dimension
         0
       end
