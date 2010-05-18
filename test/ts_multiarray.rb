@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'tc_object'
 require 'test/unit'
 begin
   require 'rubygems'

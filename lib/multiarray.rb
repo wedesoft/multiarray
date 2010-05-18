@@ -90,6 +90,7 @@ class Module
 
 end
 
+require 'set'
 require 'malloc'
 require 'multiarray/malloc'
 require 'multiarray/list'

@@ -144,7 +144,7 @@ module Hornetseye
           end
           bits = signed ? bits : ubits
           if bits <= 64
-            INT bits, signed
+            Hornetseye::INT bits, signed
           else
             super *values
           end
