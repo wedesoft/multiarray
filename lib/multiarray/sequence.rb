@@ -4,29 +4,15 @@ module Hornetseye
 
     class << self
 
-      # Create a one-dimensional array
-      #
-      # Create an array with +num_elements+ elements of type +element_type+.
-      #
-      # @param [Class] element_type Element type of the array. Should derive
-      # from +Type+.
-      # @param [Integer] num_elements Number of elements of the array.
-      # @return [Sequence_] An array with the specified element type and the
-      # specified number of elements.
-      #
-      # @see #Sequence
-      # @see MultiArray.new
-      def new( element_type, num_elements )
-        Hornetseye::Sequence( element_type, num_elements ).new
+      def new( typecode, size )
+        MultiArray.new typecode, size
       end
 
       def []( *args )
-        target = Type.fit args
-        if target.primitive.dimension > 1
-          target = Hornetseye::Sequence OBJECT, args.size
-        end
+        target = Node.fit args
+        target = Sequence OBJECT, args.size if target.dimension > 1
         retval = target.new
-        retval[] = args
+        args.each_with_index { |arg,i| retval[ i ] = arg }
         retval
       end
 
@@ -34,29 +20,94 @@ module Hornetseye
 
   end
 
-  # Create an array class
-  #
-  # The parameters +element_type+, +num_elements+, and +stride+ are assigned
-  # to the corresponding attributes of the resulting class.
-  #
-  # @param [Class] element_type Element type of the array type. Should derive
-  # from +Type+.
-  # @param [Integer] num_elements Number of elements of the array type.
-  # @param [Integer] stride Optional stride size for transposed or
-  # non-contiguous array types.
-  # @return [Class] An array class deriving from +Pointer_+.
-  #
-  # @see Sequence.new
-  # @see #MultiArray
-  def Sequence( element_type, num_elements,
-                stride = element_type.dereference.size )
-    sequence = Class.new Sequence_
-    sequence.element_type = element_type.dereference
-    sequence.num_elements = num_elements
-    sequence.stride = stride
-    Pointer sequence
+  class Sequence_
+
+    class << self
+
+      attr_accessor :element_type
+      attr_accessor :num_elements
+
+      def shape
+        element_type.shape + [ num_elements ]
+      end
+
+      def typecode
+        element_type.typecode
+      end
+
+      def pointer_type
+        self
+      end
+
+      def dimension
+        element_type.dimension + 1
+      end
+
+      def inspect
+        if dimension == 1
+          "Sequence(#{typecode.inspect},#{num_elements.inspect})"
+        else
+          "MultiArray(#{typecode.inspect},#{shape.join ','})"
+        end
+      end
+
+      def descriptor( hash )
+        if dimension == 1
+          "Sequence(#{typecode.descriptor( hash )},#{num_elements.to_s})"
+        else
+          "MultiArray(#{typecode.descriptor( hash )},#{shape.join ','})"
+        end
+      end
+
+      def coercion( other )
+        if other < Sequence_
+          Sequence element_type.coercion( other.element_type ), num_elements
+        else
+          Sequence element_type.coercion( other ), num_elements
+        end
+      end
+
+      def coerce( other )
+        if other < Sequence_
+          return other, self
+        else
+          return Sequence( other, num_elements ), self
+        end
+      end
+
+      def new
+        MultiArray.new typecode, *shape
+      end
+
+    end
+
+    module Match
+
+      def fit( *values )
+        n = values.inject 0 do |size,value|
+          value.is_a?( Array ) ? [ size, value.size ].max : size
+        end
+        if n > 0
+          elements = values.inject [] do |flat,value|
+            flat + ( value.is_a?( Array ) ? value : [ value ] )
+          end
+          Sequence fit( *elements ), n
+        else
+          super *values
+        end
+      end
+
+    end
+
+    Node.extend Match
+
   end
 
-  module_function :Sequence
+  def Sequence( element_type, num_elements )
+    retval = Class.new Sequence_
+    retval.element_type = element_type
+    retval.num_elements = num_elements
+    retval
+  end
 
 end

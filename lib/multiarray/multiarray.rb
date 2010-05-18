@@ -4,26 +4,34 @@ module Hornetseye
 
     class << self
 
-      # Create a multi-dimensional array
-      #
-      # Creates a multi-dimensional array with elements of type
-      # +element_type+ and dimensions +*shape+.
-      #
-      # @param [Class] element_type Element type of the array. Should derive
-      # from +Type+.
-      # @param [Array<Integer>] *shape The dimensions of the array.
-      # @return [Type,Sequence_] An array with the specified element type and
-      # the specified dimensions.
-      #
-      # @see #MultiArray
-      # @see Sequence.new
-      def new( element_type, *shape )
-        Hornetseye::MultiArray( element_type, *shape ).new
+      def new( typecode, *shape )
+        options = shape.last.is_a?( Hash ) ? shape.pop : {}
+        count = options[ :count ] || 1
+        if shape.empty?
+          memory = typecode.memory.new typecode.storage_size * count
+          Pointer( typecode ).new memory
+        else
+          size = shape.pop
+          stride = shape.inject( 1 ) { |a,b| a * b }
+          lazy( size ) do |index|
+            pointer = new typecode, *( shape + [ :count => count * size ] )
+            Lookup.new pointer, index, INT.new( stride )
+          end
+        end
       end
 
       def []( *args )
-        retval = Type.fit( args ).new
-        retval[] = args
+        retval = Node.fit( args ).new
+        recursion = proc do |element,args|
+          if element.dimension > 0
+            args.each_with_index do |arg,i|
+              recursion.call element.element( i ), arg
+            end
+          else
+            element[] = args
+          end
+        end
+        recursion.call retval, args
         retval
       end
 
@@ -31,26 +39,12 @@ module Hornetseye
 
   end
 
-  # Create a multi-dimensional array class
-  #
-  # Creates a multi-dimensional array class with elements of type
-  # +element_type+ and dimensions +*shape+.
-  #
-  # @param [Class] element_type Element type of the array type. Should derive
-  # from +Type+.
-  # @param [Array<Integer>] *shape The dimensions of the array type.
-  # @return [Class] A class deriving from +Pointer_+.
-  #
-  # @see MultiArray.new
-  # @see #Sequence
   def MultiArray( element_type, *shape )
     if shape.empty?
       element_type
     else
-      MultiArray Sequence( element_type, shape.first ), *shape[ 1 .. -1 ]
+      Sequence MultiArray( element_type, *shape[ 0 ... -1 ] ), shape.last
     end
   end
-
-  module_function :MultiArray
 
 end

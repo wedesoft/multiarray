@@ -1,3 +1,34 @@
+# cache <-> demand/get? what about store?
+# Composite numbers?
+# change Convolve#demand to generate GCC code
+# inspect method (type method to get MultiArray( ... ) or Sequence( ... ))
+# put JIT-calls into 'force'-method, don't call JIT for OBJECT
+# -> multiarray gem
+# pointer-increments for better efficiency
+# use pid, allow creation of library for pre-loading cache
+
+# histogram
+# binary operations, equality: ( a == b ).inject( true ) { |e,b| e && b }
+# inject: min, max, equal, n-d clips for warp
+# block(var1,var2,...) with smart subst?
+# lazy( 5 ) { |i| 0 }
+# lazy( 3, 2 ) { |i,j| i }
+# lazy( 3, 2 ) { |i,j| j }
+
+# downsampling after correlation?
+# ruby -Ilib -rrubygems -rmultiarray -rtest test/tc_sequence.rb
+# README.rdoc, demo video
+
+# f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy
+# lut(g(i))
+# f(warp(i))
+#class Node
+#  def map( lut, options = {} ) # !!!
+#    
+#  end
+#end
+
+
 lazy { a * b } -> lazy { |i,j| lazy { |i,j| a[i,j] * b[i,j] }[i,j] } # ?
 lazy { s } -> s
 lazy { -s } -> lazy { |i| -s[i] }

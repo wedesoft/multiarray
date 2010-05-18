@@ -1,55 +1,31 @@
 module Hornetseye
 
-  # Class for representing Ruby objects
-  class OBJECT < Type
+  class OBJECT < Element
 
     class << self
 
-      # Get memory type for storing objects of this type
-      #
-      # @return [Class] Returns +List+.
-      #
-      # @see List
-      #
-      # @private
+      def inspect
+        'OBJECT'
+      end
+
+      def descriptor( hash )
+        'OBJECT'
+      end
+
       def memory
         List
       end
 
-      # Get string with information about this type
-      #
-      # @return [String] Returns +'OBJECT'+.
-      def to_s
-        'OBJECT'
-      end
-
-      # Get string with information about this type
-      #
-      # @return [String] Returns +'OBJECT'+.
-      def inspect
-        to_s
-      end
-
-      # Default value for Ruby objects
-      #
-      # @return [Object] Returns +nil+.
-      #
-      # @private
-      def default
-        nil
-      end
-
-      # Size of storage required to store an element of this type
-      #
-      # @return [Integer] Size of storage required. Returns +1+.
-      #
-      # @private
       def storage_size
         1
       end
 
+      def default
+        nil
+      end
+
       def coercion( other )
-        if other < Pointer_
+        if other < Sequence_
           other.coercion self
         else
           self
@@ -62,14 +38,15 @@ module Hornetseye
 
     end
 
-    def store( ptr )
-      ptr.write @value
-      self
+    def inspect
+      "OBJECT(#{@value.inspect})"
     end
 
-    raise '\'multiarray/object\' must be loaded first' if Type.respond_to? :fit
+    def descriptor( hash )
+      "OBJECT(#{@value.to_s})"
+    end
 
-    module RubyMatching
+    module Match
 
       def fit( *values )
         OBJECT
@@ -77,7 +54,7 @@ module Hornetseye
 
     end
 
-    Type.extend RubyMatching
+    Node.extend Match
 
   end
 

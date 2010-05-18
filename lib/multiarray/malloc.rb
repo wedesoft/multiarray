@@ -2,8 +2,13 @@ module Hornetseye
 
   class Malloc
 
-    def fetch( type )
-      type.import read( type.storage_size )
+    def load( typecode )
+      read( typecode.storage_size ).unpack( typecode.directive ).first
+    end
+
+    def save( value )
+      write [ value.get ].pack( value.typecode.directive )
+      value
     end
 
   end
