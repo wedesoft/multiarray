@@ -186,17 +186,6 @@ module Hornetseye
       end
     end
 
-    def +( other )
-      other = Node.match( other, typecode ).new other unless other.is_a? Node
-      if dimension == 0 and variables.empty? and
-          other.dimension == 0 and other.variables.empty?
-        target = array_type.coercion other.array_type
-        target.new demand.get + other.demand.get
-      else
-        Binary( :+ ).new( self, other ).force
-      end
-    end
-
     def inject( initial = nil, options = {} )
       if dimension == 0
         demand
@@ -214,6 +203,14 @@ module Hornetseye
         value = element( index ).
           inject initial, :block => block, :var1 => var1, :var2 => var2
         Inject.new( value, index, initial, block, var1, var2 ).force.get
+      end
+    end
+
+    def ==( other )
+      if other.class == self.class
+        Hornetseye::lazy { eq( other ).inject( true ) { |a,b| a.and b } }[]
+      else
+        false
       end
     end
 

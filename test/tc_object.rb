@@ -46,15 +46,15 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 42, o[]
   end
 
-  #def test_equal
-  #  assert_not_equal O.new( 3 ), O.new( 4 )
-  #  assert_equal O.new( 3 ), O.new( 3 )
-  #end
+  def test_equal
+    assert_not_equal O.new( 3 ), O.new( 4 )
+    assert_equal O.new( 3 ), O.new( 3 )
+  end
 
-  #def test_negate
-  #  o = O.new 5
-  #  assert_equal O.new( -5 ), -o
-  #end
+  def test_negate
+    o = O.new 5
+    assert_equal O.new( -5 ), -o
+  end
 
   #def test_plus
   #  v = O.new 3

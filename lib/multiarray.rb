@@ -212,6 +212,8 @@ module Hornetseye
     end
   end
 
+  module_function :lazy
+
   def eager( *shape, &action )
     previous = Thread.current[ :lazy ]
     Thread.current[ :lazy ] = false
@@ -222,6 +224,8 @@ module Hornetseye
       Thread.current[ :lazy ] = previous
     end
   end
+
+  module_function :eager
 
   def sum( *shape, &action )
     options = shape.last.is_a?( Hash ) ? shape.pop : {}
@@ -238,5 +242,7 @@ module Hornetseye
       Inject.new( term, index, nil, var1 + var2, var1, var2 ).force.get
     end
   end
+
+  module_function :sum
 
 end
