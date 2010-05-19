@@ -181,29 +181,7 @@ module Hornetseye
         target = array_type.coercion other.array_type
         target.new demand.get + other.demand.get
       else
-        Plus.new( self, other ).force
-      end
-    end
-
-    def -( other )
-      other = Node.match( other, typecode ).new other unless other.is_a? Node
-      if dimension == 0 and variables.empty? and
-          other.dimension == 0 and other.variables.empty?
-        target = array_type.coercion other.array_type
-        target.new demand.get - other.demand.get
-      else
-        Minus.new( self, other ).force
-      end
-    end
-
-    def *( other )
-      other = Node.match( other, typecode ).new other unless other.is_a? Node
-      if dimension == 0 and variables.empty? and
-          other.dimension == 0 and other.variables.empty?
-        target = array_type.coercion other.array_type
-        target.new demand.get * other.demand.get
-      else
-        Multiply.new( self, other ).force
+        Binary( :+ ).new( self, other ).force
       end
     end
 
