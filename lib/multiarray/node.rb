@@ -174,14 +174,6 @@ module Hornetseye
       end
     end
 
-    def -@
-      if dimension == 0 and variables.empty?
-        typecode.new -demand.get
-      else
-        Unary( :-@ ).new( self ).force
-      end
-    end
-
     def +( other )
       other = Node.match( other, typecode ).new other unless other.is_a? Node
       if dimension == 0 and variables.empty? and
