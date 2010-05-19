@@ -46,6 +46,18 @@ module Hornetseye
         0
       end
 
+      def contiguous
+        self
+      end
+
+      def bool
+        BOOL
+      end
+
+      def bool_binary( other )
+        BOOL
+      end
+
       def variables
         Set[]
       end

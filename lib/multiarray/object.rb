@@ -38,14 +38,6 @@ module Hornetseye
 
     end
 
-    def inspect
-      "OBJECT(#{@value.inspect})"
-    end
-
-    def descriptor( hash )
-      "OBJECT(#{@value.to_s})"
-    end
-
     module Match
 
       def fit( *values )

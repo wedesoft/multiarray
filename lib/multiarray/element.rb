@@ -4,8 +4,8 @@ module Hornetseye
 
     class << self
 
-      def fetch( p )
-        new p.load( self )
+      def fetch( ptr )
+        new ptr.load( self )
       end
 
       def coercion( other )
@@ -13,7 +13,7 @@ module Hornetseye
           self
         else
           x, y = other.coerce self
-          x.coercion y
+          x.coercion self
         end
       end
 
@@ -21,6 +21,14 @@ module Hornetseye
 
     def initialize( value = self.class.default )
       @value = value
+    end
+
+    def inspect
+      "#{self.class.inspect}(#{@value.inspect})"
+    end
+
+    def descriptor( hash )
+      "#{self.class.to_s}(#{@value.to_s})"
     end
 
     def demand
