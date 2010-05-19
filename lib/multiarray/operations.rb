@@ -33,6 +33,9 @@ module Hornetseye
     define_binary_op :+
     define_binary_op :-
     define_binary_op :*
+    define_binary_op :/
+    define_binary_op :%
+    # define_binary_op :eq
 
   end
 

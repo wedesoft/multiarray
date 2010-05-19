@@ -21,6 +21,66 @@ class Proc
 
 end
 
+class TrueClass
+
+  def not
+     false
+  end
+
+  def and( other )
+    if [ false, true ].member? other
+      other
+    else
+      x, y = other.coerce self
+      x.and y
+    end
+  end
+
+  def or( other )
+    if [ false, true ].member? other
+      true
+    else
+      x, y = other.coerce self
+      x.or y
+    end
+  end
+
+  def conditional( a, b )
+    a
+  end
+
+end
+
+class FalseClass
+
+  def not
+    true
+  end
+
+  def and( other )
+    if [ false, true ].member? other
+      false
+    else
+      x, y = other.coerce self
+      x.and y
+    end
+  end
+
+  def or( other )
+    if [ false, true ].member? other
+      other
+    else
+      x, y = other.coerce self
+      x.or y
+    end
+  end
+
+  def conditional( a, b )
+    b
+  end
+
+end
+
 # Object#instance_exec is defined if it does not exist already
 class Object
 
@@ -33,6 +93,24 @@ class Object
       block.bind( self )[ *arguments ]
     end
 
+  end
+
+  def eq( other )
+    unless other.is_a? Hornetseye::Node
+      self == other
+    else
+      x, y = other.coerce self
+      x.eq y
+    end
+  end
+
+  def ne( other )
+    unless other.is_a? Hornetseye::Node
+      ( self == other ).not
+    else
+      x, y = other.coerce self
+      x.ne y
+    end
   end
 
 end
