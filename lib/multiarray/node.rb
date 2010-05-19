@@ -178,7 +178,7 @@ module Hornetseye
       if dimension == 0 and variables.empty?
         typecode.new -demand.get
       else
-        Negate.new( self ).force
+        Unary( :-@ ).new( self ).force
       end
     end
 

@@ -102,7 +102,8 @@ require 'multiarray/int'
 require 'multiarray/pointer'
 require 'multiarray/variable'
 require 'multiarray/lambda'
-require 'multiarray/negate'
+require 'multiarray/lookup'
+require 'multiarray/unary'
 require 'multiarray/plus'
 require 'multiarray/minus'
 require 'multiarray/multiply'
@@ -111,49 +112,53 @@ require 'multiarray/diagonal'
 require 'multiarray/sequence'
 require 'multiarray/multiarray'
 
-def lazy( *shape, &action )
-  previous = Thread.current[ :lazy ]
-  Thread.current[ :lazy ] = true
-  begin
+module Hornetseye
+
+  def lazy( *shape, &action )
+    previous = Thread.current[ :lazy ]
+    Thread.current[ :lazy ] = true
+    begin
+      options = shape.last.is_a?( Hash ) ? shape.pop : {}
+      arity = options[ :arity ] || action.arity
+      if arity <= 0
+        action.call
+      else
+        index = Variable.new shape.empty? ? INDEX( nil ) : INDEX( shape.pop )
+        term = lazy *( shape + [ :arity => arity - 1 ] ) do |*args|
+          action.call *( args + [ index ] )
+        end
+        Lambda.new index, term
+      end
+    ensure
+      Thread.current[ :lazy ] = previous
+    end
+  end
+
+  def eager( *shape, &action )
+    previous = Thread.current[ :lazy ]
+    Thread.current[ :lazy ] = false
+    begin
+      retval = lazy *shape, &action
+      retval.is_a?( Node ) ? retval.force : retval
+    ensure
+      Thread.current[ :lazy ] = previous
+    end
+  end
+
+  def sum( *shape, &action )
     options = shape.last.is_a?( Hash ) ? shape.pop : {}
     arity = options[ :arity ] || action.arity
     if arity <= 0
       action.call
     else
       index = Variable.new shape.empty? ? INDEX( nil ) : INDEX( shape.pop )
-      term = lazy *( shape + [ :arity => arity - 1 ] ) do |*args|
+      term = sum *( shape + [ :arity => arity - 1 ] ) do |*args|
         action.call *( args + [ index ] )
       end
-      Lambda.new index, term
+      var1 = Variable.new term.typecode
+      var2 = Variable.new term.typecode
+      Inject.new( term, index, nil, var1 + var2, var1, var2 ).force.get
     end
-  ensure
-    Thread.current[ :lazy ] = previous
   end
-end
 
-def eager( *shape, &action )
-  previous = Thread.current[ :lazy ]
-  Thread.current[ :lazy ] = false
-  begin
-    retval = lazy *shape, &action
-    retval.is_a?( Node ) ? retval.force : retval
-  ensure
-    Thread.current[ :lazy ] = previous
-  end
-end
-
-def sum( *shape, &action )
-  options = shape.last.is_a?( Hash ) ? shape.pop : {}
-  arity = options[ :arity ] || action.arity
-  if arity <= 0
-    action.call
-  else
-    index = Variable.new shape.empty? ? INDEX( nil ) : INDEX( shape.pop )
-    term = sum *( shape + [ :arity => arity - 1 ] ) do |*args|
-      action.call *( args + [ index ] )
-    end
-    var1 = Variable.new term.typecode
-    var2 = Variable.new term.typecode
-    Inject.new( term, index, nil, var1 + var2, var1, var2 ).force.get
-  end
 end
