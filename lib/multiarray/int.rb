@@ -21,7 +21,7 @@ module Hornetseye
 
       def coercion( other )
         if other < INT_
-          INT [ bits, other.bits ].max, ( signed or other.signed )
+          Hornetseye::INT [ bits, other.bits ].max, ( signed or other.signed )
         else
           super other
         end

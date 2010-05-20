@@ -196,7 +196,7 @@ module Hornetseye
         else
           initial_typecode = typecode
         end
-        index = Variable.new INDEX( nil )
+        index = Variable.new Hornetseye::INDEX( nil )
         var1 = options[ :var1 ] || Variable.new( initial_typecode )
         var2 = options[ :var2 ] || Variable.new( typecode )
         block = options[ :block ] || yield( var1, var2 )

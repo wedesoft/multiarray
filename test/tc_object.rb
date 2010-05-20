@@ -15,16 +15,16 @@ class TC_Object < Test::Unit::TestCase
   def teardown
   end
 
-  def test_object_default
-    assert_nil O.new[]
-  end
-
   def test_object_inspect
     assert_equal 'OBJECT', O.inspect
   end
 
   def test_object_to_s
     assert_equal 'OBJECT', O.to_s
+  end
+
+  def test_object_default
+    assert_nil O.new[]
   end
 
   def test_inspect
