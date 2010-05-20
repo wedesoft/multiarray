@@ -43,6 +43,14 @@ module Hornetseye
         element_type.dimension + 1
       end
 
+      def contiguous
+        self
+      end
+
+      def bool
+        Hornetseye::Sequence element_type.bool, num_elements
+      end
+
       def inspect
         if dimension == 1
           "Sequence(#{typecode.inspect},#{num_elements.inspect})"

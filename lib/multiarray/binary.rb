@@ -64,4 +64,6 @@ module Hornetseye
     retval
   end
 
+  module_function :Binary
+
 end

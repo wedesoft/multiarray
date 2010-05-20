@@ -5,6 +5,7 @@ module Hornetseye
     class << self
 
       attr_accessor :operation
+      attr_accessor :conversion
 
       def inspect
         operation.to_s
@@ -29,7 +30,7 @@ module Hornetseye
     end
 
     def array_type
-      @value.array_type
+      @value.array_type.send self.class.conversion
     end
 
     def subst( hash )
@@ -55,10 +56,13 @@ module Hornetseye
 
   end
 
-  def Unary( operation )
+  def Unary( operation, conversion = :contiguous )
     retval = Class.new Unary_
     retval.operation = operation
+    retval.conversion = conversion
     retval
   end
+
+  module_function :Unary
 
 end

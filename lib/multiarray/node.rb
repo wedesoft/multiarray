@@ -166,7 +166,7 @@ module Hornetseye
       if Thread.current[ :lazy ] or not variables.empty?
         self
       else
-        lazy do
+        Hornetseye::lazy do
           if shape.empty?
             demand
           else

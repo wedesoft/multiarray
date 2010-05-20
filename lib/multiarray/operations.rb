@@ -8,7 +8,7 @@ module Hornetseye
           target = typecode.send conversion
           target.new demand.get.send( op )
         else
-          Unary( op ).new( self ).force
+          Hornetseye::Unary( op, conversion ).new( self ).force
         end
       end
     end
@@ -23,7 +23,7 @@ module Hornetseye
           target = array_type.send coercion, other.array_type
           target.new demand.get.send( op, other.demand.get )
         else
-          Binary( op ).new( self, other ).force
+          Hornetseye::Binary( op ).new( self, other ).force
         end
       end
     end
