@@ -23,7 +23,7 @@ module Hornetseye
           target = array_type.send coercion, other.array_type
           target.new demand.get.send( op, other.demand.get )
         else
-          Hornetseye::Binary( op ).new( self, other ).force
+          Hornetseye::Binary( op, coercion ).new( self, other ).force
         end
       end
     end

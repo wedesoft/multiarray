@@ -51,6 +51,10 @@ module Hornetseye
         Hornetseye::Sequence element_type.bool, num_elements
       end
 
+      def bool_binary( other )
+        coercion( other ).bool
+      end
+
       def inspect
         if dimension == 1
           "Sequence(#{typecode.inspect},#{num_elements.inspect})"

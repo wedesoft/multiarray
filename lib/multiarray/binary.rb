@@ -5,6 +5,7 @@ module Hornetseye
     class << self
 
       attr_accessor :operation
+      attr_accessor :coercion
 
       def inspect
         operation.to_s
@@ -29,7 +30,7 @@ module Hornetseye
     end
 
     def array_type
-      @value1.array_type.coercion @value2.array_type
+      @value1.array_type.send self.class.coercion, @value2.array_type
     end
 
     def subst( hash )
@@ -58,9 +59,10 @@ module Hornetseye
 
   end
 
-  def Binary( operation )
+  def Binary( operation, coercion = :coercion )
     retval = Class.new Binary_
     retval.operation = operation
+    retval.coercion = coercion
     retval
   end
 
