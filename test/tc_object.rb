@@ -35,9 +35,9 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 'OBJECT(42)', O.new( 42 ).to_s
   end
 
-  #def test_marshal
-  #  assert_equal O.new( 42 ), Marshal.load( Marshal.dump( O.new( 42 ) ) )
-  #end
+  def test_marshal
+    assert_equal O.new( 42 ), Marshal.load( Marshal.dump( O.new( 42 ) ) )
+  end
 
   def test_at_assign
     o = O.new 3
@@ -52,14 +52,11 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_negate
-    o = O.new 5
-    assert_equal O.new( -5 ), -o
+    assert_equal O.new( -5 ), -O.new( 5 )
   end
 
-  #def test_plus
-  #  v = O.new 3
-  #  w = O.new 5
-  #  assert_equal O.new( 3 + 5 ), v + w
-  #end
+  def test_plus
+    assert_equal O.new( 3 + 5 ), O.new( 3 ) + O.new( 5 )
+  end
 
 end
