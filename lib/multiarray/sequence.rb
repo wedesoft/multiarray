@@ -27,6 +27,10 @@ module Hornetseye
       attr_accessor :element_type
       attr_accessor :num_elements
 
+      def default
+        Hornetseye::lazy( num_elements ) { |i| element_type.default }
+      end
+
       def shape
         element_type.shape + [ num_elements ]
       end
@@ -61,6 +65,10 @@ module Hornetseye
         else
           "MultiArray(#{typecode.inspect},#{shape.join ','})"
         end
+      end
+
+      def to_s
+        descriptor( {} )
       end
 
       def descriptor( hash )

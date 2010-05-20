@@ -206,6 +206,7 @@ module Hornetseye
         term = lazy *( shape + [ :arity => arity - 1 ] ) do |*args|
           action.call *( args + [ index ] )
         end
+        term = Node.match( term ).new term unless term.is_a? Node
         Lambda.new index, term
       end
     ensure
