@@ -201,7 +201,8 @@ module Hornetseye
       if arity <= 0
         action.call
       else
-        index = Variable.new shape.empty? ? INDEX( nil ) : INDEX( shape.pop )
+        index = Variable.new shape.empty? ? Hornetseye::INDEX( nil ) :
+                                            Hornetseye::INDEX( shape.pop )
         term = lazy *( shape + [ :arity => arity - 1 ] ) do |*args|
           action.call *( args + [ index ] )
         end
@@ -233,7 +234,8 @@ module Hornetseye
     if arity <= 0
       action.call
     else
-      index = Variable.new shape.empty? ? INDEX( nil ) : INDEX( shape.pop )
+      index = Variable.new shape.empty? ? Hornetseye::INDEX( nil ) :
+                           Hornetseye::INDEX( shape.pop )
       term = sum *( shape + [ :arity => arity - 1 ] ) do |*args|
         action.call *( args + [ index ] )
       end

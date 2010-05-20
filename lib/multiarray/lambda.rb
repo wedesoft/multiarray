@@ -17,7 +17,7 @@ module Hornetseye
     end
 
     def array_type
-      Sequence @term.array_type, @index.size.get
+      Hornetseye::Sequence @term.array_type, @index.size.get
     end
 
     def variables

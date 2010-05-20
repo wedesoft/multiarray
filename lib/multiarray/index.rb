@@ -46,4 +46,6 @@ module Hornetseye
     retval
   end
 
+  module_function :INDEX
+
 end

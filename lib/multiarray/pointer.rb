@@ -89,4 +89,6 @@ module Hornetseye
     p
   end
 
+  module_function :Pointer
+
 end

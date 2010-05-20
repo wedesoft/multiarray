@@ -10,7 +10,7 @@ module Hornetseye
 
       def []( *args )
         target = Node.fit args
-        target = Sequence OBJECT, args.size if target.dimension > 1
+        target = Hornetseye::Sequence OBJECT, args.size if target.dimension > 1
         retval = target.new
         args.each_with_index { |arg,i| retval[ i ] = arg }
         retval
@@ -61,9 +61,11 @@ module Hornetseye
 
       def coercion( other )
         if other < Sequence_
-          Sequence element_type.coercion( other.element_type ), num_elements
+          Hornetseye::Sequence element_type.coercion( other.element_type ),
+                               num_elements
         else
-          Sequence element_type.coercion( other ), num_elements
+          Hornetseye::Sequence element_type.coercion( other ),
+                               num_elements
         end
       end
 
@@ -71,7 +73,7 @@ module Hornetseye
         if other < Sequence_
           return other, self
         else
-          return Sequence( other, num_elements ), self
+          return Hornetseye::Sequence( other, num_elements ), self
         end
       end
 
@@ -91,7 +93,7 @@ module Hornetseye
           elements = values.inject [] do |flat,value|
             flat + ( value.is_a?( Array ) ? value : [ value ] )
           end
-          Sequence fit( *elements ), n
+          Hornetseye::Sequence fit( *elements ), n
         else
           super *values
         end
@@ -109,5 +111,7 @@ module Hornetseye
     retval.num_elements = num_elements
     retval
   end
+
+  module_function :Sequence
 
 end

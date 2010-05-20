@@ -9,11 +9,11 @@ module Hornetseye
         count = options[ :count ] || 1
         if shape.empty?
           memory = typecode.memory.new typecode.storage_size * count
-          Pointer( typecode ).new memory
+          Hornetseye::Pointer( typecode ).new memory
         else
           size = shape.pop
           stride = shape.inject( 1 ) { |a,b| a * b }
-          lazy( size ) do |index|
+          Hornetseye::lazy( size ) do |index|
             pointer = new typecode, *( shape + [ :count => count * size ] )
             Lookup.new pointer, index, INT.new( stride )
           end
@@ -43,8 +43,11 @@ module Hornetseye
     if shape.empty?
       element_type
     else
-      Sequence MultiArray( element_type, *shape[ 0 ... -1 ] ), shape.last
+      Hornetseye::Sequence MultiArray( element_type, *shape[ 0 ... -1 ] ),
+                           shape.last
     end
   end
+
+  module_function :MultiArray
 
 end
