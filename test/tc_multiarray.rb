@@ -8,7 +8,12 @@ Kernel::require 'multiarray'
 class TC_MultiArray < Test::Unit::TestCase
 
   O = Hornetseye::OBJECT
+  S = Hornetseye::Sequence
   M = Hornetseye::MultiArray
+
+  def S( *args )
+    Hornetseye::Sequence *args
+  end
 
   def M( *args )
     Hornetseye::MultiArray *args
@@ -88,7 +93,29 @@ class TC_MultiArray < Test::Unit::TestCase
                      M[ [ 1, 2, 3 ], [ 4, 6, 5 ] ]
     # !!!
     assert_not_equal M[ [ 1, 1 ], [ 1, 1 ] ], 1
-    assert_not_equal M[ [ 1, 1 ], [ 1, 1 ] ], M[ 1, 1 ]
+    assert_not_equal M[ [ 1, 1 ], [ 1, 1 ] ], S[ 1, 1 ]
+  end
+
+  def test_inject
+    assert_equal 21, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject { |a,b| a + b }
+    assert_equal 28, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject( 7 ) { |a,b| a + b }
+  end
+
+  def test_zero
+    assert_equal M[ [ false, true ], [ true, false ] ],
+                 M[ [ -1, 0 ], [ 0, 1 ] ].zero?
+  end
+
+  def test_negate
+    assert_equal M[ [ -1, 2, -3 ], [ 4, -5, 6 ] ],
+                 -M[ [ 1, -2, 3 ], [ -4, 5, -6 ] ]
+  end
+
+  def test_plus
+    assert_equal M[ [ 2, 3, 5 ], [ 3, 5, 7 ] ],
+                 M[ [ 1, 2, 4 ], [ 2, 4, 6 ] ] + 1
+    #assert_equal M[ [ 2, 3, 5 ], [ 3, 5, 7 ] ],
+    #             1 + M[ [ 1, 2, 4 ], [ 2, 4, 6 ] ]
   end
 
 end
