@@ -27,12 +27,36 @@ class TC_Object < Test::Unit::TestCase
     assert_nil O.new[]
   end
 
+  def test_object_typecode
+    assert_equal O, O.typecode
+  end
+
+  def test_object_dimension
+    assert_equal 0, O.dimension
+  end
+
+  def test_object_shape
+    assert_equal [], O.shape
+  end
+
   def test_inspect
     assert_equal 'OBJECT(42)', O.new( 42 ).inspect
   end
 
   def test_marshal
     assert_equal O.new( 42 ), Marshal.load( Marshal.dump( O.new( 42 ) ) )
+  end
+
+  def test_typecode
+    assert_equal O, O.new.typecode
+  end
+
+  def test_dimension
+    assert_equal 0, O.new.dimension
+  end
+
+  def test_shape
+    assert_equal [], O.new.shape
   end
 
   def test_at_assign
@@ -48,8 +72,13 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_inject
-    assert_equal 2, OBJECT.new( 2 ).inject { |a,b| a + b }[]
-    assert_equal 3, OBJECT.new( 2 ).inject( 1 ) { |a,b| a + b }[]
+    assert_equal 2, O.new( 2 ).inject { |a,b| a + b }[]
+    assert_equal 3, O.new( 2 ).inject( 1 ) { |a,b| a + b }[]
+  end
+
+  def test_zero
+    assert O.new( 0 ).zero?[]
+    assert !O.new( 3 ).zero?[]
   end
 
   def test_negate

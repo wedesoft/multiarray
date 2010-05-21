@@ -36,6 +36,18 @@ class TC_Object < Test::Unit::TestCase
     assert_equal [ 1, 2, 3 ], S[ 1, 2, 3 ].to_a
   end
 
+  def test_sequence_typecode
+    assert_equal O, S( O, 3 ).typecode
+  end
+
+  def test_sequence_dimension
+    assert_equal 1, S( O, 3 ).dimension
+  end
+
+  def test_sequence_shape
+    assert_equal [ 3 ], S( O, 3 ).shape
+  end
+
   def test_inspect
     assert_equal "Sequence(OBJECT,3):\n[ :a, 2, 3 ]", S[ :a, 2, 3 ].inspect
   end
@@ -44,12 +56,12 @@ class TC_Object < Test::Unit::TestCase
     assert_equal O, S.new( O, 3 ).typecode
   end
 
-  def test_shape
-    assert_equal [ 3 ], S[ 1, 2, 3 ].shape
-  end
-
   def test_dimension
     assert_equal 1, S[ 1, 2, 3 ].dimension
+  end
+
+  def test_shape
+    assert_equal [ 3 ], S[ 1, 2, 3 ].shape
   end
 
   def test_at_assign
@@ -69,6 +81,10 @@ class TC_Object < Test::Unit::TestCase
   def test_inject
     assert_equal 6, S[ 1, 2, 3 ].inject { |a,b| a + b }
     assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
+  end
+
+  def test_zero
+    assert_equal S[ false, true, false ], S[ -1, 0, 1 ].zero?
   end
 
   def test_negate
