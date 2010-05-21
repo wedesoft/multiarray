@@ -71,4 +71,14 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
   end
 
+  def test_negate
+    assert_equal S[ -1, 2, -3 ], -S[ 1, -2, 3 ]
+  end
+
+  def test_plus
+    assert_equal S[ 2, 3, 5 ], S[ 1, 2, 4 ] + 1
+    assert_equal S[ 2, 3, 5 ], 1 + S[ 1, 2, 4 ]
+    assert_equal S[ 2, 3, 5 ], S[ 1, 2, 3 ] + S[ 1, 1, 2 ]
+  end
+
 end
