@@ -118,7 +118,7 @@ module Hornetseye
         lines = 0
         retval = '[ '
         for i in 0 ... array_type.num_elements
-          x = element i
+          x = lazy { element i }
           if x.dimension > 0
             if i > 0
               retval += ",\n  "
