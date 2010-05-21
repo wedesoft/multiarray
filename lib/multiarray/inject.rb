@@ -7,10 +7,6 @@ module Hornetseye
         value, index, initial, block, var1, var2
     end
 
-    def inspect
-      "Inject(#{@value.inspect},#{@initial.inspect},#{@index.inspect},#{@block.inspect})"
-    end
-
     def descriptor( hash )
       hash = hash.merge @index => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var1 => ( ( hash.values.max || 0 ) + 1 )

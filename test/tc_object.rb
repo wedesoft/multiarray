@@ -31,10 +31,6 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 'OBJECT(42)', O.new( 42 ).inspect
   end
 
-  def test_to_s
-    assert_equal 'OBJECT(42)', O.new( 42 ).to_s
-  end
-
   def test_marshal
     assert_equal O.new( 42 ), Marshal.load( Marshal.dump( O.new( 42 ) ) )
   end

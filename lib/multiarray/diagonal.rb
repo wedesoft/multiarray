@@ -7,10 +7,6 @@ module Hornetseye
         value, index0, index1, index2, initial, block, var1, var2
     end
 
-    def inspect
-      "Diagonal(#{@value.inspect},#{@initial.inspect},#{@block.inspect})"
-    end
-
     def descriptor( hash )
       hash = hash.merge @index0 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @index1 => ( ( hash.values.max || 0 ) + 1 )

@@ -39,6 +39,10 @@ module Hornetseye
         element_type.typecode
       end
 
+      def array_type
+        self
+      end
+
       def pointer_type
         self
       end

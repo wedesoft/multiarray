@@ -21,10 +21,6 @@ module Hornetseye
       @value1, @value2 = value1, value2
     end
 
-    def inspect
-      "(#{@value1.inspect}).#{self.class.inspect}(#{@value2.inspect})"
-    end
-
     def descriptor( hash )
       "(#{@value1.descriptor( hash )}).#{self.class.descriptor( hash )}(#{@value2.descriptor( hash )})"
     end

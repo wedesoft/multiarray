@@ -7,10 +7,6 @@ module Hornetseye
       @term = term
     end
 
-    def inspect
-      "Lambda(#{@index.inspect},#{@term.inspect})"
-    end
-
     def descriptor( hash )
       hash = hash.merge @index => ( ( hash.values.max || 0 ) + 1 )
       "Lambda(#{@index.descriptor( hash )},#{@term.descriptor( hash )})"

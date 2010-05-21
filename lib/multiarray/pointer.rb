@@ -54,10 +54,6 @@ module Hornetseye
       return [ variable ], [ self ], variable
     end
 
-    def inspect
-      "#{self.class.inspect}(#{@value.inspect})"
-    end
-
     def descriptor( hash )
       "#{self.class.to_s}(#{@value.to_s})"
     end

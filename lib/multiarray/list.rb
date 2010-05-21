@@ -11,6 +11,10 @@ module Hornetseye
       "List(#{@array.size - @offset})"
     end
 
+    def to_s
+      "List(#{@array[ @offset .. -1 ]})"
+    end
+
     def +( offset )
       List.new 0, :array => @array, :offset => @offset + offset
     end

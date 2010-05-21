@@ -109,6 +109,50 @@ module Hornetseye
       end
     end
 
+    def inspect( indent = nil, lines = nil )
+      if dimension == 0 and not indent
+        "#{array_type.inspect}(#{get.inspect})"
+      else # empty? !!!
+        prepend = indent ? '' : "#{array_type.inspect}:\n"
+        indent = 0
+        lines = 0
+        retval = '[ '
+        for i in 0 ... array_type.num_elements
+          x = element i
+          if x.dimension > 0
+            if i > 0
+              retval += ",\n  "
+              lines += 1
+              if lines >= 10
+                retval += '...' if indent == 0
+                break
+              end
+              retval += '  ' * indent
+            end
+            str = x.inspect indent + 1, lines
+            lines += str.count "\n"
+            retval += str
+            if lines >= 10
+              retval += '...' if indent == 0
+              break
+            end
+          else
+            retval += ', ' if i > 0
+            str = x.force.get.inspect
+            if retval.size + str.size >= 74 - '...'.size -
+                '[  ]'.size * indent.succ
+              retval += '...'
+              break
+            else
+              retval += str
+            end
+          end
+        end
+        retval += ' ]' unless lines >= 10
+        prepend + retval
+      end
+    end
+
     def to_s
       descriptor( {} )
     end

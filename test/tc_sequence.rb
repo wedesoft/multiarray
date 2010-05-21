@@ -36,6 +36,12 @@ class TC_Object < Test::Unit::TestCase
     assert_equal [ 1, 2, 3 ], S[ 1, 2, 3 ].to_a
   end
 
+  def test_inspect
+    s = S.new O, 3
+    s[ 0 ], s[ 1 ], s[ 2 ] = 1, 2, 3
+    assert_equal "Sequence(OBJECT,3):\n[ 1, 2, 3 ]", s.inspect
+  end
+
   def test_typecode
     assert_equal O, S.new( O, 3 ).typecode
   end
