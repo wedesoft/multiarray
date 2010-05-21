@@ -5,7 +5,7 @@ rescue LoadError
 end
 Kernel::require 'multiarray'
 
-class TC_Object < Test::Unit::TestCase
+class TC_Sequence < Test::Unit::TestCase
 
   O = Hornetseye::OBJECT
   S = Hornetseye::Sequence
