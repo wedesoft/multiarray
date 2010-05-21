@@ -37,9 +37,7 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_inspect
-    s = S.new O, 3
-    s[ 0 ], s[ 1 ], s[ 2 ] = 1, 2, 3
-    assert_equal "Sequence(OBJECT,3):\n[ 1, 2, 3 ]", s.inspect
+    assert_equal "Sequence(OBJECT,3):\n[ :a, 2, 3 ]", S[ :a, 2, 3 ].inspect
   end
 
   def test_typecode
@@ -54,8 +52,23 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 1, S[ 1, 2, 3 ].dimension
   end
 
+  def test_at_assign
+    s = S.new O, 3
+    ( 0 ... 3 ).each { |i| assert_equal i + 1, s[ i ] = i + 1 }
+    ( 0 ... 3 ).each { |i| assert_equal i + 1, s[ i ] }
+  end
+
+  def test_equal
+    assert_equal S[ 2, 3, 5 ], S[ 2, 3, 5 ]
+    assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 7 ]
+    #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3 ]
+    #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 5, 7 ]
+    assert_not_equal S[ 2, 2, 2 ], 2
+  end
+
   def test_inject
     assert_equal 6, S[ 1, 2, 3 ].inject { |a,b| a + b }
+    assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
   end
 
 end

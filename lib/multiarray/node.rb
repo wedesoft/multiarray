@@ -118,7 +118,7 @@ module Hornetseye
         lines = 0
         retval = '[ '
         for i in 0 ... array_type.num_elements
-          x = lazy { element i }
+          x = Hornetseye::lazy { element i }
           if x.dimension > 0
             if i > 0
               retval += ",\n  "
@@ -231,21 +231,25 @@ module Hornetseye
     end
 
     def inject( initial = nil, options = {} )
-      if dimension == 0
-        demand
+      if initial
+        initial = Node.match( initial ).new initial unless initial.is_a? Node
+        initial_typecode = initial.typecode
       else
+        initial_typecode = typecode
+      end
+      var1 = options[ :var1 ] || Variable.new( initial_typecode )
+      var2 = options[ :var2 ] || Variable.new( typecode )
+      block = options[ :block ] || yield( var1, var2 )
+      if dimension == 0
         if initial
-          initial = Node.match( initial ).new initial unless initial.is_a? Node
-          initial_typecode = initial.typecode
+          block.subst( var1 => initial, var2 => self ).demand
         else
-          initial_typecode = typecode
+          demand
         end
+      else
         index = Variable.new Hornetseye::INDEX( nil )
-        var1 = options[ :var1 ] || Variable.new( initial_typecode )
-        var2 = options[ :var2 ] || Variable.new( typecode )
-        block = options[ :block ] || yield( var1, var2 )
         value = element( index ).
-          inject initial, :block => block, :var1 => var1, :var2 => var2
+          inject nil, :block => block, :var1 => var1, :var2 => var2
         Inject.new( value, index, initial, block, var1, var2 ).force.get
       end
     end

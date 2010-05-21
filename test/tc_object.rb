@@ -47,6 +47,11 @@ class TC_Object < Test::Unit::TestCase
     assert_equal O.new( 3 ), O.new( 3 )
   end
 
+  def test_inject
+    assert_equal 2, OBJECT.new( 2 ).inject { |a,b| a + b }[]
+    assert_equal 3, OBJECT.new( 2 ).inject( 1 ) { |a,b| a + b }[]
+  end
+
   def test_negate
     assert_equal O.new( -5 ), -O.new( 5 )
   end
