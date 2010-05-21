@@ -83,6 +83,12 @@ module Hornetseye
         end
       end
 
+      def ==( other )
+        other.is_a? Class and other < Sequence_ and
+          other.element_type == element_type and
+          other.num_elements == num_elements
+      end
+
       def coercion( other )
         if other < Sequence_
           Hornetseye::Sequence element_type.coercion( other.element_type ),

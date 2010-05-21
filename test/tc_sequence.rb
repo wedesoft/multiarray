@@ -66,14 +66,18 @@ class TC_Object < Test::Unit::TestCase
 
   def test_at_assign
     s = S.new O, 3
-    ( 0 ... 3 ).each { |i| assert_equal i + 1, s[ i ] = i + 1 }
-    ( 0 ... 3 ).each { |i| assert_equal i + 1, s[ i ] }
+    for i in 0 ... 3
+      assert_equal i + 1, s[ i ] = i + 1
+    end
+    for i in 0 ... 3
+      assert_equal i + 1, s[ i ]
+    end
   end
 
   def test_equal
     assert_equal S[ 2, 3, 5 ], S[ 2, 3, 5 ]
     assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 7 ]
-    #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3 ]
+    #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3 ] # !!!
     #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 5, 7 ]
     assert_not_equal S[ 2, 2, 2 ], 2
   end

@@ -255,7 +255,7 @@ module Hornetseye
     end
 
     def ==( other )
-      if other.class == self.class
+      if other.is_a? Node and other.array_type == array_type
         Hornetseye::lazy { eq( other ).inject( true ) { |a,b| a.and b } }[]
       else
         false
