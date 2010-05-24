@@ -13,7 +13,7 @@ module Hornetseye
           self
         else
           x, y = other.coerce self
-          x.coercion self
+          x.coercion y
         end
       end
 

@@ -114,8 +114,11 @@ class TC_MultiArray < Test::Unit::TestCase
   def test_plus
     assert_equal M[ [ 2, 3, 5 ], [ 3, 5, 7 ] ],
                  M[ [ 1, 2, 4 ], [ 2, 4, 6 ] ] + 1
-    #assert_equal M[ [ 2, 3, 5 ], [ 3, 5, 7 ] ],
-    #             1 + M[ [ 1, 2, 4 ], [ 2, 4, 6 ] ]
+    assert_equal M[ [ 2, 3, 5 ], [ 3, 5, 7 ] ],
+                 1 + M[ [ 1, 2, 4 ], [ 2, 4, 6 ] ]
+    assert_equal M[ [ -3, 2, 1 ], [ 8, 6, 4 ] ] +
+                 M[ [ 2, 0, 2 ], [ -4, -1, 2 ] ],
+                 M[ [ -1, 2, 3 ], [ 4, 5, 6 ] ]
   end
 
 end
