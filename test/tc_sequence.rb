@@ -8,6 +8,8 @@ Kernel::require 'multiarray'
 class TC_Sequence < Test::Unit::TestCase
 
   O = Hornetseye::OBJECT
+  B = Hornetseye::BOOL
+  I = Hornetseye::INT
   S = Hornetseye::Sequence
 
   def S( *args )
@@ -35,6 +37,8 @@ class TC_Sequence < Test::Unit::TestCase
   def test_sequence_at
     assert_equal [ 1, 2, 3 ], S[ 1, 2, 3 ].to_a
     assert_equal O, S[ :a ].typecode
+    assert_equal B, S[ false, true ].typecode
+    assert_equal I, S[ -2 ** 31, 2 ** 31 - 1 ].typecode
   end
 
   def test_sequence_typecode
