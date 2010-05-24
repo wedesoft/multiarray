@@ -51,7 +51,7 @@ module Hornetseye
       end
 
       def inspect
-        if bits != nil and signed != nil
+        unless bits.nil? or signed.nil?
           case [ bits, signed ]
           when [  8, true  ]
             'BYTE'
@@ -78,7 +78,7 @@ module Hornetseye
       end
 
       def descriptor( hash )
-        if bits != nil and signed != nil
+        unless bits.nil? or signed.nil?
           case [ bits, signed ]
           when [  8, true  ]
             'BYTE'

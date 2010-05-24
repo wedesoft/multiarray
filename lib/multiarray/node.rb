@@ -231,7 +231,7 @@ module Hornetseye
     end
 
     def inject( initial = nil, options = {} )
-      if initial
+      unless initial.nil?
         initial = Node.match( initial ).new initial unless initial.is_a? Node
         initial_typecode = initial.typecode
       else

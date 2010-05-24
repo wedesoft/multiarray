@@ -34,6 +34,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_sequence_at
     assert_equal [ 1, 2, 3 ], S[ 1, 2, 3 ].to_a
+    assert_equal O, S[ :a ].typecode
   end
 
   def test_sequence_typecode
