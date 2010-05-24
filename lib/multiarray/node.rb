@@ -111,8 +111,8 @@ module Hornetseye
 
     def inspect( indent = nil, lines = nil )
       if dimension == 0 and not indent
-        "#{array_type.inspect}(#{get.inspect})"
-      else # empty? !!!
+        "#{array_type.inspect}(#{force.get.inspect})" # !!!
+      else
         prepend = indent ? '' : "#{array_type.inspect}:\n"
         indent = 0
         lines = 0
@@ -138,7 +138,7 @@ module Hornetseye
             end
           else
             retval += ', ' if i > 0
-            str = x.force.get.inspect
+            str = x.force.get.inspect # !!!
             if retval.size + str.size >= 74 - '...'.size -
                 '[  ]'.size * indent.succ
               retval += '...'
