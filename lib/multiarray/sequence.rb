@@ -31,6 +31,24 @@ module Hornetseye
         Hornetseye::lazy( num_elements ) { |i| element_type.default }
       end
 
+      def indgen( offset = 0, increment = 1 )
+        Hornetseye::lazy( num_elements ) do |i|
+          if offset == 0
+            if increment == 1
+              i
+            else
+              increment * i
+            end
+          else
+            if increment == 1
+              offset + i
+            else
+              offset + increment * i
+            end
+          end
+        end
+      end
+
       def shape
         element_type.shape + [ num_elements ]
       end
