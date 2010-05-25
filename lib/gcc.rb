@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+require 'tmpdir'
 require 'rbconfig'
 require 'multiarray'
 
@@ -121,7 +122,6 @@ class GCCContext
                 "-I#{Config::CONFIG['rubyhdrdir']}/#{Config::CONFIG['arch']}" :
                 "-I#{Config::CONFIG['archdir']}"
   LIBRUBYARG = Config::CONFIG[ 'LIBRUBYARG' ]
-  TMP = ENV[ 'HORNETSEYE' ] || ENV[ 'TMP' ] || '/tmp'
   class << self
     @@lib_name = 'hornetseye_aaaaaaaa'
     def build( &action )
@@ -198,16 +198,16 @@ void Init_#{@lib_name}(void)
 }
 EOS
     # File::EXCL no overwrite
-    File.open "#{TMP}/#{@lib_name}.c", 'w', 0600 do |f|
+    File.open "#{Dir.tmpdir}/#{@lib_name}.c", 'w', 0600 do |f|
       f << template
     end
-    gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -o #{TMP}/#{@lib_name}.so " +
-          "#{TMP}/#{@lib_name}.c #{LIBRUBYARG}"
-    strip = "#{STRIP} #{TMP}/#{@lib_name}.so"
+    gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -o #{Dir.tmpdir}/#{@lib_name}.so " +
+          "#{Dir.tmpdir}/#{@lib_name}.c #{LIBRUBYARG}"
+    strip = "#{STRIP} #{Dir.tmpdir}/#{@lib_name}.so"
     # puts template
     system gcc
     system strip
-    require "#{TMP}/#{@lib_name}.so"
+    require "#{Dir.tmpdir}/#{@lib_name}.so"
   end
   def <<( str )
     @instructions << str
@@ -439,10 +439,20 @@ end
 
 # lazy { Sequence[ 1, 2, 3 ].inject { |a,b| a + b } }[] # does not call JIT!
 # create and lock /tmp/hornetseye by default, reload cache
-#   f = File.new '/tmp/hornetseye'
-#   f.flock File::LOCK_EX
-#   ...
-#   f.flock File::LOCK_UN
+#   #!/usr/bin/env ruby
+#   require 'tmpdir'
+#   dir = "#{Dir.tmpdir}/hornetseye"
+#   perm = 0700
+#   Dir.mkdir dir, perm unless File.exist? dir
+#   file = File.new dir
+#   
+#   file.flock File::LOCK_EX
+#   print 'Locked ... '; STDOUT.flush
+#   file.chmod 0700
+#   sleep 10
+#   print "done\n"
+#   file.flock File::LOCK_UN
+#   file.close
 # JIT 'force'-method? do call JIT for inject
 # change Convolve#demand to generate GCC code; tests
 # separate secondary operations like equality
