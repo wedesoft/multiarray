@@ -194,7 +194,7 @@ module Hornetseye
 
     def []( *args )
       if args.empty?
-        force.get
+        demand.get # force.get
       else
         element( args.last )[ *args[ 0 ... -1 ] ]
       end

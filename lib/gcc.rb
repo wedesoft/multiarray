@@ -445,7 +445,9 @@ end
 
 # --------------------------------------------------------------------
 
+# integrate JIT
 # lazy { Sequence[ 1, 2, 3 ].inject { |a,b| a + b } }[] # does not call JIT!
+#    use force.get in Node#[] ?
 # compile Convolve#demand
 # Composite numbers?
 # pointer-increments for better efficiency
