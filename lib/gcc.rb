@@ -1,4 +1,4 @@
-# gcc.rb - Draft for using GCC as just-in-time compiler in Ruby
+# multiarray - Lazy multi-dimensional arrays for Ruby
 # Copyright (C) 2010 Jan Wedekind
 #
 # This program is free software: you can redistribute it and/or modify
@@ -115,6 +115,7 @@ class GCCValue
 end
 
 class GCCContext
+
   LDSHARED = Config::CONFIG[ 'LDSHARED' ] # c:\mingw\bin\gcc
   STRIP = Config::CONFIG[ 'STRIP' ]
   RUBYHDRDIR = Config::CONFIG.member?( 'rubyhdrdir' ) ?
@@ -122,6 +123,14 @@ class GCCContext
                 "-I#{Config::CONFIG['rubyhdrdir']}/#{Config::CONFIG['arch']}" :
                 "-I#{Config::CONFIG['archdir']}"
   LIBRUBYARG = Config::CONFIG[ 'LIBRUBYARG' ]
+  DIRNAME = "#{Dir.tmpdir}/hornetseye"
+  Dir.mkdir DIRNAME, 0700 unless File.exist? DIRNAME
+  @@dir = File.new DIRNAME
+  unless @@dir.flock File::LOCK_EX | File::LOCK_NB
+    raise "Could not lock directory #{DIRNAME}"
+  end
+  @@dir.chmod 0700
+
   class << self
     @@lib_name = 'hornetseye_aaaaaaaa'
     def build( &action )
@@ -129,15 +138,18 @@ class GCCContext
       new( lib_name ).build &action
     end
   end
+
   def initialize( lib_name )
     @lib_name = lib_name
     @instructions = ''
     @wrappers = ''
     @registrations = ''
   end
+
   def build( &action )
     action.call self
   end
+
   def function( descriptor, *param_types )
     @instructions << <<EOS
 void #{descriptor}(#{
@@ -198,16 +210,16 @@ void Init_#{@lib_name}(void)
 }
 EOS
     # File::EXCL no overwrite
-    File.open "#{Dir.tmpdir}/#{@lib_name}.c", 'w', 0600 do |f|
+    File.open "#{DIRNAME}/#{@lib_name}.c", 'w', 0600 do |f|
       f << template
     end
-    gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -o #{Dir.tmpdir}/#{@lib_name}.so " +
-          "#{Dir.tmpdir}/#{@lib_name}.c #{LIBRUBYARG}"
-    strip = "#{STRIP} #{Dir.tmpdir}/#{@lib_name}.so"
+    gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -o #{DIRNAME}/#{@lib_name}.so " +
+          "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
+    strip = "#{STRIP} #{DIRNAME}/#{@lib_name}.so"
     # puts template
     system gcc
     system strip
-    require "#{Dir.tmpdir}/#{@lib_name}.so"
+    require "#{DIRNAME}/#{@lib_name}.so"
   end
   def <<( str )
     @instructions << str
@@ -437,22 +449,8 @@ end
 
 # --------------------------------------------------------------------
 
+# add GPL headers
 # lazy { Sequence[ 1, 2, 3 ].inject { |a,b| a + b } }[] # does not call JIT!
-# create and lock /tmp/hornetseye by default, reload cache
-#   #!/usr/bin/env ruby
-#   require 'tmpdir'
-#   dir = "#{Dir.tmpdir}/hornetseye"
-#   perm = 0700
-#   Dir.mkdir dir, perm unless File.exist? dir
-#   file = File.new dir
-#   
-#   file.flock File::LOCK_EX
-#   print 'Locked ... '; STDOUT.flush
-#   file.chmod 0700
-#   sleep 10
-#   print "done\n"
-#   file.flock File::LOCK_UN
-#   file.close
 # JIT 'force'-method? do call JIT for inject
 # change Convolve#demand to generate GCC code; tests
 # separate secondary operations like equality
@@ -463,6 +461,7 @@ end
 # Plus#demand: @value1.demand + @value2.demand ???
 # nonzero?
 # typecasts
+# preload cache
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 
 # histogram
