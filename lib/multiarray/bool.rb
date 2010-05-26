@@ -20,6 +20,10 @@ module Hornetseye
 
     class << self
 
+      def compilable?
+        false
+      end
+
       def fetch( ptr )
         new ptr.load( self ) != 0
       end

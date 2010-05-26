@@ -185,6 +185,7 @@ class Module
 end
 
 require 'malloc'
+require 'rbconfig'
 require 'set'
 require 'tmpdir'
 require 'multiarray/malloc'

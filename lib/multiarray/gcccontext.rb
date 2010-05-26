@@ -110,7 +110,8 @@ inline void *mallocToPtr( VALUE rbMalloc )
 #{@wrappers}
 void Init_#{@lib_name}(void)
 {
-  VALUE cGCCContext = rb_define_class( "GCCContext", rb_cObject );
+  VALUE mHornetseye = rb_define_module( "Hornetseye" );
+  VALUE cGCCContext = rb_define_class_under( mHornetseye, "GCCContext", rb_cObject );
 #{@registrations}
 }
 EOS
