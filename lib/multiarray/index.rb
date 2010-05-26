@@ -36,11 +36,11 @@ module Hornetseye
 
       def strip
         var = Variable.new INT
-        return [ var ], [ size ], INDEX( var )
+        return [ var ], [ size ], Hornetseye::INDEX( var )
       end
 
       def subst( hash )
-        INDEX size.subst( hash )
+        Hornetseye::INDEX size.subst( hash )
       end
 
       def variables

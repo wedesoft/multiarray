@@ -51,7 +51,7 @@ module Hornetseye
       end
 
       def pointer_type
-        Pointer( self )
+        Hornetseye::Pointer( self )
       end
 
       def shape
@@ -88,6 +88,10 @@ module Hornetseye
 
       def subst( hash )
         hash[ self ] || self
+      end
+
+      def compilable?
+        true
       end
 
     end
@@ -181,6 +185,10 @@ module Hornetseye
       hash[ self ] || self
     end
 
+    def compilable?
+      typecode.compilable?
+    end
+
     def transpose( *order )
       term = self
       variables = shape.reverse.collect do |i|
@@ -222,14 +230,22 @@ module Hornetseye
       self
     end
 
+    def lazy?
+      Thread.current[ :lazy ] or not variables.empty?
+    end
+
     def force
-      if Thread.current[ :lazy ] or not variables.empty?
+      if lazy?
         self
       else
-        Hornetseye::lazy do
-          retval = array_type.new
-          retval[] = self
-          retval
+        unless compilable?
+          Hornetseye::lazy do
+            retval = array_type.new
+            retval[] = self
+            retval
+          end
+        else
+          GCCFunction.run( self ).demand
         end
       end
     end

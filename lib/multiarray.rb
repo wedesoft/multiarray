@@ -184,8 +184,9 @@ class Module
 
 end
 
-require 'set'
 require 'malloc'
+require 'set'
+require 'tmpdir'
 require 'multiarray/malloc'
 require 'multiarray/list'
 require 'multiarray/node'
@@ -205,6 +206,11 @@ require 'multiarray/inject'
 require 'multiarray/diagonal'
 require 'multiarray/sequence'
 require 'multiarray/multiarray'
+require 'multiarray/gcctype'
+require 'multiarray/gccvalue'
+require 'multiarray/gcccontext'
+require 'multiarray/gcccache'
+require 'multiarray/gccfunction'
 
 module Hornetseye
 

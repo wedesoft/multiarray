@@ -56,6 +56,14 @@ module Hornetseye
       return [ variable ], [ self ], variable
     end
 
+    def compilable?
+      if @value.respond_to? :compilable?
+        @value.compilable?
+      else
+        super
+      end
+    end
+
     def get
       @value
     end
