@@ -376,13 +376,9 @@ class Node
       # if $jit or is_a?( Element )
       unless compilable?
         Hornetseye::lazy do
-          if shape.empty?
-            demand
-          else
-            retval = array_type.new
-            retval[] = self
-            retval
-          end
+          retval = array_type.new
+          retval.store self
+          retval
         end
       else
         GCCFunction.run( self ).demand

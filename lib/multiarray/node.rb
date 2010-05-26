@@ -194,7 +194,7 @@ module Hornetseye
 
     def []( *args )
       if args.empty?
-        demand.get
+        force.get
       else
         element( args.last )[ *args[ 0 ... -1 ] ]
       end
@@ -227,13 +227,9 @@ module Hornetseye
         self
       else
         Hornetseye::lazy do
-          if shape.empty?
-            demand
-          else
-            retval = array_type.new
-            retval[] = self
-            retval
-          end
+          retval = array_type.new
+          retval[] = self
+          retval
         end
       end
     end

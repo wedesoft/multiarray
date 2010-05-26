@@ -66,7 +66,7 @@ module Hornetseye
 
     def element( i )
       i = Node.match( i ).new i unless i.is_a? Node
-      i.size[] ||= @index.size[] if i.is_a? Variable
+      i.size.store @index.size if @index.size.get and i.is_a? Variable
       @term.subst @index => i
     end
 
