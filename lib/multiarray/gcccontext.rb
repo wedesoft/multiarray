@@ -89,9 +89,9 @@ end
 EOS
 
       @registrations << <<EOS
-  rb_define_method( cGCCContext, "#{descriptor}",
-                    RUBY_METHOD_FUNC( wrap#{descriptor.capitalize} ),
-                    #{param_types.size} ); 
+  rb_define_singleton_method( cGCCCache, "#{descriptor}",
+                              RUBY_METHOD_FUNC( wrap#{descriptor.capitalize} ),
+                              #{param_types.size} ); 
 EOS
     end
     def compile
@@ -111,7 +111,7 @@ inline void *mallocToPtr( VALUE rbMalloc )
 void Init_#{@lib_name}(void)
 {
   VALUE mHornetseye = rb_define_module( "Hornetseye" );
-  VALUE cGCCContext = rb_define_class_under( mHornetseye, "GCCContext", rb_cObject );
+  VALUE cGCCCache = rb_define_class_under( mHornetseye, "GCCCache", rb_cObject );
 #{@registrations}
 }
 EOS

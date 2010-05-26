@@ -28,7 +28,7 @@ module Hornetseye
         method_name = '_' + term.descriptor( labels ).
                       tr( '(),+\-*/.@', '0123\45678' )
         unless GCCCache.respond_to? method_name
-          function = GCCContext.build do |context|
+          GCCContext.build do |context|
             function = new context, method_name,
                            *( retval_keys + keys ).collect { |var| var.meta }
             term_subst = ( 0 ... keys.size ).collect do |i|
@@ -43,13 +43,9 @@ module Hornetseye
             function.insn_return
             function.compile
           end
-          ( class << GCCCache; self; end ).instance_eval do
-            define_method method_name do |*args|
-              function.call *args
-            end
-          end
         end
-        GCCCache.send method_name, *( retval_values + values )
+        args = ( retval_values + values ).collect { |arg| arg.get }
+        GCCCache.send method_name, *args
         # retval = retval.demand.get
         retval
       end
