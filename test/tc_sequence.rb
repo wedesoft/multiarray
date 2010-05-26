@@ -139,6 +139,9 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_plus
+    assert_equal S[ 'ax', 'bx' ], S[ 'a', 'b' ] + 'x'
+    assert_equal S[ 'xa', 'xb' ], O.new( 'x' ) + S[ 'a', 'b' ]
+    assert_equal S[ 'ac', 'bd' ], S[ 'a', 'b' ] + S[ 'c', 'd' ]
     assert_equal S[ 2, 3, 5 ], S[ 1, 2, 4 ] + 1
     assert_equal S[ 2, 3, 5 ], 1 + S[ 1, 2, 4 ]
     assert_equal S[ 2, 3, 5 ], S[ 1, 2, 3 ] + S[ 1, 1, 2 ]

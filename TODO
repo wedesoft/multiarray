@@ -1,3 +1,37 @@
+# integrate JIT
+# lazy { Sequence[ 1, 2, 3 ].inject { |a,b| a + b } }[] # does not call JIT!
+#    use force.get in Node#[] ?
+# compile Convolve#demand
+# Composite numbers?
+# pointer-increments for better efficiency
+# How does contiguous work here? typecasts?
+# Plus#demand: @value1.demand + @value2.demand ???
+# nonzero?
+# typecasts
+# preload cache
+# separate secondary operations like equality
+# inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
+
+# histogram
+# inject: min, max, equal, n-d clips for warp
+# block(var1,var2,...) with smart subst?
+# lazy( 5 ) { |i| 0 } # but lazy { 0 }
+# lazy( 3, 2 ) { |i,j| i }
+# lazy( 3, 2 ) { |i,j| j.to_object }
+
+# downsampling after correlation?
+# README.rdoc, YARD documentation with pictures, demo video
+
+# f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy
+# lut(g(i))
+# f(warp(i))
+#class Node
+#  def map( lut, options = {} )
+#    
+#  end
+#end
+
+
 # cache <-> demand/get? what about store?
 # Composite numbers?
 # change Convolve#demand to generate GCC code
