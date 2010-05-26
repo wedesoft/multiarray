@@ -449,10 +449,9 @@ end
 
 # --------------------------------------------------------------------
 
-# add GPL headers
 # lazy { Sequence[ 1, 2, 3 ].inject { |a,b| a + b } }[] # does not call JIT!
 # JIT 'force'-method? do call JIT for inject
-# change Convolve#demand to generate GCC code; tests
+# change Convolve#demand to generate GCC code
 # separate secondary operations like equality
 # use pid, allow creation of library for pre-loading cache
 # Composite numbers?

@@ -33,7 +33,7 @@ module Hornetseye
     end
 
     def array_type
-      MultiArray @block.typecode, *@value.shape
+      Hornetseye::MultiArray @block.typecode, *@value.shape
     end
 
     def demand

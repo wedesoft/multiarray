@@ -115,6 +115,21 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
   end
 
+  def test_convolve
+    assert_equal S[ 2, 3, 0, 0, 0 ],
+                 S[ 1, 0, 0, 0, 0 ].convolve( S[ 1, 2, 3 ] )
+    assert_equal S[ 1, 2, 3, 0, 0 ],
+                 S[ 0, 1, 0, 0, 0 ].convolve( S[ 1, 2, 3 ] )
+    assert_equal S[ 0, 1, 2, 3, 0 ],
+                 S[ 0, 0, 1, 0, 0 ].convolve( S[ 1, 2, 3 ] )
+    assert_equal S[ 0, 0, 1, 2, 3 ],
+                 S[ 0, 0, 0, 1, 0 ].convolve( S[ 1, 2, 3 ] )
+    assert_equal S[ 0, 0, 0, 1, 2 ],
+                 S[ 0, 0, 0, 0, 1 ].convolve( S[ 1, 2, 3 ] )
+    assert_equal S[ 1, 2, 3, 0 ],
+                 S[ 0, 1, 0, 0 ].convolve( S[ 1, 2, 3 ] )
+  end
+
   def test_zero
     assert_equal S[ false, true, false ], S[ -1, 0, 1 ].zero?
   end

@@ -288,9 +288,9 @@ module Hornetseye
         else
           initial_typecode = typecode
         end
-        index0 = Variable.new INDEX( nil )
-        index1 = Variable.new INDEX( nil )
-        index2 = Variable.new INDEX( nil )
+        index0 = Variable.new Hornetseye::INDEX( nil )
+        index1 = Variable.new Hornetseye::INDEX( nil )
+        index2 = Variable.new Hornetseye::INDEX( nil )
         var1 = options[ :var1 ] || Variable.new( initial_typecode )
         var2 = options[ :var2 ] || Variable.new( typecode )
         block = options[ :block ] || yield( var1, var2 )
@@ -307,7 +307,7 @@ module Hornetseye
       if dimension == 0
         self * filter
       else
-        lazy { |i,j| self[j].product filter[i] }
+        Hornetseye::lazy { |i,j| self[j].product filter[i] }
       end
     end
 
