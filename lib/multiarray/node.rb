@@ -184,30 +184,57 @@ module Hornetseye
 
     end
 
+
+    # Array type of this term
+    #
+    # @return [Class] Resulting array type.
     def array_type
       self.class.array_type
     end
 
+    # Convert to pointer type.
+    #
+    # @return [Class] Corresponding pointer type.
     def pointer_type
       array_type.pointer_type
     end
 
+    # Element-type of this term
+    #
+    # @return [Class] Element-type of this datatype.
     def typecode
       array_type.typecode
     end
 
+    # Get shape of this term
+    #
+    # @return [Array<Integer>] Returns +array_type.shape+.
     def shape
       array_type.shape
     end
 
+    # Get dimension of this term
+    #
+    # @return [Array<Integer>] Returns +array_type.dimension+.
     def dimension
       array_type.dimension
     end
 
+    # Extract native value if this is an element
+    #
+    # @return [Node,Object] Returns +self+.
+    #
+    # @private
     def get
       self
     end
 
+    # Convert to Ruby array of objects.
+    #
+    # Perform pending computations and convert native array to Ruby array of
+    # objects.
+    #
+    # @return [Array<Object>] Array of objects.
     def to_a
       if dimension == 0
         demand.get
@@ -217,6 +244,9 @@ module Hornetseye
       end
     end
 
+    # Display information about this object.
+    #
+    # @return [String] String with information about this object.
     def inspect( indent = nil, lines = nil )
       if dimension == 0 and not indent
         "#{array_type.inspect}(#{force.get.inspect})" # !!!
@@ -261,18 +291,48 @@ module Hornetseye
       end
     end
 
+    # Get unique descriptor of this object
+    #
+    # The method calls +descriptor( {} )+.
+    #
+    # @return [String] Descriptor of this object.
+    #
+    # @see descriptor
+    #
+    # @private
     def to_s
       descriptor( {} )
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object.
+    #
+    # @private
     def descriptor( hash )
       'Node()'
     end
 
+    # Substitute variables.
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       hash[ self ] || self
     end
 
+    # Check whether this term is compilable.
+    #
+    # @return [FalseClass,TrueClass] Returns +typecode.compilable?+.
+    #
+    # @private
     def compilable?
       typecode.compilable?
     end
