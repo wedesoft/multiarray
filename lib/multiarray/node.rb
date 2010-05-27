@@ -363,7 +363,7 @@ module Hornetseye
     # @return [Object,Node] Value of array element or a sub-element.
     def []( *indices )
       if indices.empty?
-        demand.get # force.get
+        force.get
       else
         element( indices.last )[ *indices[ 0 ... -1 ] ]
       end

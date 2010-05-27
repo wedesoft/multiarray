@@ -1,5 +1,3 @@
-# lazy { Sequence.new( INT, 10000 ).inject { |a,b| a + b } }[] # does not call JIT!
-#    use force.get in Node#[] ?
 # Check for Ruby version in cache
 # compile boolean operations, compile Convolve#demand
 # Composite numbers?

@@ -25,7 +25,7 @@ module Hornetseye
       "-I#{Config::CONFIG['rubyhdrdir']}/#{Config::CONFIG['arch']}" :
       "-I#{Config::CONFIG['archdir']}"
     LIBRUBYARG = Config::CONFIG[ 'LIBRUBYARG' ]
-    DIRNAME = "#{Dir.tmpdir}/hornetseye"
+    DIRNAME = "#{Dir.tmpdir}/hornetseye-ruby#{RUBY_VERSION}"
     Dir.mkdir DIRNAME, 0700 unless File.exist? DIRNAME
     @@dir = File.new DIRNAME
     unless @@dir.flock File::LOCK_EX | File::LOCK_NB
