@@ -16,80 +16,168 @@
 
 module Hornetseye
 
+  # Base class for representing native datatypes and operations (terms).
   class Node
 
     class << self
 
+      # Get string with information about this class
+      #
+      # @return [String] Returns +'Node'+.
       def inspect
         'Node'
       end
 
+      # Get unique descriptor of this class
+      #
+      # The method calls +descriptor( {} )+.
+      #
+      # @return [String] Descriptor of this class.
+      #
+      # @see descriptor
+      #
+      # @private
       def to_s
         descriptor( {} )
       end
 
+      # Get unique descriptor of this class
+      #
+      # @param [Hash] hash Labels for any variables.
+      #
+      # @return [String] Descriptor of this class.
+      #
+      # @private
       def descriptor( hash )
         'Node'
       end
 
+      # Find matching native datatype to a Ruby value
+      #
+      # @param [Object] value Value to find native datatype for.
+      #
+      # @return [Class] Matching native datatype.
+      #
+      # @private
       def match( value, context = nil )
         retval = fit value
         retval = retval.align context if context
         retval
       end
 
+      # Align this native datatype with another
+      #
+      # @param [Class] Native datatype to align with.
+      #
+      # @return [Class] Aligned native datatype.
+      #
+      # @private
       def align( context )
         self
       end
 
+      # Element-type of this term
+      #
+      # @return [Class] Element-type of this datatype.
       def typecode
         self
       end
 
+      # Array type of this term
+      #
+      # @return [Class] Resulting array type.
       def array_type
         self
       end
 
+      # Convert to pointer type.
+      #
+      # @return [Class] Corresponding pointer type.
       def pointer_type
         Hornetseye::Pointer( self )
       end
 
+      # Get shape of this term
+      #
+      # @return [Array<Integer>] Returns +[]+.
       def shape
         []
       end
 
+      # Get dimension of this term
+      #
+      # @return [Array<Integer>] Returns +0+.
       def dimension
         0
       end
 
+      # Get corresponding contiguous datatype
+      #
+      # @return [Class] Returns +self+.
+      #
+      # @private
       def contiguous
         self
       end
 
+      # Get corresponding boolean-based datatype
+      #
+      # @return [Class] Returns +BOOL+.
       def bool
         BOOL
       end
 
+      # Get boolean-based datatype for binary operation
+      #
+      # @return [Class] Returns +BOOL+.
       def bool_binary( other )
         BOOL
       end
 
+      # Get variables in the definition of this datatype.
+      #
+      # @return [Set] Returns +Set[]+.
+      #
+      # @private
       def variables
         Set[]
       end
 
+      # Category operator.
+      #
+      # @return [FalseClass,TrueClass] Check for equality or kind.
       def ===( other )
         ( other == self ) or ( other.is_a? self ) or ( other.class == self )
       end
 
+      # Strip of all values.
+      #
+      # Split up into variables, values, and a term where all values have been
+      # replaced with variables.
+      #
+      # @private
       def strip
         return [], [], self
       end
 
+      # Substitute variables.
+      #
+      # Substitute the variables with the values given in the hash.
+      #
+      # @param [Hash] hash Substitutions to apply.
+      #
+      # @return [Node] Term with substitutions applied.
+      #
+      # @private
       def subst( hash )
         hash[ self ] || self
       end
 
+      # Check whether this term is compilable.
+      #
+      # @return [FalseClass,TrueClass] Returns +true+.
+      #
+      # @private
       def compilable?
         true
       end

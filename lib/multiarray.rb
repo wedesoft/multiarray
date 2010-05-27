@@ -304,6 +304,12 @@ require 'multiarray/gccfunction'
 module Hornetseye
 
   # Method for performing computations in lazy mode
+  #
+  # @param [Array<Integer>] *shape Optional shape of result. The method
+  # attempts to infer the shape if not specified.
+  # @yield Operation to compute array elements lazily.
+  #
+  # @return [Object,Node] Lazy term to compute later.
   def lazy( *shape, &action )
     previous = Thread.current[ :lazy ]
     Thread.current[ :lazy ] = true
@@ -329,6 +335,12 @@ module Hornetseye
   module_function :lazy
 
   # Method for performing computations in eager mode.
+  #
+  # @param [Array<Integer>] *shape Optional shape of result. The method
+  # attempts to infer the shape if not specified.
+  # @yield Operation computing array elements.
+  #
+  # @return [Object,Node] Result of computation.
   def eager( *shape, &action )
     previous = Thread.current[ :lazy ]
     Thread.current[ :lazy ] = false
@@ -343,6 +355,12 @@ module Hornetseye
   module_function :eager
 
   # Method for summing values
+  #
+  # @param [Array<Integer>] *shape Optional shape of result. The method
+  # attempts to infer the shape if not specified.
+  # @yield Operation returning array elements.
+  #
+  # @return [Object,Node] Sum of values.
   def sum( *shape, &action )
     options = shape.last.is_a?( Hash ) ? shape.pop : {}
     arity = options[ :arity ] || action.arity
