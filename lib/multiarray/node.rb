@@ -134,7 +134,7 @@ module Hornetseye
         BOOL
       end
 
-      # Get variables in the definition of this datatype.
+      # Get variables contained in the definition of this datatype.
       #
       # @return [Set] Returns +Set[]+.
       #
@@ -337,6 +337,14 @@ module Hornetseye
       typecode.compilable?
     end
 
+    # Lazy transpose of array.
+    #
+    # Lazily compute transpose by swapping indices according to the specified
+    # order.
+    #
+    # @param [Array<Integer>] order New order of indices.
+    #
+    # @return [Node] Returns the transposed array.
     def transpose( *order )
       term = self
       variables = shape.reverse.collect do |i|
@@ -348,40 +356,83 @@ module Hornetseye
         inject( term ) { |retval,var| Lambda.new var, retval }
     end
 
-    def []( *args )
-      if args.empty?
+    # Retrieve value of array element(s)
+    #
+    # @param [Array<Integer>] *indices Index/indices to select element.
+    #
+    # @return [Object,Node] Value of array element or a sub-element.
+    def []( *indices )
+      if indices.empty?
         demand.get # force.get
       else
-        element( args.last )[ *args[ 0 ... -1 ] ]
+        element( indices.last )[ *indices[ 0 ... -1 ] ]
       end
     end
 
-    def []=( *args )
-      value = args.pop
+    # Assign value to array element(s)
+    # 
+    # @overload []=( *indices, value )
+    #   Assign a value to an element of an array
+    #   @param [Array<Integer>] *indices Index/indices to select the element.
+    #   @param [Object,Node] value Ruby object with new value.
+    #
+    # @return [Object,Node] Returns the value.
+    def []=( *indices )
+      value = indices.pop
       value = Node.match( value ).new value unless value.is_a? Node
-      if args.empty?
+      if indices.empty?
         store value
       else
-        element( args.last )[ *args[ 0 ... -1 ] ] = value
+        element( indices.last )[ *indices[ 0 ... -1 ] ] = value
       end
     end
 
+    # Get variables contained in this object.
+    #
+    # @return [Set] Returns +Set[]+.
+    #
+    # @private
     def variables
       Set[]
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       return [], [], self
     end
 
+    # Reevaluate computation
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see force
+    #
+    # @private
     def demand
       self
     end
 
+    # Check whether mode of computation is lazy
+    #
+    # @see #lazy
+    #
+    # @private
     def lazy?
       Thread.current[ :lazy ] or not variables.empty?
     end
 
+    # Force delayed computation unless in lazy mode
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see demand
+    #
+    # @private
     def force
       if lazy?
         self
@@ -398,6 +449,13 @@ module Hornetseye
       end
     end
 
+    # Coerce with other object
+    #
+    # @param [Node,Object] other Other object.
+    #
+    # @return [Array<Node>] Result of coercion.
+    #
+    # @private
     def coerce( other )
       if other.is_a? Node
         return other, self
@@ -430,6 +488,9 @@ module Hornetseye
       end
     end
 
+    # Equality operator.
+    #
+    # @return [FalseClass,TrueClass] Returns result of comparison.
     def ==( other )
       if other.is_a? Node and other.array_type == array_type
         Hornetseye::lazy { eq( other ).inject( true ) { |a,b| a.and b } }[]
