@@ -33,9 +33,13 @@ module Hornetseye
     end
     @@dir.chmod 0700
 
-    class << self
+    @@lib_name = 'hornetseye_aaaaaaaa'
+    while File.exist? "#{DIRNAME}/#{@@lib_name}.so"
+      require "#{DIRNAME}/#{@@lib_name}.so"        
+      @@lib_name = @@lib_name.succ
+    end
 
-      @@lib_name = 'hornetseye_aaaaaaaa'
+    class << self
 
       def build( &action )
         lib_name, @@lib_name = @@lib_name, @@lib_name.succ
