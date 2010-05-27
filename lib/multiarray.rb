@@ -212,11 +212,19 @@ class Range
 
   public
 
+  # The original minimum method
+  #
+  # @return [Object] Minimum value of range.
   alias_method :orig_min, :min
 
+  # The original maximum method
+  #
+  # @return [Object] Maximum value of range.
   alias_method :orig_max, :max
 
   # For performance reasons a specialised method for integers is added
+  #
+  # @return [Object] Minimum value of range.
   def min
     if self.begin.is_a? Integer
       self.begin
@@ -226,6 +234,8 @@ class Range
   end
 
   # For performance reasons a specialised method for integers is added.
+  #
+  # @return [Object] Maximum value of range.
   def max
     if self.end.is_a? Integer
       exclude_end? ? self.end - 1 : self.end
@@ -235,6 +245,8 @@ class Range
   end
 
   # Compute the size of a range.
+  #
+  # @return [Integer] Number of discrete values within range.
   def size
     max + 1 - min
   end
