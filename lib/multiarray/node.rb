@@ -34,7 +34,7 @@ module Hornetseye
       #
       # @return [String] Descriptor of this class.
       #
-      # @see descriptor
+      # @see #descriptor
       #
       # @private
       def to_s
@@ -297,7 +297,7 @@ module Hornetseye
     #
     # @return [String] Descriptor of this object.
     #
-    # @see descriptor
+    # @see #descriptor
     #
     # @private
     def to_s
@@ -410,7 +410,7 @@ module Hornetseye
     #
     # @return [Node,Object] Result of computation
     #
-    # @see force
+    # @see #force
     #
     # @private
     def demand
@@ -430,7 +430,7 @@ module Hornetseye
     #
     # @return [Node,Object] Result of computation
     #
-    # @see demand
+    # @see #demand
     #
     # @private
     def force
@@ -499,6 +499,20 @@ module Hornetseye
       end
     end
 
+    # Apply accumulative operation over elements diagonally.
+    #
+    # This method is used internally to implement convolutions.
+    #
+    # @param [Object,Node] initial Initial value.
+    # @option options [Variable] :var1 First variable defining operation.
+    # @option options [Variable] :var2 Second variable defining operation.
+    # @option options [Variable] :block (yield( var1, var2 )) The operation to
+    # apply diagonally.
+    # @yield Optional operation to apply diagonally.
+    #
+    # @see #convolve
+    #
+    # @private
     def diagonal( initial = nil, options = {} )
       if dimension == 0
         demand
@@ -524,6 +538,15 @@ module Hornetseye
       end
     end
 
+    # Compute product table from two arrays
+    #
+    # Used internally to implement convolutions.
+    #
+    # @param [Node] filter Filter to form product table with.
+    #
+    # @see #convolve
+    #
+    # @private
     def product( filter )
       if dimension == 0
         self * filter
@@ -532,6 +555,11 @@ module Hornetseye
       end
     end
 
+    # Convolution with other array of same dimension
+    #
+    # @param [Node] filter Filter to convolve with.
+    #
+    # @return [Node] Result of convolution.
     def convolve( filter )
       product( filter ).diagonal { |s,x| s + x }
     end
