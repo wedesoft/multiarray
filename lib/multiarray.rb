@@ -15,11 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Proc#bind is defined if it does not exist already
+#
+# @private
 class Proc
 
   unless method_defined? :bind
 
     # Proc#bind is defined if it does not exist already
+    #
+    # @param [Object] object Object to bind this instance of +Proc+ to.
     #
     # @private
     def bind( object )
@@ -37,42 +41,26 @@ class Proc
 
 end
 
-class TrueClass
-
-  def not
-     false
-  end
-
-  def and( other )
-    if [ false, true ].member? other
-      other
-    else
-      x, y = other.coerce self
-      x.and y
-    end
-  end
-
-  def or( other )
-    if [ false, true ].member? other
-      true
-    else
-      x, y = other.coerce self
-      x.or y
-    end
-  end
-
-  def conditional( a, b )
-    a
-  end
-
-end
-
+# +FalseClass+ is extended with a few methods
+#
+# @see TrueClass
 class FalseClass
 
+  # Boolean negation
+  #
+  # @return [FalseClass] Returns +true+.
+  #
+  # @see TrueClass#not
   def not
     true
   end
 
+  # Boolean 'and' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [FalseClass] Returns +false+.
+  #
+  # @see TrueClass#and
   def and( other )
     if [ false, true ].member? other
       false
@@ -82,6 +70,12 @@ class FalseClass
     end
   end
 
+  # Boolean 'or' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [FalseClass,TrueClass] Returns +other+.
+  #
+  # @see TrueClass#or
   def or( other )
     if [ false, true ].member? other
       other
@@ -91,13 +85,77 @@ class FalseClass
     end
   end
 
+  # Boolean select operation
+  #
+  # @param [Object] a Object to select if +self+ is +true+.
+  # @param [Object] b Object to select if +self+ is +false+.
+  # @return [Object] Returns +b+.
+  #
+  # @see TrueClass#conditional
   def conditional( a, b )
     b
   end
 
 end
 
-# Object#instance_exec is defined if it does not exist already
+# +TrueClass+ is extended with a few methods
+#
+# @see FalseClass
+class TrueClass
+
+  # Boolean negation
+  #
+  # @return [FalseClass] Returns +false+.
+  #
+  # @see FalseClass#not
+  def not
+     false
+  end
+
+  # Boolean 'and' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [FalseClass,TrueClass] Returns +other+.
+  #
+  # @see FalseClass#and
+  def and( other )
+    if [ false, true ].member? other
+      other
+    else
+      x, y = other.coerce self
+      x.and y
+    end
+  end
+
+  # Boolean 'or' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [TrueClass] Returns +true+.
+  #
+  # @see FalseClass#or
+  def or( other )
+    if [ false, true ].member? other
+      true
+    else
+      x, y = other.coerce self
+      x.or y
+    end
+  end
+
+  # Boolean select operation
+  #
+  # @param [Object] a Object to select if +self+ is +true+.
+  # @param [Object] b Object to select if +self+ is +false+.
+  # @return [Object] Returns +a+.
+  #
+  # @see FalseClass#conditional
+  def conditional( a, b )
+    a
+  end
+
+end
+
+# +Object+ is extended with a few methods
 class Object
 
   unless method_defined? :instance_exec
@@ -111,6 +169,15 @@ class Object
 
   end
 
+  # Element-wise equal operator
+  #
+  # The method calls +self == other+ unless +other+ is of type
+  # Hornetseye::Node. In that case an element-wise comparison using
+  # Hornetseye::Node#eq is performed after coercion.
+  #
+  # @return [FalseClass,TrueClass,Hornetseye::Node] Result of comparison.
+  # @see Hornetseye::Node
+  # @see Hornetseye::Binary_
   def eq( other )
     unless other.is_a? Hornetseye::Node
       self == other
@@ -120,6 +187,15 @@ class Object
     end
   end
 
+  # Element-wise not-equal operator
+  #
+  # The method calls +( self == other ).not+ unless +other+ is of type
+  # Hornetseye::Node. In that case an element-wise comparison using
+  # Hornetseye::Node#ne is performed after coercion.
+  #
+  # @return [FalseClass,TrueClass,Hornetseye::Node] Result of comparison.
+  # @see Hornetseye::Node
+  # @see Hornetseye::Binary_
   def ne( other )
     unless other.is_a? Hornetseye::Node
       ( self == other ).not
@@ -131,7 +207,7 @@ class Object
 
 end
 
-# Range#min and Range#max are replaced for performance reasons
+# +Range+ is extended with a few methods
 class Range
 
   public
@@ -215,6 +291,7 @@ require 'multiarray/gccfunction'
 
 module Hornetseye
 
+  # Method for performing computations in lazy mode
   def lazy( *shape, &action )
     previous = Thread.current[ :lazy ]
     Thread.current[ :lazy ] = true
@@ -239,6 +316,7 @@ module Hornetseye
 
   module_function :lazy
 
+  # Method for performing computations in eager mode.
   def eager( *shape, &action )
     previous = Thread.current[ :lazy ]
     Thread.current[ :lazy ] = false
@@ -252,6 +330,7 @@ module Hornetseye
 
   module_function :eager
 
+  # Method for summing values
   def sum( *shape, &action )
     options = shape.last.is_a?( Hash ) ? shape.pop : {}
     arity = options[ :arity ] || action.arity
