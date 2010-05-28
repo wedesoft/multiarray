@@ -84,7 +84,7 @@ if param_types.empty?
   ''
 else
   s = ' ' + ( 0 ... param_types.size ).collect do |i|
-    "#{param_types[ i ].r2c}( rbParam#{i} )"
+    param_types[ i ].r2c "rbParam#{i}"
   end.join( ', ' ) + ' '
 end
 });

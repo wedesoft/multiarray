@@ -26,6 +26,8 @@ module Hornetseye
       case @typecode
       when nil
         'void'
+      when BOOL
+        'char'
       when BYTE
         'char'
       when UBYTE
@@ -49,13 +51,15 @@ module Hornetseye
       end
     end
 
-    def r2c
+    def r2c( expr )
       case @typecode
+      when BOOL
+        "( #{expr} ) != Qfalse"
       when BYTE, UBYTE, SINT, USINT, INT, UINT
-        'NUM2INT'
+        "NUM2INT( #{expr} )"
       else
         if @typecode < Pointer_
-          "(#{identifier})mallocToPtr"
+          "(#{identifier})mallocToPtr( #{expr} )"
         else
           raise "No conversion available for #{@typecode.inspect}"
         end

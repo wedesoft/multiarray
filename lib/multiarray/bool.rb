@@ -55,7 +55,7 @@ module Hornetseye
     end
 
     def write( ptr )
-      ptr.save UBYTE.new( get ? 1 : 0 )
+      ptr.save UBYTE.new( get.conditional( 1, 0 ) )
     end
 
     module Match
