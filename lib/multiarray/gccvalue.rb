@@ -54,6 +54,18 @@ module Hornetseye
       @function << "#{@function.indent}*(#{GCCType.new( value.typecode ).identifier} *)( #{self} ) = #{value.get};\n"
     end
 
+    def eq( other )
+      GCCValue.new @function, "( #{self} ) == ( #{other} )"
+    end
+
+    def conditional( a, b )
+      GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
+    end
+
+    def and( other )
+      GCCValue.new @function, "( #{self} ) && ( #{other} )"
+    end
+
     def -@
       GCCValue.new @function, "-( #{self} )"
     end

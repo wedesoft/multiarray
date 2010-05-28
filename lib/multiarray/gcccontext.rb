@@ -127,8 +127,8 @@ EOS
         "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
       strip = "#{STRIP} #{DIRNAME}/#{@lib_name}.so"
       # puts template
-      system gcc
-      system strip
+      raise "Error compiling #{DIRNAME}/#{@lib_name}.c" unless system gcc
+      raise "Error stripping #{DIRNAME}/#{@lib_name}.so" unless system strip
       require "#{DIRNAME}/#{@lib_name}.so"
     end
 
