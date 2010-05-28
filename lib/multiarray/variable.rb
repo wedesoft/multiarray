@@ -29,6 +29,13 @@ module Hornetseye
       "Variable(#{@meta.inspect})"
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
     def descriptor( hash )
       if hash[ self ]
         "Variable#{hash[ self ]}(#{@meta.descriptor( hash )})"
@@ -49,6 +56,12 @@ module Hornetseye
       @meta.array_type
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       meta_vars, meta_values, meta_term = @meta.strip
       if meta_vars.empty?

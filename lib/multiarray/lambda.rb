@@ -24,6 +24,13 @@ module Hornetseye
       @term = term
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
     def descriptor( hash )
       hash = hash.merge @index => ( ( hash.values.max || 0 ) + 1 )
       "Lambda(#{@index.descriptor( hash )},#{@term.descriptor( hash )})"
@@ -37,6 +44,12 @@ module Hornetseye
       @term.variables - @index.variables + @index.meta.variables
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       vars, values, term = @term.strip
       meta_vars, meta_values, var = @index.strip

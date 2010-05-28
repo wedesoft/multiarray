@@ -32,6 +32,13 @@ module Hornetseye
       @descriptor
     end
 
+    # Reevaluate computation
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see #force
+    #
+    # @private
     def demand( typecode )
       result = @function.variable( typecode, 'v' ).get
       @function << "#{@function.indent}#{result} = #{self};\n"

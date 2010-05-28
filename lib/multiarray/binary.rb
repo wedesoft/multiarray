@@ -38,6 +38,13 @@ module Hornetseye
       @value1, @value2 = value1, value2
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
     def descriptor( hash )
       "(#{@value1.descriptor( hash )}).#{self.class.descriptor( hash )}(#{@value2.descriptor( hash )})"
     end
@@ -54,12 +61,25 @@ module Hornetseye
       @value1.variables + @value2.variables
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       vars1, values1, term1 = @value1.strip
       vars2, values2, term2 = @value2.strip
       return vars1 + vars2, values1 + values2, self.class.new( term1, term2 )
     end
 
+    # Reevaluate computation
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see #force
+    #
+    # @private
     def demand
       @value1.send self.class.operation, @value2
     end

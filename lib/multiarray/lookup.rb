@@ -23,6 +23,13 @@ module Hornetseye
       @p, @index, @stride = p, index, stride
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
     def descriptor( hash )
       "Lookup(#{@p.descriptor( hash )},#{@index.descriptor( hash )},#{@stride.descriptor( hash )})"
     end
@@ -39,6 +46,12 @@ module Hornetseye
       @p.variables + @index.variables + @stride.variables
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       vars1, values1, term1 = @p.strip
       vars2, values2, term2 = @stride.strip

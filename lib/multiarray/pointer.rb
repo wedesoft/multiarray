@@ -65,6 +65,12 @@ module Hornetseye
       @value = value
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       variable = Variable.new self.class
       return [ variable ], [ self ], variable
@@ -80,6 +86,13 @@ module Hornetseye
       result
     end
 
+    # Reevaluate computation
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see #force
+    #
+    # @private
     def demand
       self.class.target.fetch( @value ).demand
     end

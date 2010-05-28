@@ -21,6 +21,11 @@ module Hornetseye
 
     class << self
 
+      # Check whether this term is compilable
+      #
+      # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+      #
+      # @private
       def compilable?
         false
       end

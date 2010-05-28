@@ -125,6 +125,8 @@ proc { |i| proc { |j| i+j } }.call( 5 ).call 3
 
 gem install flay: http://ruby.sadi.st/Flay.html
 
+# donate to yardoc
+
 How to nest/cascade mode-environments?
 (how to specify nested modes for recursive algorithms and called algorithms?)
 ruby and jit compiles, lazy and parallel forwards

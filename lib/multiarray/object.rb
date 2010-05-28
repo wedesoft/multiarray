@@ -53,6 +53,11 @@ module Hornetseye
         return self, self
       end
 
+      # Check whether this term is compilable
+      #
+      # @return [FalseClass,TrueClass] Returns +false+.
+      #
+      # @private
       def compilable?
         false
       end

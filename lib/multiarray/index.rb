@@ -35,6 +35,12 @@ module Hornetseye
         INT
       end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
       def strip
         var = Variable.new INT
         return [ var ], [ size ], Hornetseye::INDEX( var )

@@ -24,6 +24,13 @@ module Hornetseye
         value, index, initial, block, var1, var2
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
     def descriptor( hash )
       hash = hash.merge @index => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var1 => ( ( hash.values.max || 0 ) + 1 )
@@ -35,6 +42,13 @@ module Hornetseye
       @block.array_type
     end
 
+    # Reevaluate computation
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see #force
+    #
+    # @private
     def demand
       if @initial
         retval = @initial.demand
@@ -60,6 +74,12 @@ module Hornetseye
       ( @value.variables + initial_variables ) - @index.variables
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       vars1, values1, term1 = @value.strip
       if @initial

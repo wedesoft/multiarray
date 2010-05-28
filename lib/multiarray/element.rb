@@ -17,14 +17,24 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Base class for representing native elements
   class Element < Node
 
     class << self
 
+      # Retrieve element from memory
+      #
+      # @param [Malloc,List] ptr Memory to load element from.
+      #
+      # @see Malloc#load
+      # @see List#load
       def fetch( ptr )
         new ptr.load( self )
       end
 
+      # Type coercion for native elements
+      #
+      # @param [Node] other Other native datatype to coerce with.
       def coercion( other )
         if self == other
           self
@@ -36,14 +46,31 @@ module Hornetseye
 
     end
 
+    # Constructor initialising element with a value
+    #
+    # @param [Object] value Initial value for element.
     def initialize( value = self.class.default )
       @value = value
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
     def descriptor( hash )
       "#{self.class.to_s}(#{@value.to_s})"
     end
 
+    # Reevaluate computation
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see #force
+    #
+    # @private
     def demand
       if @value.respond_to? :demand
         self.class.new @value.demand( self.class )
@@ -52,11 +79,22 @@ module Hornetseye
       end
     end
 
+    # Strip of all values.
+    #
+    # Split up into variables, values, and a term where all values have been
+    # replaced with variables.
+    #
+    # @private
     def strip
       variable = Variable.new self.class
       return [ variable ], [ self ], variable
     end
 
+    # Check whether this term is compilable
+    #
+    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    #
+    # @private
     def compilable?
       if @value.respond_to? :compilable?
         @value.compilable?
@@ -65,10 +103,16 @@ module Hornetseye
       end
     end
 
+    # Get value of this native element
+    #
+    # @return [Object] Value of this native element.
     def get
       @value
     end
 
+    # Store a value in this native element
+    #
+    # @param [Object] value New value for native element.
     def store( value )
       if @value.respond_to? :store
         @value.store value.demand.get
@@ -77,6 +121,12 @@ module Hornetseye
       end
     end
 
+    # Write element to memory
+    #
+    # @param [Malloc,List] ptr Memory to write element to.
+    #
+    # @see Malloc#save
+    # @see List#save
     def write( ptr )
       ptr.save self
     end

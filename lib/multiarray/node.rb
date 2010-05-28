@@ -17,7 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  # Base class for representing native datatypes and operations (terms).
+  # Base class for representing native datatypes and operations (terms)
   class Node
 
     class << self
@@ -174,7 +174,7 @@ module Hornetseye
         hash[ self ] || self
       end
 
-      # Check whether this term is compilable.
+      # Check whether this term is compilable
       #
       # @return [FalseClass,TrueClass] Returns +true+.
       #
