@@ -301,6 +301,7 @@ require 'multiarray/gcccontext'
 require 'multiarray/gcccache'
 require 'multiarray/gccfunction'
 
+# Namespace of Hornetseye computer vision library
 module Hornetseye
 
   # Method for performing computations in lazy mode

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Namespace of Hornetseye computer vision library
 module Hornetseye
 
   class Inject < Node
@@ -46,6 +47,7 @@ module Hornetseye
         retval = @value.subst( @index => INT.new( 0 ) ).demand
         ( @index.size - 1 ).get.times do |i|
           sub = @value.subst( @index => INT.new( i ) + 1 ).demand
+# raise 'Doo!' if retval.inspect == '( v03 ) == ( v04 )'
           retval.store @block.subst( @var1 => retval,
                                      @var2 => sub ).demand
         end
