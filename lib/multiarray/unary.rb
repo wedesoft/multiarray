@@ -28,6 +28,13 @@ module Hornetseye
         operation.to_s
       end
 
+      # Get unique descriptor of this class
+      #
+      # @param [Hash] hash Labels for any variables.
+      #
+      # @return [String] Descriptor of this class.
+      #
+      # @private
       def descriptor( hash )
         operation.to_s
       end

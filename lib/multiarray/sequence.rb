@@ -110,6 +110,13 @@ module Hornetseye
         descriptor( {} )
       end
 
+      # Get unique descriptor of this class
+      #
+      # @param [Hash] hash Labels for any variables.
+      #
+      # @return [String] Descriptor of this class.
+      #
+      # @private
       def descriptor( hash )
         if dimension == 1
           "Sequence(#{typecode.descriptor( hash )},#{num_elements.to_s})"

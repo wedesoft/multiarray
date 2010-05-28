@@ -17,26 +17,48 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing Ruby objects
   class OBJECT < Element
 
     class << self
 
+      # Get string with information about this class
+      #
+      # @return [String] Returns +'OBJECT'+.
       def inspect
         'OBJECT'
       end
 
+      # Get unique descriptor of this class
+      #
+      # @param [Hash] hash Labels for any variables.
+      #
+      # @return [String] Descriptor of this class.
+      #
+      # @private
       def descriptor( hash )
         'OBJECT'
       end
 
+      # Get memory type required to store elements of this type
+      #
+      # @return [Class] Returns +List+.
+      #
+      # @see List
       def memory
         List
       end
 
+      # Get storage size to store an element of this type
+      #
+      # @return [Integer] Returns +1+.
       def storage_size
         1
       end
 
+      # Get default value for elements of this type
+      #
+      # @return [Object] Returns +nil+.
       def default
         nil
       end
@@ -49,6 +71,11 @@ module Hornetseye
         end
       end
 
+      # Coerce with other object
+      #
+      # @param [Node,Object] other Other object.
+      #
+      # @return [Array<Node>] Result of coercion.
       def coerce( other )
         return self, self
       end
@@ -64,8 +91,16 @@ module Hornetseye
 
     end
 
+    # Namespace containing method for matching elements of type OBJECT
+    # @see OBJECT
     module Match
 
+      # Method for matching elements of type OBJECT#
+      #
+      # @param [Array<Object>] *values Values to find matching native element
+      # type for.
+      #
+      # @see OBJECT
       def fit( *values )
         OBJECT
       end
