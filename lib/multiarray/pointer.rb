@@ -37,6 +37,9 @@ module Hornetseye
         "*(#{target.to_s})"
       end
 
+      # Get default value for elements of this type
+      #
+      # @return [Memory,List] Memory for storing object of type +target+.
       def default
         target.memory.new target.storage_size
       end

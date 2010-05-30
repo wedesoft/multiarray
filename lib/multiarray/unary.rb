@@ -131,6 +131,9 @@ module Hornetseye
   end
 
   # Create a class deriving from +Unary_+
+  #
+  # @param [Symbol,String] operation Name of operation.
+  # @param [Symbol,String] conversion Name of method for type conversion.
   def Unary( operation, conversion = :contiguous )
     retval = Class.new Unary_
     retval.operation = operation

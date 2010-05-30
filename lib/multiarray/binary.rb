@@ -17,6 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing binary operations on scalars and arrays
   class Binary_ < Node
 
     class << self
@@ -24,6 +25,9 @@ module Hornetseye
       attr_accessor :operation
       attr_accessor :coercion
 
+      # Get string with information about this class
+      #
+      # @return [String] Return string with information about this class.
       def inspect
         operation.to_s
       end
@@ -41,6 +45,10 @@ module Hornetseye
 
     end
 
+    # Initialise binary operation.
+    #
+    # @param [Node] value1 First operand to apply operation to.
+    # @param [Node] value2 Second operand to apply operation to.
     def initialize( value1, value2 )
       @value1, @value2 = value1, value2
     end
@@ -56,14 +64,33 @@ module Hornetseye
       "(#{@value1.descriptor( hash )}).#{self.class.descriptor( hash )}(#{@value2.descriptor( hash )})"
     end
 
+    # Array type of this term
+    #
+    # @return [Class] Resulting array type.
+    #
+    # @private
     def array_type
       @value1.array_type.send self.class.coercion, @value2.array_type
     end
 
+    # Substitute variables.
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       self.class.new @value1.subst( hash ), @value2.subst( hash )
     end
 
+    # Get variables contained in the definition of this datatype.
+    #
+    # @return [Set] Returns +Set[]+.
+    #
+    # @private
     def variables
       @value1.variables + @value2.variables
     end
@@ -91,6 +118,11 @@ module Hornetseye
       @value1.send self.class.operation, @value2
     end
 
+    # Get element of unary operation
+    #
+    # @param [Integer,Node] i Index of desired element.
+    #
+    # @return [Node,Object] Element of unary operation.
     def element( i )
       element1 = @value1.dimension == 0 ? @value1 : @value1.element( i )
       element2 = @value2.dimension == 0 ? @value2 : @value2.element( i )
@@ -99,6 +131,10 @@ module Hornetseye
 
   end
 
+  # Create a class deriving from +Binary_+
+  #
+  # @param [Symbol,String] operation Name of operation.
+  # @param [Symbol,String] conversion Name of method for type conversion.
   def Binary( operation, coercion = :coercion )
     retval = Class.new Binary_
     retval.operation = operation
