@@ -17,6 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing native integers
   class INT_ < Element
 
     class << self
@@ -67,6 +68,9 @@ module Hornetseye
         end
       end
 
+      # Get string with information about this class
+      #
+      # @return [String] Returns string with information about this class.
       def inspect
         unless bits.nil? or signed.nil?
           case [ bits, signed ]
@@ -145,6 +149,12 @@ module Hornetseye
 
     module Match
 
+      # Method for matching elements of type INT_
+      #
+      # 'param [Array<Object>] *values Values to find matching native element
+      # type for.
+      #
+      # @see INT_
       def fit( *values )
         if values.all? { |value| value.is_a? Integer }
           bits = 8

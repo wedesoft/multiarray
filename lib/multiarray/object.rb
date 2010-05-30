@@ -45,6 +45,8 @@ module Hornetseye
       # @return [Class] Returns +List+.
       #
       # @see List
+      #
+      # @private
       def memory
         List
       end
@@ -52,6 +54,8 @@ module Hornetseye
       # Get storage size to store an element of this type
       #
       # @return [Integer] Returns +1+.
+      #
+      # @private
       def storage_size
         1
       end
@@ -59,6 +63,8 @@ module Hornetseye
       # Get default value for elements of this type
       #
       # @return [Object] Returns +nil+.
+      #
+      # @private
       def default
         nil
       end
@@ -92,10 +98,11 @@ module Hornetseye
     end
 
     # Namespace containing method for matching elements of type OBJECT
+    #
     # @see OBJECT
     module Match
 
-      # Method for matching elements of type OBJECT#
+      # Method for matching elements of type OBJECT
       #
       # @param [Array<Object>] *values Values to find matching native element
       # type for.

@@ -21,35 +21,9 @@ module Hornetseye
 
     class << self
 
-      # Check whether this term is compilable
+      # Get string with information about this class
       #
-      # @return [FalseClass,TrueClass] Returns whether this term is compilable.
-      #
-      # @private
-      def compilable?
-        false
-      end
-
-      def fetch( ptr )
-        new ptr.load( self ) != 0
-      end
-
-      def memory
-        Malloc
-      end
-
-      def storage_size
-        1
-      end
-
-      def default
-        false
-      end
-
-      def directive
-        'c'
-      end
-
+      # @return [String] Returns +'BOOL'+
       def inspect
         'BOOL'
       end
@@ -65,14 +39,82 @@ module Hornetseye
         'BOOL'
       end
 
+      # Check whether this term is compilable
+      #
+      # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+      #
+      # @private
+      def compilable?
+        false
+      end
+
+      # Retrieve element from memory
+      #
+      # @param [Malloc] ptr Memory to load element from.
+      #
+      # @see Malloc#load
+      #
+      # @private
+      def fetch( ptr )
+        new ptr.load( self ) != 0
+      end
+
+      # Memory type required to store elements of this type
+      #
+      # @return [Class] Returns +Malloc+.
+      #
+      # @private
+      def memory
+        Malloc
+      end
+
+      # Get storage size to store an element of this type
+      #
+      # @return [Integer] Returns +1+.
+      #
+      # @private
+      def storage_size
+        1
+      end
+
+      # Get default value for elements of this type
+      #
+      # @return [Object] Returns +false+.
+      #
+      # @private
+      def default
+        false
+      end
+
+      # Directive for packing/unpacking elements of this type
+      #
+      # @private
+      def directive
+        'c'
+      end
+
     end
 
+    # Write element to memory
+    #
+    # @param [Malloc] ptr Memory to write element to.
+    #
+    # @see Malloc#save
     def write( ptr )
       ptr.save UBYTE.new( get.conditional( 1, 0 ) )
     end
 
+    # Namespace containing method for matching elements of type BOOL
+    #
+    # @see BOOL
     module Match
 
+      # Method for matching elements of type BOOL
+      #
+      # @param [Array<Object>] *values Values to find matching native element
+      # type for.
+      #
+      # @see BOOL
       def fit( *values )
         if values.all? { |value| [ false, true ].member? value }
           BOOL
