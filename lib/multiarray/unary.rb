@@ -17,13 +17,20 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing unary operations on scalars and arrays
   class Unary_ < Node
 
     class << self
 
+      # Name (symbol) of operation
       attr_accessor :operation
+
+      # Name (symbol) of method for type conversion
       attr_accessor :conversion
 
+      # Get string with information about this class
+      #
+      # @return [String] Return string with information about this class.
       def inspect
         operation.to_s
       end
@@ -41,6 +48,9 @@ module Hornetseye
 
     end
 
+    # Initialise unary operation.
+    #
+    # @param [Node] value Value to apply operation to.
     def initialize( value )
       @value = value
     end
@@ -56,14 +66,33 @@ module Hornetseye
       "(#{@value.descriptor( hash )}).#{self.class.descriptor( hash )}"
     end
 
+    # Array type of this term
+    #
+    # @return [Class] Resulting array type.
+    #
+    # @private
     def array_type
       @value.array_type.send self.class.conversion
     end
 
+    # Substitute variables.
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       self.class.new @value.subst( hash )
     end
 
+    # Get variables contained in the definition of this datatype.
+    #
+    # @return [Set] Returns +Set[]+.
+    #
+    # @private
     def variables
       @value.variables
     end
@@ -90,12 +119,18 @@ module Hornetseye
       @value.send self.class.operation
     end
 
+    # Get element of unary operation
+    #
+    # @param [Integer,Node] i Index of desired element.
+    #
+    # @return [Node,Object] Element of unary operation.
     def element( i )
       @value.element( i ).send self.class.operation
     end
 
   end
 
+  # Create a class deriving from +Unary_+
   def Unary( operation, conversion = :contiguous )
     retval = Class.new Unary_
     retval.operation = operation

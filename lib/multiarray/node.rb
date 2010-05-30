@@ -87,6 +87,8 @@ module Hornetseye
       # Array type of this term
       #
       # @return [Class] Resulting array type.
+      #
+      # @private
       def array_type
         self
       end
