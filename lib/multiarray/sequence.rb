@@ -69,8 +69,11 @@ module Hornetseye
 
       def default
         Hornetseye::lazy( num_elements ) do |i|
-          element = element_type.default
-          element = Node.match( element ).new element unless element.is_a? Node
+          if element_type.dimension > 0
+            element = element_type.default
+          else
+            element = element_type.new
+          end
         end
       end
 
