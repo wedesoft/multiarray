@@ -35,6 +35,8 @@ module Hornetseye
       # Type coercion for native elements
       #
       # @param [Node] other Other native datatype to coerce with.
+      #
+      # @return [Array<Node>] Result of coercion.
       def coercion( other )
         if self == other
           self
@@ -79,7 +81,7 @@ module Hornetseye
       end
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
@@ -116,12 +118,15 @@ module Hornetseye
     # Store a value in this native element
     #
     # @param [Object] value New value for native element.
+    #
+    # @return [Object] Returns +value+.
     def store( value )
       if @value.respond_to? :store
         @value.store value.demand.get
       else
         @value = value.demand.get
       end
+      value
     end
 
     # Write element to memory
@@ -130,6 +135,8 @@ module Hornetseye
     #
     # @see Malloc#save
     # @see List#save
+    #
+    # @private
     def write( ptr )
       ptr.save self
     end

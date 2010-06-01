@@ -93,7 +93,7 @@ module Hornetseye
         self
       end
 
-      # Convert to pointer type.
+      # Convert to pointer type
       #
       # @return [Class] Corresponding pointer type.
       def pointer_type
@@ -137,7 +137,7 @@ module Hornetseye
         BOOL
       end
 
-      # Get variables contained in the definition of this datatype.
+      # Get variables contained in this datatype
       #
       # @return [Set] Returns +Set[]+.
       #
@@ -146,14 +146,14 @@ module Hornetseye
         Set[]
       end
 
-      # Category operator.
+      # Category operator
       #
       # @return [FalseClass,TrueClass] Check for equality or kind.
       def ===( other )
         ( other == self ) or ( other.is_a? self ) or ( other.class == self )
       end
 
-      # Strip of all values.
+      # Strip of all values
       #
       # Split up into variables, values, and a term where all values have been
       # replaced with variables.
@@ -166,7 +166,7 @@ module Hornetseye
         return [], [], self
       end
 
-      # Substitute variables.
+      # Substitute variables
       #
       # Substitute the variables with the values given in the hash.
       #
@@ -190,7 +190,6 @@ module Hornetseye
 
     end
 
-
     # Array type of this term
     #
     # @return [Class] Resulting array type.
@@ -198,7 +197,7 @@ module Hornetseye
       self.class.array_type
     end
 
-    # Convert to pointer type.
+    # Convert to pointer type
     #
     # @return [Class] Corresponding pointer type.
     def pointer_type
@@ -235,7 +234,7 @@ module Hornetseye
       self
     end
 
-    # Convert to Ruby array of objects.
+    # Convert to Ruby array of objects
     #
     # Perform pending computations and convert native array to Ruby array of
     # objects.
@@ -250,50 +249,54 @@ module Hornetseye
       end
     end
 
-    # Display information about this object.
+    # Display information about this object
     #
     # @return [String] String with information about this object.
     def inspect( indent = nil, lines = nil )
-      if dimension == 0 and not indent
-        "#{array_type.inspect}(#{force.get.inspect})" # !!!
-      else
-        prepend = indent ? '' : "#{array_type.inspect}:\n"
-        indent = 0
-        lines = 0
-        retval = '[ '
-        for i in 0 ... array_type.num_elements
-          x = Hornetseye::lazy { element i }
-          if x.dimension > 0
-            if i > 0
-              retval += ",\n  "
-              lines += 1
+      if variables.empty?
+        if dimension == 0 and not indent
+          "#{array_type.inspect}(#{force.get.inspect})" # !!!
+        else
+          prepend = indent ? '' : "#{array_type.inspect}:\n"
+          indent = 0
+          lines = 0
+          retval = '[ '
+          for i in 0 ... array_type.num_elements
+            x = Hornetseye::lazy { element i }
+            if x.dimension > 0
+              if i > 0
+                retval += ",\n  "
+                lines += 1
+                if lines >= 10
+                  retval += '...' if indent == 0
+                  break
+                end
+                retval += '  ' * indent
+              end
+              str = x.inspect indent + 1, lines
+              lines += str.count "\n"
+              retval += str
               if lines >= 10
                 retval += '...' if indent == 0
                 break
               end
-              retval += '  ' * indent
-            end
-            str = x.inspect indent + 1, lines
-            lines += str.count "\n"
-            retval += str
-            if lines >= 10
-              retval += '...' if indent == 0
-              break
-            end
-          else
-            retval += ', ' if i > 0
-            str = x.force.get.inspect # !!!
-            if retval.size + str.size >= 74 - '...'.size -
-                '[  ]'.size * indent.succ
-              retval += '...'
-              break
             else
-              retval += str
+              retval += ', ' if i > 0
+              str = x.force.get.inspect # !!!
+              if retval.size + str.size >= 74 - '...'.size -
+                  '[  ]'.size * indent.succ
+                retval += '...'
+                break
+              else
+                retval += str
+              end
             end
           end
+          retval += ' ]' unless lines >= 10
+          prepend + retval
         end
-        retval += ' ]' unless lines >= 10
-        prepend + retval
+      else
+        to_s
       end
     end
 
@@ -321,7 +324,7 @@ module Hornetseye
       'Node()'
     end
 
-    # Substitute variables.
+    # Substitute variables
     #
     # Substitute the variables with the values given in the hash.
     #
@@ -334,7 +337,7 @@ module Hornetseye
       hash[ self ] || self
     end
 
-    # Check whether this term is compilable.
+    # Check whether this term is compilable
     #
     # @return [FalseClass,TrueClass] Returns +typecode.compilable?+.
     #
@@ -343,7 +346,7 @@ module Hornetseye
       typecode.compilable?
     end
 
-    # Lazy transpose of array.
+    # Lazy transpose of array
     #
     # Lazily compute transpose by swapping indices according to the specified
     # order.
@@ -393,7 +396,7 @@ module Hornetseye
       end
     end
 
-    # Get variables contained in this object.
+    # Get variables contained in this object
     #
     # @return [Set] Returns +Set[]+.
     #
@@ -402,7 +405,7 @@ module Hornetseye
       Set[]
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
@@ -497,7 +500,7 @@ module Hornetseye
       end
     end
 
-    # Equality operator.
+    # Equality operator
     #
     # @return [FalseClass,TrueClass] Returns result of comparison.
     def ==( other )
@@ -508,7 +511,7 @@ module Hornetseye
       end
     end
 
-    # Apply accumulative operation over elements diagonally.
+    # Apply accumulative operation over elements diagonally
     #
     # This method is used internally to implement convolutions.
     #
@@ -518,6 +521,8 @@ module Hornetseye
     # @option options [Variable] :block (yield( var1, var2 )) The operation to
     # apply diagonally.
     # @yield Optional operation to apply diagonally.
+    #
+    # @return [Node] Result of operation.
     #
     # @see #convolve
     #
@@ -552,6 +557,8 @@ module Hornetseye
     # Used internally to implement convolutions.
     #
     # @param [Node] filter Filter to form product table with.
+    #
+    # @return [Node] Result of operation.
     #
     # @see #convolve
     #

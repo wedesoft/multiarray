@@ -17,14 +17,29 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing uniform arrays
   class Sequence
 
     class << self
 
+      # Allocate new uniform array
+      #
+      # @param [Class] typecode Type of array elements.
+      # @param [Integer] size Number of elements.
+      #
+      # @return [Node] Returns uninitialised native array.
       def new( typecode, size )
         MultiArray.new typecode, size
       end
 
+      # Convert array to uniform array
+      #
+      # A native type which fits all elements is determined and used to create
+      # a uniform array of those elements.
+      #
+      # @param [Array<Object>] *args Elements of array.
+      #
+      # @return [Node] Returns native array with values.
       def []( *args )
         target = Node.fit args
         target = Hornetseye::Sequence OBJECT, args.size if target.dimension > 1
@@ -37,15 +52,26 @@ module Hornetseye
 
   end
 
+  # Class for representing n-dimensional native arrays
   class Sequence_
 
     class << self
 
+      # Type of array elements
+      #
+      # @return [Class] element_type Type of array elements.
       attr_accessor :element_type
+
+      # Number of array elements
+      #
+      # @return [Integer] num_elements Number of elements.
       attr_accessor :num_elements
 
       def default
-        Hornetseye::lazy( num_elements ) { |i| element_type.default }
+        Hornetseye::lazy( num_elements ) do |i|
+          element = element_type.default
+          element = Node.match( element ).new element unless element.is_a? Node
+        end
       end
 
       def indgen( offset = 0, increment = 1 )
@@ -155,8 +181,23 @@ module Hornetseye
 
     end
 
+    # Namespace containing method for matching elements of type Sequence_
+    #
+    # @see Sequence_
+    #
+    # @private
     module Match
 
+      # Method for matching elements of type Sequence_
+      #
+      # 'param [Array<Object>] *values Values to find matching native element
+      # type for.
+      #
+      # @return [Class] Native type fitting all values.
+      #
+      # @see Sequence_
+      #
+      # @private
       def fit( *values )
         n = values.inject 0 do |size,value|
           value.is_a?( Array ) ? [ size, value.size ].max : size

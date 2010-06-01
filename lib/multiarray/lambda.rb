@@ -44,7 +44,7 @@ module Hornetseye
       @term.variables - @index.variables + @index.meta.variables
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
@@ -77,6 +77,8 @@ module Hornetseye
     #
     # @param [Node] value Index of element.
     # @param [Node] stride Stride for iterating over elements.
+    #
+    # @return [Lookup,Lambda] Result of lookup.
     #
     # @private
     def lookup( value, stride )

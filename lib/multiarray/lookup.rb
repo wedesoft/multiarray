@@ -46,7 +46,7 @@ module Hornetseye
       @p.variables + @index.variables + @stride.variables
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.

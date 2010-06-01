@@ -74,7 +74,7 @@ module Hornetseye
       ( @value.variables + initial_variables ) - @index.variables
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.

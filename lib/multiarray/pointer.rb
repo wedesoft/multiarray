@@ -20,6 +20,9 @@ module Hornetseye
 
     class << self
 
+      # Target type of pointer
+      #
+      # @return [Node] Type of object the pointer is pointing at.
       attr_accessor :target
 
       def inspect
@@ -75,7 +78,7 @@ module Hornetseye
       @value = value
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.

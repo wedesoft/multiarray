@@ -19,6 +19,9 @@ module Hornetseye
 
   class Variable < Node
 
+    # Type information about this variable
+    #
+    # @return [Class] Returns type information about this variable.
     attr_reader :meta
 
     def initialize( meta )

@@ -21,6 +21,9 @@ module Hornetseye
 
     class << self
 
+      # Size of range for this index
+      #
+      # @return [Object] Size of range for this index.
       attr_accessor :size
 
       def inspect
@@ -42,7 +45,7 @@ module Hornetseye
         INT
       end
 
-      # Strip of all values.
+      # Strip of all values
       #
       # Split up into variables, values, and a term where all values have been
       # replaced with variables.

@@ -22,10 +22,14 @@ module Hornetseye
 
     class << self
 
-      # Name (symbol) of operation
+      # Name of operation
+      #
+      # @return [Symbol,String] The name of this operation.
       attr_accessor :operation
 
-      # Name (symbol) of method for type conversion
+      # Name of method for type conversion
+      #
+      # @return [Symbol,String] The name of the method for type conversion.
       attr_accessor :conversion
 
       # Get string with information about this class
@@ -48,7 +52,7 @@ module Hornetseye
 
     end
 
-    # Initialise unary operation.
+    # Initialise unary operation
     #
     # @param [Node] value Value to apply operation to.
     def initialize( value )
@@ -75,7 +79,7 @@ module Hornetseye
       @value.array_type.send self.class.conversion
     end
 
-    # Substitute variables.
+    # Substitute variables
     #
     # Substitute the variables with the values given in the hash.
     #
@@ -88,7 +92,7 @@ module Hornetseye
       self.class.new @value.subst( hash )
     end
 
-    # Get variables contained in the definition of this datatype.
+    # Get variables contained in this term
     #
     # @return [Set] Returns set of variables.
     #
@@ -97,7 +101,7 @@ module Hornetseye
       @value.variables
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.

@@ -106,6 +106,8 @@ module Hornetseye
     # @return [BOOL] Returns +self+.
     #
     # @see Malloc#save
+    #
+    # @private
     def write( ptr )
       ptr.save UBYTE.new( get.conditional( 1, 0 ) )
       self
@@ -114,6 +116,8 @@ module Hornetseye
     # Namespace containing method for matching elements of type BOOL
     #
     # @see BOOL
+    #
+    # @private
     module Match
 
       # Method for matching elements of type BOOL
@@ -121,7 +125,11 @@ module Hornetseye
       # @param [Array<Object>] *values Values to find matching native element
       # type for.
       #
+      # @return [Class] Native type fitting all values.
+      #
       # @see BOOL
+      #
+      # @private
       def fit( *values )
         if values.all? { |value| [ false, true ].member? value }
           BOOL

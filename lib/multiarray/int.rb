@@ -23,9 +23,14 @@ module Hornetseye
     class << self
 
       # Number of bits of this integer
+      #
+      # @return [Integer] Number of bits of this integer.
       attr_accessor :bits
 
       # Boolean indicating whether this is a signed integer or not
+      #
+      # @return [FalseClass,TrueClass] Boolean indicating whether this is a
+      # signed integer or not.
       attr_accessor :signed
 
       # Memory type required to store elements of this type
@@ -173,6 +178,11 @@ module Hornetseye
 
     end
 
+    # Namespace containing method for matching elements of type INT_
+    #
+    # @see INT_
+    #
+    # @private
     module Match
 
       # Method for matching elements of type INT_
@@ -180,7 +190,11 @@ module Hornetseye
       # 'param [Array<Object>] *values Values to find matching native element
       # type for.
       #
+      # @return [Class] Native type fitting all values.
+      #
       # @see INT_
+      #
+      # @private
       def fit( *values )
         if values.all? { |value| value.is_a? Integer }
           bits = 8

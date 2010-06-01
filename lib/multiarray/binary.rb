@@ -93,7 +93,7 @@ module Hornetseye
       self.class.new @value1.subst( hash ), @value2.subst( hash )
     end
 
-    # Get variables contained in the definition of this datatype
+    # Get variables contained in this term
     #
     # @return [Set] Returns set of variables.
     #

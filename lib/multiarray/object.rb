@@ -100,6 +100,8 @@ module Hornetseye
     # Namespace containing method for matching elements of type OBJECT
     #
     # @see OBJECT
+    #
+    # @private
     module Match
 
       # Method for matching elements of type OBJECT
@@ -107,7 +109,11 @@ module Hornetseye
       # @param [Array<Object>] *values Values to find matching native element
       # type for.
       #
+      # @return [Class] Native type fitting all values.
+      #
       # @see OBJECT
+      #
+      # @private
       def fit( *values )
         OBJECT
       end

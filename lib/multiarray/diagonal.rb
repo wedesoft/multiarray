@@ -17,8 +17,13 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing diagonal injections
   class Diagonal < Node
 
+    # Constructor
+    #
+    # @param [Node] value Initial value of injection
+    # @param [Node] index0 Index for 
     def initialize( value, index0, index1, index2, initial, block, var1, var2 )
       @value, @index0, @index1, @index2, @initial, @block, @var1, @var2 =
         value, index0, index1, index2, initial, block, var1, var2
@@ -40,6 +45,11 @@ module Hornetseye
       "Diagonal(#{@value.descriptor( hash )},#{@initial ? @initial.descriptor( hash ) : 'nil'},#{@block.descriptor( hash )})"
     end
 
+    # Array type of this term
+    #
+    # @return [Class] Resulting array type.
+    #
+    # @private
     def array_type
       Hornetseye::MultiArray @block.typecode, *@value.shape
     end
@@ -59,20 +69,30 @@ module Hornetseye
         i = @index0.get - k
         if i >= 0 and i < @index1.size.get
           sub = @value.subst( @index1 => INT.new( i ),
-                             @index2 => INT.new( j ) ).demand
+                              @index2 => INT.new( j ) ).demand
           retval = retval ? @block.subst( @var1 => retval,
-                                         @var2 => sub ).demand :
+                                          @var2 => sub ).demand :
             sub
         end
       end
       retval
     end
 
+    # Get element of diagonal injection
+    #
+    # @param [Integer,Node] i Index of desired element.
+    #
+    # @return [Node,Object] Element of diagonal injection.
     def element( i )
       Diagonal.new @value.element( i ), @index0, @index1, @index2, @initial,
         @block, @var1, @var2
     end
 
+    # Get variables contained in this term
+    #
+    # @return [Set] Returns list of variables.
+    #
+    # @private
     def variables
       initial_variables = @initial ? @initial.variables : Set[]
       @value.variables + initial_variables - 
@@ -85,7 +105,7 @@ module Hornetseye
         ( @index1.variables + @index2.variables )
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
@@ -110,6 +130,15 @@ module Hornetseye
                       @index0, var1, var2, term2, term3, @var1, @var2 )
     end
 
+    # Substitute variables
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       subst_var0 = @index0.subst hash
       subst_var1 = @index1.subst hash
