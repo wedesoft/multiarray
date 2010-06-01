@@ -42,12 +42,15 @@ module Hornetseye
         INT
       end
 
-    # Strip of all values.
-    #
-    # Split up into variables, values, and a term where all values have been
-    # replaced with variables.
-    #
-    # @private
+      # Strip of all values.
+      #
+      # Split up into variables, values, and a term where all values have been
+      # replaced with variables.
+      #
+      # @return [Array<Array,Node>] Returns an array of variables, an array of
+      # values, and the term based on variables.
+      #
+      # @private
       def strip
         var = Variable.new INT
         return [ var ], [ size ], Hornetseye::INDEX( var )

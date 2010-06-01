@@ -233,7 +233,7 @@ class Range
     end
   end
 
-  # For performance reasons a specialised method for integers is added.
+  # For performance reasons a specialised method for integers is added
   #
   # @return [Object] Maximum value of range.
   def max
@@ -244,7 +244,7 @@ class Range
     end
   end
 
-  # Compute the size of a range.
+  # Compute the size of a range
   #
   # @return [Integer] Number of discrete values within range.
   def size
@@ -335,7 +335,7 @@ module Hornetseye
 
   module_function :lazy
 
-  # Method for performing computations in eager mode.
+  # Method for performing computations in eager mode
   #
   # @param [Array<Integer>] *shape Optional shape of result. The method
   # attempts to infer the shape if not specified.

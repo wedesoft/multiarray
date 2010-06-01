@@ -90,7 +90,7 @@ module Hornetseye
 
     # Get variables contained in the definition of this datatype.
     #
-    # @return [Set] Returns +Set[]+.
+    # @return [Set] Returns set of variables.
     #
     # @private
     def variables
@@ -101,6 +101,9 @@ module Hornetseye
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
+    #
+    # @return [Array<Array,Node>] Returns an array of variables, an array of
+    # values, and the term based on variables.
     #
     # @private
     def strip
@@ -134,6 +137,14 @@ module Hornetseye
   #
   # @param [Symbol,String] operation Name of operation.
   # @param [Symbol,String] conversion Name of method for type conversion.
+  #
+  # @return [Class] A class deriving from +Unary_+.
+  #
+  # @see Unary_
+  # @see Unary_.operation
+  # @see Unary_.conversion
+  #
+  # @private
   def Unary( operation, conversion = :contiguous )
     retval = Class.new Unary_
     retval.operation = operation

@@ -49,6 +49,9 @@ module Hornetseye
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
     #
+    # @return [Array<Array,Node>] Returns an array of variables, an array of
+    # values, and the term based on variables.
+    #
     # @private
     def strip
       vars, values, term = @term.strip
@@ -70,6 +73,12 @@ module Hornetseye
       value
     end
 
+    # Lookup element of an array
+    #
+    # @param [Node] value Index of element.
+    # @param [Node] stride Stride for iterating over elements.
+    #
+    # @private
     def lookup( value, stride )
       if value.is_a? Variable
         Lookup.new self, value, stride

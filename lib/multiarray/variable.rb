@@ -56,10 +56,13 @@ module Hornetseye
       @meta.array_type
     end
 
-    # Strip of all values.
+    # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
+    #
+    # @return [Array<Array,Node>] Returns an array of variables, an array of
+    # values, and the term based on variables.
     #
     # @private
     def strip
@@ -71,6 +74,15 @@ module Hornetseye
       end
     end
 
+    # Substitute variables
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       if hash[ self ]
         hash[ self ]
@@ -81,10 +93,21 @@ module Hornetseye
       end
     end
 
+    # Get variables contained in this object
+    #
+    # @return [Set] Returns +Set[ self ]+.
+    #
+    # @private
     def variables
       Set[ self ]
     end
 
+    # Lookup element of an array
+    #
+    # @param [Node] value Index of element.
+    # @param [Node] stride Stride for iterating over elements.
+    #
+    # @private
     def lookup( value, stride )
       Lookup.new self, value, stride
     end

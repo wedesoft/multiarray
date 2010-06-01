@@ -54,6 +54,8 @@ module Hornetseye
       #
       # @see Malloc#load
       #
+       # @return [BOOL] Result of fetch operation.
+      #
       # @private
       def fetch( ptr )
         new ptr.load( self ) != 0
@@ -88,6 +90,8 @@ module Hornetseye
 
       # Directive for packing/unpacking elements of this type
       #
+      # @return [String] Returns +'c'+.
+      #
       # @private
       def directive
         'c'
@@ -99,9 +103,12 @@ module Hornetseye
     #
     # @param [Malloc] ptr Memory to write element to.
     #
+    # @return [BOOL] Returns +self+.
+    #
     # @see Malloc#save
     def write( ptr )
       ptr.save UBYTE.new( get.conditional( 1, 0 ) )
+      self
     end
 
     # Namespace containing method for matching elements of type BOOL

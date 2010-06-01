@@ -42,6 +42,7 @@ module Hornetseye
 
     def save( value )
       @array[ @offset ] = value.get
+      value
     end
 
   end

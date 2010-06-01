@@ -158,6 +158,9 @@ module Hornetseye
       # Split up into variables, values, and a term where all values have been
       # replaced with variables.
       #
+      # @return [Array<Array,Node>] Returns an array of variables, an array of
+      # values, and the term based on variables.
+      #
       # @private
       def strip
         return [], [], self
@@ -403,6 +406,9 @@ module Hornetseye
     #
     # Split up into variables, values, and a term where all values have been
     # replaced with variables.
+    #
+    # @return [Array<Array,Node>] Returns an array of variables, an array of
+    # values, and the term based on variables.
     #
     # @private
     def strip
