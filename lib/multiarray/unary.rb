@@ -135,6 +135,15 @@ module Hornetseye
       @value.element( i ).send self.class.operation
     end
 
+    # Check whether this term is compilable
+    #
+    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    #
+    # @private
+    def compilable?
+      @value.compilable?
+    end
+
   end
 
   # Create a class deriving from +Unary_+

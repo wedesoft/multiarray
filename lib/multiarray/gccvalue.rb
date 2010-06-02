@@ -94,6 +94,10 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) / ( #{other} )"
     end
 
+    def zero?
+      GCCValue.new @function, "( #{self} ) == 0"
+    end
+
     def times( &action )
       i = @function.variable INT, 'i'
       @function << "#{@function.indent}for ( #{i.get} = 0; #{i.get} != #{self}; #{i.get}++ ) {\n"

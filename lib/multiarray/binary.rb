@@ -139,6 +139,15 @@ module Hornetseye
       element1.send self.class.operation, element2
     end
 
+    # Check whether this term is compilable
+    #
+    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    #
+    # @private
+    def compilable?
+      @value1.compilable? and @value2.compilable?
+    end
+
   end
 
   # Create a class deriving from +Binary_+

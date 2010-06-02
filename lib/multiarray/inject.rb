@@ -69,6 +69,11 @@ module Hornetseye
       retval
     end
 
+    # Get variables contained in this term
+    #
+    # @return [Set] Returns set of variables.
+    #
+    # @private
     def variables
       initial_variables = @initial ? @initial.variables : Set[]
       ( @value.variables + initial_variables ) - @index.variables
@@ -98,12 +103,31 @@ module Hornetseye
                     var, term2, term3, @var1, @var2 )
     end
  
+    # Substitute variables
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       subst_var = @index.subst hash
       value = @value.subst( @index => subst_var ).subst hash
       initial = @initial ? @initial.subst( hash ) : nil
       block = @block.subst hash
       Inject.new value, subst_var, initial, block, @var1, @var2
+    end
+
+    # Check whether this term is compilable
+    #
+    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    #
+    # @private
+    def compilable?
+      initial_compilable = @initial ? @initial.compilable? : true
+      @value.compilable? and initial_compilable and @block.compilable?
     end
 
   end
