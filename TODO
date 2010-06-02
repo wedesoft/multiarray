@@ -2,12 +2,10 @@
 # Composite numbers?
 # pointer-increments for better efficiency
 # How does contiguous work here? typecasts?
-# Plus#demand: @value1.demand + @value2.demand ???
 # nonzero?
-# typecasts
-# preload cache
 # separate secondary operations like equality
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
+# preload cache
 
 # histogram
 # inject: min, max, equal, n-d clips for warp

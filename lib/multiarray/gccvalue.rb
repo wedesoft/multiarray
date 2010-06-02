@@ -41,7 +41,7 @@ module Hornetseye
     # @private
     def demand( typecode )
       result = @function.variable( typecode, 'v' ).get
-      @function << "#{@function.indent}#{result} = #{self};\n"
+      result.store self
       result
     end
 

@@ -61,7 +61,6 @@ module Hornetseye
         retval = @value.subst( @index => INT.new( 0 ) ).demand
         ( @index.size - 1 ).get.times do |i|
           sub = @value.subst( @index => INT.new( i ) + 1 ).demand
-# raise 'Doo!' if retval.inspect == '( v03 ) == ( v04 )'
           retval.store @block.subst( @var1 => retval,
                                      @var2 => sub ).demand
         end
