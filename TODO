@@ -1,3 +1,4 @@
+# fix duplicate "demand.demand" in Inject#demand
 # compile boolean operations, compile Convolve#demand
 # Composite numbers?
 # pointer-increments for better efficiency

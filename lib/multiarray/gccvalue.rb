@@ -66,6 +66,10 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) == ( #{other} )"
     end
 
+    def ne( other )
+      GCCValue.new @function, "( #{self} ) != ( #{other} )"
+    end
+
     def conditional( a, b )
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end
