@@ -41,6 +41,20 @@ class Proc
 
 end
 
+# +NilClass+ is extended with a few methods
+class NilClass
+
+    # Check whether this term is compilable
+    #
+    # @return [FalseClass,TrueClass] Returns +false+
+    #
+    # @private
+  def compilable?
+    false
+  end
+
+end
+
 # +FalseClass+ is extended with a few methods
 #
 # @see TrueClass
