@@ -48,6 +48,7 @@ module Hornetseye
     module_function :define_binary_op
 
     define_unary_op  :zero?   , :bool
+    define_unary_op  :nonzero?, :bool
     define_unary_op  :not
     define_unary_op  :-@
     define_binary_op :+

@@ -143,6 +143,10 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ false, true, false ], S[ -1, 0, 1 ].zero?
   end
 
+  def test_nonzero
+    assert_equal S[ true, false, true ], S[ -1, 0, 1 ].nonzero?
+  end
+
   def test_negate
     assert_equal S[ -1, 2, -3 ], -S[ 1, -2, 3 ]
   end

@@ -129,6 +129,11 @@ class TC_Int < Test::Unit::TestCase
     assert !I.new( 3 ).zero?[]
   end
 
+  def test_nonzero
+    # assert !I.new( 0 ).nonzero?[]
+    assert I.new( 3 ).nonzero?[]
+  end
+
   def test_negate
     assert_equal I.new( -5 ), -I.new( 5 )
   end

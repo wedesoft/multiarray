@@ -153,6 +153,11 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ -1, 0 ], [ 0, 1 ] ].zero?
   end
 
+  def test_nonzero
+    assert_equal M[ [ true, false ], [ false, true ] ],
+                 M[ [ -1, 0 ], [ 0, 1 ] ].nonzero?
+  end
+
   def test_negate
     assert_equal M[ [ -1, 2, -3 ], [ 4, -5, 6 ] ],
                  -M[ [ 1, -2, 3 ], [ -4, 5, -6 ] ]

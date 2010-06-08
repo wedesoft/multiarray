@@ -39,15 +39,6 @@ module Hornetseye
         'BOOL'
       end
 
-      # Check whether this term is compilable
-      #
-      # @return [FalseClass,TrueClass] Returns whether this term is compilable.
-      #
-      # @private
-      #def compilable?
-      #  false
-      #end
-
       # Retrieve element from memory
       #
       # @param [Malloc] ptr Memory to load element from.
