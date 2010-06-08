@@ -51,14 +51,14 @@ module Hornetseye
     # @private
     def demand
       if @initial
-        retval = @initial.demand
+        retval = @initial.demand.demand # !!!
         @index.size.get.times do |i|
           sub = @value.subst( @index => INT.new( i ) ).demand.demand # !!!
           retval.store @block.subst( @var1 => retval,
                                      @var2 => sub ).demand
         end
       else
-        retval = @value.subst( @index => INT.new( 0 ) ).demand
+        retval = @value.subst( @index => INT.new( 0 ) ).demand.demand # !!!
         ( @index.size - 1 ).get.times do |i|
           sub = @value.subst( @index => INT.new( i ) + 1 ).demand.demand # !!!
           retval.store @block.subst( @var1 => retval,
