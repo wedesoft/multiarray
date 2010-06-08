@@ -1,5 +1,6 @@
 # demand: compute if element
 # force: compute if new array
+# test "sum { |i| m[i] }" for m = MultiArray.new INT, 3, 2
 # compile boolean operations, compile Convolve#demand
 # Composite numbers?
 # pointer-increments for better efficiency

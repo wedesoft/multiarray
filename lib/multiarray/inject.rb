@@ -68,6 +68,15 @@ module Hornetseye
       retval
     end
 
+    # Get element of injection
+    #
+    # @param [Integer,Node] i Index of desired element.
+    #
+    # @return [Node,Object] Element of injection.
+    def element( i )
+      Inject.new @value.element( i ), @index, @initial, @block, @var1, @var2
+    end
+
     # Get variables contained in this term
     #
     # @return [Set] Returns set of variables.
