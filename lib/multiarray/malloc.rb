@@ -28,6 +28,10 @@ module Hornetseye
       value
     end
 
+    def to_s
+      inspect
+    end
+
   end
 
 end

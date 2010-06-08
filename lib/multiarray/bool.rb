@@ -44,9 +44,9 @@ module Hornetseye
       # @return [FalseClass,TrueClass] Returns whether this term is compilable.
       #
       # @private
-      def compilable?
-        false
-      end
+      #def compilable?
+      #  false
+      #end
 
       # Retrieve element from memory
       #
@@ -58,7 +58,7 @@ module Hornetseye
       #
       # @private
       def fetch( ptr )
-        new ptr.load( self ) != 0
+        new ptr.load( self ).ne( 0 )
       end
 
       # Memory type required to store elements of this type
