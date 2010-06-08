@@ -31,6 +31,10 @@ class TC_Sequence < Test::Unit::TestCase
   def S( *args )
     Hornetseye::Sequence *args
   end
+  
+  def sum( *args, &action )
+    Hornetseye::sum *args, &action
+  end
 
   def setup
   end
@@ -113,6 +117,11 @@ class TC_Sequence < Test::Unit::TestCase
   def test_inject
     assert_equal 6, S[ 1, 2, 3 ].inject { |a,b| a + b }
     assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
+  end
+
+  def test_sum
+    assert_equal 6, sum { |i| S[ 1, 2, 3 ][ i ] }
+    assert_equal [ 1, 2, 3 ], sum { || S[ 1, 2, 3 ] }.to_a
   end
 
   def dont_test_convolve

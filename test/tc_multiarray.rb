@@ -37,6 +37,14 @@ class TC_MultiArray < Test::Unit::TestCase
     Hornetseye::MultiArray *args
   end
 
+  def sum( *args, &action )
+    Hornetseye::sum *args, &action
+  end
+
+  def eager( *args, &action )
+    Hornetseye::eager *args, &action
+  end
+
   def setup
   end
 
@@ -120,6 +128,14 @@ class TC_MultiArray < Test::Unit::TestCase
   def test_inject
     assert_equal 21, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject { |a,b| a + b }
     assert_equal 28, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject( 7 ) { |a,b| a + b }
+  end
+
+  def test_sum
+    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    assert_equal 21, sum { |i,j| m[ i, j ] }
+    assert_equal [ 5, 7, 9 ], sum { |i| m[ i ] }.to_a
+    assert_equal [ 6, 15 ], eager { |j| sum { |i| m[ i, j ] } }.to_a
+    assert_equal [ [ 1, 2, 3 ] , [ 4, 5, 6 ] ], sum { || m }.to_a
   end
 
   def dont_test_convolve

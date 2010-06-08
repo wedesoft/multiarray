@@ -39,6 +39,9 @@ class TC_Int < Test::Unit::TestCase
     Hornetseye::INT Hornetseye::SIGNED, bits
   end
 
+  def sum( *args, &action )
+    Hornetseye::sum *args, &action
+  end
 
   def setup
   end
@@ -115,6 +118,10 @@ class TC_Int < Test::Unit::TestCase
   def test_inject
     assert_equal 2, I.new( 2 ).inject { |a,b| a + b }[]
     assert_equal 3, I.new( 2 ).inject( 1 ) { |a,b| a + b }[]
+  end
+
+  def test_sum
+    assert_equal 3, sum { || 3 }
   end
 
   def test_zero
