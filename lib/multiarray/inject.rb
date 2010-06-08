@@ -39,7 +39,7 @@ module Hornetseye
     end
 
     def array_type
-      @block.array_type
+      @value.array_type
     end
 
     # Reevaluate computation
