@@ -49,15 +49,15 @@ module Hornetseye
 
     define_unary_op  :zero?   , :bool
     define_unary_op  :nonzero?, :bool
-    define_unary_op  :not
+    define_unary_op  :not, :bool
     define_unary_op  :-@
     define_binary_op :+
     define_binary_op :-
     define_binary_op :*
     define_binary_op :/
     define_binary_op :%
-    define_binary_op :and
-    define_binary_op :or
+    define_binary_op :and, :bool_binary
+    define_binary_op :or, :bool_binary
     define_binary_op :eq, :bool_binary
     define_binary_op :ne, :bool_binary
 

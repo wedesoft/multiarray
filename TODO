@@ -1,4 +1,6 @@
+# false.and S[ false, true ]
 # compile boolean operations, compile Convolve#demand
+# ~, &, | vs. !, &&, ||
 # Composite numbers?
 # pointer-increments for better efficiency
 # How does contiguous work here? typecasts?

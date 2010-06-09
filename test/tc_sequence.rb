@@ -147,6 +147,25 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ true, false, true ], S[ -1, 0, 1 ].nonzero?
   end
 
+  def test_not
+    assert_equal [ true, false ], S[ false, true ].not.to_a
+    assert_equal [ true, false, false ], S[ 0, 1, 2 ].not.to_a
+  end
+
+  def test_and
+    assert_equal [ false, false ], S[ false, true ].and( false ).to_a
+    assert_equal [ false, true ], S[ false, true ].and( true ).to_a
+    assert_equal [ false, false, false, true ], S[ false, true, false, true ].
+                 and( S[ false, false, true, true ] ).to_a
+  end
+
+  def test_or
+    assert_equal [ false, true ], S[ false, true ].or( false ).to_a
+    assert_equal [ true, true ], S[ false, true ].or( true ).to_a
+    assert_equal [ false, true, true, true ], S[ false, true, false, true ].
+                 or( S[ false, false, true, true ] ).to_a
+  end
+
   def test_negate
     assert_equal S[ -1, 2, -3 ], -S[ 1, -2, 3 ]
   end

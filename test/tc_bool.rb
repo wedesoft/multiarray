@@ -95,9 +95,6 @@ class TC_Bool < Test::Unit::TestCase
     assert !B.new( true ).inject( false ) { |a,b| a.and b }[]
   end
 
-  def test_zero
-  end
-
   def test_not
     assert_equal B.new( true ), B.new( false ).not
     assert_equal B.new( false ), B.new( true ).not

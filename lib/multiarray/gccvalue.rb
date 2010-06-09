@@ -74,8 +74,16 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end
 
+    def not
+      GCCValue.new @function, "!( #{self} )"
+    end
+
     def and( other )
       GCCValue.new @function, "( #{self} ) && ( #{other} )"
+    end
+
+    def or( other )
+      GCCValue.new @function, "( #{self} ) || ( #{other} )"
     end
 
     def -@
