@@ -1,4 +1,5 @@
 # false.and S[ false, true ]
+# INT.new( 2 ).not
 # compile boolean operations, compile Convolve#demand
 # ~, &, | vs. !, &&, ||
 # Composite numbers?

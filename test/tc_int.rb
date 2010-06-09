@@ -130,8 +130,20 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_nonzero
-    # assert !I.new( 0 ).nonzero?[]
+    assert !I.new( 0 ).nonzero?[]
     assert I.new( 3 ).nonzero?[]
+  end
+
+  def test_bitwise_not
+    assert_equal I.new( -3 ), ~I.new( 2 )
+  end
+
+  def test_bitwise_and
+    assert_equal I.new( 2 ), I.new( 3 ) & I.new( 6 )
+  end
+
+  def test_bitwise_or
+    assert_equal I.new( 7 ), I.new( 3 ) | I.new( 6 )
   end
 
   def test_negate
