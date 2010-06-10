@@ -121,7 +121,7 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_not
-    assert I.new( 0 ).not[]
+    assert !I.new( 0 ).not[]
     assert !I.new( 3 ).not[]
   end
 

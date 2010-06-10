@@ -1,14 +1,14 @@
-# false.and Sequence[ false, true ]
+# 4 | Sequence[ 1, 2 ]
+# 2 & Sequence[ 1, 2 ]
 # compile Convolve#demand
-# ~, &, | vs. !, &&, ||
 # Composite numbers?
 # pointer-increments for better efficiency
 # How does contiguous work here? typecasts?
-# INT.new( 0 ).nonzero?
 # separate secondary operations like equality
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # preload cache
 # demand: compute if element, force: compute if new array
+# Sequence( UBYTE, 3 )[ ... ]
 
 # histogram (implement using injection)
 # inject: min, max, equal, n-d clips for warp

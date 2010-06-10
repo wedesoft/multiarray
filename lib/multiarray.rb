@@ -55,6 +55,48 @@ class Object
 
   end
 
+  # Boolean negation
+  #
+  # @return [FalseClass] Returns +false+.
+  #
+  # @see NilClass#not
+  # @see FalseClass#not
+  def not
+     false
+  end
+
+  # Boolean 'and' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [FalseClass,TrueClass] Returns +other+.
+  #
+  # @see FalseClass#and
+  # @see NilClass#and
+  def and( other )
+    unless other.is_a? Hornetseye::Node
+      other
+    else
+      x, y = other.coerce self
+      x.and y
+    end
+  end
+
+  # Boolean 'or' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [TrueClass] Returns +true+.
+  #
+  # @see FalseClass#or
+  # @see NilClass#or
+  def or( other )
+    unless other.is_a? Hornetseye::Node
+      self
+    else
+      x, y = other.coerce self
+      x.or y
+    end
+  end
+
   # Element-wise equal operator
   #
   # The method calls +self == other+ unless +other+ is of type
@@ -91,16 +133,82 @@ class Object
     end
   end
 
+  # Boolean select operation
+  #
+  # @param [Object] a Object to select if +self+ is neither +false+ nor +nil+.
+  # @param [Object] b Object to select if +self+ is +false+ or +nil+.
+  # @return [Object] Returns +a+.
+  #
+  # @see FalseClass#conditional
+  # @see NilClass#conditional
+  def conditional( a, b )
+    a
+  end
+
 end
 
 # +NilClass+ is extended with a few methods
 class NilClass
 
-    # Check whether this term is compilable
-    #
-    # @return [FalseClass,TrueClass] Returns +false+
-    #
-    # @private
+  # Boolean negation
+  #
+  # @return [FalseClass] Returns +false+.
+  #
+  # @see Object#not
+  # @see FalseClass#not
+  def not
+     true
+  end
+
+  # Boolean 'and' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [FalseClass] Returns +false+.
+  #
+  # @see Object#and
+  # @see FalseClass#and
+  def and( other )
+    unless other.is_a? Hornetseye::Node
+      self
+    else
+      x, y = other.coerce self
+      x.and y
+    end
+  end
+
+  # Boolean 'or' operation
+  #
+  # @param [FalseClass,TrueClass,Object] other Other boolean object.
+  # @return [FalseClass,TrueClass] Returns +other+.
+  #
+  # @see Object#or
+  # @see FalseClass#or
+  def or( other )
+    unless other.is_a? Hornetseye::Node
+      other
+    else
+      x, y = other.coerce self
+      x.or y
+    end
+  end
+
+  # Boolean select operation
+  #
+  # @param [Object] a Object to select if +self+ is neither +false+ nor +nil+.
+  # @param [Object] b Object to select if +self+ is +false+ or +nil+.
+  # @return [Object] Returns +b+.
+  #
+  # @see Object#conditional
+  # @see FalseClass#conditional
+  def conditional( a, b )
+    b
+  end
+
+  # Check whether this term is compilable
+  #
+  # @return [FalseClass,TrueClass] Returns +false+
+  #
+  # @private
   def compilable?
     false
   end
@@ -116,7 +224,8 @@ class FalseClass
   #
   # @return [FalseClass] Returns +true+.
   #
-  # @see TrueClass#not
+  # @see Object#not
+  # @see NilClass#not
   def not
     true
   end
@@ -126,10 +235,11 @@ class FalseClass
   # @param [FalseClass,TrueClass,Object] other Other boolean object.
   # @return [FalseClass] Returns +false+.
   #
-  # @see TrueClass#and
+  # @see Object#and
+  # @see NilClass#and
   def and( other )
-    if [ false, true ].member? other
-      false
+    unless other.is_a? Hornetseye::Node
+      self
     else
       x, y = other.coerce self
       x.and y
@@ -141,9 +251,10 @@ class FalseClass
   # @param [FalseClass,TrueClass,Object] other Other boolean object.
   # @return [FalseClass,TrueClass] Returns +other+.
   #
-  # @see TrueClass#or
+  # @see Object#or
+  # @see NilClass#or
   def or( other )
-    if [ false, true ].member? other
+    unless other.is_a? Hornetseye::Node
       other
     else
       x, y = other.coerce self
@@ -153,11 +264,12 @@ class FalseClass
 
   # Boolean select operation
   #
-  # @param [Object] a Object to select if +self+ is +true+.
-  # @param [Object] b Object to select if +self+ is +false+.
+  # @param [Object] a Object to select if +self+ is neither +false+ nor +nil+.
+  # @param [Object] b Object to select if +self+ is +false+ or +nil+.
   # @return [Object] Returns +b+.
   #
-  # @see TrueClass#conditional
+  # @see Object#conditional
+  # @see NilClass#conditional
   def conditional( a, b )
     b
   end
@@ -169,64 +281,6 @@ end
 # @see FalseClass
 class TrueClass
 
-  # Boolean negation
-  #
-  # @return [FalseClass] Returns +false+.
-  #
-  # @see FalseClass#not
-  def not
-     false
-  end
-
-  # Boolean 'and' operation
-  #
-  # @param [FalseClass,TrueClass,Object] other Other boolean object.
-  # @return [FalseClass,TrueClass] Returns +other+.
-  #
-  # @see FalseClass#and
-  def and( other )
-    if [ false, true ].member? other
-      other
-    else
-      x, y = other.coerce self
-      x.and y
-    end
-  end
-
-  # Boolean 'or' operation
-  #
-  # @param [FalseClass,TrueClass,Object] other Other boolean object.
-  # @return [TrueClass] Returns +true+.
-  #
-  # @see FalseClass#or
-  def or( other )
-    if [ false, true ].member? other
-      true
-    else
-      x, y = other.coerce self
-      x.or y
-    end
-  end
-
-  # Boolean select operation
-  #
-  # @param [Object] a Object to select if +self+ is +true+.
-  # @param [Object] b Object to select if +self+ is +false+.
-  # @return [Object] Returns +a+.
-  #
-  # @see FalseClass#conditional
-  def conditional( a, b )
-    a
-  end
-
-end
-
-# +Numeric+ is extended with a few methods
-class Numeric
-
-  def not
-    eq 0
-  end
 
 end
 

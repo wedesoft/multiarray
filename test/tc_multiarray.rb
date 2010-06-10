@@ -167,18 +167,28 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_and
     assert_equal [ [ false, false ] ], M[ [ false, true ] ].and( false ).to_a
+    assert_equal [ [ false, false ] ], false.and( M[ [ false, true ] ] ).to_a
     assert_equal [ [ false, true ] ], M[ [ false, true ] ].and( true ).to_a
+    assert_equal [ [ false, true ] ], true.and( M[ [ false, true ] ] ).to_a
     assert_equal [ [ false, false ], [ false, true ] ],
                  M[ [ false, true ], [ false, true ] ].
                  and( M[ [ false, false ], [ true, true ] ] ).to_a
+    assert_equal [ [ false, false ], [ true, false ] ],
+                 M[ [ false, true ], [ true, false ] ].
+                 and( S[ false, true ] ).to_a
   end
 
   def test_or
     assert_equal [ [ false, true ] ], M[ [ false, true ] ].or( false ).to_a
+    assert_equal [ [ false, true ] ], false.or( M[ [ false, true ] ] ).to_a
     assert_equal [ [ true, true ] ], M[ [ false, true ] ].or( true ).to_a
+    assert_equal [ [ true, true ] ], true.or( M[ [ false, true ] ] ).to_a
     assert_equal [ [ false, true ], [ true, true ] ],
                  M[ [ false, true ], [ false, true ] ].
                  or( M[ [ false, false ], [ true, true ] ] ).to_a
+    assert_equal [ [ false, true ], [ true, true ] ],
+                 M[ [ false, true ], [ true, false ] ].
+                 or( S[ false, true ] ).to_a
   end
 
   def test_bitwise_not

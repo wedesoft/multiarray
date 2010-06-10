@@ -134,7 +134,7 @@ module Hornetseye
       #
       # @return [Class] Returns +BOOL+.
       def bool_binary( other )
-        BOOL
+        other.coercion( self ).bool
       end
 
       # Get variables contained in this datatype
