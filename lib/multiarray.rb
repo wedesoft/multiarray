@@ -41,6 +41,58 @@ class Proc
 
 end
 
+# +Object+ is extended with a few methods
+class Object
+
+  unless method_defined? :instance_exec
+
+    # Object#instance_exec is defined if it does not exist already
+    #
+    # @private
+    def instance_exec( *arguments, &block )
+      block.bind( self )[ *arguments ]
+    end
+
+  end
+
+  # Element-wise equal operator
+  #
+  # The method calls +self == other+ unless +other+ is of type
+  # Hornetseye::Node. In that case an element-wise comparison using
+  # Hornetseye::Node#eq is performed after coercion.
+  #
+  # @return [FalseClass,TrueClass,Hornetseye::Node] Result of comparison.
+  # @see Hornetseye::Node
+  # @see Hornetseye::Binary_
+  def eq( other )
+    unless other.is_a? Hornetseye::Node
+      self == other
+    else
+      x, y = other.coerce self
+      x.eq y
+    end
+  end
+
+  # Element-wise not-equal operator
+  #
+  # The method calls +( self == other ).not+ unless +other+ is of type
+  # Hornetseye::Node. In that case an element-wise comparison using
+  # Hornetseye::Node#ne is performed after coercion.
+  #
+  # @return [FalseClass,TrueClass,Hornetseye::Node] Result of comparison.
+  # @see Hornetseye::Node
+  # @see Hornetseye::Binary_
+  def ne( other )
+    unless other.is_a? Hornetseye::Node
+      ( self == other ).not
+    else
+      x, y = other.coerce self
+      x.ne y
+    end
+  end
+
+end
+
 # +NilClass+ is extended with a few methods
 class NilClass
 
@@ -169,54 +221,11 @@ class TrueClass
 
 end
 
-# +Object+ is extended with a few methods
-class Object
+# +Numeric+ is extended with a few methods
+class Numeric
 
-  unless method_defined? :instance_exec
-
-    # Object#instance_exec is defined if it does not exist already
-    #
-    # @private
-    def instance_exec( *arguments, &block )
-      block.bind( self )[ *arguments ]
-    end
-
-  end
-
-  # Element-wise equal operator
-  #
-  # The method calls +self == other+ unless +other+ is of type
-  # Hornetseye::Node. In that case an element-wise comparison using
-  # Hornetseye::Node#eq is performed after coercion.
-  #
-  # @return [FalseClass,TrueClass,Hornetseye::Node] Result of comparison.
-  # @see Hornetseye::Node
-  # @see Hornetseye::Binary_
-  def eq( other )
-    unless other.is_a? Hornetseye::Node
-      self == other
-    else
-      x, y = other.coerce self
-      x.eq y
-    end
-  end
-
-  # Element-wise not-equal operator
-  #
-  # The method calls +( self == other ).not+ unless +other+ is of type
-  # Hornetseye::Node. In that case an element-wise comparison using
-  # Hornetseye::Node#ne is performed after coercion.
-  #
-  # @return [FalseClass,TrueClass,Hornetseye::Node] Result of comparison.
-  # @see Hornetseye::Node
-  # @see Hornetseye::Binary_
-  def ne( other )
-    unless other.is_a? Hornetseye::Node
-      ( self == other ).not
-    else
-      x, y = other.coerce self
-      x.ne y
-    end
+  def not
+    eq 0
   end
 
 end

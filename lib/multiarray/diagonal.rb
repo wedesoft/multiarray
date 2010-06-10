@@ -151,6 +151,17 @@ module Hornetseye
         block, @var1, @var2
     end
 
+    # Check whether this term is compilable
+    #
+    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    #
+    # @private
+    def compilable?
+      initial_compilable = @initial ? @initial.compilable? : true
+      @value.compilable? and initial_compilable and @block.compilable?
+      false # !!!
+    end
+
   end
 
 end

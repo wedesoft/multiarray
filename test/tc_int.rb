@@ -120,6 +120,11 @@ class TC_Int < Test::Unit::TestCase
     assert_equal 3, I.new( 2 ).inject( 1 ) { |a,b| a + b }[]
   end
 
+  def test_not
+    assert I.new( 0 ).not[]
+    assert !I.new( 3 ).not[]
+  end
+
   def test_sum
     assert_equal 3, sum { || 3 }
   end

@@ -1,6 +1,5 @@
-# false.and S[ false, true ]
-# INT.new( 2 ).not
-# compile boolean operations, compile Convolve#demand
+# false.and Sequence[ false, true ]
+# compile Convolve#demand
 # ~, &, | vs. !, &&, ||
 # Composite numbers?
 # pointer-increments for better efficiency
