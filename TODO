@@ -1,11 +1,12 @@
+# accept ranges for element access
 # compile Convolve#demand
+# demand: compute if element, force: compute if new array (see Inject#demand),
+#   inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # Composite numbers?
 # pointer-increments for better efficiency
 # How does contiguous work here? typecasts?
 # separate secondary operations like equality
-# inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # preload cache
-# demand: compute if element, force: compute if new array
 # Sequence( UBYTE, 3 )[ ... ]
 
 # histogram (implement using injection)
