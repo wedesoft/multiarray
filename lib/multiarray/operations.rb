@@ -61,6 +61,9 @@ module Hornetseye
     define_binary_op :or, :bool_binary
     define_binary_op :&
     define_binary_op :|
+    define_binary_op :^
+    define_binary_op :<<
+    define_binary_op :>>
     define_binary_op :eq, :bool_binary
     define_binary_op :ne, :bool_binary
 

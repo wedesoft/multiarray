@@ -98,6 +98,18 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) | ( #{other} )"
     end
 
+    def ^( other )
+      GCCValue.new @function, "( #{self} ) ^ ( #{other} )"
+    end
+
+    def <<( other )
+      GCCValue.new @function, "( #{self} ) << ( #{other} )"
+    end
+
+    def >>( other )
+      GCCValue.new @function, "( #{self} ) >> ( #{other} )"
+    end
+
     def -@
       GCCValue.new @function, "-( #{self} )"
     end

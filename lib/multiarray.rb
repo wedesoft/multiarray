@@ -14,6 +14,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Module#alias_method_chain is defined.
+#
+# @private
+class Module
+
+  unless method_defined? :alias_method_chain
+
+    # Method for creating alias chains.
+    #
+    # @private
+    def alias_method_chain( target, feature, vocalize = target )
+      alias_method "#{vocalize}_without_#{feature}", target
+      alias_method target, "#{vocalize}_with_#{feature}"
+    end
+
+  end
+
+end
+
 # Proc#bind is defined if it does not exist already
 #
 # @private
@@ -276,32 +295,95 @@ class FalseClass
 
 end
 
-# +TrueClass+ is extended with a few methods
+# Some methods of +Fixnum+ are modified
 #
-# @see FalseClass
-class TrueClass
+# @private
+class Fixnum
 
+  # +&+ is modified to work with this library
+  #
+  # @private
+  def intand_with_hornetseye( other )
+    if other.is_a? Integer
+      intand_without_hornetseye other
+    else
+      x, y = other.coerce self
+      x & y
+    end
+  end
+
+  alias_method_chain :&, :hornetseye, :intand
+
+  # +|+ is modified to work with this library
+  #
+  # @private
+  def intor_with_hornetseye( other )
+    if other.is_a? Integer
+      intor_without_hornetseye other
+    else
+      x, y = other.coerce self
+      x | y
+    end
+  end
+
+  alias_method_chain :|, :hornetseye, :intor
+
+  # +^+ is modified to work with this library
+  #
+  # @private
+  def intxor_with_hornetseye( other )
+    if other.is_a? Integer
+      intxor_without_hornetseye other
+    else
+      x, y = other.coerce self
+      x ^ y
+    end
+  end
+
+  alias_method_chain :^, :hornetseye, :intxor
+
+  # +<<+ is modified to work with this library
+  #
+  # @private
+  def shl_with_hornetseye( other )
+    if other.is_a? Integer
+      shl_without_hornetseye other
+    else
+      x, y = other.coerce self
+      x << y
+    end
+  end
+
+  alias_method_chain :<<, :hornetseye, :shl
+
+  # +>>+ is modified to work with this library
+  #
+  # @private
+  def shr_with_hornetseye( other )
+    if other.is_a? Integer
+      shr_without_hornetseye other
+    else
+      x, y = other.coerce self
+      x >> y
+    end
+  end
+
+  alias_method_chain :>>, :hornetseye, :shr
 
 end
 
 # +Range+ is extended with a few methods
 class Range
 
-  public
-
-  # The original minimum method
-  #
-  # @return [Object] Minimum value of range.
   alias_method :orig_min, :min
 
-  # The original maximum method
-  #
-  # @return [Object] Maximum value of range.
   alias_method :orig_max, :max
 
   # For performance reasons a specialised method for integers is added
   #
   # @return [Object] Minimum value of range.
+  #
+  # @private
   def min
     if self.begin.is_a? Integer
       self.begin
@@ -313,6 +395,8 @@ class Range
   # For performance reasons a specialised method for integers is added
   #
   # @return [Object] Maximum value of range.
+  #
+  # @private
   def max
     if self.end.is_a? Integer
       exclude_end? ? self.end - 1 : self.end
@@ -326,25 +410,6 @@ class Range
   # @return [Integer] Number of discrete values within range.
   def size
     max + 1 - min
-  end
-
-end
-
-# Module#alias_method_chain is defined.
-#
-# @private
-class Module
-
-  unless method_defined? :alias_method_chain
-
-    # Method for creating alias chains.
-    #
-    # @private
-    def alias_method_chain( target, feature, vocalize = target )
-      alias_method "#{vocalize}_without_#{feature}", target
-      alias_method target, "#{vocalize}_with_#{feature}"
-    end
-
   end
 
 end

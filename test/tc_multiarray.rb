@@ -199,15 +199,40 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_bitwise_and
-    assert_equal [ [ 0, 1 ], [ 0, 1 ] ], M[ [ 0, 1 ], [ 2, 3 ] ].&( 1 ).to_a
-    assert_equal [ [ 0, 1 ], [ 0, 2 ] ], M[ [ 0, 1 ], [ 2, 3 ] ].
-                 &( M[ [ 4, 3 ], [ 1, 2 ] ] ).to_a
+    assert_equal [ [ 0, 1 ], [ 0, 1 ] ], ( M[ [ 0, 1 ], [ 2, 3 ] ] & 1 ).to_a
+    assert_equal [ [ 0, 1 ], [ 0, 1 ] ], ( 1 & M[ [ 0, 1 ], [ 2, 3 ] ] ).to_a
+    assert_equal [ [ 0, 1 ], [ 0, 2 ] ], ( M[ [ 0, 1 ], [ 2, 3 ] ] &
+                                           M[ [ 4, 3 ], [ 1, 2 ] ] ).to_a
   end
 
   def test_bitwise_or
-    assert_equal [ [ 1, 1 ], [ 3, 3 ] ], M[ [ 0, 1 ], [ 2, 3 ] ].|( 1 ).to_a
-    assert_equal [ [ 4, 3 ], [ 3, 3 ] ], M[ [ 0, 1 ], [ 2, 3 ] ].
-                 |( M[ [ 4, 3 ], [ 1, 2 ] ] ).to_a
+    assert_equal [ [ 1, 1 ], [ 3, 3 ] ], ( M[ [ 0, 1 ], [ 2, 3 ] ] | 1 ).to_a
+    assert_equal [ [ 1, 1 ], [ 3, 3 ] ], ( 1 | M[ [ 0, 1 ], [ 2, 3 ] ] ).to_a
+    assert_equal [ [ 4, 3 ], [ 3, 3 ] ], ( M[ [ 0, 1 ], [ 2, 3 ] ] |
+                                           M[ [ 4, 3 ], [ 1, 2 ] ] ).to_a
+  end
+
+  def test_bitwise_xor
+    assert_equal [ [ 1, 0 ], [ 3, 2 ] ], ( M[ [ 0, 1 ], [ 2, 3 ] ] ^ 1 ).to_a
+    assert_equal [ [ 1, 0 ], [ 3, 2 ] ], ( 1 ^ M[ [ 0, 1 ], [ 2, 3 ] ] ).to_a
+    assert_equal [ [ 4, 2 ], [ 3, 1 ] ], ( M[ [ 0, 1 ], [ 2, 3 ] ] ^
+                                           M[ [ 4, 3 ], [ 1, 2 ] ] ).to_a
+  end
+
+  def test_shl
+    assert_equal [ [ 2, 4 ], [ 6, 8 ] ], ( M[ [ 1, 2 ], [ 3, 4 ] ] << 1 ).to_a
+    assert_equal [ [ 6, 12 ], [ 24, 48 ] ],
+                 ( 3 << M[ [ 1, 2 ], [ 3, 4 ] ] ).to_a
+    assert_equal [ [ 8, 8 ], [ 6, 4 ] ],
+                 ( M[ [ 1, 2 ], [ 3, 4 ] ] << M[ [ 3, 2 ], [ 1, 0 ] ] ).to_a
+  end
+
+  def test_shr
+    assert_equal [ [ 1, 2 ], [ 3, 4 ] ], ( M[ [ 2, 4 ], [ 6, 8 ] ] >> 1 ).to_a
+    assert_equal [ [ 24, 12 ], [ 6, 3 ] ],
+                 ( 48 >> M[ [ 1, 2 ], [ 3, 4 ] ] ).to_a
+    assert_equal [ [ 2, 1 ], [ 3, 2 ] ],
+                 ( M[ [ 16, 4 ], [ 6, 2 ] ] >> M[ [ 3, 2 ], [ 1, 0 ] ] ).to_a
   end
 
   def test_negate

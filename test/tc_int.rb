@@ -151,6 +151,18 @@ class TC_Int < Test::Unit::TestCase
     assert_equal I.new( 7 ), I.new( 3 ) | I.new( 6 )
   end
 
+  def test_bitwise_xor
+    assert_equal I.new( 1 ), I.new( 3 ) ^ I.new( 2 )
+  end
+
+  def test_shl
+    assert_equal I.new( 4 ), I.new( 2 ) << I.new( 1 )
+  end
+
+  def test_shr
+    assert_equal I.new( 2 ), I.new( 4 ) >> I.new( 1 )
+  end
+
   def test_negate
     assert_equal I.new( -5 ), -I.new( 5 )
   end

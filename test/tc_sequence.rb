@@ -176,13 +176,33 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_bitwise_and
-    assert_equal [ 0, 1, 0 ], S[ 0, 1, 2 ].&( 1 ).to_a
-    assert_equal [ 0, 1, 0, 2 ], S[ 0, 1, 2, 3 ].&( S[ 4, 3, 1, 2 ] ).to_a
+    assert_equal [ 0, 1, 0 ], ( S[ 0, 1, 2 ] & 1 ).to_a
+    assert_equal [ 0, 1, 0 ], ( 1 & S[ 0, 1, 2 ] ).to_a
+    assert_equal [ 0, 1, 0, 2 ], ( S[ 0, 1, 2, 3 ] & S[ 4, 3, 1, 2 ] ).to_a
   end
 
   def test_bitwise_or
-    assert_equal [ 1, 1, 3 ], S[ 0, 1, 2 ].|( 1 ).to_a
-    assert_equal [ 4, 3, 3, 3 ], S[ 0, 1, 2, 3 ].|( S[ 4, 3, 1, 2 ] ).to_a
+    assert_equal [ 1, 1, 3 ], ( S[ 0, 1, 2 ] | 1 ).to_a
+    assert_equal [ 1, 1, 3 ], ( 1 | S[ 0, 1, 2 ] ).to_a
+    assert_equal [ 4, 3, 3, 3 ], ( S[ 0, 1, 2, 3 ] | S[ 4, 3, 1, 2 ] ).to_a
+  end
+
+  def test_bitwise_xor
+    assert_equal [ 1, 0, 3 ], ( S[ 0, 1, 2 ] ^ 1 ).to_a
+    assert_equal [ 1, 0, 3 ], ( 1 ^ S[ 0, 1, 2 ] ).to_a
+    assert_equal [ 4, 2, 3, 1 ], ( S[ 0, 1, 2, 3 ] ^ S[ 4, 3, 1, 2 ] ).to_a
+  end
+
+  def test_shl
+    assert_equal [ 2, 4, 6 ], ( S[ 1, 2, 3 ] << 1 ).to_a
+    assert_equal [ 6, 12, 24 ], ( 3 << S[ 1, 2, 3 ] ).to_a
+    assert_equal [ 8, 8, 6 ], ( S[ 1, 2, 3 ] << S[ 3, 2, 1 ] ).to_a
+  end
+
+  def test_shr
+    assert_equal [ 1, 2, 3 ], ( S[ 2, 4, 6 ] >> 1 ).to_a
+    assert_equal [ 12, 6, 3 ], ( 24 >> S[ 1, 2, 3 ] ).to_a
+    assert_equal [ 2, 1, 3 ], ( S[ 16, 4, 6 ] >> S[ 3, 2, 1 ] ).to_a
   end
 
   def test_negate
