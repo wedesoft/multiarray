@@ -23,7 +23,7 @@ module Hornetseye
       define_method( op ) do
         if dimension == 0 and variables.empty?
           target = typecode.send conversion
-          target.new demand.get.send( op )
+          target.new simplify.get.send( op )
         else
           Hornetseye::Unary( op, conversion ).new( self ).force
         end
@@ -38,7 +38,7 @@ module Hornetseye
         if dimension == 0 and variables.empty? and
             other.dimension == 0 and other.variables.empty?
           target = array_type.send coercion, other.array_type
-          target.new demand.get.send( op, other.demand.get )
+          target.new demand.get.send( op, other.simplify.get )
         else
           Hornetseye::Binary( op, coercion ).new( self, other ).force
         end

@@ -48,8 +48,7 @@ module Hornetseye
         end
         args = ( retval_values + values ).collect { |arg| arg.get }
         GCCCache.send method_name, *args
-        # retval = retval.demand.get
-        retval
+        retval.simplify
       end
 
     end

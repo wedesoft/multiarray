@@ -73,9 +73,9 @@ module Hornetseye
     # @see #force
     #
     # @private
-    def demand
-      if @value.respond_to? :demand
-        self.class.new @value.demand( self.class )
+    def dup
+      if @value.respond_to? :duplicate
+        self.class.new @value.duplicate( self.class )
       else
         self.class.new @value
       end
@@ -122,9 +122,9 @@ module Hornetseye
     # @return [Object] Returns +value+.
     def store( value )
       if @value.respond_to? :store
-        @value.store value.demand.get
+        @value.store value.simplify.get
       else
-        @value = value.demand.get
+        @value = value.simplify.get
       end
       value
     end

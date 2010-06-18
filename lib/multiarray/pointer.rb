@@ -97,7 +97,7 @@ module Hornetseye
     end
 
     def store( value )
-      result = value.demand
+      result = value.simplify
       self.class.target.new( result.get ).write @value
       result
     end
@@ -110,7 +110,7 @@ module Hornetseye
     #
     # @private
     def demand
-      self.class.target.fetch( @value ).demand
+      self.class.target.fetch( @value ).simplify
     end
 
     # Lookup element of an array

@@ -69,9 +69,9 @@ module Hornetseye
         i = @index0.get - k
         if i >= 0 and i < @index1.size.get
           sub = @value.subst( @index1 => INT.new( i ),
-                              @index2 => INT.new( j ) ).demand
+                              @index2 => INT.new( j ) ).simplify
           retval = retval ? @block.subst( @var1 => retval,
-                                          @var2 => sub ).demand :
+                                          @var2 => sub ).simplify :
             sub
         end
       end

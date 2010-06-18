@@ -242,7 +242,7 @@ module Hornetseye
     # @return [Array<Object>] Array of objects.
     def to_a
       if dimension == 0
-        demand.get
+        force
       else
         n = shape.last
         ( 0 ... n ).collect { |i| element( i ).to_a }
@@ -456,9 +456,20 @@ module Hornetseye
             retval.get
           end
         else
-          GCCFunction.run( self ).demand.get
+          GCCFunction.run( self ).get
         end
       end
+    end
+
+    # Reevaluate term
+    #
+    # @return [Node,Object] Result of simplification
+    #
+    # @See @demand
+    #
+    # @private
+    def simplify
+      dimension == 0 ? demand.dup : demand
     end
 
     # Coerce with other object
@@ -488,7 +499,7 @@ module Hornetseye
       block = options[ :block ] || yield( var1, var2 )
       if dimension == 0
         if initial
-          block.subst( var1 => initial, var2 => self ).demand
+          block.subst( var1 => initial, var2 => self ).simplify
         else
           demand
         end
