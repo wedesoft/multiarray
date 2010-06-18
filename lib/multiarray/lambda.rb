@@ -54,8 +54,8 @@ module Hornetseye
     #
     # @private
     def strip
-      vars, values, term = @term.strip
       meta_vars, meta_values, var = @index.strip
+      vars, values, term = @term.subst( @index => var ).strip
       return vars + meta_vars, values + meta_values,
         Lambda.new( var, term.subst( @index => var ) )
     end

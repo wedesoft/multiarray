@@ -218,4 +218,12 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ 2, 3, 5 ], S[ 1, 2, 3 ] + S[ 1, 1, 2 ]
   end
 
+  def test_indgen
+    assert_equal [ 0, 1, 2 ], S( I, 3 ).indgen.to_a
+    assert_equal [ 1, 2, 3 ], ( S( I, 3 ).indgen + 1 ).to_a
+    assert_equal [ 1, 2, 3 ], S( I, 3 ).indgen( 1 ).to_a
+    assert_equal [ 1, 3, 5 ], ( 2 * S( I, 3 ).indgen + 1 ).to_a
+    assert_equal [ 1, 3, 5 ], S( I, 3 ).indgen( 1, 2 ).to_a
+  end
+
 end

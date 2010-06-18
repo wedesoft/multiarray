@@ -55,8 +55,12 @@ module Hornetseye
       #
       # @private
       def strip
-        var = Variable.new INT
-        return [ var ], [ size ], Hornetseye::INDEX( var )
+        meta_vars, meta_values = size.strip
+        if meta_vars.empty?
+          return [], [], self
+        else
+          return meta_vars, meta_values, Hornetseye::INDEX( meta_vars.first )
+        end
       end
 
       def subst( hash )

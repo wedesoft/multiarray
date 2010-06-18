@@ -1,4 +1,4 @@
-# lazy ( 10 ) { |i| i } + 1
+# test for multiarray-indgen
 # accept ranges for element access
 # compile Convolve#demand
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
