@@ -1,3 +1,7 @@
+# compilable?
+# lazy? -> lazy and ( multi-dimensional or flat (including respond_to?) )
+# force_1d = self or ( ... ).force_1d
+
 # accept ranges for element access
 # compile Convolve#demand
 # demand: compute if element, force: compute if new array (see Inject#demand),
@@ -15,6 +19,8 @@
 # lazy( 5 ) { |i| 0 } # but lazy { 0 }
 # lazy( 3, 2 ) { |i,j| i }
 # lazy( 3, 2 ) { |i,j| j.to_object }
+
+# RSpec
 
 # downsampling after correlation?
 # README.rdoc, YARD documentation with pictures, demo video

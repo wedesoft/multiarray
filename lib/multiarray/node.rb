@@ -255,7 +255,7 @@ module Hornetseye
     def inspect( indent = nil, lines = nil )
       if variables.empty?
         if dimension == 0 and not indent
-          "#{array_type.inspect}(#{force.get.inspect})" # !!!
+          "#{array_type.inspect}(#{force.inspect})" # !!!
         else
           prepend = indent ? '' : "#{array_type.inspect}:\n"
           indent = 0
@@ -282,7 +282,7 @@ module Hornetseye
               end
             else
               retval += ', ' if i > 0
-              str = x.force.get.inspect # !!!
+              str = x.force.inspect # !!!
               if retval.size + str.size >= 74 - '...'.size -
                   '[  ]'.size * indent.succ
                 retval += '...'
@@ -372,7 +372,7 @@ module Hornetseye
     # @return [Object,Node] Value of array element or a sub-element.
     def []( *indices )
       if indices.empty?
-        force.get
+        force
       else
         element( indices.last )[ *indices[ 0 ... -1 ] ]
       end
@@ -435,7 +435,7 @@ module Hornetseye
     #
     # @private
     def lazy?
-      Thread.current[ :lazy ] or not variables.empty?
+      ( dimension > 0 and Thread.current[ :lazy ] ) or not variables.empty?
     end
 
     # Force delayed computation unless in lazy mode
@@ -453,10 +453,10 @@ module Hornetseye
           Hornetseye::lazy do
             retval = array_type.new
             retval[] = self
-            retval
+            retval.get
           end
         else
-          GCCFunction.run( self ).demand
+          GCCFunction.run( self ).demand.get
         end
       end
     end
@@ -496,7 +496,7 @@ module Hornetseye
         index = Variable.new Hornetseye::INDEX( nil )
         value = element( index ).
           inject nil, :block => block, :var1 => var1, :var2 => var2
-        Inject.new( value, index, initial, block, var1, var2 ).force.get
+        Inject.new( value, index, initial, block, var1, var2 ).force
       end
     end
 
@@ -505,7 +505,7 @@ module Hornetseye
     # @return [FalseClass,TrueClass] Returns result of comparison.
     def ==( other )
       if other.is_a? Node and other.array_type == array_type
-        Hornetseye::lazy { eq( other ).inject( true ) { |a,b| a.and b } }[]
+        Hornetseye::eager { eq( other ).inject( true ) { |a,b| a.and b } }
       else
         false
       end
@@ -548,7 +548,7 @@ module Hornetseye
         term = Diagonal.new( value, index0, index1, index2, initial,
                              block, var1, var2 )
         index0.size[] ||= index1.size[]
-        Lambda.new( index0, term ).force.get
+        Lambda.new( index0, term ).force
       end
     end
 

@@ -517,7 +517,7 @@ module Hornetseye
       end
       var1 = Variable.new term.typecode
       var2 = Variable.new term.typecode
-      Inject.new( term, index, nil, var1 + var2, var1, var2 ).force.get
+      Inject.new( term, index, nil, var1 + var2, var1, var2 ).force
     end
   end
 
