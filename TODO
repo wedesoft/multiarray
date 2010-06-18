@@ -1,11 +1,7 @@
-# compilable?
-# lazy? -> lazy and ( multi-dimensional or flat (including respond_to?) )
-# force_1d = self or ( ... ).force_1d
-
+# lazy ( 10 ) { |i| i } + 1
 # accept ranges for element access
 # compile Convolve#demand
-# demand: compute if element, force: compute if new array (see Inject#demand),
-#   inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
+# inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # Composite numbers?
 # pointer-increments for better efficiency
 # How does contiguous work here? typecasts?
