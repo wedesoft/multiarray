@@ -100,6 +100,10 @@ module Hornetseye
         Hornetseye::Pointer( self )
       end
 
+      def indgen( offset = 0, increment = 1 )
+        offset
+      end
+
       # Get shape of this term
       #
       # @return [Array<Integer>] Returns +[]+.

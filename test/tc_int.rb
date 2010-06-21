@@ -71,6 +71,12 @@ class TC_Int < Test::Unit::TestCase
     assert_equal 0, I.new[]
   end
 
+  def test_int_indgen
+    assert_equal 0, I.indgen
+    assert_equal 1, I.indgen( 1 )
+    assert_equal 1, I.indgen( 1, 2 )
+  end
+
   def test_int_typecode
     assert_equal I, I.typecode
   end

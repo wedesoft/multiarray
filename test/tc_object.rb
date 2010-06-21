@@ -43,6 +43,12 @@ class TC_Object < Test::Unit::TestCase
     assert_nil O.new[]
   end
 
+  def test_object_indgen
+    assert_equal 0, O.indgen
+    assert_equal 1, O.indgen( 1 )
+    assert_equal 1, O.indgen( 1, 2 )
+  end
+
   def test_object_typecode
     assert_equal O, O.typecode
   end

@@ -78,7 +78,10 @@ module Hornetseye
       end
 
       def indgen( offset = 0, increment = 1 )
-        Hornetseye::lazy( num_elements ) { |i| increment * i + offset }
+        Hornetseye::lazy( num_elements ) do |i|
+          element_type.size * increment * i +
+            element_type.indgen( offset, increment )
+        end
       end
 
       def shape

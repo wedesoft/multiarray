@@ -71,6 +71,17 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal I, M[ [ -2 ** 31, 2 ** 31 - 1 ] ].typecode
   end
 
+  def test_multiarray_indgen
+    assert_equal [ [ 0, 1, 2 ], [ 3, 4, 5 ] ],
+                 M( I, 3, 2 ).indgen.to_a
+    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
+                 M( I, 3, 2 ).indgen( 1 ).to_a
+    assert_equal [ [ 0, 2, 4 ], [ 6, 8, 10 ] ],
+                 M( I, 3, 2 ).indgen( 0, 2 ).to_a
+    assert_equal [ [ 1, 3, 5 ], [ 7, 9, 11 ] ],
+                 M( I, 3, 2 ).indgen( 1, 2 ).to_a
+  end
+
   def test_multiarray_typecode
     assert_equal O, M( O, 3, 2 ).typecode
   end
