@@ -83,6 +83,10 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal [ 3, 2 ], M( O, 3, 2 ).shape
   end
 
+  def test_multiarray_size
+    assert_equal 6, M( O, 3, 2 ).size
+  end
+
   def test_inspect
     assert_equal "MultiArray(OBJECT,3,2):\n[ [ :a, 2, 3 ],\n  [ 4, 5, 6 ] ]",
                  M[ [ :a, 2, 3 ], [ 4, 5, 6 ] ].inspect
@@ -98,6 +102,10 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_shape
     assert_equal [ 3, 2 ], M( O, 3, 2 ).new.shape
+  end
+
+  def test_size
+    assert_equal 6, M( O, 3, 2 ).new.size
   end
 
   def test_at_assign
@@ -248,6 +256,12 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ -3, 2, 1 ], [ 8, 6, 4 ] ] +
                  M[ [ 2, 0, 2 ], [ -4, -1, 2 ] ],
                  M[ [ -1, 2, 3 ], [ 4, 5, 6 ] ]
+  end
+
+  def test_default
+    assert_equal [ [ nil, nil, nil ], [ nil, nil, nil ] ],
+                 M( O, 3, 2 ).default.to_a
+    assert_equal [ [ 0, 0, 0 ], [ 0, 0, 0 ] ], M( I, 3, 2 ).default.to_a
   end
 
 end

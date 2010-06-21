@@ -1,3 +1,4 @@
+# lazy( 2 ) { |j| 3 * j + lazy( 3 ) { |i| i } }
 # test for multiarray-indgen
 # accept ranges for element access
 # compile Convolve#demand
@@ -20,6 +21,7 @@
 
 # downsampling after correlation?
 # README.rdoc, YARD documentation with pictures, demo video
+# CK_Thesis.pdf: tensor voting
 
 # f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy
 # lut(g(i))

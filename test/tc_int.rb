@@ -78,9 +78,13 @@ class TC_Int < Test::Unit::TestCase
   def test_int_dimension
     assert_equal 0, I.dimension
   end
-
+!
   def test_int_shape
     assert_equal [], I.shape
+  end
+
+  def test_int_size
+    assert_equal 1, I.size
   end
 
   def test_inspect
@@ -101,6 +105,10 @@ class TC_Int < Test::Unit::TestCase
 
   def test_shape
     assert_equal [], I.new.shape
+  end
+
+  def test_size
+    assert_equal 1, I.new.size
   end
 
   def test_at_assign

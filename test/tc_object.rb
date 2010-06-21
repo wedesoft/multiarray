@@ -55,6 +55,10 @@ class TC_Object < Test::Unit::TestCase
     assert_equal [], O.shape
   end
 
+  def test_object_size
+    assert_equal 1, O.size
+  end
+
   def test_inspect
     assert_equal 'OBJECT(42)', O.new( 42 ).inspect
   end
@@ -73,6 +77,10 @@ class TC_Object < Test::Unit::TestCase
 
   def test_shape
     assert_equal [], O.new.shape
+  end
+
+  def test_size
+    assert_equal 1, O.new.size
   end
 
   def test_at_assign
