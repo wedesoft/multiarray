@@ -114,6 +114,10 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_slice
+    assert_equal [ 2, 3 ], S[ 1, 2, 3, 4 ][ 1 .. 2 ].to_a
+  end
+
   def test_equal
     assert_equal S[ 2, 3, 5 ], S[ 2, 3, 5 ]
     assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 7 ]

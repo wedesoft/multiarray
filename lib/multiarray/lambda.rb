@@ -89,10 +89,24 @@ module Hornetseye
       end
     end
 
+    # Get element of this term
+    # Pass +i+ as argument to this lambda object.
+    #
+    # @param [Integer,Node] i Index of desired element.
+    #
+    # @return [Node,Object] Result of inserting +i+ for lambda argument.
     def element( i )
       i = Node.match( i ).new i unless i.is_a? Node
       i.size.store @index.size if @index.size.get and i.is_a? Variable
       @term.subst @index => i
+    end
+
+    def slice( start, length )
+      start = Node.match( start ).new start unless start.is_a? Node
+      length = Node.match( length ).new length unless length.is_a? Node
+      index = Variable.new Hornetseye::INDEX( length )
+      Lambda.new index,
+                 @term.subst( @index => index ).skip( index, start, length )
     end
 
   end

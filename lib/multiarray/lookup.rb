@@ -76,8 +76,20 @@ module Hornetseye
       end
     end
 
+    def skip( index, start, length )
+      if @index == index
+        Lookup.new @p.lookup( start, @stride ), @index, @stride
+      else
+        Lookup.new @p.skip( index, start, length ), @index, @stride
+      end
+    end
+
     def element( i )
       Lookup.new @p.element( i ), @index, @stride
+    end
+
+    def slice( start, length )
+      Lookup.new @p.slice( start, length ), @index, @stride
     end
 
   end

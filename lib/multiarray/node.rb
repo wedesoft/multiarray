@@ -391,6 +391,8 @@ module Hornetseye
     def []( *indices )
       if indices.empty?
         force
+      elsif indices.last.is_a? Range
+        slice( indices.last.min, indices.last.size )[ *indices[ 0 ... -1 ] ]
       else
         element( indices.last )[ *indices[ 0 ... -1 ] ]
       end
