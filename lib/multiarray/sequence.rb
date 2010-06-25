@@ -42,6 +42,7 @@ module Hornetseye
       # @return [Node] Returns native array with values.
       def []( *args )
         target = Node.fit args
+        target = Hornetseye::Sequence target, 0 if target.dimension == 0
         target = Hornetseye::Sequence OBJECT, args.size if target.dimension > 1
         retval = target.new
         args.each_with_index { |arg,i| retval[ i ] = arg }
@@ -90,6 +91,10 @@ module Hornetseye
 
       def size
         num_elements * element_type.size
+      end
+
+      def empty?
+        size == 0
       end
 
       def typecode

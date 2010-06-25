@@ -118,6 +118,10 @@ module Hornetseye
         1
       end
 
+      def empty?
+        size == 0
+      end
+
       # Get dimension of this term
       #
       # @return [Array<Integer>] Returns +0+.
@@ -236,6 +240,10 @@ module Hornetseye
       array_type.size
     end
 
+    def empty?
+      array_type.empty?
+    end
+
     # Get dimension of this term
     #
     # @return [Array<Integer>] Returns +array_type.dimension+.
@@ -275,42 +283,50 @@ module Hornetseye
         if dimension == 0 and not indent
           "#{array_type.inspect}(#{force.inspect})" # !!!
         else
-          prepend = indent ? '' : "#{array_type.inspect}:\n"
-          indent = 0
-          lines = 0
-          retval = '[ '
-          for i in 0 ... array_type.num_elements
-            x = Hornetseye::lazy { element i }
-            if x.dimension > 0
-              if i > 0
-                retval += ",\n  "
-                lines += 1
+          if indent
+            prepend = ''
+          else
+            prepend = "#{array_type.inspect}:\n"
+            indent = 0
+            lines = 0
+          end
+          if empty?
+            retval = '[]'
+          else
+            retval = '[ '
+            for i in 0 ... array_type.num_elements
+              x = Hornetseye::lazy { element i }
+              if x.dimension > 0
+                if i > 0
+                  retval += ",\n  "
+                  lines += 1
+                  if lines >= 10
+                    retval += '...' if indent == 0
+                    break
+                  end
+                  retval += '  ' * indent
+                end
+                str = x.inspect indent + 1, lines
+                lines += str.count "\n"
+                retval += str
                 if lines >= 10
                   retval += '...' if indent == 0
                   break
                 end
-                retval += '  ' * indent
-              end
-              str = x.inspect indent + 1, lines
-              lines += str.count "\n"
-              retval += str
-              if lines >= 10
-                retval += '...' if indent == 0
-                break
-              end
-            else
-              retval += ', ' if i > 0
-              str = x.force.inspect # !!!
-              if retval.size + str.size >= 74 - '...'.size -
-                  '[  ]'.size * indent.succ
-                retval += '...'
-                break
               else
-                retval += str
+                retval += ', ' if i > 0
+                str = x.force.inspect # !!!
+                if retval.size + str.size >= 74 - '...'.size -
+                    '[  ]'.size * indent.succ
+                  retval += '...'
+                  break
+                else
+                  retval += str
+                end
               end
             end
+            retval += ' ]' unless lines >= 10
           end
-          retval += ' ]' unless lines >= 10
           prepend + retval
         end
       else
@@ -381,6 +397,26 @@ module Hornetseye
       end.reverse
       order.collect { |o| variables[o] }.
         inject( term ) { |retval,var| Lambda.new var, retval }
+    end
+
+    def roll( n = 1 )
+      if n < 0
+        unroll -n
+      else
+        order = ( 0 ... dimension ).to_a
+        n.times { order = order[ 1 .. -1 ] + [ order.first ] }
+        transpose *order
+      end
+    end
+
+    def unroll( n = 1 )
+      if n < 0
+        roll -n
+      else
+        order = ( 0 ... dimension ).to_a
+        n.times { order = [ order.last ] + order[ 0 ... -1 ] }
+        transpose *order
+      end
     end
 
     # Retrieve value of array element(s)

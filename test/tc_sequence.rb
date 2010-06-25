@@ -85,6 +85,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_inspect
+    assert_equal "Sequence(OBJECT,0):\n[]", S[].inspect
     assert_equal "Sequence(OBJECT,3):\n[ :a, 2, 3 ]", S[ :a, 2, 3 ].inspect
   end
 
