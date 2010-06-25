@@ -115,6 +115,14 @@ module Hornetseye
       Lookup.new self, value, stride
     end
 
+    def skip( index, start )
+      if index == self
+        self + start
+      else
+        self
+      end
+    end
+
   end
 
 end

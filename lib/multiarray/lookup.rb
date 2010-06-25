@@ -76,11 +76,11 @@ module Hornetseye
       end
     end
 
-    def skip( index, start, length )
+    def skip( index, start )
       if @index == index
         Lookup.new @p.lookup( start, @stride ), @index, @stride
       else
-        Lookup.new @p.skip( index, start, length ), @index, @stride
+        Lookup.new @p.skip( index, start ), @index, @stride
       end
     end
 

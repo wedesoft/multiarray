@@ -89,8 +89,8 @@ module Hornetseye
       end
     end
 
-    def skip( index, start, length )
-      Lambda.new @index, @term.skip( index, start, length )
+    def skip( index, start )
+      Lambda.new @index, @term.skip( index, start )
     end
 
     # Get element of this term
@@ -110,7 +110,7 @@ module Hornetseye
       length = Node.match( length ).new length unless length.is_a? Node
       index = Variable.new Hornetseye::INDEX( length )
       Lambda.new( index, @term.subst( @index => index ).
-                         skip( index, start, length ) ).unroll
+                         skip( index, start ) ).unroll
     end
 
   end

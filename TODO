@@ -1,4 +1,5 @@
 # test slicing on results of lazy operations
+# unify lookup and skip?
 # m - m for 3D arrays -> too many arguments
 # test element operation on lazy unary, binary, and inject
 # compile Convolve#demand

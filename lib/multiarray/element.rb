@@ -108,6 +108,10 @@ module Hornetseye
       end
     end
 
+    def skip( index, start )
+      self
+    end
+
     # Get value of this native element
     #
     # @return [Object] Value of this native element.

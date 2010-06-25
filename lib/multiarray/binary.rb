@@ -139,6 +139,12 @@ module Hornetseye
       element1.send self.class.operation, element2
     end
 
+    def skip( index, start )
+      element1 = @value1.skip( index, start )
+      element2 = @value2.skip( index, start )
+      element1.send self.class.operation, element2
+    end
+
     # Check whether this term is compilable
     #
     # @return [FalseClass,TrueClass] Returns whether this term is compilable.
