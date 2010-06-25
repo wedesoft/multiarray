@@ -176,6 +176,20 @@ class TC_MultiArray < Test::Unit::TestCase
                    [ 3, 1, 1, 1, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
   end
 
+  def test_transpose
+    assert_equal [ [ 1, 4 ], [ 2, 5 ], [ 3, 6 ] ],
+                 M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].transpose( 1, 0 ).to_a
+    assert_equal [ [ [ 0, 3 ], [ 1, 4 ], [ 2, 5 ] ] ],
+                 M( I, 3, 2, 1 ).indgen.transpose( 1, 0, 2 ).to_a
+  end
+
+  def test_roll_unroll
+    assert_equal [ [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 3 ], [ 4 ], [ 5 ] ] ],
+                 M( I, 3, 2, 1 ).indgen.unroll.to_a
+    assert_equal [ [ [ 0, 3 ] ], [ [ 1, 4 ] ], [ [ 2, 5 ] ] ],
+                 M( I, 3, 2, 1 ).indgen.roll.to_a
+  end
+
   def test_equal
     assert_equal M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ], M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
     assert_not_equal M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
