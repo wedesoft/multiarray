@@ -116,7 +116,17 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_slice
-    assert_equal [ 2, 3 ], S[ 1, 2, 3, 4 ][ 1 .. 2 ].to_a
+    s = S( I, 4 ).indgen( 1 )[]
+    assert_equal [ 2, 3 ], s[ 1 .. 2 ].to_a
+    assert_equal [ 2, 3 ], s[ 1 ... 3 ].to_a
+    s[ 1 .. 2 ] = 0
+    assert_equal [ 1, 0, 0, 4 ], s.to_a
+    s[ 1 ... 3 ] = 5
+    assert_equal [ 1, 5, 5, 4 ], s.to_a
+    s[ 1 .. 2 ] = S[ 6, 7 ]
+    assert_equal [ 1, 6, 7, 4 ], s.to_a
+    s[ 1 ... 3 ] = S[ 8, 9 ]
+    assert_equal [ 1, 8, 9, 4 ], s.to_a
   end
 
   def test_equal

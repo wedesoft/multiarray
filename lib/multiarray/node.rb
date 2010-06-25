@@ -427,10 +427,13 @@ module Hornetseye
     def []( *indices )
       if indices.empty?
         force
-      elsif indices.last.is_a? Range
-        slice( indices.last.min, indices.last.size )[ *indices[ 0 ... -1 ] ]
       else
-        element( indices.last )[ *indices[ 0 ... -1 ] ]
+        if indices.last.is_a? Range
+          view = slice indices.last.min, indices.last.size
+        else
+          view = element indices.last
+        end
+        view[ *indices[ 0 ... -1 ] ]
       end
     end
 
@@ -448,7 +451,12 @@ module Hornetseye
       if indices.empty?
         store value
       else
-        element( indices.last )[ *indices[ 0 ... -1 ] ] = value
+        if indices.last.is_a? Range
+          view = slice indices.last.min, indices.last.size
+        else
+          view = element indices.last
+        end
+        view[ *indices[ 0 ... -1 ] ] = value
       end
     end
 
@@ -570,13 +578,23 @@ module Hornetseye
     # Equality operator
     #
     # @return [FalseClass,TrueClass] Returns result of comparison.
-    def ==( other )
-      if other.is_a? Node and other.array_type == array_type
-        Hornetseye::eager { eq( other ).inject( true ) { |a,b| a.and b } }
+    def eq_with_multiarray( other )
+      if other.is_a? Node
+        if variables.empty?
+          if other.array_type == array_type
+            Hornetseye::eager { eq( other ).inject( true ) { |a,b| a.and b } }
+          else
+            false
+          end
+        else
+          eq_without_multiarray other
+        end
       else
         false
       end
     end
+
+    alias_method_chain :==, :multiarray, :eq
 
     # Apply accumulative operation over elements diagonally
     #

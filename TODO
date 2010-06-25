@@ -1,6 +1,5 @@
-# comparison of indices in Lookup#skip doesn't work
-# test passing ranges as elements
-# test transpose
+# test slicing on results of lazy operations
+# test transpose, roll, and unroll
 # m - m for 3D arrays -> too many arguments
 # test element operation on lazy unary, binary, and inject
 # compile Convolve#demand
