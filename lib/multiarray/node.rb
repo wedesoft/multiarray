@@ -391,7 +391,7 @@ module Hornetseye
     def transpose( *order )
       term = self
       variables = shape.reverse.collect do |i|
-        var = Variable.new INDEX( i )
+        var = Variable.new Hornetseye::INDEX( i )
         term = term.element var
         var
       end.reverse

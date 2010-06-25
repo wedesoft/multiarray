@@ -1,4 +1,7 @@
-# accept ranges for element access
+# comparison of indices in Lookup#skip doesn't work
+# test passing ranges as elements
+# test transpose
+# m - m for 3D arrays -> too many arguments
 # test element operation on lazy unary, binary, and inject
 # compile Convolve#demand
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
