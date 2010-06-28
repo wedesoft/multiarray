@@ -1,7 +1,6 @@
 # compile Convolve#demand
 # test slicing on results of lazy operations
 # unify lookup and skip?
-# m - m for 3D arrays -> too many arguments
 # test element operation on lazy unary, binary, and inject
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # Composite numbers?

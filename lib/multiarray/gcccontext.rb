@@ -75,18 +75,14 @@ end
 EOS
 
       @wrappers << <<EOS
-VALUE wrap#{descriptor.capitalize}( VALUE rbSelf#{
-( 0 ... param_types.size ).inject '' do |s,i|
-   s << ", VALUE rbParam#{i}"
-end
-} )
+VALUE wrap#{descriptor.capitalize}( int argc, VALUE *argv, VALUE rbSelf )
 {
   #{descriptor}(#{
 if param_types.empty?
   ''
 else
   s = ' ' + ( 0 ... param_types.size ).collect do |i|
-    param_types[ i ].r2c "rbParam#{i}"
+    param_types[ i ].r2c "argv[ #{i} ]"
   end.join( ', ' ) + ' '
 end
 });
@@ -97,7 +93,7 @@ EOS
       @registrations << <<EOS
   rb_define_singleton_method( cGCCCache, "#{descriptor}",
                               RUBY_METHOD_FUNC( wrap#{descriptor.capitalize} ),
-                              #{param_types.size} ); 
+                              -1 ); 
 EOS
     end
     def compile
