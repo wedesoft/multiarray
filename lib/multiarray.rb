@@ -458,7 +458,7 @@ module Hornetseye
     Thread.current[ :lazy ] = true
     begin
       options = shape.last.is_a?( Hash ) ? shape.pop : {}
-      arity = options[ :arity ] || action.arity
+      arity = options[ :arity ] || [ action.arity, shape.size ].max
       if arity <= 0
         action.call
       else
@@ -506,7 +506,7 @@ module Hornetseye
   # @return [Object,Node] Sum of values.
   def sum( *shape, &action )
     options = shape.last.is_a?( Hash ) ? shape.pop : {}
-    arity = options[ :arity ] || action.arity
+    arity = options[ :arity ] || [ action.arity, shape.size ].max
     if arity <= 0
       action.call
     else

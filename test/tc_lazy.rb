@@ -43,11 +43,24 @@ class TC_Lazy < Test::Unit::TestCase
 
   def setup
     @s = S[ -1, 2, 3, 5, 7 ]
-    @m = 2 * 10 ** 6
-    @n = 10 ** 6
+    @m = M[ [ -1, 2, 3 ], [ 4, 5, 6 ] ]
+    @w = 2 * 10 ** 6
+    @h = 10 ** 6
   end
 
   def teardown
+  end
+
+  def test_const
+    assert_equal 0, lazy { 0 }
+    assert_equal [ 0, 0, 0 ], lazy( 3 ) { 0 }.to_a
+    assert_equal [ 0, 0, 0 ], lazy( 3 ) { |i| 0 }.to_a
+  end
+
+  def test_index
+    assert_equal [ 0, 1, 2 ], lazy( 3 ) { |i| i }.to_a
+    assert_equal [ [ 0, 1, 2 ], [ 0, 1, 2 ] ], lazy( 3, 2 ) { |i,j| i }.to_a
+    assert_equal [ [ 0, 0, 0 ], [ 1, 1, 1 ] ], lazy( 3, 2 ) { |i,j| j }.to_a
   end
 
   def test_minus_at
@@ -67,14 +80,14 @@ class TC_Lazy < Test::Unit::TestCase
   end
 
   def test_index_at
-    assert_equal 3, lazy { lazy( @n ) { |i| i }[ 3 ] }
-    assert_equal 5, lazy { lazy( @m, @n ) { |i,j| 2 * i + j }[ 2, 1 ] }
+    assert_equal 3, lazy { lazy( @h ) { |i| i }[ 3 ] }
+    assert_equal 5, lazy { lazy( @w, @h ) { |i,j| 2 * i + j }[ 2, 1 ] }
   end
 
   def test_index_slice
-    assert_equal [ 3, 4, 5 ], lazy { lazy( @n ) { |i| i }[ 3 .. 5 ] }.to_a
+    assert_equal [ 3, 4, 5 ], lazy { lazy( @h ) { |i| i }[ 3 .. 5 ] }.to_a
     assert_equal [ [ 5, 7, 9 ], [ 6, 8, 10 ] ],
-      lazy { lazy( @m, @n ) { |i,j| 2 * i + j }[ 2 .. 4, 1 .. 2 ] }.to_a
+      lazy { lazy( @w, @h ) { |i,j| 2 * i + j }[ 2 .. 4, 1 .. 2 ] }.to_a
   end
 
 end

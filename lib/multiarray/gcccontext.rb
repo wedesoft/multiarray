@@ -36,10 +36,12 @@ module Hornetseye
 
     @@lib_name = 'hornetseye_aaaaaaaa'
 
-    # while File.exist? "#{DIRNAME}/#{@@lib_name}.so"
-    #   require "#{DIRNAME}/#{@@lib_name}.so"        
-    #   @@lib_name = @@lib_name.succ
-    # end
+    if ENV[ 'HORNETSEYE_PRELOAD_CACHE' ]
+      while File.exist? "#{DIRNAME}/#{@@lib_name}.so"
+        require "#{DIRNAME}/#{@@lib_name}.so"        
+        @@lib_name = @@lib_name.succ
+      end
+    end
 
     class << self
 

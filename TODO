@@ -1,20 +1,17 @@
 # sum { |k| lazy( 5, 4 ) { |i,j| 2 * i + j }[k] }
 # compile Convolve#demand
 # unify lookup and skip?
-# test element operation on lazy inject
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # Composite numbers?
 # pointer-increments for better efficiency
 # implement typecasts, how does contiguous work here?
 # separate secondary operations like equality
 # preload cache
-# Sequence( UBYTE, 3 )[ ... ]
+# Sequence( UBYTE, 3 )[ 0, 1, 2 ]
 
 # histogram (implement using injection)
 # inject: min, max, equal, n-d clips for warp
 # block(var1,var2,...) with smart subst?
-# lazy( 5 ) { |i| 0 } # but lazy { 0 }
-# lazy( 3, 2 ) { |i,j| i }
 # lazy( 3, 2 ) { |i,j| j.to_object }
 
 # RSpec
