@@ -126,6 +126,10 @@ module Hornetseye
       @value.send self.class.operation
     end
 
+    def skip( index, start )
+      @value.skip( index, start ).send self.class.operation
+    end
+
     # Get element of unary operation
     #
     # @param [Integer,Node] i Index of desired element.
@@ -135,8 +139,8 @@ module Hornetseye
       @value.element( i ).send self.class.operation
     end
 
-    def skip( index, start )
-      @value.skip( index, start ).send self.class.operation
+    def slice( start, length )
+      @value.slice( start, length ).send self.class.operation
     end
 
     # Check whether this term is compilable

@@ -128,6 +128,12 @@ module Hornetseye
       @value1.send self.class.operation, @value2
     end
 
+    def skip( index, start )
+      element1 = @value1.skip( index, start )
+      element2 = @value2.skip( index, start )
+      element1.send self.class.operation, element2
+    end
+
     # Get element of unary operation
     #
     # @param [Integer,Node] i Index of desired element.
@@ -139,9 +145,11 @@ module Hornetseye
       element1.send self.class.operation, element2
     end
 
-    def skip( index, start )
-      element1 = @value1.skip( index, start )
-      element2 = @value2.skip( index, start )
+    def slice( start, length )
+      element1 = @value1.dimension == 0 ? @value1 :
+                                          @value1.slice( start, length )
+      element2 = @value2.dimension == 0 ? @value2 :
+                                          @value2.slice( start, length )
       element1.send self.class.operation, element2
     end
 

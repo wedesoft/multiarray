@@ -1,7 +1,7 @@
+# sum { |k| lazy( 5, 4 ) { |i,j| 2 * i + j }[k] }
 # compile Convolve#demand
-# test slicing on results of lazy operations
 # unify lookup and skip?
-# test element operation on lazy unary, binary, and inject
+# test element operation on lazy inject
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # Composite numbers?
 # pointer-increments for better efficiency
