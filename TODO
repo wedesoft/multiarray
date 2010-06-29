@@ -1,13 +1,12 @@
 # sum { |k| lazy( 5, 4 ) { |i,j| 2 * i + j }[k] }
 # compile Convolve#demand
 # unify lookup and skip?
-# inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 # Composite numbers?
 # pointer-increments for better efficiency
 # implement typecasts, how does contiguous work here?
 # separate secondary operations like equality
-# preload cache
 # Sequence( UBYTE, 3 )[ 0, 1, 2 ]
+# inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 
 # histogram (implement using injection)
 # inject: min, max, equal, n-d clips for warp
