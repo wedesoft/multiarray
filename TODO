@@ -1,4 +1,5 @@
-# sum { |k| lazy( 5, 4 ) { |i,j| 2 * i + j }[k] }
+# sum { |k| lazy( 4, 3 ) { |i,j| i }[ k ] } # [ 0, 3, 6, 9 ]
+# sum { |k| lazy( 4, 3 ) { |i,j| j }[ k ] } # [ 3, 3, 3, 3 ]
 # compile Convolve#demand
 # unify lookup and skip?
 # Composite numbers?

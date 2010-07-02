@@ -147,6 +147,14 @@ module Hornetseye
       @function << "#{@function.indent}};\n"
     end
 
+    def coerce( other )
+      if other.is_a? GCCValue
+        return other, self
+      else
+        return GCCValue.new( @function, "( #{other} )" ), self
+      end
+    end
+
   end
 
 end

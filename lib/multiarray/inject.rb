@@ -97,18 +97,17 @@ module Hornetseye
     #
     # @private
     def strip
-      vars1, values1, term1 = @value.strip
+      meta_vars, meta_values, var = @index.strip
+      vars1, values1, term1 = @value.subst( @index => var ).strip
       if @initial
         vars2, values2, term2 = @initial.strip
       else
         vars2, values2 = [], [], nil
       end
       vars3, values3, term3 = @block.strip
-      meta_vars, meta_values, var = @index.strip
       return vars1 + vars2 + vars3 + meta_vars,
         values1 + values2 + values3 + meta_values,
-        Inject.new( term1.subst( @index => var ),
-                    var, term2, term3, @var1, @var2 )
+        Inject.new( term1, var, term2, term3, @var1, @var2 )
     end
  
     # Substitute variables
