@@ -52,7 +52,11 @@ module Hornetseye
     #
     # @param [Object] value Initial value for element.
     def initialize( value = self.class.default )
-      @value = value
+      if Thread.current[ :function ].nil? or value.is_a? GCCValue
+        @value = value
+      else
+        @value = GCCValue.new Thread.current[ :function ], value.to_s
+      end
     end
 
     # Get unique descriptor of this object

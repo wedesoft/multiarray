@@ -41,6 +41,10 @@ class TC_Lazy < Test::Unit::TestCase
     Hornetseye::lazy *args, &action
   end
 
+  def sum( *args, &action )
+    Hornetseye::sum *args, &action
+  end
+
   def setup
     @s = S[ -1, 2, 3, 5, 7 ]
     @m = M[ [ -1, 2, 3 ], [ 4, 5, 6 ] ]
@@ -88,6 +92,12 @@ class TC_Lazy < Test::Unit::TestCase
     assert_equal [ 3, 4, 5 ], lazy { lazy( @h ) { |i| i }[ 3 .. 5 ] }.to_a
     assert_equal [ [ 5, 7, 9 ], [ 6, 8, 10 ] ],
       lazy { lazy( @w, @h ) { |i,j| 2 * i + j }[ 2 .. 4, 1 .. 2 ] }.to_a
+  end
+
+  def test_index_inject
+    assert_equal 10, lazy( 5 ) { |i| i }.inject { |a,b| a + b }
+    assert_equal [ 0, 3, 6, 9 ], sum { |k| lazy( 4, 3 ) { |i,j| i }[ k ] }.to_a
+    assert_equal [ 3, 3, 3, 3 ], sum { |k| lazy( 4, 3 ) { |i,j| j }[ k ] }.to_a
   end
 
 end
