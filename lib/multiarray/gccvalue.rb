@@ -32,19 +32,6 @@ module Hornetseye
       @descriptor
     end
 
-    # Store result of computation in new variable
-    #
-    # @return [Node,Object] Result of computation
-    #
-    # @see #force
-    #
-    # @private
-    def duplicate( typecode )
-      result = @function.variable( typecode, 'v' ).get
-      result.store self
-      result
-    end
-
     def store( value )
       @function << "#{@function.indent}#{self} = #{value};\n"
       value
