@@ -83,7 +83,7 @@ module Hornetseye
         value.get.store get
         value
       else
-        self.class.new @value
+        self.class.new get
       end
     end
 
