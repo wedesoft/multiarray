@@ -78,8 +78,10 @@ module Hornetseye
     #
     # @private
     def dup
-      if @value.respond_to? :duplicate
-        self.class.new @value.duplicate( self.class )
+      if Thread.current[ :function ]
+        value = Thread.current[ :function ].variable self.class, 'v'
+        value.get.store get
+        value
       else
         self.class.new @value
       end

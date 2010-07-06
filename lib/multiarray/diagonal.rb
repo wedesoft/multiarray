@@ -71,8 +71,7 @@ module Hornetseye
           sub = @value.subst( @index1 => INT.new( i ),
                               @index2 => INT.new( j ) ).simplify
           retval = retval ? @block.subst( @var1 => retval,
-                                          @var2 => sub ).simplify :
-            sub
+                                          @var2 => sub ).simplify : sub
         end
       end
       retval
