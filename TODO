@@ -1,3 +1,4 @@
+# Sequence[ 0, 1, 0 ].convolve Sequence[ 1, 2, 3 ]
 # compile Diagonal#demand
 # unify lookup and skip?
 # Composite numbers?
@@ -14,7 +15,6 @@
 
 # RSpec
 
-# thesis2.tex !!!
 # downsampling after correlation?
 # YARD documentation with pictures, demo video
 # CK_Thesis.pdf: tensor voting
