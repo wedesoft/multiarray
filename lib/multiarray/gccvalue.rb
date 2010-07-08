@@ -144,6 +144,15 @@ module Hornetseye
       @function << "#{@function.indent}};\n"
     end
 
+    def upto( other, &action )
+      i = @function.variable INT, 'i'
+      @function << "#{@function.indent}for ( #{i.get} = #{self}; #{i.get} != #{ other + 1 }; #{i.get}++ ) {\n"
+      @function.indent_offset +1
+      action.call i.get
+      @function.indent_offset -1
+      @function << "#{@function.indent}};\n"
+    end
+
     def coerce( other )
       if other.is_a? GCCValue
         return other, self

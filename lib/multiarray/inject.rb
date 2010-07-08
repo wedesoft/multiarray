@@ -59,8 +59,8 @@ module Hornetseye
         end
       else
         retval = @value.subst( @index => INT.new( 0 ) ).simplify # !!!
-        ( @index.size - 1 ).get.times do |i|
-          sub = @value.subst( @index => INT.new( i ) + 1 ).simplify # !!!
+        INT.new( 1 ).get.upto @index.size.get - 1 do |i|
+          sub = @value.subst( @index => INT.new( i ) ).simplify # !!!
           retval.store @block.subst( @var1 => retval,
                                      @var2 => sub ) #.simplify
         end
