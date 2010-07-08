@@ -38,18 +38,8 @@ module Hornetseye
       end
 
       def []( *args )
-        retval = Node.fit( args ).new
-        recursion = proc do |element,args|
-          if element.dimension > 0
-            args.each_with_index do |arg,i|
-              recursion.call element.element( i ), arg
-            end
-          else
-            element[] = args
-          end
-        end
-        recursion.call retval, args
-        retval
+        target = Node.fit args
+        target[ *args ]
       end
 
     end

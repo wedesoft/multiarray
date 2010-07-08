@@ -1,11 +1,16 @@
-# Sequence[ 0, 1, 0 ].convolve Sequence[ 1, 2, 3 ]
 # compile Diagonal#demand
+include Hornetseye
+m = MultiArray.new OBJECT, 3, 3
+m[] =  MultiArray[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+m.diagonal { |a,b| a + b } # [ 6, 15, 14 ]
+
+# Sequence[ 0, 1, 0 ].convolve Sequence[ 1, 2, 3 ]
+# MultiArray[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ].diagonal { |a,b| a + b }
 # unify lookup and skip?
 # Composite numbers?
 # pointer-increments for better efficiency
 # implement typecasts, how does contiguous work here?
 # separate secondary operations like equality
-# Sequence( UBYTE, 3 )[ 0, 1, 2 ]
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
 
 # histogram (implement using injection)
@@ -59,45 +64,12 @@
 #  end
 #end
 
-
-lazy { a * b } -> lazy { |i,j| lazy { |i,j| a[i,j] * b[i,j] }[i,j] } # ?
-lazy { s } -> s
-lazy { -s } -> lazy { |i| -s[i] }
-lazy { |i,j| s[i,j] }
-lazy { |i| lazy { |j| s[i,j] } }
-lazy( n ) { |i| i }
-lazy( n, m ) { |i,j| i + j }
-lazy( n ) { |i| lazy( m ) { |j| i + j } }
-eager( n ) { |i| i }
-...
-
-tensor indices to enable transpose of lazy array
 ranges (rolling, lazy rolling, lazy ranges)
-test lazyness
-sums/injections (equality for arrays)? nesting? tensors?
-JIT?
 test type conversions
-fancy README
 
-a = lazy( 16 ) { |i| i }
-a = lazy( 16 ) { |i| i }[ 4 ... 12 ]  # offsets: apply sel-operation to all
-                                        members; index array?
 a = lazy( 16, 32 ) { |i,j| Sequence[ i, j ] } # ???
 a = lazy( 8, 8 ) { |i,j| Sequence[ i, a[j] * sin( i + b[j] ) ] }.hist 8, 8
-a = b.class.new.op { |x| set -x }
-a = lazy { |i| -b[i] }
-a = lazy { -b }
-a = array { -b }
-a = array { |i| -b[i] }
-a = array( :dim => [ b.size ] ) { |i| -b[i] }
-a = -b
-array { |i| sum { |j| a[i,j] } }
-lazy { |i| sum { |j| a[i,j] } }
 parallel { ... }
-lazy { |i| lazy { |j| a[i,j] } }
-array { lazy { |i| sum { |j| a[i,j] } } }
-
-correlate?
 
 lines:
 [ i, a[j] * sin( i + b[j] ) ].hist
@@ -120,19 +92,3 @@ Lazy( Sequence( INT, 3 ) )
 
 interpretation: type coercion, actual operation, jit,
 collection of jit arguments (e.g. tensor)
-
-proc { |i| proc { |j| i+j } }.call( 5 ).call 3
-
-gem install flay: http://ruby.sadi.st/Flay.html
-
-# donate to yardoc
-
-How to nest/cascade mode-environments?
-(how to specify nested modes for recursive algorithms and called algorithms?)
-ruby and jit compiles, lazy and parallel forwards
-
-* Ruby
-* Lazy (Lazy histogram -> hough transform, lazy transpose, unused indices?)
-* Multithreading
-* JIT
-* GCC

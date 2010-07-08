@@ -66,6 +66,8 @@ class TC_MultiArray < Test::Unit::TestCase
   def test_multiarray_at
     assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
                  M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].to_a
+    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
+                 M( O, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].to_a
     assert_equal O, M[ [ :a ] ].typecode
     assert_equal B, M[ [ false ], [ true ] ].typecode
     assert_equal I, M[ [ -2 ** 31, 2 ** 31 - 1 ] ].typecode

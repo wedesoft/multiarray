@@ -44,9 +44,7 @@ module Hornetseye
         target = Node.fit args
         target = Hornetseye::Sequence target, 0 if target.dimension == 0
         target = Hornetseye::Sequence OBJECT, args.size if target.dimension > 1
-        retval = target.new
-        args.each_with_index { |arg,i| retval[ i ] = arg }
-        retval
+        target[ *args ]
       end
 
     end
@@ -83,6 +81,21 @@ module Hornetseye
           element_type.size * increment * i +
             element_type.indgen( offset, increment )
         end
+      end
+
+      def []( *args )
+        retval = new
+        recursion = proc do |element,args|
+          if element.dimension > 0
+            args.each_with_index do |arg,i|
+              recursion.call element.element( i ), arg
+            end
+          else
+            element[] = args
+          end
+        end
+        recursion.call retval, args
+        retval
       end
 
       def shape

@@ -62,6 +62,13 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sequence_at
+    assert_equal "Sequence(INT,3):\n[ 1, 2, 3 ]",
+                 S( I, 3 )[ 1, 2, 3 ].inspect
+    assert_equal "Sequence(OBJECT,3):\n[ 1, 2, 3 ]",
+                 S( O, 3 )[ 1, 2, 3 ].inspect
+  end
+
+  def test_sequence_at
     assert_equal [ 1, 2, 3 ], S[ 1, 2, 3 ].to_a
     assert_equal O, S[ :a ].typecode
     assert_equal B, S[ false, true ].typecode
@@ -91,6 +98,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_typecode
     assert_equal O, S.new( O, 3 ).typecode
+    assert_equal I, S.new( I, 3 ).typecode
   end
 
   def test_dimension
@@ -107,11 +115,14 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_at_assign
     s = S.new O, 3
+    t = S.new I, 3
     for i in 0 ... 3
       assert_equal i + 1, s[ i ] = i + 1
+      assert_equal i + 1, t[ i ] = i + 1
     end
     for i in 0 ... 3
       assert_equal i + 1, s[ i ]
+      assert_equal i + 1, t[ i ]
     end
   end
 
@@ -138,8 +149,10 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_inject
-    assert_equal 6, S[ 1, 2, 3 ].inject { |a,b| a + b }
-    assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
+    assert_equal 6, S( I, 3 )[ 1, 2, 3 ].inject { |a,b| a + b }
+    assert_equal 10, S( I, 3 )[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
+    assert_equal 6, S( O, 3 )[ 1, 2, 3 ].inject { |a,b| a + b }
+    assert_equal 10, S( O, 3 )[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
   end
 
   def test_sum
