@@ -63,19 +63,34 @@ module Hornetseye
     # @private
     def demand
       retval = @initial
-      offset = @index2.size.get / 2
-      @index2.size.get.times do |j|
-        k = j - offset
-        i = @index0.get - k
-        if i >= 0 and i < @index1.size.get
-          sub = @value.subst( @index1 => INT.new( i ),
-                              @index2 => INT.new( j ) ).simplify
-          retval = retval ? @block.subst( @var1 => retval,
-                                          @var2 => sub ).simplify : sub
-        end
+      s1 = @index2.size / 2
+      # s2 = ( @index2.size + 1 ) / 2
+      INT.new( 0 ).major( @index0 + s1 + 1 - @index1.size ).
+        upto ( @index2.size - 1 ).minor( @index0 + s1 ) do |j|
+        i = @index0.get + s1.get - j
+        sub = @value.subst( @index1 => INT.new( i ),
+                            @index2 => INT.new( j ) ).simplify
+        retval = retval ? @block.subst( @var1 => retval,
+                                        @var2 => sub ).simplify : sub
       end
       retval
     end
+
+    #def demand
+    #  retval = @initial
+    #  offset = @index2.size.get / 2
+    #  @index2.size.times do |j|
+    #    k = j - offset
+    #    i = @index0.get - k
+    #    if i >= 0 and i < @index1.size.get
+    #      sub = @value.subst( @index1 => INT.new( i ),
+    #                          @index2 => INT.new( j ) ).simplify
+    #      retval = retval ? @block.subst( @var1 => retval,
+    #                                      @var2 => sub ).simplify : sub
+    #    end
+    #  end
+    #  retval
+    #end
 
     # Get element of diagonal injection
     #

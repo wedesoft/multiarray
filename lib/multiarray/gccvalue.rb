@@ -142,6 +142,7 @@ module Hornetseye
       action.call i.get
       @function.indent_offset -1
       @function << "#{@function.indent}};\n"
+      self
     end
 
     def upto( other, &action )
@@ -151,6 +152,7 @@ module Hornetseye
       action.call i.get
       @function.indent_offset -1
       @function << "#{@function.indent}};\n"
+      self
     end
 
     def coerce( other )

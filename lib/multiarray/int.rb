@@ -178,6 +178,16 @@ module Hornetseye
 
     end
 
+    def times( &action )
+      get.times &action
+      self
+    end
+
+    def upto( other, &action )
+      get.upto other.get, &action
+      self
+    end
+
     # Namespace containing method for matching elements of type INT_
     #
     # @see INT_
