@@ -414,6 +414,28 @@ class Range
 
 end
 
+class Numeric
+
+  def major( other )
+    if other.is_a? Numeric
+      ( self >= other ).conditional self, other
+    else
+      x, y = other.coerce self
+      x.major other
+    end
+  end
+
+  def minor( other )
+    if other.is_a? Numeric
+      ( self <= other ).conditional self, other
+    else
+      x, y = other.coerce self
+      x.minor other
+    end
+  end
+
+end
+
 require 'malloc'
 require 'rbconfig'
 require 'set'

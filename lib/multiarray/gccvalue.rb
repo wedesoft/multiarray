@@ -117,6 +117,16 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) / ( #{other} )"
     end
 
+    def major( other )
+      GCCValue.new @function,
+        "( ( #{self} ) >= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
+    end
+
+    def minor( other )
+      GCCValue.new @function,
+        "( ( #{self} ) <= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
+    end
+
     def zero?
       GCCValue.new @function, "( #{self} ) == 0"
     end
