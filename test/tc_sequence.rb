@@ -149,10 +149,10 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_inject
-    assert_equal 6, S( I, 3 )[ 1, 2, 3 ].inject { |a,b| a + b }
-    assert_equal 10, S( I, 3 )[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
-    assert_equal 6, S( O, 3 )[ 1, 2, 3 ].inject { |a,b| a + b }
-    assert_equal 10, S( O, 3 )[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
+    assert_equal 6, S[ 1, 2, 3 ].inject { |a,b| a + b }
+    assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
+    assert_equal 'abc', S[ 'a', 'b', 'c' ].inject { |a,b| a + b }
+    assert_equal 'abcd', S[ 'b', 'c', 'd' ].inject( 'a' ) { |a,b| a + b }
   end
 
   def test_sum
