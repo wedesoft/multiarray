@@ -254,6 +254,18 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ 2, 3, 5 ], S[ 1, 2, 3 ] + S[ 1, 1, 2 ]
   end
 
+  def test_major
+    assert_equal [ 2, 2, 3 ], S[ 1, 2, 3 ].major( 2 ).to_a
+    assert_equal [ 2, 2, 3 ], 2.major( S[ 1, 2, 3 ] ).to_a
+    assert_equal [ 3, 2, 3 ], S[ 1, 2, 3 ].major( S[ 3, 2, 1 ] ).to_a
+  end
+
+  def test_minor
+    assert_equal [ 1, 2, 2 ], S[ 1, 2, 3 ].minor( 2 ).to_a
+    assert_equal [ 1, 2, 2 ], 2.minor( S[ 1, 2, 3 ] ).to_a
+    assert_equal [ 1, 2, 1 ], S[ 1, 2, 3 ].minor( S[ 3, 2, 1 ] ).to_a
+  end
+
   def test_default
     assert_equal [ nil, nil, nil ], S( O, 3 ).default.to_a
     assert_equal [ 0, 0, 0 ], S( I, 3 ).default.to_a

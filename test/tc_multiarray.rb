@@ -326,6 +326,16 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ -1, 2, 3 ], [ 4, 5, 6 ] ]
   end
 
+  def test_major
+    assert_equal M[ [ 4, 2 ], [ 3, 4 ] ],
+                 M[ [ 1, 2 ], [ 3, 4 ] ].major( M[ [ 4, 1 ], [ 3, 2 ] ] )
+  end
+
+  def test_minor
+    assert_equal M[ [ 1, 1 ], [ 3, 2 ] ],
+                 M[ [ 1, 2 ], [ 3, 4 ] ].minor( M[ [ 4, 1 ], [ 3, 2 ] ] )
+  end
+
   def test_default
     assert_equal [ [ nil, nil, nil ], [ nil, nil, nil ] ],
                  M( O, 3, 2 ).default.to_a

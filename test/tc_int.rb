@@ -185,5 +185,15 @@ class TC_Int < Test::Unit::TestCase
     assert_equal I.new( 3 + 5 ), I.new( 3 ) + I.new( 5 )
   end
 
+  def test_major
+    assert_equal I.new( 4 ), I.new( 3 ).major( I.new( 4 ) )
+    assert_equal I.new( 5 ), I.new( 5 ).major( I.new( 3 ) )
+  end
+
+  def test_minor
+    assert_equal I.new( 3 ), I.new( 3 ).minor( I.new( 4 ) )
+    assert_equal I.new( 4 ), I.new( 5 ).minor( I.new( 4 ) )
+  end
+
 end
 

@@ -375,41 +375,63 @@ end
 # +Range+ is extended with a few methods
 class Range
 
-  alias_method :orig_min, :min
-
-  alias_method :orig_max, :max
-
   # For performance reasons a specialised method for integers is added
   #
   # @return [Object] Minimum value of range.
   #
   # @private
-  def min
+  def min_with_hornetseye
     if self.begin.is_a? Integer
       self.begin
     else
-      orig_min
+      min_without_hornetseye
     end
   end
+
+  alias_method_chain :min, :hornetseye
 
   # For performance reasons a specialised method for integers is added
   #
   # @return [Object] Maximum value of range.
   #
   # @private
-  def max
+  def max_with_hornetseye
     if self.end.is_a? Integer
       exclude_end? ? self.end - 1 : self.end
     else
-      orig_max
+      max_without_hornetseye
     end
   end
+
+  alias_method_chain :max, :hornetseye
 
   # Compute the size of a range
   #
   # @return [Integer] Number of discrete values within range.
   def size
     max + 1 - min
+  end
+
+end
+
+class Numeric
+
+  def major( other )
+    if other.is_a? Numeric
+      ( self >= other ).conditional self, other
+    else
+      x, y = other.coerce self
+      x.major other
+    end
+  end
+
+  def minor( other )
+    if other.is_a? Numeric
+      ( self <= other ).conditional self, other
+    else
+      x, y = other.coerce self
+      x.minor other
+    end
   end
 
 end

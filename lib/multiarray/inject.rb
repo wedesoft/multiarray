@@ -52,18 +52,15 @@ module Hornetseye
     def demand
       if @initial
         retval = @initial.simplify # !!!
-        @index.size.get.times do |i|
-          sub = @value.subst( @index => INT.new( i ) ).simplify # !!!
-          retval.store @block.subst( @var1 => retval,
-                                     @var2 => sub ) #.simplify
-        end
+        offset = INT.new 0
       else
         retval = @value.subst( @index => INT.new( 0 ) ).simplify # !!!
-        ( @index.size - 1 ).get.times do |i|
-          sub = @value.subst( @index => INT.new( i ) + 1 ).simplify # !!!
-          retval.store @block.subst( @var1 => retval,
-                                     @var2 => sub ) #.simplify
-        end
+        offset = INT.new 1
+      end
+      offset.upto @index.size - 1 do |i|
+        sub = @value.subst( @index => INT.new( i ) ).simplify # !!!
+        retval.store @block.subst( @var1 => retval,
+                                   @var2 => sub ) #.simplify
       end
       retval
     end

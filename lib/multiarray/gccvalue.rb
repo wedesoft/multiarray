@@ -117,6 +117,16 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) / ( #{other} )"
     end
 
+    def major( other )
+      GCCValue.new @function,
+        "( ( #{self} ) >= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
+    end
+
+    def minor( other )
+      GCCValue.new @function,
+        "( ( #{self} ) <= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
+    end
+
     def zero?
       GCCValue.new @function, "( #{self} ) == 0"
     end
@@ -132,6 +142,17 @@ module Hornetseye
       action.call i.get
       @function.indent_offset -1
       @function << "#{@function.indent}};\n"
+      self
+    end
+
+    def upto( other, &action )
+      i = @function.variable INT, 'i'
+      @function << "#{@function.indent}for ( #{i.get} = #{self}; #{i.get} != #{ other + 1 }; #{i.get}++ ) {\n"
+      @function.indent_offset +1
+      action.call i.get
+      @function.indent_offset -1
+      @function << "#{@function.indent}};\n"
+      self
     end
 
     def coerce( other )
