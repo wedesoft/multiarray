@@ -1,4 +1,4 @@
-# compile Diagonal#demand
+# compile Diagonal#demand, optimize Node#diagonal
 include Hornetseye
 m = MultiArray[ [ 'a1', 'a2', 'a3' ], [ 'b1', 'b2', 'b3' ], [ 'c1', 'c2', 'c3' ] ]
 m.diagonal { |a,b| a + b } # [ "b1a2", "c1b2a3", "c2b3" ]
