@@ -63,17 +63,16 @@ module Hornetseye
     # @private
     def demand
       s1 = @index2.size / 2
+      j0 = INT.new( 0 ).major( @index0 + s1 + 1 - @index1.size )
       if @initial
         retval = @initial
-        j0 = INT.new( 0 ).major( @index0 + s1 + 1 - @index1.size )
       else
-        j = INT.new( 0 ).major( @index0 + s1 + 1 - @index1.size )
-        i = @index0.get + s1.get - j.get
+        j = j0.get
+        i = @index0.get + s1.get - j
         retval = @value.subst( @index1 => INT.new( i ),
-                               @index2 => INT.new( j.get ) ).simplify
-        j0 = j + 1
+                               @index2 => INT.new( j ) ).simplify
+        j0 = ( j0 + 1 ).simplify
       end
-      # s2 = ( @index2.size + 1 ) / 2
       j0.upto ( @index2.size - 1 ).minor( @index0 + s1 ) do |j|
         i = @index0.get + s1.get - j
         sub = @value.subst( @index1 => INT.new( i ),
@@ -164,7 +163,6 @@ module Hornetseye
     def compilable?
       initial_compilable = @initial ? @initial.compilable? : true
       @value.compilable? and initial_compilable and @block.compilable?
-      false # !!!
     end
 
   end
