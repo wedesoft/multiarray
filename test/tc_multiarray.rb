@@ -215,19 +215,25 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_diagonal
-    assert_equal M[ 'b1a2', 'c1b2a3', 'c2b3' ],
+    assert_equal S[ 'b1a2', 'c1b2a3', 'c2b3' ],
                  M[ [ 'a1', 'a2', 'a3' ],
                     [ 'b1', 'b2', 'b3' ],
                     [ 'c1', 'c2', 'c3' ] ].diagonal { |a,b| a + b }
-    assert_equal M[ 'c1b2a3', 'c2b3a4', 'c3b4' ],
+    assert_equal S[ 'c1b2a3', 'c2b3a4', 'c3b4' ],
                  M[ [ 'a1', 'a2', 'a3', 'a4' ],
                     [ 'b1', 'b2', 'b3', 'b4' ],
                     [ 'c1', 'c2', 'c3', 'c4' ] ].diagonal { |a,b| a + b }
-    assert_equal M[ 'b1a2', 'c1b2a3', 'd1c2b3', 'd2c3' ],
+    assert_equal S[ 'xb1a2', 'xc1b2a3', 'xd1c2b3', 'xd2c3' ],
                  M[ [ 'a1', 'a2', 'a3' ],
                     [ 'b1', 'b2', 'b3' ],
                     [ 'c1', 'c2', 'c3' ],
-                    [ 'd1', 'd2', 'd3' ] ].diagonal { |a,b| a + b }
+                    [ 'd1', 'd2', 'd3' ] ].diagonal( 'x' ) { |a,b| a + b }
+    assert_equal S( I, 4 )[ 4, 12, 21, 18 ],
+                 M( I, 3, 4 ).indgen[].diagonal { |a,b| a + b } # !!!
+    assert_equal S( I, 3 )[ 4, 12, 12 ],
+                 M( I, 3, 3 ).indgen[].diagonal { |a,b| a + b } # !!!
+    assert_equal S( I, 2 )[ 4, 6 ],
+                 M( I, 3, 2 ).indgen[].diagonal { |a,b| a + b } # !!!
   end
 
   def test_convolve

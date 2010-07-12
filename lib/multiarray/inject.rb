@@ -58,9 +58,8 @@ module Hornetseye
         offset = INT.new 1
       end
       offset.upto @index.size - 1 do |i|
-        sub = @value.subst( @index => INT.new( i ) ).simplify # !!!
-        retval.store @block.subst( @var1 => retval,
-                                   @var2 => sub ) #.simplify
+        sub = @value.subst @index => INT.new( i )
+        retval.store @block.subst @var1 => retval, @var2 => sub
       end
       retval
     end

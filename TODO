@@ -1,19 +1,7 @@
-# optimize Node#diagonal
-include Hornetseye
-m = MultiArray[ [ 'a1', 'a2', 'a3' ], [ 'b1', 'b2', 'b3' ], [ 'c1', 'c2', 'c3' ] ]
-m.diagonal { |a,b| a + b } # [ "b1a2", "c1b2a3", "c2b3" ]
-
-m = MultiArray[ [ 'a1', 'a2', 'a3', 'a4' ], [ 'b1', 'b2', 'b3', 'b4' ], [ 'c1', 'c2', 'c3', 'c4' ] ]
-m.diagonal { |a,b| a + b } # [ "c1b2a3", "c2b3a4", "c3b4" ]
-
-m = MultiArray[ [ 'a1', 'a2', 'a3' ], [ 'b1', 'b2', 'b3' ], [ 'c1', 'c2', 'c3' ], [ 'd1', 'd2', 'd3' ] ]
-m.diagonal { |a,b| a + b } # [ "b1a2", "c1b2a3", "d1c2b3", "d2c3" ]
-
-# Sequence[ 0, 1, 0 ].convolve Sequence[ 1, 2, 3 ]
-# MultiArray[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ].diagonal { |a,b| a + b }
+# MultiArray( INT, 3, 2 ).indgen.diagonal { |a,b| a + b }
 # unify lookup and skip?
 # Composite numbers?
-# pointer-increments for better efficiency
+# pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?
 # separate secondary operations like equality
 # inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value

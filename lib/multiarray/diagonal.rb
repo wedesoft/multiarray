@@ -65,7 +65,7 @@ module Hornetseye
       s1 = @index2.size / 2
       j0 = INT.new( 0 ).major( @index0 + s1 + 1 - @index1.size )
       if @initial
-        retval = @initial
+        retval = @initial.simplify
       else
         j = j0.get
         i = @index0.get + s1.get - j
@@ -75,9 +75,8 @@ module Hornetseye
       end
       j0.upto ( @index2.size - 1 ).minor( @index0 + s1 ) do |j|
         i = @index0.get + s1.get - j
-        sub = @value.subst( @index1 => INT.new( i ),
-                            @index2 => INT.new( j ) ).simplify
-        retval.store @block.subst( @var1 => retval, @var2 => sub ).simplify
+        sub = @value.subst @index1 => INT.new( i ), @index2 => INT.new( j ) 
+        retval.store @block.subst @var1 => retval, @var2 => sub
       end
       retval
     end
@@ -149,7 +148,7 @@ module Hornetseye
       subst_var2 = @index2.subst hash
       value = @value.subst( @index0 => subst_var0, @index1 => subst_var1,
                             @index2 => subst_var2 ).subst hash
-      initial = @intial ? @initial.subst( hash ) : nil
+      initial = @initial ? @initial.subst( hash ) : nil
       block = @block.subst hash
       Diagonal.new value, subst_var0, subst_var1, subst_var2, initial,
         block, @var1, @var2
