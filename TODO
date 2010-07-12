@@ -52,9 +52,6 @@ m.diagonal { |a,b| a + b } # [ "b1a2", "c1b2a3", "d1c2b3", "d2c3" ]
 # binary operations, equality: ( a == b ).inject( true ) { |e,b| e && b }
 # inject: min, max, equal, n-d clips for warp
 # block(var1,var2,...) with smart subst?
-# lazy( 5 ) { |i| 0 }
-# lazy( 3, 2 ) { |i,j| i }
-# lazy( 3, 2 ) { |i,j| j }
 
 # downsampling after correlation?
 # ruby -Ilib -rrubygems -rmultiarray -rtest test/tc_sequence.rb

@@ -160,7 +160,7 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 1, 2, 3 ], sum { || S[ 1, 2, 3 ] }.to_a
   end
 
-  def dont_test_convolve
+  def test_convolve
     assert_equal S[ 2, 3, 0, 0, 0 ],
                  S[ 1, 0, 0, 0, 0 ].convolve( S[ 1, 2, 3 ] )
     assert_equal S[ 1, 2, 3, 0, 0 ],

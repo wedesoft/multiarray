@@ -214,7 +214,7 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal [ [ 1, 2, 3 ] , [ 4, 5, 6 ] ], sum { || m }.to_a
   end
 
-  def dont_test_convolve
+  def test_convolve
     f = M[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
     assert_equal M[ [ 5, 6, 0 ], [ 8, 9, 0 ], [ 0, 0, 0 ] ],
                  M[ [ 1, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ] ].convolve( f )

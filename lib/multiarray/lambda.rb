@@ -113,6 +113,10 @@ module Hornetseye
                          skip( index, start ) ).unroll
     end
 
+    def compilable?
+      @term.compilable?
+    end
+
   end
 
 end
