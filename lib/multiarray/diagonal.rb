@@ -37,12 +37,12 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      hash = hash.merge @index0 => ( ( hash.values.max || 0 ) + 1 )
+      #hash = hash.merge @index0 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @index1 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @index2 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var1 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var2 => ( ( hash.values.max || 0 ) + 1 )
-      "Diagonal(#{@value.descriptor( hash )},#{@initial ? @initial.descriptor( hash ) : 'nil'},#{@block.descriptor( hash )})"
+      "Diagonal(#{@value.descriptor( hash )},#{@index0.descriptor( hash )},#{@index1.descriptor( hash )},#{@index2.descriptor( hash )},#{@initial ? @initial.descriptor( hash ) : 'nil'},#{@block.descriptor( hash )})"
     end
 
     # Array type of this term
@@ -76,7 +76,7 @@ module Hornetseye
       j0.upto ( @index2.size - 1 ).minor( @index0 + s1 ) do |j|
         i = @index0.get + s1.get - j
         sub = @value.subst @index1 => INT.new( i ), @index2 => INT.new( j ) 
-        retval.store @block.subst @var1 => retval, @var2 => sub
+        retval.store @block.subst( @var1 => retval, @var2 => sub )
       end
       retval
     end
@@ -98,13 +98,7 @@ module Hornetseye
     # @private
     def variables
       initial_variables = @initial ? @initial.variables : Set[]
-      @value.variables + initial_variables - 
-        ( @index1.variables + @index2.variables )
-    end
-
-    def variables
-      initial_variables = @initial ? @initial.variables : Set[]
-      @value.variables + initial_variables - 
+      @value.variables + initial_variables + @index0.variables - 
         ( @index1.variables + @index2.variables )
     end
 
@@ -118,9 +112,10 @@ module Hornetseye
     #
     # @private
     def strip
-      vars1, values1, term1 = @value.strip
       meta_vars1, meta_values1, var1 = @index1.strip
       meta_vars2, meta_values2, var2 = @index2.strip
+      vars1, values1, term1 =
+        @value.subst( @index1 => var1, @index2 => var2 ).strip
       if @initial
         vars2, values2, term2 = @initial.strip
       else
@@ -129,8 +124,7 @@ module Hornetseye
       vars3, values3, term3 = @block.strip
       return vars1 + meta_vars1 + meta_vars2 + vars2 + vars3,
         values1 + meta_values1 + meta_values2 + values2 + values3,
-        Diagonal.new( term1.subst( @index1 => var1, @index2 => var2 ),
-                      @index0, var1, var2, term2, term3, @var1, @var2 )
+        Diagonal.new( term1, @index0, var1, var2, term2, term3, @var1, @var2 )
     end
 
     # Substitute variables

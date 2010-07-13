@@ -1,4 +1,3 @@
-# MultiArray( INT, 3, 2 ).indgen.diagonal { |a,b| a + b }
 # unify lookup and skip?
 # Composite numbers?
 # pointer-increments for better efficiency, optimize Node#diagonal

@@ -100,5 +100,10 @@ class TC_Lazy < Test::Unit::TestCase
     assert_equal [ 3, 3, 3, 3 ], sum { |k| lazy( 4, 3 ) { |i,j| j }[ k ] }.to_a
   end
 
+  def test_indgen_diagonal
+    assert_equal [ 15, 18, 17 ],
+                 M( I, 4, 3 ).indgen.diagonal { |a,b| a + b }.to_a
+  end
+
 end
 
