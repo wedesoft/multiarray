@@ -51,7 +51,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sequence_default
-    assert_equal [ O.default ] * 3, S( O, 3 ).default.to_a
+    assert_equal [ nil, nil, nil ], S( O, 3 ).default.to_a
+    assert_equal [ 0, 0, 0 ], S( I, 3 ).default.to_a
   end
 
   def test_sequence_indgen
@@ -114,30 +115,31 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_at_assign
-    s = S.new O, 3
-    t = S.new I, 3
-    for i in 0 ... 3
-      assert_equal i + 1, s[ i ] = i + 1
-      assert_equal i + 1, t[ i ] = i + 1
-    end
-    for i in 0 ... 3
-      assert_equal i + 1, s[ i ]
-      assert_equal i + 1, t[ i ]
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      s = t.new
+      for i in 0 ... 3
+        assert_equal i + 1, s[ i ] = i + 1
+      end
+      for i in 0 ... 3
+        assert_equal i + 1, s[ i ]
+      end
     end
   end
 
   def test_slice
-    s = S( I, 4 ).indgen( 1 )[]
-    assert_equal [ 2, 3 ], s[ 1 .. 2 ].to_a
-    assert_equal [ 2, 3 ], s[ 1 ... 3 ].to_a
-    s[ 1 .. 2 ] = 0
-    assert_equal [ 1, 0, 0, 4 ], s.to_a
-    s[ 1 ... 3 ] = 5
-    assert_equal [ 1, 5, 5, 4 ], s.to_a
-    s[ 1 .. 2 ] = S[ 6, 7 ]
-    assert_equal [ 1, 6, 7, 4 ], s.to_a
-    s[ 1 ... 3 ] = S[ 8, 9 ]
-    assert_equal [ 1, 8, 9, 4 ], s.to_a
+    [ S( O, 4 ), S( I, 4 ) ].each do |t|
+      s = t.indgen( 1 )[]
+      assert_equal [ 2, 3 ], s[ 1 .. 2 ].to_a
+      assert_equal [ 2, 3 ], s[ 1 ... 3 ].to_a
+      s[ 1 .. 2 ] = 0
+      assert_equal [ 1, 0, 0, 4 ], s.to_a
+      s[ 1 ... 3 ] = 5
+      assert_equal [ 1, 5, 5, 4 ], s.to_a
+      s[ 1 .. 2 ] = S[ 6, 7 ]
+      assert_equal [ 1, 6, 7, 4 ], s.to_a
+      s[ 1 ... 3 ] = S[ 8, 9 ]
+      assert_equal [ 1, 8, 9, 4 ], s.to_a
+    end
   end
 
   def test_equal
@@ -156,8 +158,10 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sum
-    assert_equal 6, sum { |i| S[ 1, 2, 3 ][ i ] }
-    assert_equal [ 1, 2, 3 ], sum { || S[ 1, 2, 3 ] }.to_a
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal 6, sum { |i| t[ 1, 2, 3 ][ i ] }
+      assert_equal [ 1, 2, 3 ], sum { || t[ 1, 2, 3 ] }.to_a
+    end
   end
 
   def test_convolve
@@ -207,14 +211,17 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_bitwise_not
-    assert_equal [ 255, 254, 253 ], ( ~S[ 0, 1, 2 ] ).to_a
-    assert_equal [ 0, -1, -2, -3 ], ( ~S[ -1, 0, 1, 2 ] ).to_a
+    [ S( O, 4 ), S( I, 4 ) ].each do |t|
+      assert_equal [ 0, -1, -2, -3 ], ( ~t[ -1, 0, 1, 2 ] ).to_a
+    end
   end
 
   def test_bitwise_and
-    assert_equal [ 0, 1, 0 ], ( S[ 0, 1, 2 ] & 1 ).to_a
-    assert_equal [ 0, 1, 0 ], ( 1 & S[ 0, 1, 2 ] ).to_a
-    assert_equal [ 0, 1, 0, 2 ], ( S[ 0, 1, 2, 3 ] & S[ 4, 3, 1, 2 ] ).to_a
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal [ 0, 1, 0 ], ( t[ 0, 1, 2 ] & 1 ).to_a
+      assert_equal [ 0, 1, 0 ], ( 1 & t[ 0, 1, 2 ] ).to_a
+      assert_equal [ 0, 1, 2 ], ( t[ 0, 1, 3 ] & t[ 4, 3, 2 ] ).to_a
+    end
   end
 
   def test_bitwise_or
@@ -272,11 +279,13 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_indgen
-    assert_equal [ 0, 1, 2 ], S( I, 3 ).indgen.to_a
-    assert_equal [ 1, 2, 3 ], ( S( I, 3 ).indgen + 1 ).to_a
-    assert_equal [ 1, 2, 3 ], S( I, 3 ).indgen( 1 ).to_a
-    assert_equal [ 1, 3, 5 ], ( 2 * S( I, 3 ).indgen + 1 ).to_a
-    assert_equal [ 1, 3, 5 ], S( I, 3 ).indgen( 1, 2 ).to_a
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal [ 0, 1, 2 ], t.indgen.to_a
+      assert_equal [ 1, 2, 3 ], ( t.indgen + 1 ).to_a
+      assert_equal [ 1, 2, 3 ], t.indgen( 1 ).to_a
+      assert_equal [ 1, 3, 5 ], ( 2 * t.indgen + 1 ).to_a
+      assert_equal [ 1, 3, 5 ], t.indgen( 1, 2 ).to_a
+    end
   end
 
 end
