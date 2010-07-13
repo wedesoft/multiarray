@@ -37,7 +37,6 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      #hash = hash.merge @index0 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @index1 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @index2 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var1 => ( ( hash.values.max || 0 ) + 1 )

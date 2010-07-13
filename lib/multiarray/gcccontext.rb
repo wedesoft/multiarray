@@ -123,7 +123,7 @@ EOS
       File.open "#{DIRNAME}/#{@lib_name}.c", 'w', 0600 do |f|
         f << template
       end
-      gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -o #{DIRNAME}/#{@lib_name}.so " +
+      gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -O -o #{DIRNAME}/#{@lib_name}.so " +
         "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
       strip = "#{STRIP} #{DIRNAME}/#{@lib_name}.so"
       # puts template
