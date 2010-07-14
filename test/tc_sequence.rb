@@ -165,18 +165,20 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_convolve
-    assert_equal S[ 2, 3, 0, 0, 0 ],
-                 S[ 1, 0, 0, 0, 0 ].convolve( S[ 1, 2, 3 ] )
-    assert_equal S[ 1, 2, 3, 0, 0 ],
-                 S[ 0, 1, 0, 0, 0 ].convolve( S[ 1, 2, 3 ] )
-    assert_equal S[ 0, 1, 2, 3, 0 ],
-                 S[ 0, 0, 1, 0, 0 ].convolve( S[ 1, 2, 3 ] )
-    assert_equal S[ 0, 0, 1, 2, 3 ],
-                 S[ 0, 0, 0, 1, 0 ].convolve( S[ 1, 2, 3 ] )
-    assert_equal S[ 0, 0, 0, 1, 2 ],
-                 S[ 0, 0, 0, 0, 1 ].convolve( S[ 1, 2, 3 ] )
-    assert_equal S[ 1, 2, 3, 0 ],
-                 S[ 0, 1, 0, 0 ].convolve( S[ 1, 2, 3 ] )
+    [ O, I ].each do |t|
+      assert_equal S( t, 5 )[ 2, 3, 0, 0, 0 ],
+                   S( t, 5 )[ 1, 0, 0, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+      assert_equal S( t, 5 )[ 1, 2, 3, 0, 0 ],
+                   S( t, 5 )[ 0, 1, 0, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+      assert_equal S( t, 5 )[ 0, 1, 2, 3, 0 ],
+                   S( t, 5 )[ 0, 0, 1, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+      assert_equal S( t, 5 )[ 0, 0, 1, 2, 3 ],
+                   S( t, 5 )[ 0, 0, 0, 1, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+      assert_equal S( t, 5 )[ 0, 0, 0, 1, 2 ],
+                   S( t, 5 )[ 0, 0, 0, 0, 1 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+      assert_equal S( t, 4 )[ 1, 2, 3, 0 ],
+                   S( t, 4 )[ 0, 1, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+    end
   end
 
   def test_zero

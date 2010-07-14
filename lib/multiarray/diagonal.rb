@@ -72,7 +72,7 @@ module Hornetseye
                                @index2 => INT.new( j ) ).simplify
         j0 = ( j0 + 1 ).simplify
       end
-      j0.upto ( @index2.size - 1 ).minor( @index0 + s1 ) do |j|
+      j0.upto( ( @index2.size - 1 ).minor( @index0 + s1 ) ) do |j|
         i = @index0.get + s1.get - j
         sub = @value.subst @index1 => INT.new( i ), @index2 => INT.new( j ) 
         retval.store @block.subst( @var1 => retval, @var2 => sub )
