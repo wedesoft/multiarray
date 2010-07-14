@@ -1,9 +1,7 @@
-# unify lookup and skip?
 # Composite numbers?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?
-# separate secondary operations like equality
-# inject without initial is [ 1 .. -1 ].inject with [ 0 ] as initial value
+# documentation!
 
 # histogram (implement using injection)
 # inject: min, max, equal, n-d clips for warp
