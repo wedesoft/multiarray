@@ -124,4 +124,10 @@ module Hornetseye
 
   end
 
+  def OBJECT( value )
+    OBJECT.new value
+  end
+
+  module_function :OBJECT
+
 end

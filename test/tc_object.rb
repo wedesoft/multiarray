@@ -25,6 +25,10 @@ class TC_Object < Test::Unit::TestCase
 
   O = Hornetseye::OBJECT
 
+  def O( *args )
+    Hornetseye::OBJECT *args
+  end
+
   def setup
   end
 
@@ -66,11 +70,11 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal 'OBJECT(42)', O.new( 42 ).inspect
+    assert_equal 'OBJECT(42)', O( 42 ).inspect
   end
 
   def test_marshal
-    assert_equal O.new( 42 ), Marshal.load( Marshal.dump( O.new( 42 ) ) )
+    assert_equal O( 42 ), Marshal.load( Marshal.dump( O( 42 ) ) )
   end
 
   def test_typecode
@@ -90,33 +94,33 @@ class TC_Object < Test::Unit::TestCase
   end
 
   def test_at_assign
-    o = O.new 3
+    o = O 3
     assert_equal 3, o[]
     assert_equal 42, o[] = 42
     assert_equal 42, o[]
   end
 
   def test_equal
-    assert_not_equal O.new( 3 ), O.new( 4 )
-    assert_equal O.new( 3 ), O.new( 3 )
+    assert_not_equal O( 3 ), O( 4 )
+    assert_equal O( 3 ), O( 3 )
   end
 
   def test_inject
-    assert_equal 2, O.new( 2 ).inject { |a,b| a + b }[]
-    assert_equal 3, O.new( 2 ).inject( 1 ) { |a,b| a + b }[]
+    assert_equal 2, O( 2 ).inject { |a,b| a + b }[]
+    assert_equal 3, O( 2 ).inject( 1 ) { |a,b| a + b }[]
   end
 
   def test_zero
-    assert O.new( 0 ).zero?[]
-    assert !O.new( 3 ).zero?[]
+    assert O( 0 ).zero?[]
+    assert !O( 3 ).zero?[]
   end
 
   def test_negate
-    assert_equal O.new( -5 ), -O.new( 5 )
+    assert_equal O( -5 ), -O( 5 )
   end
 
   def test_plus
-    assert_equal O.new( 3 + 5 ), O.new( 3 ) + O.new( 5 )
+    assert_equal O( 3 + 5 ), O( 3 ) + O( 5 )
   end
 
 end

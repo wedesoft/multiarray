@@ -31,12 +31,16 @@ class TC_Int < Test::Unit::TestCase
   U32 = Hornetseye::UINT
   S32 = Hornetseye::INT
 
+  def I( *args )
+    Hornetseye::INT *args
+  end
+
   def UI( bits )
-    Hornetseye::INT Hornetseye::UNSIGNED, bits
+    I Hornetseye::UNSIGNED, bits
   end
 
   def SI( bits )
-    Hornetseye::INT Hornetseye::SIGNED, bits
+    I Hornetseye::SIGNED, bits
   end
 
   def sum( *args, &action )
@@ -94,11 +98,11 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal 'INT(42)', I.new( 42 ).inspect
+    assert_equal 'INT(42)', I( 42 ).inspect
   end
 
   def test_marshal
-    assert_equal I.new( 42 ), Marshal.load( Marshal.dump( I.new( 42 ) ) )
+    assert_equal I( 42 ), Marshal.load( Marshal.dump( I( 42 ) ) )
   end
 
   def test_typecode
@@ -118,25 +122,25 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_at_assign
-    i = I.new 42
+    i = I 42
     assert_equal 42, i[]
     assert_equal 3, i[] = 3
     assert_equal 3, i[]
   end
 
   def test_equal
-    assert_not_equal I.new( 3 ), I.new( 4 )
-    assert_equal I.new( 3 ), I.new( 3 )
+    assert_not_equal I( 3 ), I( 4 )
+    assert_equal I( 3 ), I( 3 )
   end
 
   def test_inject
-    assert_equal 2, I.new( 2 ).inject { |a,b| a + b }[]
-    assert_equal 3, I.new( 2 ).inject( 1 ) { |a,b| a + b }[]
+    assert_equal 2, I( 2 ).inject { |a,b| a + b }[]
+    assert_equal 3, I( 2 ).inject( 1 ) { |a,b| a + b }[]
   end
 
   def test_not
-    assert !I.new( 0 ).not[]
-    assert !I.new( 3 ).not[]
+    assert !I( 0 ).not[]
+    assert !I( 3 ).not[]
   end
 
   def test_sum
@@ -144,55 +148,55 @@ class TC_Int < Test::Unit::TestCase
   end
 
   def test_zero
-    assert I.new( 0 ).zero?[]
-    assert !I.new( 3 ).zero?[]
+    assert I( 0 ).zero?[]
+    assert !I( 3 ).zero?[]
   end
 
   def test_nonzero
-    assert !I.new( 0 ).nonzero?[]
-    assert I.new( 3 ).nonzero?[]
+    assert !I( 0 ).nonzero?[]
+    assert I( 3 ).nonzero?[]
   end
 
   def test_bitwise_not
-    assert_equal I.new( -3 ), ~I.new( 2 )
+    assert_equal I( -3 ), ~I( 2 )
   end
 
   def test_bitwise_and
-    assert_equal I.new( 2 ), I.new( 3 ) & I.new( 6 )
+    assert_equal I( 2 ), I( 3 ) & I( 6 )
   end
 
   def test_bitwise_or
-    assert_equal I.new( 7 ), I.new( 3 ) | I.new( 6 )
+    assert_equal I( 7 ), I( 3 ) | I( 6 )
   end
 
   def test_bitwise_xor
-    assert_equal I.new( 1 ), I.new( 3 ) ^ I.new( 2 )
+    assert_equal I( 1 ), I( 3 ) ^ I( 2 )
   end
 
   def test_shl
-    assert_equal I.new( 4 ), I.new( 2 ) << I.new( 1 )
+    assert_equal I( 4 ), I( 2 ) << I( 1 )
   end
 
   def test_shr
-    assert_equal I.new( 2 ), I.new( 4 ) >> I.new( 1 )
+    assert_equal I( 2 ), I( 4 ) >> I( 1 )
   end
 
   def test_negate
-    assert_equal I.new( -5 ), -I.new( 5 )
+    assert_equal I( -5 ), -I( 5 )
   end
 
   def test_plus
-    assert_equal I.new( 3 + 5 ), I.new( 3 ) + I.new( 5 )
+    assert_equal I( 3 + 5 ), I( 3 ) + I( 5 )
   end
 
   def test_major
-    assert_equal I.new( 4 ), I.new( 3 ).major( I.new( 4 ) )
-    assert_equal I.new( 5 ), I.new( 5 ).major( I.new( 3 ) )
+    assert_equal I( 4 ), I( 3 ).major( I( 4 ) )
+    assert_equal I( 5 ), I( 5 ).major( I( 3 ) )
   end
 
   def test_minor
-    assert_equal I.new( 3 ), I.new( 3 ).minor( I.new( 4 ) )
-    assert_equal I.new( 4 ), I.new( 5 ).minor( I.new( 4 ) )
+    assert_equal I( 3 ), I( 3 ).minor( I( 4 ) )
+    assert_equal I( 4 ), I( 5 ).minor( I( 4 ) )
   end
 
 end

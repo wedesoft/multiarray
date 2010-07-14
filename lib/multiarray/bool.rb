@@ -135,4 +135,10 @@ module Hornetseye
 
   end
 
+  def BOOL( value )
+    BOOL.new value
+  end
+
+  module_function :BOOL
+
 end

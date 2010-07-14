@@ -235,23 +235,31 @@ module Hornetseye
 
   end
 
-  # Create a class deriving from +INT_+
+  # Create a class deriving from +INT_+ or instantiate an +INT+ object
   #
-  # he aprameters +bits+ and +signed+ are assigned to the corresponding
-  # attributes of the resulting class.
+  # @overload INT( bits, signed )
+  #   Create a class deriving from +INT_+. The aprameters +bits+ and +signed+
+  #   are assigned to the corresponding attributes of the resulting class.
+  #   @param [Integer] bits Number of bits of native integer.
+  #   @param [FalseClass,TrueClass] signed Specify +UNSIGNED+ or +SIGNED+ here.
+  #   @return [Class] A class deriving from +INT_+.
   #
-  # @param [Integer] bits Number of bits of native integer.
-  # @param [FalseClass,TrueClass] signed Specify +UNSIGNED+ or +SIGNED+ here.
-  # @return [Class] A class deriving from +INT_+.
+  # @overload INT( value )
+  #   This is a shortcut for +INT.new( value )+.
+  #   @param [Integer] value Initial value for integer object.
   #
   # @see INT_
   # @see INT_.bits
   # @see INT_.signed
-  def INT( bits, signed )
-    retval = Class.new INT_
-    retval.bits = bits
-    retval.signed = signed
-    retval
+  def INT( arg, signed = nil )
+    if signed.nil?
+      INT.new arg
+    else
+      retval = Class.new INT_
+      retval.bits = arg
+      retval.signed = signed
+      retval
+    end
   end
 
   module_function :INT

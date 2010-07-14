@@ -25,6 +25,10 @@ class TC_Bool < Test::Unit::TestCase
 
   B = Hornetseye::BOOL
 
+  def B( *args )
+    Hornetseye::BOOL *args
+  end
+
   def setup
   end
 
@@ -60,11 +64,11 @@ class TC_Bool < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal 'BOOL(true)', B.new( true ).inspect
+    assert_equal 'BOOL(true)', B( true ).inspect
   end
 
   def test_marshal
-    assert_equal B.new( true ), Marshal.load( Marshal.dump( B.new( true ) ) )
+    assert_equal B( true ), Marshal.load( Marshal.dump( B( true ) ) )
   end
 
   def test_typecode
@@ -84,42 +88,42 @@ class TC_Bool < Test::Unit::TestCase
   end
 
   def test_at_assign
-    b = B.new false
+    b = B false
     assert !b[]
     assert b[] = true
     assert b[]
   end
 
   def test_equal
-    assert_equal B.new( false ), B.new( false )
-    assert_not_equal B.new( false ), B.new( true )
-    assert_not_equal B.new( true ), B.new( false )
-    assert_equal B.new( true ), B.new( true )
+    assert_equal B( false ), B( false )
+    assert_not_equal B( false ), B( true )
+    assert_not_equal B( true ), B( false )
+    assert_equal B( true ), B( true )
   end
 
   def test_inject
-    assert B.new( true ).inject { |a,b| a.and b }[]
-    assert !B.new( false ).inject( true ) { |a,b| a.and b }[]
-    assert !B.new( true ).inject( false ) { |a,b| a.and b }[]
+    assert B( true ).inject { |a,b| a.and b }[]
+    assert !B( false ).inject( true ) { |a,b| a.and b }[]
+    assert !B( true ).inject( false ) { |a,b| a.and b }[]
   end
 
   def test_not
-    assert_equal B.new( true ), B.new( false ).not
-    assert_equal B.new( false ), B.new( true ).not
+    assert_equal B( true ), B( false ).not
+    assert_equal B( false ), B( true ).not
   end
 
   def test_and
-    assert_equal B.new( false ), B.new( false ).and( B.new( false ) )
-    assert_equal B.new( false ), B.new( false ).and( B.new( true ) )
-    assert_equal B.new( false ), B.new( true ).and( B.new( false ) )
-    assert_equal B.new( true ), B.new( true ).and( B.new( true ) )
+    assert_equal B( false ), B( false ).and( B( false ) )
+    assert_equal B( false ), B( false ).and( B( true ) )
+    assert_equal B( false ), B( true ).and( B( false ) )
+    assert_equal B( true ), B( true ).and( B( true ) )
   end
 
   def test_or
-    assert_equal B.new( false ), B.new( false ).or( B.new( false ) )
-    assert_equal B.new( true ), B.new( false ).or( B.new( true ) )
-    assert_equal B.new( true ), B.new( true ).or( B.new( false ) )
-    assert_equal B.new( true ), B.new( true ).or( B.new( true ) )
+    assert_equal B( false ), B( false ).or( B( false ) )
+    assert_equal B( true ), B( false ).or( B( true ) )
+    assert_equal B( true ), B( true ).or( B( false ) )
+    assert_equal B( true ), B( true ).or( B( true ) )
   end
 
 end

@@ -182,15 +182,20 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_zero
-    assert_equal S[ false, true, false ], S[ -1, 0, 1 ].zero?
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal S[ false, true, false ], t[ -1, 0, 1 ].zero?
+    end
   end
 
   def test_nonzero
-    assert_equal S[ true, false, true ], S[ -1, 0, 1 ].nonzero?
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal S[ true, false, true ], t[ -1, 0, 1 ].nonzero?
+    end
   end
 
   def test_not
-    assert_equal [ true, false ], S[ false, true ].not.to_a
+    assert_equal [ true, false ], S( O, 2 )[ false, true ].not.to_a
+    assert_equal [ true, false ], S( B, 2 )[ false, true ].not.to_a
     assert_equal [ true, false, false ], S[ 0, 1, 2 ].not.to_a
   end
 
