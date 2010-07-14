@@ -22,13 +22,6 @@ module Hornetseye
 
     class << self
 
-      # Get string with information about this class
-      #
-      # @return [String] Returns +'Node'+.
-      def inspect
-        'Node'
-      end
-
       # Get unique descriptor of this class
       #
       # The method calls +descriptor( {} )+.
