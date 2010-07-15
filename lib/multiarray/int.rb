@@ -302,4 +302,41 @@ module Hornetseye
   # 64-bit unsigned integer
   ULONG = INT 64, UNSIGNED
 
+  def BYTE( value )
+    BYTE.new value
+  end
+
+  def UBYTE( value )
+    UBYTE.new value
+  end
+
+  def SINT( value )
+    SINT.new value
+  end
+
+  def USINT( value )
+    USINT.new value
+  end
+
+  def UINT( value )
+    UINT.new value
+  end
+
+  def LONG( value )
+    LONG.new value
+  end
+
+  def ULONG( value )
+    ULONG.new value
+  end
+
+  module_function :BYTE
+  module_function :UBYTE
+  module_function :SINT
+  module_function :USINT
+  module_function :UINT
+  module_function :LONG
+  module_function :ULONG
+
+
 end

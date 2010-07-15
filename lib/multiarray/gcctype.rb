@@ -41,6 +41,10 @@ module Hornetseye
         'int'
       when UINT
         'unsigned int'
+      when SFLOAT
+        'float'
+        when DFLOAT
+        'double'
       else
         if @typecode < Pointer_
           'void *'
@@ -58,6 +62,8 @@ module Hornetseye
         "( #{expr} ) != Qfalse"
       when BYTE, UBYTE, SINT, USINT, INT, UINT
         "NUM2INT( #{expr} )"
+      when SFLOAT, DFLOAT
+        "NUM2DBL( #{expr} )"
       else
         if @typecode < Pointer_
           "(#{identifier})mallocToPtr( #{expr} )"
