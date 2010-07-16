@@ -72,26 +72,16 @@ module Hornetseye
       #
       # @private
       def directive
-        case [ bits, signed ]
-        when [  8, true  ]
-          'c'
-        when [  8, false ]
-          'C'
-        when [ 16, true  ]
-          's'
-        when [ 16, false ]
-          'S'
-        when [ 32, true  ]
-          'i'
-        when [ 32, false ]
-          'I'
-        when [ 64, true  ]
-          'q'
-        when [ 64, false ]
-          'Q'
-        else
-          raise "No directive for packing/unpacking #{inspect}"
-        end
+        retval = { [  8, true  ] => 'c',
+                   [  8, false ] => 'C',
+                   [ 16, true  ] => 's',
+                   [ 16, false ] => 'S',
+                   [ 32, true  ] => 'i',
+                   [ 32, false ] => 'I',
+                   [ 64, true  ] => 'q',
+                   [ 64, false ] => 'Q' }[ [ bits, signed ] ]
+        raise "No directive for packing/unpacking #{inspect}" unless retval
+        retval
       end
 
       # Get string with information about this class
