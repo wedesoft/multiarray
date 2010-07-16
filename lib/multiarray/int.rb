@@ -89,26 +89,15 @@ module Hornetseye
       # @return [String] Returns string with information about this class.
       def inspect
         unless bits.nil? or signed.nil?
-          case [ bits, signed ]
-          when [  8, true  ]
-            'BYTE'
-          when [  8, false ]
-            'UBYTE'
-          when [ 16, true  ]
-            'SINT'
-          when [ 16, false ]
-            'USINT'
-          when [ 32, true  ]
-            'INT'
-          when [ 32, false ]
-            'UINT'
-          when [ 64, true  ]
-            'LONG'
-          when [ 64, false ]
-            'ULONG'
-          else
-            "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
-          end
+          retval = { [  8, true  ] => 'BYTE',
+                     [  8, false ] => 'UBYTE',
+                     [ 16, true  ] => 'SINT',
+                     [ 16, false ] => 'USINT',
+                     [ 32, true  ] => 'INT',
+                     [ 32, false ] => 'UINT',
+                     [ 64, true  ] => 'LONG',
+                     [ 64, false ] => 'ULONG' }[ [ bits, signed ] ] ||
+                   "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
         else
           super
         end
@@ -123,26 +112,15 @@ module Hornetseye
       # @private
       def descriptor( hash )
         unless bits.nil? or signed.nil?
-          case [ bits, signed ]
-          when [  8, true  ]
-            'BYTE'
-          when [  8, false ]
-            'UBYTE'
-          when [ 16, true  ]
-            'SINT'
-          when [ 16, false ]
-            'USINT'
-          when [ 32, true  ]
-            'INT'
-          when [ 32, false ]
-            'UINT'
-          when [ 64, true  ]
-            'LONG'
-          when [ 64, false ]
-            'ULONG'
-          else
-            "INT(#{bits.to_s},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
-          end
+          retval = { [  8, true  ] => 'BYTE',
+                     [  8, false ] => 'UBYTE',
+                     [ 16, true  ] => 'SINT',
+                     [ 16, false ] => 'USINT',
+                     [ 32, true  ] => 'INT',
+                     [ 32, false ] => 'UINT',
+                     [ 64, true  ] => 'LONG',
+                     [ 64, false ] => 'ULONG' }[ [ bits, signed ] ] ||
+                   "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
         else
           super
         end
