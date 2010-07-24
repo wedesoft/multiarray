@@ -164,6 +164,18 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_min
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal 2, t[ 4, 2, 3 ].min
+    end
+  end
+
+  def test_max
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal 4, t[ 4, 2, 3 ].max
+    end
+  end
+
   def test_convolve
     [ O, I ].each do |t|
       assert_equal S( t, 5 )[ 2, 3, 0, 0, 0 ],

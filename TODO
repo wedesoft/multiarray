@@ -4,7 +4,7 @@
 # documentation!
 
 # histogram (implement using injection)
-# inject: min, max, equal, n-d clips for warp
+# inject: n-d clips for warp
 # block(var1,var2,...) with smart subst?
 # lazy( 3, 2 ) { |i,j| j.to_object }
 

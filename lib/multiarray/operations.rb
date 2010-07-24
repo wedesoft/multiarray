@@ -154,6 +154,14 @@ module Hornetseye
 
     alias_method_chain :==, :multiarray, :eq
 
+    def min
+      inject { |a,b| a.minor b }
+    end
+
+    def max
+      inject { |a,b| a.major b }
+    end
+
     # Apply accumulative operation over elements diagonally
     #
     # This method is used internally to implement convolutions.

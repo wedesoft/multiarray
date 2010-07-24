@@ -214,6 +214,14 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal [ [ 1, 2, 3 ] , [ 4, 5, 6 ] ], sum { || m }.to_a
   end
 
+  def test_min
+    assert_equal 1, M[ [ 5, 3, 7 ], [ 2, 1, 6 ] ].min
+  end
+
+  def test_max
+    assert_equal 7, M[ [ 5, 3, 7 ], [ 2, 1, 6 ] ].max
+  end
+
   def test_diagonal
     assert_equal S[ 'b1a2', 'c1b2a3', 'c2b3' ],
                  M[ [ 'a1', 'a2', 'a3' ],
