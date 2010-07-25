@@ -29,7 +29,7 @@ module Hornetseye
       # @see Malloc#load
       # @see List#load
       def fetch( ptr )
-        new ptr.load( self )
+        new *ptr.load( self )
       end
 
       # Type coercion for native elements

@@ -20,7 +20,7 @@ module Hornetseye
   class Malloc
 
     def load( typecode )
-      read( typecode.storage_size ).unpack( typecode.directive ).first
+      read( typecode.storage_size ).unpack( typecode.directive )
     end
 
     def save( value )

@@ -42,7 +42,7 @@ module Hornetseye
     end
 
     def load( typecode )
-      GCCValue.new @function, "*(#{GCCType.new( typecode ).identifier} *)( #{self} )"
+      [ GCCValue.new( @function, "*(#{GCCType.new( typecode ).identifier} *)( #{self} )" ) ]
     end
 
     def save( value )

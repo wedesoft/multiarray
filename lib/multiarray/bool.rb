@@ -49,7 +49,7 @@ module Hornetseye
       #
       # @private
       def fetch( ptr )
-        new ptr.load( self ).ne( 0 )
+        new ptr.load( self ).first.ne( 0 )
       end
 
       # Memory type required to store elements of this type
