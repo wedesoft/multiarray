@@ -37,6 +37,10 @@ module Hornetseye
 
       attr_accessor :element_type
 
+      def fetch( ptr )
+        new RGB( *ptr.load( self ) )
+      end
+
       def memory
         element_type.memory
       end
