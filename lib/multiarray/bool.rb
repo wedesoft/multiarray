@@ -36,7 +36,7 @@ module Hornetseye
       #
       # @private
       def descriptor( hash )
-        'BOOL'
+        inspect
       end
 
       # Retrieve element from memory

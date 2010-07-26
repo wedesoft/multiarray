@@ -37,7 +37,7 @@ module Hornetseye
       #
       # @private
       def descriptor( hash )
-        'OBJECT'
+        inspect
       end
 
       # Get memory type required to store elements of this type

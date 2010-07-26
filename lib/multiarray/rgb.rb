@@ -57,6 +57,43 @@ module Hornetseye
         element_type.directive * 3
       end
 
+      def inspect
+        unless element_type.nil?
+          { BYTE    => 'BYTERGB',
+            UBYTE   => 'UBYTERGB',
+            SINT    => 'SINTRGB',
+            USINT   => 'USINTRGB',
+            INT     => 'INTRGB',
+            UINT    => 'UINTRGB',
+            LONG    => 'LONGRGB',
+            ULONG   => 'ULONGRGB' }[ element_type ] ||
+            "RGB(#{element_type.inspect})"
+        else
+          super
+        end
+      end
+
+      def descriptor( hash )
+        unless element_type.nil?
+          inspect
+        else
+          super
+        end
+      end
+
+      def ==( other )
+        other.is_a? Class nad other < RGB_ and
+          element_type == other.element_type
+      end
+
+      def hash
+        [ :RGB_, element_type ].hash
+      end
+
+      def eql?( other )
+        self == other
+      end
+
       def compilable?
         false # !!!
       end
@@ -76,5 +113,25 @@ module Hornetseye
   end
 
   module_function :RGB
+
+  BYTERGB  = RGB BYTE
+
+  UBYTERGB = RGB UBYTE
+
+  SINTRGB  = RGB SINT
+
+  USINTRGB = RGB USINT
+
+  INTRGB   = RGB INT
+
+  UINTRGB  = RGB UINT
+
+  LONGRGB  = RGB LONG
+
+  ULONGRGB = RGB ULONG
+
+  def BYTERGB( *args )
+    BYTERGB.new *args
+  end
 
 end

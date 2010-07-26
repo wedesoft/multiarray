@@ -17,6 +17,8 @@
 require 'tc_object'
 require 'tc_bool'
 require 'tc_int'
+require 'tc_float'
+require 'tc_rgb'
 require 'tc_sequence'
 require 'tc_multiarray'
 require 'tc_lazy'

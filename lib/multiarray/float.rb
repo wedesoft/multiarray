@@ -54,7 +54,7 @@ module Hornetseye
       end
 
       def descriptor( hash )
-        "#{ double ? 'D' : 'S' }FLOAT"
+        inspect
       end
 
       def ==( other )

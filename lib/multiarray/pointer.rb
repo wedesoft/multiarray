@@ -37,7 +37,7 @@ module Hornetseye
       #
       # @private
       def descriptor( hash )
-        "*(#{target.to_s})"
+        inspect
       end
 
       # Get default value for elements of this type

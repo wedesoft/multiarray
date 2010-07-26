@@ -112,17 +112,9 @@ module Hornetseye
       # @private
       def descriptor( hash )
         unless bits.nil? or signed.nil?
-          retval = { [  8, true  ] => 'BYTE',
-                     [  8, false ] => 'UBYTE',
-                     [ 16, true  ] => 'SINT',
-                     [ 16, false ] => 'USINT',
-                     [ 32, true  ] => 'INT',
-                     [ 32, false ] => 'UINT',
-                     [ 64, true  ] => 'LONG',
-                     [ 64, false ] => 'ULONG' }[ [ bits, signed ] ] ||
-                   "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
+          inspect
         else
-          super
+          super hash
         end
       end
 
@@ -203,6 +195,20 @@ module Hornetseye
 
   end
 
+  # Boolean constant to use as a parameter for creating integer classes
+  #
+  # The value is +false+.
+  #
+  # @see #INT
+  UNSIGNED = false
+
+  # Boolean constant to use as a parameter for creating integer classes
+  #
+  # The value is +true+.
+  #
+  # @see #INT
+  SIGNED   = true
+
   # Create a class deriving from +INT_+ or instantiate an +INT+ object
   #
   # @overload INT( bits, signed )
@@ -231,20 +237,6 @@ module Hornetseye
   end
 
   module_function :INT
-
-  # Boolean constant to use as a parameter for creating integer classes
-  #
-  # The value is +false+.
-  #
-  # @see #INT
-  UNSIGNED = false
-
-  # Boolean constant to use as a parameter for creating integer classes
-  #
-  # The value is +true+.
-  #
-  # @see #INT
-  SIGNED   = true
 
   # 8-bit signed integer
   BYTE  = INT  8, SIGNED
