@@ -29,6 +29,10 @@ module Hornetseye
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
+    def ==( other )
+      ( @r == other.r ).and( @g == other.g ).and( @b == other.b )
+    end
+
   end
 
   class RGB_ < Element
@@ -38,7 +42,7 @@ module Hornetseye
       attr_accessor :element_type
 
       def fetch( ptr )
-        new RGB( *ptr.load( self ) )
+        new Hornetseye::RGB( *ptr.load( self ) )
       end
 
       def memory
@@ -50,7 +54,7 @@ module Hornetseye
       end
 
       def default
-        RGB( 0, 0, 0 )
+        Hornetseye::RGB 0, 0, 0
       end
 
       def directive
@@ -82,7 +86,7 @@ module Hornetseye
       end
 
       def ==( other )
-        other.is_a? Class nad other < RGB_ and
+        other.is_a? Class and other < RGB_ and
           element_type == other.element_type
       end
 
@@ -114,24 +118,75 @@ module Hornetseye
 
   module_function :RGB
 
-  BYTERGB  = RGB BYTE
+  BYTERGB   = RGB BYTE
 
-  UBYTERGB = RGB UBYTE
+  UBYTERGB  = RGB UBYTE
 
-  SINTRGB  = RGB SINT
+  SINTRGB   = RGB SINT
 
-  USINTRGB = RGB USINT
+  USINTRGB  = RGB USINT
 
-  INTRGB   = RGB INT
+  INTRGB    = RGB INT
 
-  UINTRGB  = RGB UINT
+  UINTRGB   = RGB UINT
 
-  LONGRGB  = RGB LONG
+  LONGRGB   = RGB LONG
 
-  ULONGRGB = RGB ULONG
+  ULONGRGB  = RGB ULONG
 
-  def BYTERGB( *args )
-    BYTERGB.new *args
+  SFLOATRGB = RGB SFLOAT
+
+  DFLOATRGB = RGB DFLOAT
+
+  def BYTERGB( value )
+    BYTERGB.new value
   end
+
+  def UBYTERGB( value )
+    UBYTERGB.new value
+  end
+
+  def SINTRGB( value )
+    SINTRGB.new value
+  end
+
+  def USINTRGB( value )
+    USINTRGB.new value
+  end
+
+  def INTRGB( value )
+    INTRGB.new value
+  end
+
+  def UINTRGB( value )
+    UINTRGB.new value
+  end
+
+  def LONGRGB( value )
+    LONGRGB.new value
+  end
+
+  def ULONGRGB( value )
+    ULONGRGB.new value
+  end
+
+  def SFLOATRGB( value )
+    SFLOATRGB.new value
+  end
+
+  def DFLOATRGB( value )
+    DFLOATRGB.new value
+  end
+
+  module_function :BYTERGB
+  module_function :UBYTERGB
+  module_function :SINTRGB
+  module_function :USINTRGB
+  module_function :INTRGB
+  module_function :UINTRGB
+  module_function :LONGRGB
+  module_function :ULONGRGB
+  module_function :SFLOATRGB
+  module_function :DFLOATRGB
 
 end

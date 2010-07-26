@@ -31,6 +31,16 @@ class TC_RGB < Test::Unit::TestCase
   UINTRGB   = Hornetseye::UINTRGB
   LONGRGB   = Hornetseye::LONGRGB
   ULONGRGB  = Hornetseye::ULONGRGB
+  SFLOATRGB = Hornetseye::SFLOATRGB
+  DFLOATRGB = Hornetseye::DFLOATRGB
+
+  def RGB( *args )
+    Hornetseye::RGB *args
+  end
+
+  def INTRGB( value )
+    Hornetseye::INTRGB value
+  end
 
   def setup
   end
@@ -62,6 +72,32 @@ class TC_RGB < Test::Unit::TestCase
 
   def test_rgb_default
     assert_equal RGB( 0, 0, 0 ), INTRGB.new[]
+  end
+
+  def test_rgb_indgen
+    assert_equal 0, INTRGB.indgen
+    assert_equal 1, INTRGB.indgen( 1 )
+    assert_equal 1, INTRGB.indgen( 1, 2 )
+  end
+
+  def test_rgb_typecode
+    assert_equal BYTERGB, BYTERGB.typecode
+  end
+
+  def test_rgb_dimension
+    assert_equal 0, SFLOATRGB.dimension
+  end
+
+  def test_rgb_shape
+    assert_equal [], SFLOATRGB.shape
+  end
+
+  def test_rgb_size
+    assert_equal 1, SINTRGB.size
+  end
+
+  def test_inspect
+    assert_equal 'INTRGB(RGB(1,2,3))', INTRGB( RGB( 1, 2, 3 ) ).inspect
   end
 
 end

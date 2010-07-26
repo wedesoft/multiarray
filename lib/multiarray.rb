@@ -416,6 +416,18 @@ end
 
 class Numeric
 
+  def r
+    self
+  end
+
+  def g
+    self
+  end
+
+  def b
+    self
+  end
+
   def major( other )
     if other.is_a? Numeric
       ( self >= other ).conditional self, other
