@@ -197,7 +197,9 @@ class TC_RGB < Test::Unit::TestCase
   end
 
   def test_plus
-    assert_equal RGB( 1 + 4, 2 + 5, 3 + 6 ), RGB( 1, 2, 3 ) + RGB( 4, 5, 6 )
+    assert_equal RGB( 5, 7, 9 ), RGB( 1, 2, 3 ) + RGB( 4, 5, 6 )
+    assert_equal RGB( 2, 3, 4 ), RGB( 1, 2, 3 ) + 1
+    assert_equal RGB( 2, 3, 4 ), 1 + RGB( 1, 2, 3 )
   end
 
   def test_major
