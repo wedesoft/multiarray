@@ -19,6 +19,14 @@ module Hornetseye
 
   class RGB
 
+    class << self
+
+      def generic?( value )
+        value.is_a? Numeric
+      end
+
+    end
+
     attr_accessor :r, :g, :b
 
     def initialize( r, g, b )
@@ -29,8 +37,41 @@ module Hornetseye
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
+    def -@
+      RGB.new -@r, -@g, -@b
+    end
+
+    def +@
+      self
+    end
+
+    def +( other )
+      if other.is_a? RGB
+        RGB.new r + other.r, g + other.g, b + other.b
+      elsif RGB.generic? other
+        RGB.new r + other, g + other, b + other
+      else
+        x, y = other.coerce self
+        x + y
+      end
+    end
+
+    def zero?
+      @r.zero?.and( @g.zero? ).and( @b.zero? )
+    end
+
+    def nonzero?
+      @r.nonzero?.or( @g.nonzero? ).or( @b.nonzero? )
+    end
+
     def ==( other )
-      ( @r == other.r ).and( @g == other.g ).and( @b == other.b )
+      if other.is_a? RGB
+        ( @r == other.r ).and( @g == other.g ).and( @b == other.b )
+      elsif RGB.generic? other
+        ( @r == other ).and( @g == other ).and( @b == other )
+      else
+        false
+      end
     end
 
   end

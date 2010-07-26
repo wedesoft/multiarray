@@ -42,6 +42,10 @@ class TC_RGB < Test::Unit::TestCase
     Hornetseye::INTRGB value
   end
 
+  def sum( *args, &action )
+    Hornetseye::sum *args, &action
+  end
+
   def setup
   end
 
@@ -98,6 +102,71 @@ class TC_RGB < Test::Unit::TestCase
 
   def test_inspect
     assert_equal 'INTRGB(RGB(1,2,3))', INTRGB( RGB( 1, 2, 3 ) ).inspect
+  end
+
+  def test_marshal
+    assert_equal INTRGB( RGB( 1, 2, 3 ) ),
+                 Marshal.load( Marshal.dump( INTRGB( RGB( 1, 2, 3 ) ) ) )
+  end
+
+  def test_typecode
+    assert_equal INTRGB, INTRGB.new.typecode
+  end
+
+  def test_dimension
+    assert_equal 0, INTRGB.new.dimension
+  end
+
+  def test_shape
+    assert_equal [], INTRGB.new.shape
+  end
+  
+  def test_size
+    assert_equal 1, UBYTERGB.new.size
+  end
+
+  def test_at_assign
+    c = INTRGB RGB( 1, 2, 3 )
+    assert_equal RGB( 1, 2, 3 ), c[]
+    assert_equal RGB( 4, 5, 6 ), c[] = RGB( 4, 5, 6 )
+    assert_equal RGB( 4, 5, 6, ), c[]
+  end
+
+  def test_equal
+    assert_not_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 2, 2, 3 ) )
+    assert_not_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 1, 3, 3 ) )
+    assert_not_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 1, 2, 2 ) )
+    assert_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 1, 2, 3 ) )
+  end
+
+  def test_inject
+    assert_equal RGB( 1, 2, 3 ), INTRGB( RGB( 1, 2, 3 ) ).
+                 inject { |a,b| a + b }[]
+    assert_equal RGB( 3, 5, 7 ), INTRGB( RGB( 1, 2, 3 ) ).
+                 inject( RGB( 2, 3, 4 ) ) { |a,b| a + b }[]
+  end
+
+  def test_not
+    assert !INTRGB( RGB( 0, 0, 0 ) ).not[]
+    assert !INTRGB( RGB( 1, 2, 3 ) ).not[]
+  end
+
+  def test_sum
+    assert_equal RGB( 1, 2, 3 ), sum { || RGB 1, 2, 3 }
+  end
+
+  def test_zero
+    assert INTRGB( RGB( 0, 0, 0 ) ).zero?[]
+    assert !INTRGB( RGB( 1, 0, 0 ) ).zero?[]
+    assert !INTRGB( RGB( 0, 1, 0 ) ).zero?[]
+    assert !INTRGB( RGB( 0, 0, 1 ) ).zero?[]
+  end
+
+  def test_nonzero
+    assert !INTRGB( RGB( 0, 0, 0 ) ).nonzero?[]
+    assert INTRGB( RGB( 1, 0, 0 ) ).nonzero?[]
+    assert INTRGB( RGB( 0, 1, 0 ) ).nonzero?[]
+    assert INTRGB( RGB( 0, 0, 1 ) ).nonzero?[]
   end
 
 end
