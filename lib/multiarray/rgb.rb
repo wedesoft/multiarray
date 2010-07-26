@@ -155,6 +155,26 @@ module Hornetseye
         end
       end
 
+      def coercion( other )
+        if other < RGB_
+          Hornetseye::RGB element_type.coercion( other.element_type )
+        elsif other < INT_ or other < FLOAT_
+          Hornetseye::RGB element_type.coercion( other )
+        else
+          super other
+        end
+      end
+
+      def coerce( other )
+        if other < RGB_
+          return other, self
+        elsif other < INT_ or other < FLOAT_
+          return Hornetseye::RGB( other ), self
+        else
+          super other
+        end
+      end
+
       def ==( other )
         other.is_a? Class and other < RGB_ and
           element_type == other.element_type

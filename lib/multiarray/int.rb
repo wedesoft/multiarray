@@ -68,6 +68,14 @@ module Hornetseye
         end
       end
 
+      def coerce( other )
+        if other < INT_
+          return other, self
+        else
+          super other
+        end
+      end
+
       # Directive for packing/unpacking elements of this type
       #
       # @private

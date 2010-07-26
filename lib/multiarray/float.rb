@@ -45,6 +45,16 @@ module Hornetseye
         end
       end
 
+      def coerce( other )
+        if other < FLOAT_
+          return other, self
+        elsif other < INT_
+          return self, self
+        else
+          super other
+        end
+      end
+
       def directive
         double ? 'd' : 'f'
       end
