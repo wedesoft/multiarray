@@ -178,6 +178,37 @@ module Hornetseye
       [ get.r, get.g, get.b ]
     end
 
+    module Match
+
+      def fit( *values )
+        if values.all? { |value| value.is_a? RGB or value.is_a? Float or
+                                 value.is_a? Integer }
+          if values.any? { |value| value.is_a? RGB }
+            elements = values.inject( [] ) do |arr,value|
+              if value.is_a? RGB
+                arr + [ value.r, value.g, value.b ]
+              else
+                arr + [ value ]
+              end
+            end
+            element_fit = fit *elements
+            if element_fit == OBJECT
+              super *values
+            else
+              Hornetseye::RGB element_fit
+            end
+          else
+            super *values
+          end
+        else
+          super *values
+        end
+      end
+
+    end
+
+    Node.extend Match
+
   end
 
   def RGB( arg, g = nil, b = nil )
