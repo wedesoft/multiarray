@@ -80,8 +80,8 @@ class TC_RGB < Test::Unit::TestCase
 
   def test_rgb_indgen
     assert_equal 0, INTRGB.indgen
-    assert_equal 1, INTRGB.indgen( 1 )
-    assert_equal 1, INTRGB.indgen( 1, 2 )
+    assert_equal RGB( 1, 2, 3 ), INTRGB.indgen( RGB( 1, 2, 3 ) )
+    assert_equal RGB( 1, 2, 3 ), INTRGB.indgen( RGB( 1, 2, 3 ), 1 )
   end
 
   def test_rgb_typecode
@@ -101,12 +101,11 @@ class TC_RGB < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal 'INTRGB(RGB(1,2,3))', INTRGB( RGB( 1, 2, 3 ) ).inspect
+    assert_equal 'RGB(1,2,3)', RGB( 1, 2, 3 ).inspect
   end
 
   def test_marshal
-    assert_equal INTRGB( RGB( 1, 2, 3 ) ),
-                 Marshal.load( Marshal.dump( INTRGB( RGB( 1, 2, 3 ) ) ) )
+    assert_equal RGB( 1, 2, 3 ), Marshal.load( Marshal.dump( RGB( 1, 2, 3 ) ) )
   end
 
   def test_typecode
@@ -137,6 +136,8 @@ class TC_RGB < Test::Unit::TestCase
     assert_not_equal RGB( 1, 2, 3 ), RGB( 1, 3, 3 )
     assert_not_equal RGB( 1, 2, 3 ), RGB( 1, 2, 2 )
     assert_equal RGB( 1, 2, 3 ), RGB( 1, 2, 3 )
+    assert_equal RGB( 3, 3, 3 ), 3
+    assert_not_equal RGB( 3, 3, 3 ), 4
   end
 
   def test_inject
@@ -175,6 +176,8 @@ class TC_RGB < Test::Unit::TestCase
 
   def test_bitwise_and
     assert_equal RGB( 1, 2, 1 ), RGB( 1, 2, 3 ) & RGB( 3, 2, 1 )
+    assert_equal RGB( 2, 2, 0 ), 2 & RGB( 3, 2, 1 )
+    assert_equal RGB( 0, 2, 2 ), RGB( 1, 2, 3 ) & 2
   end
 
   def test_bitwise_or

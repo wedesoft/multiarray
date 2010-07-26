@@ -58,6 +58,14 @@ module Hornetseye
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
+    def coerce( other )
+      if other.is_a? RGB
+        return other, self
+      else
+        return RGB.new( other, other, other ), self
+      end
+    end
+
     def +@
       self
     end
