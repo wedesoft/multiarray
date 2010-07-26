@@ -129,14 +129,14 @@ class TC_RGB < Test::Unit::TestCase
     c = INTRGB RGB( 1, 2, 3 )
     assert_equal RGB( 1, 2, 3 ), c[]
     assert_equal RGB( 4, 5, 6 ), c[] = RGB( 4, 5, 6 )
-    assert_equal RGB( 4, 5, 6, ), c[]
+    assert_equal RGB( 4, 5, 6 ), c[]
   end
 
   def test_equal
-    assert_not_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 2, 2, 3 ) )
-    assert_not_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 1, 3, 3 ) )
-    assert_not_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 1, 2, 2 ) )
-    assert_equal INTRGB( RGB( 1, 2, 3 ) ), INTRGB( RGB( 1, 2, 3 ) )
+    assert_not_equal RGB( 1, 2, 3 ), RGB( 2, 2, 3 )
+    assert_not_equal RGB( 1, 2, 3 ), RGB( 1, 3, 3 )
+    assert_not_equal RGB( 1, 2, 3 ), RGB( 1, 2, 2 )
+    assert_equal RGB( 1, 2, 3 ), RGB( 1, 2, 3 )
   end
 
   def test_inject
@@ -147,8 +147,8 @@ class TC_RGB < Test::Unit::TestCase
   end
 
   def test_not
-    assert !INTRGB( RGB( 0, 0, 0 ) ).not[]
-    assert !INTRGB( RGB( 1, 2, 3 ) ).not[]
+    assert !RGB( 0, 0, 0 ).not
+    assert !RGB( 1, 2, 3 ).not
   end
 
   def test_sum
@@ -156,17 +156,53 @@ class TC_RGB < Test::Unit::TestCase
   end
 
   def test_zero
-    assert INTRGB( RGB( 0, 0, 0 ) ).zero?[]
-    assert !INTRGB( RGB( 1, 0, 0 ) ).zero?[]
-    assert !INTRGB( RGB( 0, 1, 0 ) ).zero?[]
-    assert !INTRGB( RGB( 0, 0, 1 ) ).zero?[]
+    assert RGB( 0, 0, 0 ).zero?
+    assert !RGB( 1, 0, 0 ).zero?
+    assert !RGB( 0, 1, 0 ).zero?
+    assert !RGB( 0, 0, 1 ).zero?
   end
 
   def test_nonzero
-    assert !INTRGB( RGB( 0, 0, 0 ) ).nonzero?[]
-    assert INTRGB( RGB( 1, 0, 0 ) ).nonzero?[]
-    assert INTRGB( RGB( 0, 1, 0 ) ).nonzero?[]
-    assert INTRGB( RGB( 0, 0, 1 ) ).nonzero?[]
+    assert !RGB( 0, 0, 0 ).nonzero?
+    assert RGB( 1, 0, 0 ).nonzero?
+    assert RGB( 0, 1, 0 ).nonzero?
+    assert RGB( 0, 0, 1 ).nonzero?
+  end
+
+  def test_bitwise_not
+    assert_equal RGB( -2, -3, -4 ), ~RGB( 1, 2, 3 )
+  end
+
+  def test_bitwise_and
+    assert_equal RGB( 1, 2, 1 ), RGB( 1, 2, 3 ) & RGB( 3, 2, 1 )
+  end
+
+  def test_bitwise_or
+    assert_equal RGB( 3, 2, 3 ), RGB( 1, 2, 3 ) | RGB( 3, 2, 1 )
+  end
+
+  def test_shl
+    assert_equal RGB( 2, 4, 6 ), RGB( 1, 2, 3 ) << 1
+  end
+
+  def test_shr
+    assert_equal RGB( 1, 2, 3 ), RGB( 2, 4, 6 ) >> 1
+  end
+
+  def test_negate
+    assert_equal RGB( -1, -2, -3 ), -RGB( 1, 2, 3 )
+  end
+
+  def test_plus
+    assert_equal RGB( 1 + 4, 2 + 5, 3 + 6 ), RGB( 1, 2, 3 ) + RGB( 4, 5, 6 )
+  end
+
+  def test_major
+    assert_equal RGB( 4, 3, 3 ), RGB( 1, 2, 3 ).major( RGB( 4, 3, 2 ) )
+  end
+
+  def test_minor
+    assert_equal RGB( 1, 2, 2 ), RGB( 1, 2, 3 ).minor( RGB( 4, 3, 2 ) )
   end
 
 end

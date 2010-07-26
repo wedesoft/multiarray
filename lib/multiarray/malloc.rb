@@ -24,7 +24,7 @@ module Hornetseye
     end
 
     def save( value )
-      write [ value.get ].pack( value.typecode.directive )
+      write value.values.pack( value.typecode.directive )
       value
     end
 

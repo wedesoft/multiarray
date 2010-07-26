@@ -25,6 +25,27 @@ module Hornetseye
         value.is_a? Numeric
       end
 
+      def define_unary_op( op )
+        define_method( op ) do
+          RGB.new r.send( op ), g.send( op ), b.send( op )
+        end
+      end
+
+      def define_binary_op( op )
+        define_method( op ) do |other|
+          if other.is_a? RGB
+            RGB.new r.send( op, other.r ), g.send( op, other.g ),
+                    b.send( op, other.b )
+          elsif RGB.generic? other
+            RGB.new r.send( op, other ), g.send( op, other ),
+                    b.send( op, other )
+          else
+            x, y = other.coerce self
+            x.send op, y
+          end
+        end
+      end
+
     end
 
     attr_accessor :r, :g, :b
@@ -37,24 +58,24 @@ module Hornetseye
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
-    def -@
-      RGB.new -@r, -@g, -@b
-    end
-
     def +@
       self
     end
 
-    def +( other )
-      if other.is_a? RGB
-        RGB.new r + other.r, g + other.g, b + other.b
-      elsif RGB.generic? other
-        RGB.new r + other, g + other, b + other
-      else
-        x, y = other.coerce self
-        x + y
-      end
-    end
+    define_unary_op  :~
+    define_unary_op  :-@
+    define_binary_op :+
+    define_binary_op :-
+    define_binary_op :*
+    define_binary_op :/
+    define_binary_op :%
+    define_binary_op :&
+    define_binary_op :|
+    define_binary_op :^
+    define_binary_op :<<
+    define_binary_op :>>
+    define_binary_op :minor
+    define_binary_op :major
 
     def zero?
       @r.zero?.and( @g.zero? ).and( @b.zero? )
@@ -143,6 +164,10 @@ module Hornetseye
         false # !!!
       end
 
+    end
+
+    def values
+      [ get.r, get.g, get.b ]
     end
 
   end

@@ -151,6 +151,10 @@ module Hornetseye
       ptr.save self
     end
 
+    def values
+      [ get ]
+    end
+
   end
 
 end
