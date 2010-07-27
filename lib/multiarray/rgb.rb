@@ -140,7 +140,9 @@ module Hornetseye
             INT     => 'INTRGB',
             UINT    => 'UINTRGB',
             LONG    => 'LONGRGB',
-            ULONG   => 'ULONGRGB' }[ element_type ] ||
+            ULONG   => 'ULONGRGB',
+            SFLOAT  => 'SFLOATRGB',
+            DFLOAT  => 'DFLOATRGB' }[ element_type ] ||
             "RGB(#{element_type.inspect})"
         else
           super

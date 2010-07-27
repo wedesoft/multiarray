@@ -61,6 +61,8 @@ class TC_RGB < Test::Unit::TestCase
     assert_equal 'UINTRGB', UINTRGB.inspect
     assert_equal 'LONGRGB', LONGRGB.inspect
     assert_equal 'ULONGRGB', ULONGRGB.inspect
+    assert_equal 'SFLOATRGB', SFLOATRGB.inspect
+    assert_equal 'DFLOATRGB', DFLOATRGB.inspect
   end
 
   def test_rgb_to_s
@@ -72,6 +74,8 @@ class TC_RGB < Test::Unit::TestCase
     assert_equal 'UINTRGB', UINTRGB.to_s
     assert_equal 'LONGRGB', LONGRGB.to_s
     assert_equal 'ULONGRGB', ULONGRGB.to_s
+    assert_equal 'SFLOATRGB', SFLOATRGB.to_s
+    assert_equal 'DFLOATRGB', DFLOATRGB.to_s
   end
 
   def test_rgb_default
