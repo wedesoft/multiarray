@@ -58,6 +58,15 @@ module Hornetseye
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
+    def to_s
+      raise 'RGB#to_s was called'
+      "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
+    end
+
+    def store( value )
+      @r, @g, @b = value.r, value.g, value.b
+    end
+
     def coerce( other )
       if other.is_a? RGB
         return other, self

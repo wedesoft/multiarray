@@ -42,11 +42,35 @@ module Hornetseye
     end
 
     def load( typecode )
-      [ GCCValue.new( @function, "*(#{GCCType.new( typecode ).identifier} *)( #{self} )" ) ]
+      if typecode == UBYTERGB
+        [ GCCValue.new( @function, "*(#{GCCType.new( UBYTE ).identifier} *)( #{self} )" ),
+          GCCValue.new( @function, "*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 1 )" ),
+          GCCValue.new( @function, "*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 2 )" ) ]
+      else
+        [ GCCValue.new( @function, "*(#{GCCType.new( typecode ).identifier} *)( #{self} )" ) ]
+      end
     end
 
     def save( value )
-      @function << "#{@function.indent}*(#{GCCType.new( value.typecode ).identifier} *)( #{self} ) = #{value.get};\n"
+      if value.typecode == UBYTERGB
+        @function << "#{@function.indent}*(#{GCCType.new( UBYTE ).identifier} *)( #{self} ) = #{value.values[0]};\n"
+        @function << "#{@function.indent}*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 1 ) = #{value.values[1]};\n"
+        @function << "#{@function.indent}*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 2 ) = #{value.values[2]};\n"
+      else
+        @function << "#{@function.indent}*(#{GCCType.new( value.typecode ).identifier} *)( #{self} ) = #{value.get};\n"
+      end
+    end
+
+    def r
+      self
+    end
+
+    def g
+      self
+    end
+
+    def b
+      self
     end
 
     def eq( other )
