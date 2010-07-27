@@ -76,14 +76,14 @@ module Hornetseye
     end
 
     def variable( typecode, prefix )
-      if typecode == UBYTERGB
+      if typecode == INTRGB
         r = GCCValue.new( self, id( prefix ) )
         g = GCCValue.new( self, id( prefix ) )
         b = GCCValue.new( self, id( prefix ) )
-        self << "#{indent}#{GCCType.new( UBYTE ).identifier} #{r};\n"
-        self << "#{indent}#{GCCType.new( UBYTE ).identifier} #{g};\n"
-        self << "#{indent}#{GCCType.new( UBYTE ).identifier} #{b};\n"
-        UBYTERGB.new RGB.new( r, g, b )
+        self << "#{indent}#{GCCType.new( INT ).identifier} #{r};\n"
+        self << "#{indent}#{GCCType.new( INT ).identifier} #{g};\n"
+        self << "#{indent}#{GCCType.new( INT ).identifier} #{b};\n"
+        INTRGB.new RGB.new( r, g, b )
       else
         retval = typecode.new GCCValue.new( self, id( prefix ) )
         self << "#{indent}#{GCCType.new( typecode ).identifier} #{retval.get};\n"

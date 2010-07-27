@@ -42,20 +42,20 @@ module Hornetseye
     end
 
     def load( typecode )
-      if typecode == UBYTERGB
-        [ GCCValue.new( @function, "*(#{GCCType.new( UBYTE ).identifier} *)( #{self} )" ),
-          GCCValue.new( @function, "*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 1 )" ),
-          GCCValue.new( @function, "*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 2 )" ) ]
+      if typecode == INTRGB
+        [ GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} )" ),
+          GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} + 1 )" ),
+          GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} + 2 )" ) ]
       else
         [ GCCValue.new( @function, "*(#{GCCType.new( typecode ).identifier} *)( #{self} )" ) ]
       end
     end
 
     def save( value )
-      if value.typecode == UBYTERGB
-        @function << "#{@function.indent}*(#{GCCType.new( UBYTE ).identifier} *)( #{self} ) = #{value.values[0]};\n"
-        @function << "#{@function.indent}*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 1 ) = #{value.values[1]};\n"
-        @function << "#{@function.indent}*(#{GCCType.new( UBYTE ).identifier} *)( #{self} + 2 ) = #{value.values[2]};\n"
+      if value.typecode == INTRGB
+        @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} ) = #{value.values[0]};\n"
+        @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 1 ) = #{value.values[1]};\n"
+        @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 2 ) = #{value.values[2]};\n"
       else
         @function << "#{@function.indent}*(#{GCCType.new( value.typecode ).identifier} *)( #{self} ) = #{value.get};\n"
       end

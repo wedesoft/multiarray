@@ -55,7 +55,7 @@ module Hornetseye
       if Thread.current[ :function ].nil? or value.is_a? GCCValue
         @value = value
       else
-        if is_a? UBYTERGB
+        if is_a? INTRGB
           r = GCCValue.new Thread.current[ :function ], value.r.to_s
           g = GCCValue.new Thread.current[ :function ], value.g.to_s
           b = GCCValue.new Thread.current[ :function ], value.b.to_s

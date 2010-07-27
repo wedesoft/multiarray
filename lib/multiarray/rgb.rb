@@ -59,7 +59,6 @@ module Hornetseye
     end
 
     def to_s
-      raise 'RGB#to_s was called'
       "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
     end
 
@@ -203,6 +202,19 @@ module Hornetseye
         false # !!!
       end
 
+    end
+
+    def strip
+      v1 = Variable.new self.class.element_type
+      v2 = Variable.new self.class.element_type
+      v3 = Variable.new self.class.element_type
+      return [ v1, v2, v3 ], [ self.class.element_type.new( get.r ),
+                               self.class.element_type.new( get.g ),
+                               self.class.element_type.new( get.b ) ], self.class.new( RGB.new( v1, v2, v3 ) )
+    end
+
+    def subst( hash )
+      self.class.new RGB.new( get.r.subst( hash ).get, get.g.subst( hash ).get, get.b.subst( hash ).get )
     end
 
     def values
