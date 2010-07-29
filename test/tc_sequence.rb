@@ -27,9 +27,14 @@ class TC_Sequence < Test::Unit::TestCase
   B = Hornetseye::BOOL
   I = Hornetseye::INT
   S = Hornetseye::Sequence
+  C = Hornetseye::INTRGB
 
   def S( *args )
     Hornetseye::Sequence *args
+  end
+
+  def C( *args )
+    Hornetseye::RGB *args
   end
   
   def sum( *args, &action )
@@ -278,6 +283,9 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ 2, 3, 5 ], S[ 1, 2, 4 ] + 1
     assert_equal S[ 2, 3, 5 ], 1 + S[ 1, 2, 4 ]
     assert_equal S[ 2, 3, 5 ], S[ 1, 2, 3 ] + S[ 1, 1, 2 ]
+    assert_equal S[ C( 2, 3, 4 ), C( 5, 6, 7 ) ], S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ] + 1
+    assert_equal S[ C( 2, 3, 4 ), C( 5, 6, 7 ) ], 1 + S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ]
+    assert_equal S[ C( 2, 3, 4 ), C( 3, 4, 5 ) ], S[ 1, 2 ] + C( 1, 2, 3 )
   end
 
   def test_major
