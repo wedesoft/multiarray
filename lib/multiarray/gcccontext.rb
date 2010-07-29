@@ -108,8 +108,7 @@ EOS
 
 inline void *mallocToPtr( VALUE rbMalloc )
 {
-  VALUE rbValue = rb_iv_get( rbMalloc, "@value" );
-  void *retVal; Data_Get_Struct( rbValue, void, retVal );
+  void *retVal; Data_Get_Struct( rbMalloc, void, retVal );
   return retVal;
 }
 

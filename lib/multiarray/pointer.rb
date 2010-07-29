@@ -128,6 +128,10 @@ module Hornetseye
       end
     end
 
+    def values
+      [ @value ]
+    end
+
   end
 
   def Pointer( target )

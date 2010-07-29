@@ -59,7 +59,7 @@ module Hornetseye
     end
 
     def to_s
-      raise 'RGB#to_s was called'
+      raise 'RGB#to_s was called' # !!!
       "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
     end
 
