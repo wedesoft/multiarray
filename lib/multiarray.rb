@@ -448,6 +448,14 @@ class Numeric
 
 end
 
+class Array
+
+  def collect_with_index( &action )
+    zip( ( 0 ... size ).to_a ).collect &action
+  end
+
+end
+
 require 'malloc'
 require 'rbconfig'
 require 'set'

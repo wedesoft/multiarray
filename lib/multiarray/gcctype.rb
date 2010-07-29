@@ -23,50 +23,54 @@ module Hornetseye
       @typecode = typecode
     end
 
-    def identifier
+    def identifiers
       case @typecode
       when nil
-        'void'
+        [ 'void' ]
       when BOOL
-        'char'
+        [ 'char' ]
       when BYTE
-        'char'
+        [ 'char' ]
       when UBYTE
-        'unsigned char'
+        [ 'unsigned char' ]
       when SINT
-        'short int'
+        [ 'short int' ]
       when USINT
-        'unsigned short int'
+        [ 'unsigned short int' ]
       when INT
-        'int'
+        [ 'int' ]
       when UINT
-        'unsigned int'
+        [ 'unsigned int' ]
       when SFLOAT
-        'float'
+        [ 'float' ]
         when DFLOAT
-        'double'
+        [ 'double' ]
       else
         if @typecode < Pointer_
-          'void *'
+          [ 'void *' ]
         elsif @typecode < INDEX_
-          'int'
+          [ 'int' ]
+        elsif @typecode < RGB_
+          GCCType.new( @typecode.element_type ).identifiers * 3
         else
           raise "No identifier available for #{@typecode.inspect}"
         end
       end
     end
 
-    def r2c( expr )
+    def r2c
       case @typecode
       when BOOL
-        "( #{expr} ) != Qfalse"
+        [ proc { |expr| "( #{expr} ) != Qfalse" } ]
       when BYTE, UBYTE, SINT, USINT, INT, UINT
-        "NUM2INT( #{expr} )"
+        [ proc { |expr| "NUM2INT( #{expr} )" } ]
       when SFLOAT, DFLOAT
-        "NUM2DBL( #{expr} )"
+        [ proc { |expr| "NUM2DBL( #{expr} )" } ]
       else
         if @typecode < Pointer_
-          "(#{identifier})mallocToPtr( #{expr} )"
+          [ proc { |expr| "(#{identifiers.first})mallocToPtr( #{expr} )" } ] # !!!
+        elsif @typecode < RGB_
+          GCCType.new( @typecode.element_type ).r2c * 3
         else
           raise "No conversion available for #{@typecode.inspect}"
         end
@@ -76,4 +80,4 @@ module Hornetseye
   end
 
 end
-  
+ 

@@ -69,8 +69,10 @@ void #{descriptor}(#{
 if param_types.empty?
   ''
 else
-  ' ' + ( 0 ... param_types.size ).collect do |i|
-    "#{param_types[ i ].identifier} param#{i}"
+  ' ' + param_types.collect do |t|
+    t.identifiers
+  end.flatten.collect_with_index do |ident,i|
+    "#{ident} param#{i}"
   end.join( ', ' ) + ' '
 end
 }) {
@@ -83,8 +85,10 @@ VALUE wrap#{descriptor.capitalize}( int argc, VALUE *argv, VALUE rbSelf )
 if param_types.empty?
   ''
 else
-  s = ' ' + ( 0 ... param_types.size ).collect do |i|
-    param_types[ i ].r2c "argv[ #{i} ]"
+  s = ' ' + param_types.collect do |t|
+    t.r2c
+  end.flatten.collect_with_index do |conv,i|
+    conv.call "argv[ #{i} ]"
   end.join( ', ' ) + ' '
 end
 });

@@ -76,19 +76,19 @@ module Hornetseye
     end
 
     def variable( typecode, prefix )
-      if typecode == INTRGB
-        r = GCCValue.new( self, id( prefix ) )
-        g = GCCValue.new( self, id( prefix ) )
-        b = GCCValue.new( self, id( prefix ) )
-        self << "#{indent}#{GCCType.new( INT ).identifier} #{r};\n"
-        self << "#{indent}#{GCCType.new( INT ).identifier} #{g};\n"
-        self << "#{indent}#{GCCType.new( INT ).identifier} #{b};\n"
-        INTRGB.new RGB.new( r, g, b )
-      else
+      #if typecode == INTRGB
+      #  r = GCCValue.new( self, id( prefix ) )
+      #  g = GCCValue.new( self, id( prefix ) )
+      #  b = GCCValue.new( self, id( prefix ) )
+      #  self << "#{indent}#{GCCType.new( INT ).identifier} #{r};\n"
+      #  self << "#{indent}#{GCCType.new( INT ).identifier} #{g};\n"
+      #  self << "#{indent}#{GCCType.new( INT ).identifier} #{b};\n"
+      #  INTRGB.new RGB.new( r, g, b )
+      #else
         retval = typecode.new GCCValue.new( self, id( prefix ) )
-        self << "#{indent}#{GCCType.new( typecode ).identifier} #{retval.get};\n"
+        self << "#{indent}#{GCCType.new( typecode ).identifiers.first} #{retval.get};\n" # !!!
         retval
-      end
+      #end
     end
 
     def indent
