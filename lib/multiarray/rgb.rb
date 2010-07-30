@@ -232,7 +232,7 @@ module Hornetseye
     end
 
     def values
-      [ get.r, get.g, get.b ]
+      [ @value.r, @value.g, @value.b ]
     end
 
     module Match

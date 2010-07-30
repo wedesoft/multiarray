@@ -152,7 +152,7 @@ module Hornetseye
     end
 
     def values
-      [ get ]
+      [ @value ]
     end
 
   end
