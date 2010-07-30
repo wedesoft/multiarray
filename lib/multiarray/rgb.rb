@@ -59,7 +59,6 @@ module Hornetseye
     end
 
     def to_s
-      raise 'RGB#to_s was called' # !!!
       "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
     end
 
@@ -124,8 +123,8 @@ module Hornetseye
         construct *ptr.load( self )
       end
 
-      def construct( *args )
-        new Hornetseye::RGB( *args )
+      def construct( r, g, b )
+        new Hornetseye::RGB( r, g, b )
       end
 
       def memory
@@ -230,9 +229,9 @@ module Hornetseye
         r = Thread.current[ :function ].variable self.class.element_type, 'v'
         g = Thread.current[ :function ].variable self.class.element_type, 'v'
         b = Thread.current[ :function ].variable self.class.element_type, 'v'
-        r.get.store get.r
-        g.get.store get.g
-        b.get.store get.b
+        r.get.store @value.r
+        g.get.store @value.g
+        b.get.store @value.b
         self.class.new RGB.new( r.get, g.get, b.get )
       else
         self.class.new get

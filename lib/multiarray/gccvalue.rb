@@ -47,8 +47,13 @@ module Hornetseye
       #    GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} + 1 )" ),
       #    GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} + 2 )" ) ]
       #else
-        [ GCCValue.new( @function, "*(#{GCCType.new( typecode ).identifiers.first} *)( #{self} )" ) ] # !!!
-      #end
+      offset = 0
+      typecode.typecodes.collect do |t|
+        value = GCCValue.new @function,
+          "*(#{GCCType.new( t ).identifiers.first} *)( #{self} + #{offset} )"
+        offset += t.storage_size
+        value
+      end
     end
 
     def save( value )
