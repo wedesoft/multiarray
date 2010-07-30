@@ -205,6 +205,32 @@ module Hornetseye
 
     end
 
+    def initialize( value = self.class.default )
+      if Thread.current[ :function ].nil? or
+         [ value.r, value.g, value.b ].all? { |c| c.is_a? GCCValue }
+        @value = value
+      else
+        r = GCCValue.new Thread.current[ :function ], value.r.to_s
+        g = GCCValue.new Thread.current[ :function ], value.r.to_s
+        b = GCCValue.new Thread.current[ :function ], value.r.to_s
+        @value = RGB.new r, g, b
+      end
+    end
+
+    def dup
+      if Thread.current[ :function ]
+        r = Thread.current[ :function ].variable self.class.element_type, 'v'
+        g = Thread.current[ :function ].variable self.class.element_type, 'v'
+        b = Thread.current[ :function ].variable self.class.element_type, 'v'
+        r.get.store get.r
+        g.get.store get.g
+        b.get.store get.b
+        self.class.new RGB.new( r.get, g.get, b.get )
+      else
+        self.class.new get
+      end
+    end
+
     def values
       [ get.r, get.g, get.b ]
     end
