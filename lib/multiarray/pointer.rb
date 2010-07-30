@@ -25,6 +25,10 @@ module Hornetseye
       # @return [Node] Type of object the pointer is pointing at.
       attr_accessor :target
 
+      def construct( *args )
+        new *args
+      end
+
       def inspect
         "*(#{target.inspect})"
       end

@@ -57,8 +57,10 @@ module Hornetseye
       #  @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 1 ) = #{value.values[1]};\n"
       #  @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 2 ) = #{value.values[2]};\n"
       #else
+      offset = 0
       value.class.typecodes.zip( value.values ).each do |t,v|
-        @function << "#{@function.indent}*(#{GCCType.new( t ).identifiers.first} *)( #{self} ) = #{v};\n" # !!!
+        @function << "#{@function.indent}*(#{GCCType.new( t ).identifiers.first} *)( #{self} + #{offset} ) = #{v};\n" # !!!
+        offset += t.storage_size
       end
     end
 

@@ -100,7 +100,12 @@ module Hornetseye
     end
 
     def param( i )
-      @param_types[ i ].new GCCValue.new( self, "param#{i}" )
+      offset = ( 0 ... i ).inject( 0 ) do |s,idx|
+        s + GCCType.new( @param_types[ idx ] ).identifiers.size
+      end
+      args = ( 0 ... GCCType.new( @param_types[ i ] ).identifiers.size ).
+        collect { |idx| GCCValue.new self, "param#{ offset + idx }" }
+      @param_types[ i ].construct *args
     end
 
     def call( *args )

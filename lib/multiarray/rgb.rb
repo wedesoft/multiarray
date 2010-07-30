@@ -121,7 +121,11 @@ module Hornetseye
       attr_accessor :element_type
 
       def fetch( ptr )
-        new Hornetseye::RGB( *ptr.load( self ) )
+        construct *ptr.load( self )
+      end
+
+      def construct( *args )
+        new Hornetseye::RGB( *args )
       end
 
       def memory
