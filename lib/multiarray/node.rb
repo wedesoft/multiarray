@@ -77,6 +77,10 @@ module Hornetseye
         self
       end
 
+      def typecodes
+        [ self ]
+      end
+
       # Array type of this term
       #
       # @return [Class] Resulting array type.

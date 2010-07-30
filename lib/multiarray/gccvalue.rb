@@ -57,8 +57,9 @@ module Hornetseye
       #  @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 1 ) = #{value.values[1]};\n"
       #  @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 2 ) = #{value.values[2]};\n"
       #else
-        @function << "#{@function.indent}*(#{GCCType.new( value.typecode ).identifiers.first} *)( #{self} ) = #{value.get};\n"
-      #end
+      value.class.typecodes.zip( value.values ).each do |t,v|
+        @function << "#{@function.indent}*(#{GCCType.new( t ).identifiers.first} *)( #{self} ) = #{v};\n" # !!!
+      end
     end
 
     def r

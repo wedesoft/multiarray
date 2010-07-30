@@ -166,6 +166,10 @@ module Hornetseye
         end
       end
 
+      def typecodes
+        [ element_type ] * 3
+      end
+
       def coercion( other )
         if other < RGB_
           Hornetseye::RGB element_type.coercion( other.element_type )

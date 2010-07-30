@@ -1,4 +1,4 @@
-# compile RGB, Composite numbers?
+# compile RGB, use descriptors?, Composite numbers?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?
 # documentation!
