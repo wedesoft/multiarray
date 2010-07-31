@@ -22,7 +22,7 @@ module Hornetseye
     class << self
 
       def generic?( value )
-        value.is_a? Numeric
+        value.is_a?( Numeric ) or value.is_a?( GCCValue )
       end
 
       def define_unary_op( op )
@@ -103,9 +103,9 @@ module Hornetseye
 
     def ==( other )
       if other.is_a? RGB
-        ( @r == other.r ).and( @g == other.g ).and( @b == other.b )
+        @r.eq( other.r ).and( @g.eq( other.g ) ).and( @b.eq( other.b ) )
       elsif RGB.generic? other
-        ( @r == other ).and( @g == other ).and( @b == other )
+        @r.eq( other ).and( @g.eq( other ) ).and( @b.eq( other ) )
       else
         false
       end
