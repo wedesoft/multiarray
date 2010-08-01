@@ -59,6 +59,7 @@ module Hornetseye
     end
 
     def to_s
+raise 'WTF?'
       "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
     end
 
@@ -206,9 +207,9 @@ module Hornetseye
         self == other
       end
 
-      def compilable?
-        false # !!!
-      end
+      #def compilable?
+      #  false # !!!
+      #end
 
     end
 

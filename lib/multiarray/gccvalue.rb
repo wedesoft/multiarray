@@ -19,6 +19,31 @@ module Hornetseye
   
   class GCCValue
 
+    class << self
+
+      def generic?( value )
+        value.is_a?( GCCValue ) or value.is_a?( Fixnum ) or value.is_a?( Float )
+      end
+
+      def define_unary_op( op, opcode = op )
+        define_method( op ) do
+          GCCValue.new @function, "#{opcode}( #{self} )"
+        end
+      end
+
+      def define_binary_op( op, opcode = op )
+        define_method( op ) do |other|
+          if GCCValue.generic? other
+            GCCValue.new @function, "( #{self} ) #{opcode} ( #{other} )"
+          else
+            x, y = other.coerce self
+            x.send op, y
+          end
+        end
+      end
+
+    end
+
     def initialize( function, descriptor ) 
       @function = function
       @descriptor = descriptor
@@ -42,11 +67,6 @@ module Hornetseye
     end
 
     def load( typecode )
-      #if typecode == INTRGB
-      #  [ GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} )" ),
-      #    GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} + 1 )" ),
-      #    GCCValue.new( @function, "*(#{GCCType.new( INT ).identifier} *)( #{self} + 2 )" ) ]
-      #else
       offset = 0
       typecode.typecodes.collect do |t|
         value = GCCValue.new @function,
@@ -57,11 +77,6 @@ module Hornetseye
     end
 
     def save( value )
-      #if value.typecode == INTRGB
-      #  @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} ) = #{value.values[0]};\n"
-      #  @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 1 ) = #{value.values[1]};\n"
-      #  @function << "#{@function.indent}*(#{GCCType.new( INT ).identifier} *)( #{self} + 2 ) = #{value.values[2]};\n"
-      #else
       offset = 0
       value.class.typecodes.zip( value.values ).each do |t,v|
         @function << "#{@function.indent}*(#{GCCType.new( t ).identifiers.first} *)( #{self} + #{offset} ) = #{v};\n" # !!!
@@ -93,61 +108,20 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end
 
-    def not
-      GCCValue.new @function, "!( #{self} )"
-    end
-
-    def ~
-      GCCValue.new @function, "~( #{self} )"
-    end
-
-    def and( other )
-      GCCValue.new @function, "( #{self} ) && ( #{other} )"
-    end
-
-    def or( other )
-      GCCValue.new @function, "( #{self} ) || ( #{other} )"
-    end
-
-    def &( other )
-      GCCValue.new @function, "( #{self} ) & ( #{other} )"
-    end
-
-    def |( other )
-      GCCValue.new @function, "( #{self} ) | ( #{other} )"
-    end
-
-    def ^( other )
-      GCCValue.new @function, "( #{self} ) ^ ( #{other} )"
-    end
-
-    def <<( other )
-      GCCValue.new @function, "( #{self} ) << ( #{other} )"
-    end
-
-    def >>( other )
-      GCCValue.new @function, "( #{self} ) >> ( #{other} )"
-    end
-
-    def -@
-      GCCValue.new @function, "-( #{self} )"
-    end
-
-    def +( other )
-      GCCValue.new @function, "( #{self} ) + ( #{other} )"
-    end
-
-    def -( other )
-      GCCValue.new @function, "( #{self} ) - ( #{other} )"
-    end
-
-    def *( other )
-      GCCValue.new @function, "( #{self} ) * ( #{other} )"
-    end
-
-    def /( other )
-      GCCValue.new @function, "( #{self} ) / ( #{other} )"
-    end
+    define_unary_op :not, :!
+    define_unary_op :~
+    define_unary_op :-@, :-
+    define_binary_op :and, '&&'
+    define_binary_op :or, '||'
+    define_binary_op :&
+    define_binary_op :|
+    define_binary_op :^
+    define_binary_op :<<
+    define_binary_op :>>
+    define_binary_op :+
+    define_binary_op :-
+    define_binary_op :*
+    define_binary_op :/
 
     def major( other )
       GCCValue.new @function,
