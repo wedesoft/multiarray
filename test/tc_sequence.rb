@@ -188,12 +188,14 @@ class TC_Sequence < Test::Unit::TestCase
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal 2, t[ 4, 2, 3 ].min
     end
+    assert_equal C( 1, 2, 1 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].min
   end
 
   def test_max
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal 4, t[ 4, 2, 3 ].max
     end
+    assert_equal C( 3, 2, 3 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].max
   end
 
   def test_convolve
