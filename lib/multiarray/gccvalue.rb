@@ -108,7 +108,7 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end
 
-    define_unary_op :not, :!
+    define_unary_op :not, '!'
     define_unary_op :~
     define_unary_op :-@, :-
     define_binary_op :and, '&&'

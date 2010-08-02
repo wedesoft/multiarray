@@ -285,6 +285,9 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 1, 0, 3 ], ( 1 ^ t[ 0, 1, 2 ] ).to_a
       assert_equal [ 4, 2, 3 ], ( t[ 0, 1, 2 ] ^ t[ 4, 3, 1 ] ).to_a
     end
+    assert_equal [ C( 3, 0, 1 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] ^ 2 ).to_a
+    assert_equal [ C( 0, 3, 2 ) ], ( 1 ^ S( C, 1 )[ C( 1, 2, 3 ) ] ).to_a
+    assert_equal [ C( 2, 0, 2 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] ^ C( 3, 2, 1 ) ).to_a
   end
 
   def test_shl
@@ -307,6 +310,8 @@ class TC_Sequence < Test::Unit::TestCase
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal t[ -1, 2, -3 ], -t[ 1, -2, 3 ]
     end
+    assert_equal S( C, 2 )[ C( -1, -2, -3 ), C( -2, -1, 0 ) ],
+                 -S( C, 2 )[ C( 1, 2, 3 ), C( 2, 1, 0 ) ]
   end
 
   def test_plus
@@ -325,27 +330,14 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 2, 2, 3 ], S[ 1, 2, 3 ].major( 2 ).to_a
     assert_equal [ 2, 2, 3 ], 2.major( S[ 1, 2, 3 ] ).to_a
     assert_equal [ 3, 2, 3 ], S[ 1, 2, 3 ].major( S[ 3, 2, 1 ] ).to_a
+    assert_equal [ C( 2, 2, 3 ) ], S[ C( 1, 2, 3 ) ].major( 2 ).to_a
   end
 
   def test_minor
     assert_equal [ 1, 2, 2 ], S[ 1, 2, 3 ].minor( 2 ).to_a
     assert_equal [ 1, 2, 2 ], 2.minor( S[ 1, 2, 3 ] ).to_a
     assert_equal [ 1, 2, 1 ], S[ 1, 2, 3 ].minor( S[ 3, 2, 1 ] ).to_a
-  end
-
-  def test_default
-    assert_equal [ nil, nil, nil ], S( O, 3 ).default.to_a
-    assert_equal [ 0, 0, 0 ], S( I, 3 ).default.to_a
-  end
-
-  def test_indgen
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
-      assert_equal [ 0, 1, 2 ], t.indgen.to_a
-      assert_equal [ 1, 2, 3 ], ( t.indgen + 1 ).to_a
-      assert_equal [ 1, 2, 3 ], t.indgen( 1 ).to_a
-      assert_equal [ 1, 3, 5 ], ( 2 * t.indgen + 1 ).to_a
-      assert_equal [ 1, 3, 5 ], t.indgen( 1, 2 ).to_a
-    end
+    assert_equal [ C( 1, 2, 2 ) ], S[ C( 1, 2, 3 ) ].minor( 2 ).to_a
   end
 
 end
