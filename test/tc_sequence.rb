@@ -56,8 +56,9 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sequence_default
-    assert_equal [ nil, nil, nil ], S( O, 3 ).default.to_a
-    assert_equal [ 0, 0, 0 ], S( I, 3 ).default.to_a
+    assert_equal [ nil ] * 3, S( O, 3 ).default.to_a
+    assert_equal [ 0 ] * 3, S( I, 3 ).default.to_a
+    assert_equal [ C( 0, 0, 0 ) ] * 3, S( C, 3 ).default.to_a
   end
 
   def test_sequence_indgen
@@ -65,6 +66,8 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 1, 2, 3 ], S( I, 3 ).indgen( 1 ).to_a
     assert_equal [ 0, 2, 4 ], S( I, 3 ).indgen( 0, 2 ).to_a
     assert_equal [ 1, 3, 5 ], S( I, 3 ).indgen( 1, 2 ).to_a
+    assert_equal [ C( 1, 2, 3 ), C( 3, 5, 7 ) ],
+                 S( C, 2 ).indgen( C( 1, 2, 3 ), C( 2, 3, 4 ) ).to_a
   end
 
   def test_sequence_at
@@ -72,17 +75,23 @@ class TC_Sequence < Test::Unit::TestCase
                  S( I, 3 )[ 1, 2, 3 ].inspect
     assert_equal "Sequence(OBJECT,3):\n[ 1, 2, 3 ]",
                  S( O, 3 )[ 1, 2, 3 ].inspect
+    assert_equal "Sequence(INTRGB,2):\n[ RGB(1,2,3), RGB(4,5,6) ]",
+                 S( C, 2 )[ C( 1, 2, 3 ), C( 4, 5, 6 ) ].inspect
   end
 
-  def test_sequence_at
+  def test_sequence_match
     assert_equal [ 1, 2, 3 ], S[ 1, 2, 3 ].to_a
     assert_equal O, S[ :a ].typecode
     assert_equal B, S[ false, true ].typecode
     assert_equal I, S[ -2 ** 31, 2 ** 31 - 1 ].typecode
+    assert_equal C, S[ C( -2 ** 31, 2 ** 31 - 1, 0 ) ].typecode
   end
 
   def test_sequence_typecode
     assert_equal O, S( O, 3 ).typecode
+    assert_equal B, S( B, 3 ).typecode
+    assert_equal I, S( I, 3 ).typecode
+    assert_equal C, S( C, 3 ).typecode
   end
 
   def test_sequence_dimension
@@ -95,6 +104,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_sequence_size
     assert_equal 3, S( O, 3 ).size
+    assert_equal 3, S( C, 3 ).size
   end
 
   def test_inspect
@@ -109,6 +119,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_dimension
     assert_equal 1, S[ 1, 2, 3 ].dimension
+    assert_equal 1, S[ C( 1, 2, 3 ) ].dimension
   end
 
   def test_shape
