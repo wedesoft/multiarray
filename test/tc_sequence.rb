@@ -181,6 +181,7 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal 6, sum { |i| t[ 1, 2, 3 ][ i ] }
       assert_equal [ 1, 2, 3 ], sum { || t[ 1, 2, 3 ] }.to_a
     end
+    assert_equal C( 3, 5, 8 ), sum { |i| S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ][i] }
   end
 
   def test_min
