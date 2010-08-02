@@ -238,6 +238,26 @@ module Hornetseye
       end
     end
 
+    def store( value )
+      value = value.simplify
+      if @value.r.respond_to? :store
+        @value.r.store value.get.r
+      else
+        @value.r = value.get.r
+      end
+      if @value.g.respond_to? :store
+        @value.g.store value.get.g
+      else
+        @value.g = value.get.g
+      end
+      if @value.b.respond_to? :store
+        @value.b.store value.get.b
+      else
+        @value.b = value.get.b
+      end
+      value
+    end
+
     def values
       [ @value.r, @value.g, @value.b ]
     end

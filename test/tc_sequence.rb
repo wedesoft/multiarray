@@ -171,6 +171,9 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
     assert_equal 'abc', S[ 'a', 'b', 'c' ].inject { |a,b| a + b }
     assert_equal 'abcd', S[ 'b', 'c', 'd' ].inject( 'a' ) { |a,b| a + b }
+    assert_equal C( 3, 5, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].inject { |a,b| a + b }
+    assert_equal C( 5, 6, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].
+                               inject( C( 2, 1, 0 ) ) { |a,b| a + b }
   end
 
   def test_sum
