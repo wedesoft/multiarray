@@ -213,12 +213,16 @@ class TC_Sequence < Test::Unit::TestCase
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal S[ false, true, false ], t[ -1, 0, 1 ].zero?
     end
+    assert_equal S[ false, false, false, true ],
+                 S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].zero?
   end
 
   def test_nonzero
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal S[ true, false, true ], t[ -1, 0, 1 ].nonzero?
     end
+    assert_equal S[ true, true, true, false ],
+                 S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].nonzero?
   end
 
   def test_not
@@ -249,6 +253,8 @@ class TC_Sequence < Test::Unit::TestCase
     [ S( O, 4 ), S( I, 4 ) ].each do |t|
       assert_equal [ 0, -1, -2, -3 ], ( ~t[ -1, 0, 1, 2 ] ).to_a
     end
+    assert_equal [ C( -2, -3, -4 ), C( -5, -6, -7 ) ],
+                 ( ~S( C, 2 )[ C( 1, 2, 3 ), C( 4, 5, 6 ) ] ).to_a
   end
 
   def test_bitwise_and
@@ -257,34 +263,50 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 0, 1, 0 ], ( 1 & t[ 0, 1, 2 ] ).to_a
       assert_equal [ 0, 1, 2 ], ( t[ 0, 1, 3 ] & t[ 4, 3, 2 ] ).to_a
     end
+    assert_equal [ C( 0, 2, 2 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] & 2 ).to_a
+    assert_equal [ C( 1, 0, 1 ) ], ( 1 & S( C, 1 )[ C( 1, 2, 3 ) ] ).to_a
+    assert_equal [ C( 1, 2, 1 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] & C( 3, 2, 1 ) ).to_a
   end
 
   def test_bitwise_or
-    assert_equal [ 1, 1, 3 ], ( S[ 0, 1, 2 ] | 1 ).to_a
-    assert_equal [ 1, 1, 3 ], ( 1 | S[ 0, 1, 2 ] ).to_a
-    assert_equal [ 4, 3, 3, 3 ], ( S[ 0, 1, 2, 3 ] | S[ 4, 3, 1, 2 ] ).to_a
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal [ 1, 1, 3 ], ( t[ 0, 1, 2 ] | 1 ).to_a
+      assert_equal [ 1, 1, 3 ], ( 1 | t[ 0, 1, 2 ] ).to_a
+      assert_equal [ 4, 3, 3 ], ( t[ 0, 1, 2 ] | t[ 4, 3, 1 ] ).to_a
+    end
+    assert_equal [ C( 3, 2, 3 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] | 2 ).to_a
+    assert_equal [ C( 1, 3, 3 ) ], ( 1 | S( C, 1 )[ C( 1, 2, 3 ) ] ).to_a
+    assert_equal [ C( 3, 2, 3 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] | C( 3, 2, 1 ) ).to_a
   end
 
   def test_bitwise_xor
-    assert_equal [ 1, 0, 3 ], ( S[ 0, 1, 2 ] ^ 1 ).to_a
-    assert_equal [ 1, 0, 3 ], ( 1 ^ S[ 0, 1, 2 ] ).to_a
-    assert_equal [ 4, 2, 3, 1 ], ( S[ 0, 1, 2, 3 ] ^ S[ 4, 3, 1, 2 ] ).to_a
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal [ 1, 0, 3 ], ( t[ 0, 1, 2 ] ^ 1 ).to_a
+      assert_equal [ 1, 0, 3 ], ( 1 ^ t[ 0, 1, 2 ] ).to_a
+      assert_equal [ 4, 2, 3 ], ( t[ 0, 1, 2 ] ^ t[ 4, 3, 1 ] ).to_a
+    end
   end
 
   def test_shl
-    assert_equal [ 2, 4, 6 ], ( S[ 1, 2, 3 ] << 1 ).to_a
-    assert_equal [ 6, 12, 24 ], ( 3 << S[ 1, 2, 3 ] ).to_a
-    assert_equal [ 8, 8, 6 ], ( S[ 1, 2, 3 ] << S[ 3, 2, 1 ] ).to_a
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal [ 2, 4, 6 ], ( t[ 1, 2, 3 ] << 1 ).to_a
+      assert_equal [ 6, 12, 24 ], ( 3 << t[ 1, 2, 3 ] ).to_a
+      assert_equal [ 8, 8, 6 ], ( t[ 1, 2, 3 ] << t[ 3, 2, 1 ] ).to_a
+    end
   end
 
   def test_shr
-    assert_equal [ 1, 2, 3 ], ( S[ 2, 4, 6 ] >> 1 ).to_a
-    assert_equal [ 12, 6, 3 ], ( 24 >> S[ 1, 2, 3 ] ).to_a
-    assert_equal [ 2, 1, 3 ], ( S[ 16, 4, 6 ] >> S[ 3, 2, 1 ] ).to_a
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal [ 1, 2, 3 ], ( t[ 2, 4, 6 ] >> 1 ).to_a
+      assert_equal [ 12, 6, 3 ], ( 24 >> t[ 1, 2, 3 ] ).to_a
+      assert_equal [ 2, 1, 3 ], ( t[ 16, 4, 6 ] >> t[ 3, 2, 1 ] ).to_a
+    end
   end
 
   def test_negate
-    assert_equal S[ -1, 2, -3 ], -S[ 1, -2, 3 ]
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal t[ -1, 2, -3 ], -t[ 1, -2, 3 ]
+    end
   end
 
   def test_plus
