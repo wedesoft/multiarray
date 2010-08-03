@@ -89,10 +89,15 @@ class TC_MultiArray < Test::Unit::TestCase
                  M( I, 3, 2 ).indgen( 0, 2 ).to_a
     assert_equal [ [ 1, 3, 5 ], [ 7, 9, 11 ] ],
                  M( I, 3, 2 ).indgen( 1, 2 ).to_a
+    assert_equal [ [ C( 1, 2, 3 ), C( 2, 2, 2 ) ],
+                   [ C( 3, 2, 1 ), C( 4, 2, 0 ) ] ],
+                 M( C, 2, 2 ).indgen( C( 1, 2, 3 ), C( 1, 0, -1 ) ).to_a
   end
 
   def test_multiarray_typecode
     assert_equal O, M( O, 3, 2 ).typecode
+    assert_equal I, M( I, 3, 2 ).typecode
+    assert_equal C, M( C, 3, 2 ).typecode
   end
 
   def test_multiarray_dimension
@@ -105,6 +110,8 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_multiarray_size
     assert_equal 6, M( O, 3, 2 ).size
+    assert_equal 6, M( I, 3, 2 ).size
+    assert_equal 6, M( C, 3, 2 ).size
   end
 
   def test_inspect
@@ -127,10 +134,14 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_typecode
     assert_equal O, M( O, 3, 2 ).new.typecode
+    assert_equal I, M( I, 3, 2 ).new.typecode
+    assert_equal C, M( C, 3, 2 ).new.typecode
   end
 
   def test_dimension
     assert_equal 2, M( O, 3, 2 ).new.dimension
+    assert_equal 2, M( I, 3, 2 ).new.dimension
+    assert_equal 2, M( C, 3, 2 ).new.dimension
   end
 
   def test_shape
@@ -244,11 +255,11 @@ class TC_MultiArray < Test::Unit::TestCase
                     [ 'c1', 'c2', 'c3' ],
                     [ 'd1', 'd2', 'd3' ] ].diagonal( 'x' ) { |a,b| a + b }
     assert_equal S( I, 4 )[ 4, 12, 21, 18 ],
-                 M( I, 3, 4 ).indgen[].diagonal { |a,b| a + b } # !!!
+                 M( I, 3, 4 ).indgen.diagonal { |a,b| a + b }
     assert_equal S( I, 3 )[ 4, 12, 12 ],
-                 M( I, 3, 3 ).indgen[].diagonal { |a,b| a + b } # !!!
+                 M( I, 3, 3 ).indgen.diagonal { |a,b| a + b }
     assert_equal S( I, 2 )[ 4, 6 ],
-                 M( I, 3, 2 ).indgen[].diagonal { |a,b| a + b } # !!!
+                 M( I, 3, 2 ).indgen.diagonal { |a,b| a + b }
   end
 
   def test_convolve
