@@ -1,4 +1,5 @@
-# RGB-tests: inject, use descriptors?, Composite numbers?
+# Composite numbers?
+# use descriptors?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?
 # documentation!
