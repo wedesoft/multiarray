@@ -22,7 +22,8 @@ module Hornetseye
     class << self
 
       def generic?( value )
-        value.is_a?( GCCValue ) or value.is_a?( Fixnum ) or value.is_a?( Float )
+        value.is_a?( GCCValue ) or value.is_a?( Fixnum ) or
+          value.is_a?( Float )
       end
 
       def define_unary_op( op, opcode = op )
@@ -70,7 +71,7 @@ module Hornetseye
       offset = 0
       typecode.typecodes.collect do |t|
         value = GCCValue.new @function,
-          "*(#{GCCType.new( t ).identifiers.first} *)( #{self} + #{offset} )"
+          "*(#{GCCType.new( t ).identifiers.first} *)( #{self} + #{offset} )" # !!!
         offset += t.storage_size
         value
       end
@@ -143,7 +144,8 @@ module Hornetseye
 
     def times( &action )
       i = @function.variable INT, 'i'
-      @function << "#{@function.indent}for ( #{i.get} = 0; #{i.get} != #{self}; #{i.get}++ ) {\n"
+      @function << "#{@function.indent}for ( #{i.get} = 0; " +
+                   "#{i.get} != #{self}; #{i.get}++ ) {\n"
       @function.indent_offset +1
       action.call i.get
       @function.indent_offset -1
@@ -153,7 +155,8 @@ module Hornetseye
 
     def upto( other, &action )
       i = @function.variable INT, 'i'
-      @function << "#{@function.indent}for ( #{i.get} = #{self}; #{i.get} != #{ other + 1 }; #{i.get}++ ) {\n"
+      @function << "#{@function.indent}for ( #{i.get} = #{self}; " +
+                   "#{i.get} != #{ other + 1 }; #{i.get}++ ) {\n"
       @function.indent_offset +1
       action.call i.get
       @function.indent_offset -1

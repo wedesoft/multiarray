@@ -35,7 +35,9 @@ module Hornetseye
 
     def define_binary_op( op, coercion = :coercion )
       define_method( op ) do |other|
-        other = Node.match( other, typecode ).new other unless other.is_a? Node
+        unless other.is_a? Node
+          other = Node.match( other, typecode ).new other
+        end
         if dimension == 0 and variables.empty? and
             other.dimension == 0 and other.variables.empty?
           target = array_type.send coercion, other.array_type
@@ -183,7 +185,9 @@ module Hornetseye
         demand
       else
         if initial
-          initial = Node.match( initial ).new initial unless initial.is_a? Node
+          unless initial.is_a? Node
+            initial = Node.match( initial ).new initial
+          end
           initial_typecode = initial.typecode
         else
           initial_typecode = typecode

@@ -35,7 +35,9 @@ module Hornetseye
       hash = hash.merge @index => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var1 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var2 => ( ( hash.values.max || 0 ) + 1 )
-      "Inject(#{@value.descriptor( hash )},#{@initial ? @initial.descriptor( hash ) : 'nil'},#{@index.descriptor( hash )},#{@block.descriptor( hash )})"
+      "Inject(#{@value.descriptor( hash )}," +
+         "#{@initial ? @initial.descriptor( hash ) : 'nil'}," +
+         "#{@index.descriptor( hash )},#{@block.descriptor( hash )})"
     end
 
     def array_type

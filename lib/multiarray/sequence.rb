@@ -42,8 +42,11 @@ module Hornetseye
       # @return [Node] Returns native array with values.
       def []( *args )
         target = Node.fit args
-        target = Hornetseye::Sequence target, 0 if target.dimension == 0
-        target = Hornetseye::Sequence OBJECT, args.size if target.dimension > 1
+        if target.dimension == 0
+          target = Hornetseye::Sequence target, 0
+        elsif target.dimension > 1
+          target = Hornetseye::Sequence OBJECT, args.size
+        end
         target[ *args ]
       end
 

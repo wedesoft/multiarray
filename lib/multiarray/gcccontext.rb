@@ -98,8 +98,7 @@ EOS
 
       @registrations << <<EOS
   rb_define_singleton_method( cGCCCache, "#{descriptor}",
-                              RUBY_METHOD_FUNC( wrap#{descriptor.capitalize} ),
-                              -1 ); 
+                    RUBY_METHOD_FUNC( wrap#{descriptor.capitalize} ), -1 ); 
 EOS
     end
     def compile
@@ -118,7 +117,8 @@ inline void *mallocToPtr( VALUE rbMalloc )
 void Init_#{@lib_name}(void)
 {
   VALUE mHornetseye = rb_define_module( "Hornetseye" );
-  VALUE cGCCCache = rb_define_class_under( mHornetseye, "GCCCache", rb_cObject );
+  VALUE cGCCCache = rb_define_class_under( mHornetseye, "GCCCache",
+                                           rb_cObject );
 #{@registrations}
 }
 EOS
@@ -126,8 +126,9 @@ EOS
       File.open "#{DIRNAME}/#{@lib_name}.c", 'w', 0600 do |f|
         f << template
       end
-      gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -O -o #{DIRNAME}/#{@lib_name}.so " +
-        "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
+      gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -O " +
+            "-o #{DIRNAME}/#{@lib_name}.so " +
+            "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
       strip = "#{STRIP} #{DIRNAME}/#{@lib_name}.so"
       # puts template
       raise "Error compiling #{DIRNAME}/#{@lib_name}.c" unless system gcc

@@ -24,7 +24,8 @@ module Hornetseye
     #
     # @param [Node] value Initial value of injection
     # @param [Node] index0 Index for 
-    def initialize( value, index0, index1, index2, initial, block, var1, var2 )
+    def initialize( value, index0, index1, index2, initial, block, var1,
+                    var2 )
       @value, @index0, @index1, @index2, @initial, @block, @var1, @var2 =
         value, index0, index1, index2, initial, block, var1, var2
     end
@@ -41,7 +42,10 @@ module Hornetseye
       hash = hash.merge @index2 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var1 => ( ( hash.values.max || 0 ) + 1 )
       hash = hash.merge @var2 => ( ( hash.values.max || 0 ) + 1 )
-      "Diagonal(#{@value.descriptor( hash )},#{@index0.descriptor( hash )},#{@index1.descriptor( hash )},#{@index2.descriptor( hash )},#{@initial ? @initial.descriptor( hash ) : 'nil'},#{@block.descriptor( hash )})"
+      "Diagonal(#{@value.descriptor( hash )},#{@index0.descriptor( hash )}," +
+        "#{@index1.descriptor( hash )},#{@index2.descriptor( hash )}," +
+        "#{@initial ? @initial.descriptor( hash ) : 'nil'}," +
+        "#{@block.descriptor( hash )})"
     end
 
     # Array type of this term

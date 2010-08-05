@@ -68,7 +68,8 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      "(#{@value1.descriptor( hash )}).#{self.class.descriptor( hash )}(#{@value2.descriptor( hash )})"
+      "(#{@value1.descriptor( hash )}).#{self.class.descriptor( hash )}" +
+        "(#{@value2.descriptor( hash )})"
     end
 
     # Array type of this term

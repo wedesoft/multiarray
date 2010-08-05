@@ -31,7 +31,8 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      "Lookup(#{@p.descriptor( hash )},#{@index.descriptor( hash )},#{@stride.descriptor( hash )})"
+      "Lookup(#{@p.descriptor( hash )},#{@index.descriptor( hash )}," +
+        "#{@stride.descriptor( hash )})"
     end
 
     def array_type
