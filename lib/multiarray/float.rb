@@ -55,6 +55,10 @@ module Hornetseye
         end
       end
 
+      def float
+        self
+      end
+
       def directive
         double ? 'd' : 'f'
       end

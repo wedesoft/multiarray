@@ -1,10 +1,10 @@
-# Math.abs, ...
+# Math.abs, ... factor out common stuff of UnaryOp and UnaryMethod
 # Fast filling of arrays, duplication, type conversions
+# type alignment, Math.sqrt( SFLOAT )
 # use descriptors ('c','f',...)?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?
 # documentation!
-# type alignment
 
 # histogram (implement using injection)
 # inject: n-d clips for warp

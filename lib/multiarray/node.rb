@@ -149,6 +149,13 @@ module Hornetseye
         other.coercion( self ).bool
       end
 
+      # Get corresponding floating-point datatype
+      #
+      # @return [Class] Returns +DFLOAT+.
+      def float
+        DFLOAT
+      end
+
       # Get variables contained in this datatype
       #
       # @return [Set] Returns +Set[]+.

@@ -1,4 +1,3 @@
-
 # multiarray - Lazy multi-dimensional arrays for Ruby
 # Copyright (C) 2010 Jan Wedekind
 #
@@ -26,7 +25,7 @@ module Hornetseye
           target = typecode.send conversion
           target.new simplify.get.send( op )
         else
-          Hornetseye::Unary( op, conversion ).new( self ).force
+          Hornetseye::UnaryOp( op, conversion ).new( self ).force
         end
       end
     end
@@ -43,7 +42,7 @@ module Hornetseye
           target = array_type.send coercion, other.array_type
           target.new demand.get.send( op, other.simplify.get )
         else
-          Hornetseye::Binary( op, coercion ).new( self, other ).force
+          Hornetseye::BinaryOp( op, coercion ).new( self, other ).force
         end
       end
     end

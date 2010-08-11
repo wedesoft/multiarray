@@ -17,10 +17,15 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  # Class for representing binary operations on scalars and arrays
-  class Binary_ < Node
+  # Class for applying a unary method to scalars and arrays
+  class UnaryMethod_ < Node
 
     class << self
+
+      # Name of module
+      #
+      # @return [Module] The module with the method.
+      attr_accessor :mod
 
       # Name of operation
       #
@@ -30,13 +35,13 @@ module Hornetseye
       # Name of method for type conversion
       #
       # @return [Symbol,String] The name of the method for type conversion.
-      attr_accessor :coercion
+      attr_accessor :conversion
 
       # Get string with information about this class
       #
       # @return [String] Return string with information about this class.
       def inspect
-        operation.to_s
+        "#{mod.to_s}.#{operation.to_s}"
       end
 
       # Get unique descriptor of this class
@@ -47,17 +52,16 @@ module Hornetseye
       #
       # @private
       def descriptor( hash )
-        operation.to_s
+        inspect
       end
 
     end
 
-    # Initialise binary operation
+    # Initialise unary operation
     #
-    # @param [Node] value1 First operand to apply operation to.
-    # @param [Node] value2 Second operand to apply operation to.
-    def initialize( value1, value2 )
-      @value1, @value2 = value1, value2
+    # @param [Node] value Value to apply operation to.
+    def initialize( value )
+      @value = value
     end
 
     # Get unique descriptor of this object
@@ -68,8 +72,7 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      "(#{@value1.descriptor( hash )}).#{self.class.descriptor( hash )}" +
-        "(#{@value2.descriptor( hash )})"
+      "#{self.class.descriptor( hash )}(#{@value.descriptor( hash )})"
     end
 
     # Array type of this term
@@ -78,7 +81,7 @@ module Hornetseye
     #
     # @private
     def array_type
-      @value1.array_type.send self.class.coercion, @value2.array_type
+      @value.array_type.send self.class.conversion
     end
 
     # Substitute variables
@@ -91,7 +94,7 @@ module Hornetseye
     #
     # @private
     def subst( hash )
-      self.class.new @value1.subst( hash ), @value2.subst( hash )
+      self.class.new @value.subst( hash )
     end
 
     # Get variables contained in this term
@@ -100,7 +103,7 @@ module Hornetseye
     #
     # @private
     def variables
-      @value1.variables + @value2.variables
+      @value.variables
     end
 
     # Strip of all values
@@ -113,9 +116,8 @@ module Hornetseye
     #
     # @private
     def strip
-      vars1, values1, term1 = @value1.strip
-      vars2, values2, term2 = @value2.strip
-      return vars1 + vars2, values1 + values2, self.class.new( term1, term2 )
+      vars, values, term = @value.strip
+      return vars, values, self.class.new( term )
     end
 
     # Reevaluate computation
@@ -126,13 +128,11 @@ module Hornetseye
     #
     # @private
     def demand
-      @value1.send self.class.operation, @value2
+      self.class.mod.send self.class.operation, @value
     end
 
     def skip( index, start )
-      element1 = @value1.skip( index, start )
-      element2 = @value2.skip( index, start )
-      element1.send self.class.operation, element2
+      self.class.new( @value.skip( index, start ) ).demand
     end
 
     # Get element of unary operation
@@ -141,17 +141,11 @@ module Hornetseye
     #
     # @return [Node,Object] Element of unary operation.
     def element( i )
-      element1 = @value1.dimension == 0 ? @value1 : @value1.element( i )
-      element2 = @value2.dimension == 0 ? @value2 : @value2.element( i )
-      element1.send self.class.operation, element2
+      self.class.new( @value.element( i ) ).demand
     end
 
     def slice( start, length )
-      element1 = @value1.dimension == 0 ? @value1 :
-                                          @value1.slice( start, length )
-      element2 = @value2.dimension == 0 ? @value2 :
-                                          @value2.slice( start, length )
-      element1.send self.class.operation, element2
+      self.class.new( @value.slice( start, length ) ).demand
     end
 
     # Check whether this term is compilable
@@ -160,30 +154,33 @@ module Hornetseye
     #
     # @private
     def compilable?
-      @value1.compilable? and @value2.compilable?
+      # @value.compilable? !!!
+      false
     end
 
   end
 
-  # Create a class deriving from +Binary_+
+  # Create a class deriving from +UnaryMethod_+
   #
   # @param [Symbol,String] operation Name of operation.
   # @param [Symbol,String] conversion Name of method for type conversion.
   #
-  # @return [Class] A class deriving from +Binary_+.
+  # @return [Class] A class deriving from +UnaryMethod_+.
   #
-  # @see Binary_
-  # @see Binary_.operation
-  # @see Binary_.coercion
+  # @see UnaryMethod_
+  # @see UnaryMethod_.operation
+  # @see UnaryMethod_.conversion
   #
   # @private
-  def Binary( operation, coercion = :coercion )
-    retval = Class.new Binary_
+  def UnaryMethod( mod, operation, conversion = :contiguous )
+    retval = Class.new UnaryMethod_
+    retval.mod = mod
     retval.operation = operation
-    retval.coercion = coercion
+    retval.conversion = conversion
     retval
   end
 
-  module_function :Binary
+  module_function :UnaryMethod
 
 end
+

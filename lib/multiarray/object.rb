@@ -86,6 +86,14 @@ module Hornetseye
         return self, self
       end
 
+      def bool
+        self
+      end
+
+      def float
+        OBJECT
+      end
+
       # Check whether this term is compilable
       #
       # @return [FalseClass,TrueClass] Returns +false+.
