@@ -221,16 +221,15 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_zero
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
-      assert_equal S[ false, true, false ], t[ -1, 0, 1 ].zero?
+      assert_equal [ false, true, false ], t[ -1, 0, 1 ].zero?.to_a
     end
     assert_equal S[ false, false, false, true ],
                  S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].zero?
   end
 
   def test_nonzero
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
-      assert_equal S[ true, false, true ], t[ -1, 0, 1 ].nonzero?
-    end
+    assert_equal S[ true, false, true ], S( I, 3 )[ -1, 0, 1 ].nonzero?
+    assert_equal S[ -1, nil, 1 ], S( O, 3 )[ -1, 0, 1 ].nonzero?
     assert_equal S[ true, true, true, false ],
                  S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].nonzero?
   end
