@@ -40,7 +40,7 @@ module Hornetseye
         if dimension == 0 and variables.empty? and
             other.dimension == 0 and other.variables.empty?
           target = array_type.send coercion, other.array_type
-          target.new demand.get.send( op, other.simplify.get )
+          target.new simplify.get.send( op, other.simplify.get )
         else
           Hornetseye::BinaryOp( op, coercion ).new( self, other ).force
         end

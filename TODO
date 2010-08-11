@@ -1,6 +1,6 @@
 # Math.abs, ... factor out common stuff of UnaryOp and UnaryMethod
 # Fast filling of arrays, duplication, type conversions
-# type alignment, Math.sqrt( SFLOAT )
+# type alignment for operators and methods, Math.sqrt( SFLOAT )
 # use descriptors ('c','f',...)?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?

@@ -156,6 +156,10 @@ module Hornetseye
         DFLOAT
       end
 
+      def floating( other )
+        other.coercion( self ).float
+      end
+
       # Get variables contained in this datatype
       #
       # @return [Set] Returns +Set[]+.

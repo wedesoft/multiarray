@@ -18,9 +18,14 @@
 module Hornetseye
 
   # Class for representing binary operations on scalars and arrays
-  class BinaryOp_ < Node
+  class BinaryMethod_ < Node
 
     class << self
+
+      # Name of module
+      #
+      # @return [Module] The module with the method.
+      attr_accessor :mod
 
       # Name of operation
       #
@@ -36,7 +41,7 @@ module Hornetseye
       #
       # @return [String] Return string with information about this class.
       def inspect
-        operation.to_s
+        "#{mod.to_s}.#{operation.to_s}"
       end
 
       # Get unique descriptor of this class
@@ -68,7 +73,7 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      "(#{@value1.descriptor( hash )}).#{self.class.descriptor( hash )}" +
+      "#{self.class.descriptor( hash )}(#{@value1.descriptor( hash )})," +
         "(#{@value2.descriptor( hash )})"
     end
 
@@ -126,7 +131,7 @@ module Hornetseye
     #
     # @private
     def demand
-      @value1.send self.class.operation, @value2
+      self.class.mod.send self.class.operation, @value1, @value2
     end
 
     def skip( index, start )
@@ -165,25 +170,26 @@ module Hornetseye
 
   end
 
-  # Create a class deriving from +BinaryOp_+
+  # Create a class deriving from +BinaryMethod_+
   #
   # @param [Symbol,String] operation Name of operation.
   # @param [Symbol,String] conversion Name of method for type conversion.
   #
-  # @return [Class] A class deriving from +BinaryOp_+.
+  # @return [Class] A class deriving from +BinaryMethod_+.
   #
-  # @see BinaryOp_
-  # @see BinaryOp_.operation
-  # @see BinaryOp_.coercion
+  # @see BinaryMethod_
+  # @see BinaryMethod_.operation
+  # @see BinaryMethod_.coercion
   #
   # @private
-  def BinaryOp( operation, coercion = :coercion )
-    retval = Class.new BinaryOp_
+  def BinaryMethod( mod, operation, coercion = :coercion )
+    retval = Class.new BinaryMethod_
+    retval.mod = mod
     retval.operation = operation
     retval.coercion = coercion
     retval
   end
 
-  module_function :BinaryOp
+  module_function :BinaryMethod
 
 end
