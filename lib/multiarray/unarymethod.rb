@@ -154,8 +154,7 @@ module Hornetseye
     #
     # @private
     def compilable?
-      # @value.compilable? !!!
-      false
+      @value.compilable?
     end
 
   end

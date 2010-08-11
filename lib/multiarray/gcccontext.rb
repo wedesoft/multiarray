@@ -105,6 +105,7 @@ EOS
     def compile
       template = <<EOS
 #include <ruby.h>
+#include <math.h>
 
 inline void *mallocToPtr( VALUE rbMalloc )
 {

@@ -32,6 +32,21 @@ module Hornetseye
         end
       end
 
+      def define_unary_method( mod, op, opcode = op )
+        mod.module_eval do
+          define_method( "#{op}_with_gcc" ) do |a|
+            if a.is_a? GCCValue
+              GCCValue.new a.function, "#{opcode}( #{a} )"
+            else
+              send "#{op}_without_gcc", a
+            end
+          end
+          alias_method_chain op, :gcc
+          module_function "#{op}_without_gcc"
+          module_function op
+        end
+      end
+
       def define_binary_op( op, opcode = op )
         define_method( op ) do |other|
           if GCCValue.generic? other
@@ -44,6 +59,8 @@ module Hornetseye
       end
 
     end
+
+    attr_reader :function
 
     def initialize( function, descriptor ) 
       @function = function
@@ -123,6 +140,18 @@ module Hornetseye
     define_binary_op :-
     define_binary_op :*
     define_binary_op :/
+    define_unary_method Math, :sqrt
+    define_unary_method Math, :log
+    define_unary_method Math, :exp
+    define_unary_method Math, :cos
+    define_unary_method Math, :sin
+    define_unary_method Math, :tan
+    define_unary_method Math, :acos
+    define_unary_method Math, :asin
+    define_unary_method Math, :atan
+    define_unary_method Math, :cosh
+    define_unary_method Math, :sinh
+    define_unary_method Math, :tanh
 
     def major( other )
       GCCValue.new @function,
