@@ -134,4 +134,4 @@ rescue LoadError
   STDERR.puts 'Please install \'rubygems\' if you want to create Gem packages'
 end
 
-CLOBBER.include 'doc'
+CLOBBER.include 'doc', '.yardoc'
