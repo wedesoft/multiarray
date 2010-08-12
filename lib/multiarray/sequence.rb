@@ -145,6 +145,10 @@ module Hornetseye
         Hornetseye::Sequence element_type.float, num_elements
       end
 
+      def floating( other )
+        coercion( other ).float
+      end
+
       def inspect
         if dimension == 1
           "Sequence(#{typecode.inspect},#{num_elements.inspect})"
