@@ -498,7 +498,7 @@ module Hornetseye
     #
     # @return [Node,Object] Result of simplification
     #
-    # @See @demand
+    # @see demand
     #
     # @private
     def simplify
