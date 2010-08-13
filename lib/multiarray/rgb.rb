@@ -289,6 +289,14 @@ module Hornetseye
         end
       end
 
+      def align( context )
+        if self < RGB_
+          Hornetseye::RGB element_type.align( context )
+        else
+          super context
+        end
+      end
+
     end
 
     Node.extend Match

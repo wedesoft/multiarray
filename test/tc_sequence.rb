@@ -335,6 +335,11 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ C( 2, 3, 4 ), C( 3, 4, 5 ) ], S[ 1, 2 ] + C( 1, 2, 3 )
   end
 
+  def test_sqrt
+    assert_equal S( O, 3 )[ 1, 2, 3 ], Math.sqrt( S( O, 3 )[ 1, 4, 9 ] )
+    assert_equal S[ 1.0, 2.0, 3.0 ], Math.sqrt( S[ 1.0, 4.0, 9.0 ] )
+  end
+
   def test_major
     assert_equal [ 2, 2, 3 ], S[ 1, 2, 3 ].major( 2 ).to_a
     assert_equal [ 2, 2, 3 ], 2.major( S[ 1, 2, 3 ] ).to_a
@@ -347,6 +352,10 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 1, 2, 2 ], 2.minor( S[ 1, 2, 3 ] ).to_a
     assert_equal [ 1, 2, 1 ], S[ 1, 2, 3 ].minor( S[ 3, 2, 1 ] ).to_a
     assert_equal [ C( 1, 2, 2 ) ], S[ C( 1, 2, 3 ) ].minor( 2 ).to_a
+  end
+
+  def test_hypot
+    assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
   end
 
 end

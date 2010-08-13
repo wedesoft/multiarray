@@ -237,6 +237,14 @@ module Hornetseye
         end
       end
 
+      def align( context )
+        if self < Sequence_
+          Hornetseye::Sequence element_type.align( context ), num_elements
+        else
+          super context
+        end
+      end
+
     end
 
     Node.extend Match

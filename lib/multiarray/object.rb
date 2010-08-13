@@ -126,6 +126,10 @@ module Hornetseye
         OBJECT
       end
 
+      def align( context )
+        self
+      end
+
     end
 
     Node.extend Match

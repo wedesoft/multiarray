@@ -101,6 +101,14 @@ module Hornetseye
       end
     end
 
+    def align( context )
+      if self < FLOAT_ and context < FLOAT_
+        context
+      else
+        super context
+      end
+    end
+
   end
 
   Node.extend Match

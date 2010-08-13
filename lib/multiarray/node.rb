@@ -59,17 +59,6 @@ module Hornetseye
         retval
       end
 
-      # Align this native datatype with another
-      #
-      # @param [Class] Native datatype to align with.
-      #
-      # @return [Class] Aligned native datatype.
-      #
-      # @private
-      def align( context )
-        self
-      end
-
       # Element-type of this term
       #
       # @return [Class] Element-type of this datatype.
