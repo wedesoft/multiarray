@@ -62,8 +62,8 @@ module Hornetseye
       mod.module_eval do
         define_method( "#{op}_with_hornetseye" ) do |a,b|
           if a.is_a? Node or b.is_a? Node
-            a = Node.match( a ).new a unless a.is_a? Node
-            b = Node.match( b ).new b unless b.is_a? Node
+            a = Node.match( a, b.typecode ).new a unless a.is_a? Node
+            b = Node.match( b, a.typecode ).new b unless b.is_a? Node
             if a.dimension == 0 and a.variables.empty? and
                b.dimension == 0 and b.variables.empty?
               target = a.typecode.send coercion, b.typecode
