@@ -55,7 +55,7 @@ module Hornetseye
       # @private
       def match( value, context = nil )
         retval = fit value
-        retval = retval.align context if context
+        retval = retval.align context.basetype if context
         retval
       end
 
@@ -63,6 +63,10 @@ module Hornetseye
       #
       # @return [Class] Element-type of this datatype.
       def typecode
+        self
+      end
+
+      def basetype
         self
       end
 

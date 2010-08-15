@@ -117,6 +117,10 @@ module Hornetseye
         element_type.typecode
       end
 
+      def basetype
+        element_type.basetype
+      end
+
       def array_type
         self
       end

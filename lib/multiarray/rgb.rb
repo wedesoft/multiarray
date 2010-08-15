@@ -169,6 +169,10 @@ module Hornetseye
         end
       end
 
+      def basetype
+        element_type
+      end
+
       def typecodes
         [ element_type ] * 3
       end
