@@ -49,14 +49,18 @@ module Hornetseye
 
     module_function :define_binary_op
 
-    define_unary_op  :zero?   , :bool
-    define_unary_op  :nonzero?, :bool
-    define_unary_op  :not, :bool
-    define_unary_op  :~
-    define_unary_op  :-@
+    define_unary_op :zero?, :bool
+    define_unary_op :nonzero?, :bool
+    define_unary_op :not, :bool
+    define_unary_op :~
+    define_unary_op :-@
+    define_unary_op :floor
+    define_unary_op :ceil
+    define_unary_op :round
     define_binary_op :+
     define_binary_op :-
     define_binary_op :*
+    define_binary_op :**, :largeint
     define_binary_op :/
     define_binary_op :%
     define_binary_op :and, :bool_binary
@@ -68,8 +72,17 @@ module Hornetseye
     define_binary_op :>>
     define_binary_op :eq, :bool_binary
     define_binary_op :ne, :bool_binary
+    define_binary_op :<=, :bool_binary
+    define_binary_op :<, :bool_binary
+    define_binary_op :>=, :bool_binary
+    define_binary_op :>, :bool_binary
+    define_binary_op :<=>, :byteval
     define_binary_op :minor
     define_binary_op :major
+
+    def +@
+      self
+    end
 
     # Lazy transpose of array
     #

@@ -129,14 +129,6 @@ module Hornetseye
       self
     end
 
-    def eq( other )
-      GCCValue.new @function, "( #{self} ) == ( #{other} )"
-    end
-
-    def ne( other )
-      GCCValue.new @function, "( #{self} ) != ( #{other} )"
-    end
-
     def conditional( a, b )
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end
@@ -155,6 +147,12 @@ module Hornetseye
     define_binary_op :-
     define_binary_op :*
     define_binary_op :/
+    define_binary_op :eq, :==
+    define_binary_op :ne, '!='
+    define_binary_op :<
+    define_binary_op :<=
+    define_binary_op :>
+    define_binary_op :>=
     define_unary_method Math, :sqrt
     define_unary_method Math, :log
     define_unary_method Math, :exp

@@ -142,6 +142,14 @@ module Hornetseye
         other.coercion( self ).bool
       end
 
+      def maxint
+        self
+      end
+
+      def largeint( other )
+        coercion( other ).maxint
+      end
+
       # Get corresponding floating-point datatype
       #
       # @return [Class] Returns +DFLOAT+.

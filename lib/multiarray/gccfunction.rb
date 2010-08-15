@@ -27,8 +27,8 @@ module Hornetseye
         retval = block.pointer_type.new
         retval_keys, retval_values, retval_term = retval.strip
         method_name = '_' + term.descriptor( labels ).
-                      tr( '(),+\-*/.@?~&|^<>',
-                          '0123\456789ABCDEF' )
+                      tr( '(),+\-*/.@?~&|^<=>',
+                          '0123\456789ABCDEFG' )
         unless GCCCache.respond_to? method_name
           GCCContext.build do |context|
             function = new context, method_name,

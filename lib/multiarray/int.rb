@@ -60,6 +60,10 @@ module Hornetseye
         0
       end
 
+      def maxint
+        Hornetseye::INT [ 32, bits ].max, signed
+      end
+
       def coercion( other )
         if other < INT_
           Hornetseye::INT [ bits, other.bits ].max, ( signed or other.signed )

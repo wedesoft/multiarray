@@ -177,6 +177,14 @@ module Hornetseye
         [ element_type ] * 3
       end
 
+      def maxint
+        Hornetseye::RGB element_type.maxint
+      end
+
+      def float
+        Hornetseye::RGB element_type.float
+      end
+
       def coercion( other )
         if other < RGB_
           Hornetseye::RGB element_type.coercion( other.element_type )

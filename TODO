@@ -1,5 +1,6 @@
 # type alignment for operators and methods, Math.sqrt( SFLOAT )
-# Math.sqrt, Math.sqrt( RGB ...), factor out common stuff of UnaryOp and UnaryMethod
+# test floor, ceil, ..., factor out common stuff of UnaryOp and UnaryMethod
+# complex numbers, factor out composite numbers
 # Fast filling of arrays, duplication, type conversions
 # use descriptors ('c','f',...)?
 # pointer-increments for better efficiency, optimize Node#diagonal

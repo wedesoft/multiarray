@@ -145,6 +145,14 @@ module Hornetseye
         coercion( other ).bool
       end
 
+      def maxint
+        Hornetseye::Sequence element_type.maxint, num_elements
+      end
+
+      def largeint( other )
+        coercion( other ).maxint
+      end
+
       def float
         Hornetseye::Sequence element_type.float, num_elements
       end
