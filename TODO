@@ -1,5 +1,5 @@
 # conditional, <=>
-# test floor, ceil, ..., factor out common stuff of UnaryOp and UnaryMethod
+# factor out common stuff of UnaryOp and UnaryMethod
 # complex numbers, factor out composite numbers
 # Fast filling of arrays, duplication, type conversions
 # use descriptors ('c','f',...)?
