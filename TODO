@@ -1,4 +1,4 @@
-# type alignment for operators and methods, Math.sqrt( SFLOAT )
+# conditional, <=>
 # test floor, ceil, ..., factor out common stuff of UnaryOp and UnaryMethod
 # complex numbers, factor out composite numbers
 # Fast filling of arrays, duplication, type conversions

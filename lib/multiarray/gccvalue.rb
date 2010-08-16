@@ -147,6 +147,7 @@ module Hornetseye
     define_binary_op :-
     define_binary_op :*
     define_binary_op :/
+    define_binary_op :%
     define_binary_op :eq, :==
     define_binary_op :ne, '!='
     define_binary_op :<
@@ -168,6 +169,29 @@ module Hornetseye
     define_binary_method Math, :atan2
     define_binary_method Math, :hypot
 
+    def zero?
+      GCCValue.new @function, "( #{self} ) == 0"
+    end
+
+    def nonzero?
+      GCCValue.new @function, "( #{self} ) != 0"
+    end
+
+    def floor
+      GCCValue.new @function, "floor( #{self} )"
+    end
+
+    def ceil
+      GCCValue.new @function, "ceil( #{self} )"
+    end
+
+    def round
+      GCCValue.new @function, "round( #{self} )"
+    end
+
+    def **( other )
+      GCCValue.new @function, "pow( #{self}, #{other} )"
+    end
 
     def major( other )
       GCCValue.new @function,
@@ -177,14 +201,6 @@ module Hornetseye
     def minor( other )
       GCCValue.new @function,
         "( ( #{self} ) <= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
-    end
-
-    def zero?
-      GCCValue.new @function, "( #{self} ) == 0"
-    end
-
-    def nonzero?
-      GCCValue.new @function, "( #{self} ) != 0"
     end
 
     def times( &action )

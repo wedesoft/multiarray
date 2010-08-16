@@ -161,6 +161,14 @@ module Hornetseye
         other.coercion( self ).float
       end
 
+      def byte
+        BYTE
+      end
+
+      def byteval( other )
+        coercion( other ).byte
+      end
+
       # Get variables contained in this datatype
       #
       # @return [Set] Returns +Set[]+.
@@ -233,6 +241,10 @@ module Hornetseye
     # @return [Class] Element-type of this datatype.
     def typecode
       array_type.typecode
+    end
+
+    def basetype
+      array_type.basetype
     end
 
     # Get shape of this term
@@ -517,7 +529,7 @@ module Hornetseye
       if other.is_a? Node
         return other, self
       else
-        return Node.match( other, typecode ).new( other ), self
+        return Node.match( other, self ).new( other ), self
       end
     end
 

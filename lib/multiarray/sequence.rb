@@ -153,6 +153,14 @@ module Hornetseye
         coercion( other ).maxint
       end
 
+      def byte
+        Hornetseye::Sequence element_type.byte, num_elements
+      end
+
+      def byteval( other )
+        coercion( other ).byte
+      end
+
       def float
         Hornetseye::Sequence element_type.float, num_elements
       end

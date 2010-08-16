@@ -84,6 +84,17 @@ module Hornetseye
       self
     end
 
+    def conditional( a, b )
+      unless a.is_a? Node
+        a = Node.match( a, b.is_a?( Node ) ? b : nil ).new a
+      end
+      unless b.is_a? Node
+        b = Node.match( b, a.is_a?( Node ) ? a : nil ).new b
+      end
+      target = a.array_type.coercion b.array_type
+      raise 'Not implemented'
+    end
+
     # Lazy transpose of array
     #
     # Lazily compute transpose by swapping indices according to the specified

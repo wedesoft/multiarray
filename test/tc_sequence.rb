@@ -335,10 +335,70 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ C( 2, 3, 4 ), C( 3, 4, 5 ) ], S[ 1, 2 ] + C( 1, 2, 3 )
   end
 
-  def test_sqrt
-    assert_equal S( O, 3 )[ 1, 2, 3 ], Math.sqrt( S( O, 3 )[ 1, 4, 9 ] )
-    assert_equal S[ 1.0, 2.0, 3.0 ], Math.sqrt( S[ 1.0, 4.0, 9.0 ] )
+  def test_minus
+    assert_equal S[ 1, 2, 4 ], S[ 2, 3, 5 ] - 1
+    assert_equal S[ 1, 2, 4 ], 5 - S[ 4, 3, 1 ]
+    assert_equal S[ 1, 2, 3 ], S[ 2, 3, 5 ] - S[ 1, 1, 2 ]
+    assert_equal S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ], S[ C( 2, 3, 4 ), C( 5, 6, 7 ) ] - 1
+    assert_equal S[ C( 6, 5, 4 ), C( 3, 2, 1 ) ], 7 - S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ]
+    assert_equal S[ C( 3, 2, 1 ), C( 4, 3, 2 ) ], S[ 4, 5 ] - C( 1, 2, 3 )
   end
+
+  def test_mul
+    assert_equal S[ 6, 12, 20 ], S[ 2, 3, 4 ] * S[ 3, 4, 5 ]
+  end
+
+  def test_div
+    assert_equal S[ 2, 3, 4 ], S[ 6, 12, 20 ] / S[ 3, 4, 5 ]
+  end
+
+  def test_mod
+    assert_equal S[ 2, 0, 1 ], S[ 2, 3, 4 ] % 3
+  end
+
+  def test_pow
+    assert_equal [ 1, 4, 9 ], ( S[ 1, 2, 3 ] ** 2 ).to_a
+  end
+
+  def test_eq
+    assert_equal S[ false, true, false ], S[ 1, 2, 3 ].eq( 2 )
+  end
+
+  def test_ne
+    assert_equal S[ true, false, true ], S[ 1, 2, 3 ].ne( 2 )
+  end
+
+  def test_lt
+    assert_equal S[ true, false, false ], S[ 1, 2, 3 ] < 2
+  end
+
+  def test_le
+    assert_equal S[ true, true, false ], S[ 1, 2, 3 ] <= 2
+  end
+
+  def test_gt
+    assert_equal S[ false, false, true ], S[ 1, 2, 3 ] > 2
+  end
+
+  def test_ge
+    assert_equal S[ false, true, true ], S[ 1, 2, 3 ] >= 2
+  end
+
+  def test_floor
+    assert_equal S[ 0.0, 0.0, 1.0 ], S[ 0.3, 0.7, 1.3 ].floor
+  end
+
+  def test_ceil
+    assert_equal S[ 1.0, 1.0, 2.0 ], S[ 0.3, 0.7, 1.3 ].ceil
+  end
+
+  def test_round
+    assert_equal S[ 0.0, 1.0, 1.0 ], S[ 0.3, 0.7, 1.3 ].round
+  end
+
+  #def test_cmp
+  #  assert_equal S[ -1, 0, 1 ], S[ 1, 2, 3 ] <=> 2
+  #end
 
   def test_major
     assert_equal [ 2, 2, 3 ], S[ 1, 2, 3 ].major( 2 ).to_a
@@ -352,6 +412,11 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 1, 2, 2 ], 2.minor( S[ 1, 2, 3 ] ).to_a
     assert_equal [ 1, 2, 1 ], S[ 1, 2, 3 ].minor( S[ 3, 2, 1 ] ).to_a
     assert_equal [ C( 1, 2, 2 ) ], S[ C( 1, 2, 3 ) ].minor( 2 ).to_a
+  end
+
+  def test_sqrt
+    assert_equal S( O, 3 )[ 1, 2, 3 ], Math.sqrt( S( O, 3 )[ 1, 4, 9 ] )
+    assert_equal S[ 1.0, 2.0, 3.0 ], Math.sqrt( S[ 1.0, 4.0, 9.0 ] )
   end
 
   def test_hypot

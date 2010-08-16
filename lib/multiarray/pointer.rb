@@ -68,6 +68,10 @@ module Hornetseye
         target
       end
 
+      def basetype
+        target.basetype
+      end
+
       def array_type
         target
       end
