@@ -19,6 +19,14 @@ module Hornetseye
 
   class Inject < Node
 
+    class << self
+
+      def finalised?
+        false
+      end
+
+    end
+
     def initialize( value, index, initial, block, var1, var2 )
       @value, @index, @initial, @block, @var1, @var2 =
         value, index, initial, block, var1, var2

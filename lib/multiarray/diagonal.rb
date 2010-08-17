@@ -20,6 +20,14 @@ module Hornetseye
   # Class for representing diagonal injections
   class Diagonal < Node
 
+    class << self
+
+      def finalised?
+        false
+      end
+
+    end
+
     # Constructor
     #
     # @param [Node] value Initial value of injection

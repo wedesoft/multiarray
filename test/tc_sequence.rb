@@ -158,6 +158,15 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_view
+    [ S( O, 4 ), S( I, 4 ) ].each do |t|
+      s = t[ 1, 2, 3, 4 ]
+      v = s[ 1 .. 2 ]
+      v[] = 0
+      assert_equal [ 1, 0, 0, 4 ], s.to_a
+    end
+  end
+
   def test_equal
     assert_equal S[ 2, 3, 5 ], S[ 2, 3, 5 ]
     assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 7 ]

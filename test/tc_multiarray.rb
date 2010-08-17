@@ -168,6 +168,15 @@ class TC_MultiArray < Test::Unit::TestCase
     end
   end
 
+  def test_view
+    [ M( O, 3, 2 ), M( I, 3, 2 ) ].each do |t|
+      m = t[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+      v = m[ 1, 0 ... 2 ]
+      v[] = 0
+      assert_equal [ [ 1, 0, 3 ], [ 4, 0, 6 ] ], m.to_a
+    end
+  end
+
   def test_slice
     m = M( I, 5, 4 ).indgen[]
     assert_equal [ [ 5, 10 ], [ 6, 11 ], [ 7, 12 ], [ 8, 13 ], [ 9, 14 ] ],

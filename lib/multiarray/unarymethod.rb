@@ -55,6 +55,10 @@ module Hornetseye
         inspect
       end
 
+      def finalised?
+        false
+      end
+
     end
 
     # Initialise unary operation

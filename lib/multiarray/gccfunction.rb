@@ -21,12 +21,15 @@ module Hornetseye
 
     class << self
 
-      def run( block )
+      def run( retval, block )
         keys, values, term = block.strip
-        labels = Hash[ *keys.zip( ( 0 ... keys.size ).to_a ).flatten ]
-        retval = block.pointer_type.new
+        labels = Hash[ *keys.
+                       zip( ( 0 ... keys.size ).to_a ).flatten ]
         retval_keys, retval_values, retval_term = retval.strip
-        method_name = '_' + term.descriptor( labels ).
+        retval_labels = Hash[ *retval_keys.
+                              zip( ( 0 ... retval_keys.size ).to_a ).flatten ]
+        method_name = ( '_' + retval_term.descriptor( retval_labels ) +
+                        '_' + term.descriptor( labels ) ).
                       tr( '(),+\-*/%.@?~&|^<=>',
                           '0123\456789ABCDEFGH' )
         unless GCCCache.respond_to? method_name
@@ -76,19 +79,9 @@ module Hornetseye
     end
 
     def variable( typecode, prefix )
-      #if typecode == INTRGB
-      #  r = GCCValue.new( self, id( prefix ) )
-      #  g = GCCValue.new( self, id( prefix ) )
-      #  b = GCCValue.new( self, id( prefix ) )
-      #  self << "#{indent}#{GCCType.new( INT ).identifier} #{r};\n"
-      #  self << "#{indent}#{GCCType.new( INT ).identifier} #{g};\n"
-      #  self << "#{indent}#{GCCType.new( INT ).identifier} #{b};\n"
-      #  INTRGB.new RGB.new( r, g, b )
-      #else
-        retval = typecode.new GCCValue.new( self, id( prefix ) )
-        self << "#{indent}#{GCCType.new( typecode ).identifiers.first} #{retval.get};\n" # !!!
-        retval
-      #end
+      retval = typecode.new GCCValue.new( self, id( prefix ) )
+      self << "#{indent}#{GCCType.new( typecode ).identifiers.first} #{retval.get};\n" # !!!
+      retval
     end
 
     def indent

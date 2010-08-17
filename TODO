@@ -1,7 +1,7 @@
-# conditional, <=>
+# duplication, type conversions
+# Implement Conditional, <=>
 # factor out common stuff of UnaryOp and UnaryMethod
 # complex numbers, factor out composite numbers
-# Fast filling of arrays, duplication, type conversions
 # use descriptors ('c','f',...)?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?
@@ -11,8 +11,6 @@
 # inject: n-d clips for warp
 # block(var1,var2,...) with smart subst?
 # lazy( 3, 2 ) { |i,j| j.to_object }
-
-# RSpec
 
 # downsampling after correlation?
 # YARD documentation with pictures, demo video

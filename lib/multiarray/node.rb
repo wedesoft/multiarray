@@ -220,6 +220,10 @@ module Hornetseye
         true
       end
 
+      def finalised?
+        true
+      end
+
     end
 
     # Array type of this term
@@ -401,6 +405,10 @@ module Hornetseye
       typecode.compilable?
     end
 
+    def finalised?
+      self.class.finalised?
+    end
+
     # Retrieve value of array element(s)
     #
     # @param [Array<Integer>] *indices Index/indices to select element.
@@ -431,7 +439,11 @@ module Hornetseye
       value = indices.pop
       value = Node.match( value ).new value unless value.is_a? Node
       if indices.empty?
-        store value
+        unless compilable? and dimension > 0
+          store value
+        else
+          GCCFunction.run self, value
+        end
       else
         if indices.last.is_a? Range
           view = slice indices.last.min, indices.last.size
@@ -475,15 +487,6 @@ module Hornetseye
       self
     end
 
-    # Check whether mode of computation is lazy
-    #
-    # @see #lazy
-    #
-    # @private
-    def lazy?
-      ( dimension > 0 and Thread.current[ :lazy ] ) or not variables.empty?
-    end
-
     # Force delayed computation unless in lazy mode
     #
     # @return [Node,Object] Result of computation
@@ -492,8 +495,10 @@ module Hornetseye
     #
     # @private
     def force
-      if lazy?
+      if ( dimension > 0 and Thread.current[ :lazy ] ) or not variables.empty?
         self
+      elsif finalised?
+        get
       else
         unless compilable?
           Hornetseye::lazy do
@@ -502,7 +507,7 @@ module Hornetseye
             retval.get
           end
         else
-          GCCFunction.run( self ).get
+          GCCFunction.run( pointer_type.new, self ).get
         end
       end
     end

@@ -56,8 +56,7 @@ module Hornetseye
     def strip
       meta_vars, meta_values, var = @index.strip
       vars, values, term = @term.subst( @index => var ).strip
-      return vars + meta_vars, values + meta_values,
-        Lambda.new( var, term )
+      return vars + meta_vars, values + meta_values, Lambda.new( var, term )
     end
 
     def subst( hash )
@@ -115,6 +114,10 @@ module Hornetseye
 
     def compilable?
       @term.compilable?
+    end
+
+    def finalised?
+      @term.finalised?
     end
 
   end

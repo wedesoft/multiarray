@@ -80,6 +80,10 @@ module Hornetseye
         self
       end
 
+      def finalised?
+        false
+      end
+
     end
 
     def initialize( value = self.class.default )

@@ -91,8 +91,15 @@ module Hornetseye
       unless b.is_a? Node
         b = Node.match( b, a.is_a?( Node ) ? a : nil ).new b
       end
-      target = a.array_type.coercion b.array_type
-      raise 'Not implemented'
+      if dimension == 0 and variables.empty? and
+        a.dimension == 0 and a.variables.empty? and
+        b.dimension == 0 and b.variables.empty?
+        target = a.array_type.coercion b.array_type
+        target = Hornetseye::MultiArray( target.typecode, *shape ).coercion target
+        target.new simplify.get.conditional( a.get, b.get )
+      else
+        Hornetseye::Conditional.new( self, a, b ).force
+      end
     end
 
     # Lazy transpose of array
