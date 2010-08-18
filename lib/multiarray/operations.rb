@@ -25,7 +25,7 @@ module Hornetseye
           target = typecode.send conversion
           target.new simplify.get.send( op )
         else
-          Hornetseye::UnaryOp( op, conversion ).new( self ).force
+          Hornetseye::Op( op, conversion ).new( self ).force
         end
       end
     end
@@ -42,7 +42,7 @@ module Hornetseye
           target = array_type.send coercion, other.array_type
           target.new simplify.get.send( op, other.simplify.get )
         else
-          Hornetseye::BinaryOp( op, coercion ).new( self, other ).force
+          Hornetseye::Op( op, coercion ).new( self, other ).force
         end
       end
     end

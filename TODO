@@ -1,6 +1,6 @@
+# factor out common stuff of UnaryOp and UnaryMethod
 # type conversions, lazy( 3, 2 ) { |i,j| j.to_object }
 # Implement Conditional, <=>
-# factor out common stuff of UnaryOp and UnaryMethod
 # complex numbers, factor out composite numbers
 # use descriptors ('c','f',...)?
 # pointer-increments for better efficiency, optimize Node#diagonal
