@@ -88,9 +88,6 @@ module Hornetseye
         self.class.new value
       else
         self.class.new get
-        #retval = self.array_type.new
-        #retval.store self
-        #retval
       end
     end
 

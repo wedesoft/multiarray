@@ -132,6 +132,13 @@ class TC_MultiArray < Test::Unit::TestCase
                       [ 20, 21, 22, 23 ] ] ].inspect
   end
 
+  def test_dup
+    m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    v = m.dup
+    v[ 2, 1 ] = 0
+    assert_equal M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ], m
+  end
+
   def test_typecode
     assert_equal O, M( O, 3, 2 ).new.typecode
     assert_equal I, M( I, 3, 2 ).new.typecode

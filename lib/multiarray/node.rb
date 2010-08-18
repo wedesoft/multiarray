@@ -383,6 +383,12 @@ module Hornetseye
       'Node()'
     end
 
+    def dup
+      retval = array_type.new
+      retval[] = self
+      retval
+    end
+
     # Substitute variables
     #
     # Substitute the variables with the values given in the hash.
@@ -520,6 +526,11 @@ module Hornetseye
     #
     # @private
     def simplify
+      #if Thread.current[ :function ] and dimension == 0
+      #  demand.dup
+      #else
+      #  demand
+      #end
       dimension == 0 ? demand.dup : demand
     end
 

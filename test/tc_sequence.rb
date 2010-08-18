@@ -112,12 +112,12 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal "Sequence(OBJECT,3):\n[ :a, 2, 3 ]", S[ :a, 2, 3 ].inspect
   end
 
-  #def test_dup
-  #  s = S[ 1, 2, 3 ]
-  #  v = s.dup
-  #  v[ 1 ] = 0
-  #  assert_equal S[ 1, 2, 3 ], s
-  #end
+  def test_dup
+    s = S[ 1, 2, 3 ]
+    v = s.dup
+    v[ 1 ] = 0
+    assert_equal S[ 1, 2, 3 ], s
+  end
 
   def test_typecode
     assert_equal O, S.new( O, 3 ).typecode
