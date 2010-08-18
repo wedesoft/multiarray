@@ -1,3 +1,4 @@
+# multi-dimensional conditional
 # factor out common stuff of UnaryOp and UnaryMethod
 # type conversions, lazy( 3, 2 ) { |i,j| j.to_object }
 # Implement Conditional, <=>

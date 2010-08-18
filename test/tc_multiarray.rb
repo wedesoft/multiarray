@@ -400,4 +400,11 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 1, 2 ], [ 3, 4 ] ].minor( M[ [ 4, 1 ], [ 3, 2 ] ] )
   end
 
+  #def test_cond
+  #  assert_equal M[ [ -1, 2 ], [ 3, -4 ] ],
+  #               M[ [ false, true ], [ true, false ] ].
+  #               conditional( M[ [ 1, 2 ], [ 3, 4 ] ],
+  #                            M[ [ -1, -2 ], [ -3, -4 ] ] )
+  #end
+
 end

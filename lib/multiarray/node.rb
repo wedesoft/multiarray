@@ -169,6 +169,11 @@ module Hornetseye
         coercion( other ).byte
       end
 
+      def cond( a, b )
+        t = a.coercion b
+        Hornetseye::MultiArray t.typecode, *shape
+      end
+
       # Get variables contained in this datatype
       #
       # @return [Set] Returns +Set[]+.

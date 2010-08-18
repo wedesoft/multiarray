@@ -94,11 +94,10 @@ module Hornetseye
       if dimension == 0 and variables.empty? and
         a.dimension == 0 and a.variables.empty? and
         b.dimension == 0 and b.variables.empty?
-        target = a.array_type.coercion b.array_type
-        target = Hornetseye::MultiArray( target.typecode, *shape ).coercion target
+        target = array_type.cond a.array_type, b.array_type
         target.new simplify.get.conditional( a.get, b.get )
       else
-        Hornetseye::Conditional.new( self, a, b ).force
+        Hornetseye::Op( :conditional, :cond ).new( self, a, b ).force
       end
     end
 

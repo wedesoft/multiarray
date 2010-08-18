@@ -169,6 +169,11 @@ module Hornetseye
         coercion( other ).float
       end
 
+      def cond( a, b )
+        t = a.coercion b
+        Hornetseye::MultiArray t.typecode, *shape
+      end
+
       def inspect
         if dimension == 1
           "Sequence(#{typecode.inspect},#{num_elements.inspect})"

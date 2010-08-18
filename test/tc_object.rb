@@ -129,4 +129,9 @@ class TC_Object < Test::Unit::TestCase
     assert_equal O( 3 + 5 ), O( 3 ) + O( 5 )
   end
 
+  def test_cond
+    assert_equal O( 1 ), O( false ).conditional( O( 2 ), O( 1 ) )
+    assert_equal O( 2 ), O( true ).conditional( O( 2 ), O( 1 ) )
+  end
+
 end
