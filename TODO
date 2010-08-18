@@ -1,4 +1,4 @@
-# duplication, type conversions
+# type conversions, lazy( 3, 2 ) { |i,j| j.to_object }
 # Implement Conditional, <=>
 # factor out common stuff of UnaryOp and UnaryMethod
 # complex numbers, factor out composite numbers
@@ -10,7 +10,6 @@
 # histogram (implement using injection)
 # inject: n-d clips for warp
 # block(var1,var2,...) with smart subst?
-# lazy( 3, 2 ) { |i,j| j.to_object }
 
 # downsampling after correlation?
 # YARD documentation with pictures, demo video
