@@ -218,10 +218,6 @@ module Hornetseye
         self == other
       end
 
-      #def compilable?
-      #  false # !!!
-      #end
-
     end
 
     def initialize( value = self.class.default )
@@ -241,10 +237,10 @@ module Hornetseye
         r = Thread.current[ :function ].variable self.class.element_type, 'v'
         g = Thread.current[ :function ].variable self.class.element_type, 'v'
         b = Thread.current[ :function ].variable self.class.element_type, 'v'
-        r.get.store @value.r
-        g.get.store @value.g
-        b.get.store @value.b
-        self.class.new RGB.new( r.get, g.get, b.get )
+        r.store @value.r
+        g.store @value.g
+        b.store @value.b
+        self.class.new RGB.new( r, g, b )
       else
         self.class.new get
       end

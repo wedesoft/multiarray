@@ -56,7 +56,7 @@ module Hornetseye
     #
     # @param [Object] value Initial value for element.
     def initialize( value = self.class.default )
-      if Thread.current[ :function ].nil? or value.is_a? GCCValue
+      if Thread.current[ :function ].nil?
         @value = value
       else
         @value = GCCValue.new Thread.current[ :function ], value.to_s
@@ -84,8 +84,8 @@ module Hornetseye
     def dup
       if Thread.current[ :function ]
         value = Thread.current[ :function ].variable self.class, 'v'
-        value.get.store get
-        value
+        value.store get
+        self.class.new value
       else
         self.class.new get
         #retval = self.array_type.new

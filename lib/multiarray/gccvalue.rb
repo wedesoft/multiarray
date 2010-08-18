@@ -205,10 +205,10 @@ module Hornetseye
 
     def times( &action )
       i = @function.variable INT, 'i'
-      @function << "#{@function.indent}for ( #{i.get} = 0; " +
-                   "#{i.get} != #{self}; #{i.get}++ ) {\n"
+      @function << "#{@function.indent}for ( #{i} = 0; " +
+                   "#{i} != #{self}; #{i}++ ) {\n"
       @function.indent_offset +1
-      action.call i.get
+      action.call i
       @function.indent_offset -1
       @function << "#{@function.indent}};\n"
       self
@@ -216,10 +216,10 @@ module Hornetseye
 
     def upto( other, &action )
       i = @function.variable INT, 'i'
-      @function << "#{@function.indent}for ( #{i.get} = #{self}; " +
-                   "#{i.get} != #{ other + 1 }; #{i.get}++ ) {\n"
+      @function << "#{@function.indent}for ( #{i} = #{self}; " +
+                   "#{i} != #{ other + 1 }; #{i}++ ) {\n"
       @function.indent_offset +1
-      action.call i.get
+      action.call i
       @function.indent_offset -1
       @function << "#{@function.indent}};\n"
       self

@@ -79,8 +79,8 @@ module Hornetseye
     end
 
     def variable( typecode, prefix )
-      retval = typecode.new GCCValue.new( self, id( prefix ) )
-      self << "#{indent}#{GCCType.new( typecode ).identifiers.first} #{retval.get};\n" # !!!
+      retval = GCCValue.new( self, id( prefix ) )
+      self << "#{indent}#{GCCType.new( typecode ).identifiers.first} #{retval};\n" # !!!
       retval
     end
 
