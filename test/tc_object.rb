@@ -77,6 +77,12 @@ class TC_Object < Test::Unit::TestCase
     assert_equal O( 42 ), Marshal.load( Marshal.dump( O( 42 ) ) )
   end
 
+  def test_dup
+    o = O( 'abc' )
+    o.dup[] += 'de'
+    assert_equal 'abc', o[]
+  end
+
   def test_typecode
     assert_equal O, O.new.typecode
   end
