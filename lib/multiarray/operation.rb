@@ -18,7 +18,7 @@
 module Hornetseye
 
   # Class for representing unary operations on scalars and arrays
-  class Op_ < Node
+  class Operation_ < Node
 
     class << self
 
@@ -168,26 +168,26 @@ module Hornetseye
 
   end
 
-  # Create a class deriving from +Op_+
+  # Create a class deriving from +Operation_+
   #
   # @param [Symbol,String] operation Name of operation.
   # @param [Symbol,String] conversion Name of method for type conversion.
   #
-  # @return [Class] A class deriving from +Op_+.
+  # @return [Class] A class deriving from +Operation_+.
   #
-  # @see Op_
-  # @see Op_.operation
-  # @see Op_.conversion
+  # @see Operation_
+  # @see Operation_.operation
+  # @see Operation_.conversion
   #
   # @private
-  def Op( operation, conversion = :contiguous )
-    retval = Class.new Op_
+  def Operation( operation, conversion = :contiguous )
+    retval = Class.new Operation_
     retval.operation = operation
     retval.conversion = conversion
     retval
   end
 
-  module_function :Op
+  module_function :Operation
 
 end
 

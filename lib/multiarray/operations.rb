@@ -25,7 +25,7 @@ module Hornetseye
           target = typecode.send conversion
           target.new simplify.get.send( op )
         else
-          Hornetseye::Op( op, conversion ).new( self ).force
+          Hornetseye::Operation( op, conversion ).new( self ).force
         end
       end
     end
@@ -42,7 +42,7 @@ module Hornetseye
           target = array_type.send coercion, other.array_type
           target.new simplify.get.send( op, other.simplify.get )
         else
-          Hornetseye::Op( op, coercion ).new( self, other ).force
+          Hornetseye::Operation( op, coercion ).new( self, other ).force
         end
       end
     end
@@ -97,7 +97,7 @@ module Hornetseye
         target = array_type.cond a.array_type, b.array_type
         target.new simplify.get.conditional( a.simplify.get, b.simplify.get )
       else
-        Hornetseye::Op( :conditional, :cond ).new( self, a, b ).force
+        Hornetseye::Operation( :conditional, :cond ).new( self, a, b ).force
       end
     end
 
