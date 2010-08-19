@@ -95,7 +95,7 @@ module Hornetseye
         a.dimension == 0 and a.variables.empty? and
         b.dimension == 0 and b.variables.empty?
         target = array_type.cond a.array_type, b.array_type
-        target.new simplify.get.conditional( a.get, b.get )
+        target.new simplify.get.conditional( a.simplify.get, b.simplify.get )
       else
         Hornetseye::Op( :conditional, :cond ).new( self, a, b ).force
       end

@@ -418,6 +418,9 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_cond
     assert_equal S[ 1, 2 ], S[ false, true ].conditional( 2, 1 )
+    assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], -1 )
+    assert_equal S[ -1, 1 ], S[ false, true ].conditional( 1, S[ -1, -2 ] )
+    assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], S[ -1, -2 ] )
   end
 
   def test_major
