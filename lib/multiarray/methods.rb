@@ -44,7 +44,7 @@ module Hornetseye
               target = a.typecode.send conversion
               target.new mod.send( op, a.simplify.get )
             else
-              Hornetseye::UnaryMethod( mod, op, conversion ).new( a ).force
+              Hornetseye::Method( mod, op, conversion ).new( a ).force
             end
           else
             send "#{op}_without_hornetseye", a
@@ -69,7 +69,7 @@ module Hornetseye
               target = a.typecode.send coercion, b.typecode
               target.new mod.send( op, a.simplify.get, b.simplify.get )
             else
-              Hornetseye::BinaryMethod( mod, op, coercion ).new( a, b ).force
+              Hornetseye::Method( mod, op, coercion ).new( a, b ).force
             end
           else
             send "#{op}_without_hornetseye", a, b
