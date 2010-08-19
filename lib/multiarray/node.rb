@@ -171,7 +171,7 @@ module Hornetseye
 
       def cond( a, b )
         t = a.coercion b
-        Hornetseye::MultiArray t.typecode, *shape
+        Hornetseye::MultiArray( t.typecode, *shape ).coercion t
       end
 
       # Get variables contained in this datatype
