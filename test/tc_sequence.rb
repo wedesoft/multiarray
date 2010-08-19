@@ -412,15 +412,17 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ 0.0, 1.0, 1.0 ], S[ 0.3, 0.7, 1.3 ].round
   end
 
-  #def test_cmp
-  #  assert_equal S[ -1, 0, 1 ], S[ 1, 2, 3 ] <=> 2
-  #end
-
   def test_cond
     assert_equal S[ 1, 2 ], S[ false, true ].conditional( 2, 1 )
     assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], -1 )
     assert_equal S[ -1, 1 ], S[ false, true ].conditional( 1, S[ -1, -2 ] )
     assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], S[ -1, -2 ] )
+  end
+
+  def test_cmp
+    assert_equal S[ -1, 0, 1 ], S[ 1, 2, 3 ] <=> 2
+    assert_equal S[ 1, 0, -1 ], 2 <=> S[ 1, 2, 3 ]
+    assert_equal S[ -1, 0, 1 ], S[ 1, 3, 5 ] <=> S[ 2, 3, 4 ]
   end
 
   def test_major

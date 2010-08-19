@@ -101,6 +101,12 @@ module Hornetseye
       end
     end
 
+    def <=>( other )
+      Hornetseye::eager do
+        ( self < other ).conditional -1, ( self > other ).conditional( 1, 0 )
+      end
+    end
+
     # Lazy transpose of array
     #
     # Lazily compute transpose by swapping indices according to the specified

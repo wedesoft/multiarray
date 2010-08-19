@@ -414,4 +414,9 @@ class TC_MultiArray < Test::Unit::TestCase
                  conditional( M[ [ 1, 2 ], [ 3, 4 ] ], -1 )
   end
 
+  def test_cmp
+    assert_equal M[ [ -1, -1 ], [ 0, 1 ] ], M[ [ 1, 2 ], [ 3, 4 ] ] <=> 3
+    assert_equal M[ [ 1, 1 ], [ 0, -1 ] ], 3 <=> M[ [ 1, 2 ], [ 3, 4 ] ]
+  end
+
 end

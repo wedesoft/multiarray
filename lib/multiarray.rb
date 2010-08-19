@@ -532,7 +532,7 @@ module Hornetseye
   # @return [Object,Node] Result of computation.
   def eager( *shape, &action )
     previous = Thread.current[ :lazy ]
-    Thread.current[ :lazy ] = false
+    # Thread.current[ :lazy ] = false
     begin
       retval = lazy *shape, &action
       retval.is_a?( Node ) ? retval.force : retval
