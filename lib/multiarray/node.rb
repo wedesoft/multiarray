@@ -174,9 +174,9 @@ module Hornetseye
         Hornetseye::MultiArray( t.typecode, *shape ).coercion t
       end
 
-      #def to_type( typecode )
-      #  typecode
-      #end
+      def to_type( dest )
+        dest
+      end
 
       # Get variables contained in this datatype
       #

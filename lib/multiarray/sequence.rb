@@ -174,9 +174,9 @@ module Hornetseye
         Hornetseye::MultiArray( t.typecode, *shape ).coercion t
       end
 
-      #def to_type( typecode )
-      #  Hornetseye::Sequence element_type.to_type( typecode ), num_elements
-      #end
+      def to_type( dest )
+        Hornetseye::Sequence element_type.to_type( dest ), num_elements
+      end
 
       def inspect
         if dimension == 1

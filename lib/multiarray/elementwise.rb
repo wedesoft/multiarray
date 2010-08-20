@@ -21,16 +21,27 @@ module Hornetseye
 
     class << self
 
-
       # Name of operation
       #
-      # @return [Symbol,String] The name of this operation.
+      # @return [Proc] A closure with the operation.
       attr_accessor :operation
+
+      # Unique key to identify operation.
+      #
+      # @return [Symbol,String] A unique key to identify this operation.
+      attr_accessor :key
 
       # Name of method for type conversion
       #
-      # @return [Symbol,String] The name of the method for type conversion.
+      # @return [Proc] A closure for doing the type conversion.
       attr_accessor :conversion
+
+      # Get string with information about this class
+      #
+      # @return [String] Return string with information about this class.
+      def inspect
+        key.to_s
+      end
 
       # Get unique descriptor of this class
       #
@@ -56,6 +67,18 @@ module Hornetseye
       @values = values
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
+    def descriptor( hash )
+      "#{self.class.descriptor( hash )}" +
+        "(#{@values.collect { |value| value.descriptor( hash ) }.join ','})"
+    end
+
     # Array type of this term
     #
     # @return [Class] Resulting array type.
@@ -63,7 +86,18 @@ module Hornetseye
     # @private
     def array_type
       array_types = @values.collect { |value| value.array_type }
-      array_types.first.send self.class.conversion, *array_types[ 1 .. -1 ]
+      self.class.conversion.call *array_types
+    end
+
+    # Reevaluate computation
+    #
+    # @return [Node,Object] Result of computation
+    #
+    # @see #force
+    #
+    # @private
+    def demand
+      self.class.operation.call *@values
     end
 
     # Substitute variables
@@ -138,6 +172,30 @@ module Hornetseye
     end
 
   end
+
+  # Create a class deriving from +ElementWise_+
+  #
+  # @param [Proc] operation A closure with the operation to perform.
+  # @param [Symbol,String] key A unique descriptor to identify this operation.
+  # @param [Proc] conversion A closure for performing the type conversion.
+  #
+  # @return [Class] A class deriving from +ElementWise_+.
+  #
+  # @see ElementWise_
+  # @see ElementWise_.operation
+  # @see ElementWise_.key
+  # @see ElementWise_.conversion
+  #
+  # @private
+  def ElementWise( operation, key, conversion = :contiguous )
+    retval = Class.new ElementWise_
+    retval.operation = operation
+    retval.key = key
+    retval.conversion = conversion
+    retval
+  end
+
+  module_function :ElementWise
 
 end
 

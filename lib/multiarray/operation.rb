@@ -20,45 +20,11 @@ module Hornetseye
   # Class for representing operations on scalars and arrays
   class Operation_ < ElementWise_
 
-    class << self
-
-      # Get string with information about this class
-      #
-      # @return [String] Return string with information about this class.
-      def inspect
-        operation.to_s
-      end
-
-    end
-
-    # Get unique descriptor of this object
-    #
-    # @param [Hash] hash Labels for any variables.
-    #
-    # @return [String] Descriptor of this object,
-    #
-    # @private
-    def descriptor( hash )
-      "(#{@values.first.descriptor( hash )}).#{self.class.descriptor( hash )}" +
-        "(#{@values[ 1 .. -1 ].collect { |value| value.descriptor( hash ) }.join ','})"
-    end
-
-    # Reevaluate computation
-    #
-    # @return [Node,Object] Result of computation
-    #
-    # @see #force
-    #
-    # @private
-    def demand
-      @values.first.send self.class.operation, *@values[ 1 .. -1 ]
-    end
-
   end
 
   # Create a class deriving from +Operation_+
   #
-  # @param [Symbol,String] operation Name of operation.
+  # @param [Proc] operation A closure with the operation to perform.
   # @param [Symbol,String] conversion Name of method for type conversion.
   #
   # @return [Class] A class deriving from +Operation_+.
@@ -68,9 +34,10 @@ module Hornetseye
   # @see Operation_.conversion
   #
   # @private
-  def Operation( operation, conversion = :contiguous )
+  def Operation( operation, key, conversion = :contiguous )
     retval = Class.new Operation_
     retval.operation = operation
+    retval.key = key
     retval.conversion = conversion
     retval
   end

@@ -25,7 +25,9 @@ module Hornetseye
           target = typecode.send conversion
           target.new simplify.get.send( op )
         else
-          Hornetseye::Operation( op, conversion ).new( self ).force
+          Hornetseye::ElementWise( proc { |x| x.send op }, op,
+                                   proc { |t| t.send conversion } ).
+            new( self ).force
         end
       end
     end
@@ -42,7 +44,9 @@ module Hornetseye
           target = array_type.send coercion, other.array_type
           target.new simplify.get.send( op, other.simplify.get )
         else
-          Hornetseye::Operation( op, coercion ).new( self, other ).force
+          Hornetseye::ElementWise( proc { |x,y| x.send op, y }, op,
+                                   proc { |t,u| t.send coercion, u } ).
+            new( self, other ).force
         end
       end
     end
@@ -84,6 +88,17 @@ module Hornetseye
       self
     end
 
+    def to_type( dest )
+      if dimension == 0 and variables.empty?
+        target = typecode.to_type dest
+        target.new simplify.get
+      else
+        key = "to_#{dest.to_s.downcase}"
+        Hornetseye::ElementWise( proc { |x| x.to_type dest }, key,
+                                 proc { |t| t.to_type dest } ).new( self ).force
+      end
+    end
+
     def conditional( a, b )
       unless a.is_a? Node
         a = Node.match( a, b.is_a?( Node ) ? b : nil ).new a
@@ -97,7 +112,9 @@ module Hornetseye
         target = array_type.cond a.array_type, b.array_type
         target.new simplify.get.conditional( a.simplify.get, b.simplify.get )
       else
-        Hornetseye::Operation( :conditional, :cond ).new( self, a, b ).force
+        Hornetseye::ElementWise( proc { |x,y,z| x.conditional y, z }, :conditional,
+                                 proc { |t,u,v| t.cond u, v } ).
+          new( self, a, b ).force
       end
     end
 

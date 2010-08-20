@@ -22,41 +22,13 @@ module Hornetseye
 
     class << self
 
-      # Name of module
-      #
-      # @return [Module] The module with the method.
-      attr_accessor :mod
-
       # Get string with information about this class
       #
       # @return [String] Return string with information about this class.
       def inspect
-        "#{mod.to_s}.#{operation.to_s}"
+        key.to_s
       end
 
-    end
-
-    # Get unique descriptor of this object
-    #
-    # @param [Hash] hash Labels for any variables.
-    #
-    # @return [String] Descriptor of this object,
-    #
-    # @private
-    def descriptor( hash )
-      "#{self.class.descriptor( hash )}" +
-        "(#{@values.collect { |value| value.descriptor( hash ) }.join ','})"
-    end
-
-    # Reevaluate computation
-    #
-    # @return [Node,Object] Result of computation
-    #
-    # @see #force
-    #
-    # @private
-    def demand
-      self.class.mod.send self.class.operation, *@values
     end
 
   end
@@ -73,10 +45,10 @@ module Hornetseye
   # @see Method_.conversion
   #
   # @private
-  def Method( mod, operation, conversion = :contiguous )
+  def Method( operation, key, conversion = :contiguous )
     retval = Class.new Method_
-    retval.mod = mod
     retval.operation = operation
+    retval.key = key
     retval.conversion = conversion
     retval
   end
