@@ -1,4 +1,3 @@
-# conversion from OBJECT
 # complex numbers, factor out composite numbers
 # use descriptors ('c','f',...)?
 # pointer-increments for better efficiency, optimize Node#diagonal
