@@ -138,7 +138,7 @@ module Hornetseye
       # Get boolean-based datatype for binary operation
       #
       # @return [Class] Returns +BOOL+.
-      def bool_binary( other )
+      def coercion_bool( other )
         other.coercion( self ).bool
       end
 
@@ -146,7 +146,7 @@ module Hornetseye
         self
       end
 
-      def largeint( other )
+      def coercion_maxint( other )
         coercion( other ).maxint
       end
 
@@ -165,7 +165,7 @@ module Hornetseye
         BYTE
       end
 
-      def byteval( other )
+      def coercion_byte( other )
         coercion( other ).byte
       end
 
@@ -173,6 +173,10 @@ module Hornetseye
         t = a.coercion b
         Hornetseye::MultiArray( t.typecode, *shape ).coercion t
       end
+
+      #def to_type( typecode )
+      #  typecode
+      #end
 
       # Get variables contained in this datatype
       #

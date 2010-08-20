@@ -141,7 +141,7 @@ module Hornetseye
         Hornetseye::Sequence element_type.bool, num_elements
       end
 
-      def bool_binary( other )
+      def coercion_bool( other )
         coercion( other ).bool
       end
 
@@ -149,7 +149,7 @@ module Hornetseye
         Hornetseye::Sequence element_type.maxint, num_elements
       end
 
-      def largeint( other )
+      def coercion_maxint( other )
         coercion( other ).maxint
       end
 
@@ -157,7 +157,7 @@ module Hornetseye
         Hornetseye::Sequence element_type.byte, num_elements
       end
 
-      def byteval( other )
+      def coercion_byte( other )
         coercion( other ).byte
       end
 
@@ -173,6 +173,10 @@ module Hornetseye
         t = a.coercion b
         Hornetseye::MultiArray( t.typecode, *shape ).coercion t
       end
+
+      #def to_type( typecode )
+      #  Hornetseye::Sequence element_type.to_type( typecode ), num_elements
+      #end
 
       def inspect
         if dimension == 1

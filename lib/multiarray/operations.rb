@@ -60,23 +60,23 @@ module Hornetseye
     define_binary_op :+
     define_binary_op :-
     define_binary_op :*
-    define_binary_op :**, :largeint
+    define_binary_op :**, :coercion_maxint
     define_binary_op :/
     define_binary_op :%
-    define_binary_op :and, :bool_binary
-    define_binary_op :or, :bool_binary
+    define_binary_op :and, :coercion_bool
+    define_binary_op :or, :coercion_bool
     define_binary_op :&
     define_binary_op :|
     define_binary_op :^
     define_binary_op :<<
     define_binary_op :>>
-    define_binary_op :eq, :bool_binary
-    define_binary_op :ne, :bool_binary
-    define_binary_op :<=, :bool_binary
-    define_binary_op :<, :bool_binary
-    define_binary_op :>=, :bool_binary
-    define_binary_op :>, :bool_binary
-    define_binary_op :<=>, :byteval
+    define_binary_op :eq, :coercion_bool
+    define_binary_op :ne, :coercion_bool
+    define_binary_op :<=, :coercion_bool
+    define_binary_op :<, :coercion_bool
+    define_binary_op :>=, :coercion_bool
+    define_binary_op :>, :coercion_bool
+    define_binary_op :<=>, :coercion_byte
     define_binary_op :minor
     define_binary_op :major
 
