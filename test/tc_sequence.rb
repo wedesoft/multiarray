@@ -62,12 +62,12 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sequence_indgen
-    assert_equal [ 0, 1, 2 ], S( I, 3 ).indgen.to_a
-    assert_equal [ 1, 2, 3 ], S( I, 3 ).indgen( 1 ).to_a
-    assert_equal [ 0, 2, 4 ], S( I, 3 ).indgen( 0, 2 ).to_a
-    assert_equal [ 1, 3, 5 ], S( I, 3 ).indgen( 1, 2 ).to_a
-    assert_equal [ C( 1, 2, 3 ), C( 3, 5, 7 ) ],
-                 S( C, 2 ).indgen( C( 1, 2, 3 ), C( 2, 3, 4 ) ).to_a
+    assert_equal S( I, 3 )[ 0, 1, 2 ], S( I, 3 ).indgen
+    assert_equal S( I, 3 )[ 1, 2, 3 ], S( I, 3 ).indgen( 1 )
+    assert_equal S( I, 3 )[ 0, 2, 4 ], S( I, 3 ).indgen( 0, 2 )
+    assert_equal S( I, 3 )[ 1, 3, 5 ], S( I, 3 ).indgen( 1, 2 )
+    assert_equal S( C, 2 )[ C( 1, 2, 3 ), C( 3, 5, 7 ) ],
+                 S( C, 2 ).indgen( C( 1, 2, 3 ), C( 2, 3, 4 ) )
   end
 
   def test_sequence_at
@@ -151,7 +151,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_slice
     [ S( O, 4 ), S( I, 4 ) ].each do |t|
-      s = t.indgen( 1 )[]
+      s = t[ 1, 2, 3, 4 ]
       assert_equal [ 2, 3 ], s[ 1 .. 2 ].to_a
       assert_equal [ 2, 3 ], s[ 1 ... 3 ].to_a
       s[ 1 .. 2 ] = 0
@@ -446,6 +446,10 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_hypot
     assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
+  end
+
+  def test_to_type
+    assert_equal S( C, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_type( C )
   end
 
 end

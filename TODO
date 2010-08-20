@@ -1,5 +1,4 @@
-# type conversions, lazy( 3, 2 ) { |i,j| j.to_object }
-# use closure instead of symbol for Operation, to_type( ... )
+# type conversions with objects, indgen with object
 # complex numbers, factor out composite numbers
 # use descriptors ('c','f',...)?
 # pointer-increments for better efficiency, optimize Node#diagonal

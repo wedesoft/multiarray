@@ -81,8 +81,8 @@ module Hornetseye
 
       def indgen( offset = 0, increment = 1 )
         Hornetseye::lazy( num_elements ) do |i|
-          element_type.size * increment * i +
-            element_type.indgen( offset, increment )
+          ( element_type.size * increment * i +
+            element_type.indgen( offset, increment ) ).to_type typecode
         end
       end
 

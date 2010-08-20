@@ -121,7 +121,7 @@ module Hornetseye
     def <=>( other )
       Hornetseye::lazy do
         ( self < other ).conditional -1, ( self > other ).conditional( 1, 0 )
-      end.force
+      end
     end
 
     # Lazy transpose of array

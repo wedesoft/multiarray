@@ -81,17 +81,17 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_multiarray_indgen
-    assert_equal [ [ 0, 1, 2 ], [ 3, 4, 5 ] ],
-                 M( I, 3, 2 ).indgen.to_a
-    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
-                 M( I, 3, 2 ).indgen( 1 ).to_a
-    assert_equal [ [ 0, 2, 4 ], [ 6, 8, 10 ] ],
-                 M( I, 3, 2 ).indgen( 0, 2 ).to_a
-    assert_equal [ [ 1, 3, 5 ], [ 7, 9, 11 ] ],
-                 M( I, 3, 2 ).indgen( 1, 2 ).to_a
-    assert_equal [ [ C( 1, 2, 3 ), C( 2, 2, 2 ) ],
-                   [ C( 3, 2, 1 ), C( 4, 2, 0 ) ] ],
-                 M( C, 2, 2 ).indgen( C( 1, 2, 3 ), C( 1, 0, -1 ) ).to_a
+    assert_equal M( I, 3, 2 )[ [ 0, 1, 2 ], [ 3, 4, 5 ] ],
+                 M( I, 3, 2 ).indgen
+    assert_equal M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
+                 M( I, 3, 2 ).indgen( 1 )
+    assert_equal M( I, 3, 2 )[ [ 0, 2, 4 ], [ 6, 8, 10 ] ],
+                 M( I, 3, 2 ).indgen( 0, 2 )
+    assert_equal M( I, 3, 2 )[ [ 1, 3, 5 ], [ 7, 9, 11 ] ],
+                 M( I, 3, 2 ).indgen( 1, 2 )
+    assert_equal M( C, 2, 2 )[ [ C( 1, 2, 3 ), C( 2, 2, 2 ) ],
+                               [ C( 3, 2, 1 ), C( 4, 2, 0 ) ] ],
+                 M( C, 2, 2 ).indgen( C( 1, 2, 3 ), C( 1, 0, -1 ) )
   end
 
   def test_multiarray_typecode
@@ -418,5 +418,11 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ -1, -1 ], [ 0, 1 ] ], M[ [ 1, 2 ], [ 3, 4 ] ] <=> 3
     assert_equal M[ [ 1, 1 ], [ 0, -1 ] ], 3 <=> M[ [ 1, 2 ], [ 3, 4 ] ]
   end
+
+  def test_to_type
+    assert_equal M( C, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ],
+                 M( I, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].to_type( C )
+  end
+
 
 end
