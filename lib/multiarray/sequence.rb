@@ -233,6 +233,10 @@ module Hornetseye
         MultiArray.new typecode, *shape
       end
 
+      def compilable?
+        element_type.compilable?
+      end
+
     end
 
     # Namespace containing method for matching elements of type Sequence_

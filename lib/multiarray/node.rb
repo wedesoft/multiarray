@@ -454,7 +454,7 @@ module Hornetseye
       value = indices.pop
       value = Node.match( value ).new value unless value.is_a? Node
       if indices.empty?
-        unless compilable? and dimension > 0
+        unless compilable? and value.compilable? and dimension > 0
           store value
         else
           GCCFunction.run self, value

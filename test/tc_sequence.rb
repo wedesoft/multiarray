@@ -151,7 +151,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_slice
     [ S( O, 4 ), S( I, 4 ) ].each do |t|
-      s = t[ 1, 2, 3, 4 ]
+      s = t.indgen( 1 )[]
       assert_equal [ 2, 3 ], s[ 1 .. 2 ].to_a
       assert_equal [ 2, 3 ], s[ 1 ... 3 ].to_a
       s[ 1 .. 2 ] = 0
@@ -449,6 +449,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_to_type
+    assert_equal S( O, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_type( O )
+    assert_equal S( I, 3 )[ 1, 2, 3 ], S( O, 3 )[ 1, 2, 3 ].to_type( I )
     assert_equal S( C, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_type( C )
   end
 

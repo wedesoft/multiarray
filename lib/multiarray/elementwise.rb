@@ -168,7 +168,7 @@ module Hornetseye
     #
     # @private
     def compilable?
-      @values.all? { |value| value.compilable? }
+      array_type.compilable? and @values.all? { |value| value.compilable? }
     end
 
   end
