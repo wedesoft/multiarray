@@ -129,6 +129,14 @@ module Hornetseye
       self
     end
 
+    def real
+      self
+    end
+
+    def imag
+      0
+    end
+
     def conditional( a, b )
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end

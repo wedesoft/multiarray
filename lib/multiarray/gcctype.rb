@@ -50,8 +50,10 @@ module Hornetseye
           [ 'void *' ]
         elsif @typecode < INDEX_
           [ 'int' ]
-        elsif @typecode < RGB_
+        elsif @typecode < RGB_ # !!!
           GCCType.new( @typecode.element_type ).identifiers * 3
+        elsif @typecode < COMPLEX_ # !!!
+          GCCType.new( @typecode.element_type ).identifiers * 2
         else
           raise "No identifier available for #{@typecode.inspect}"
         end

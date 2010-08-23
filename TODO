@@ -1,5 +1,6 @@
 # complex numbers, factor out composite numbers
-# use descriptors ('c','f',...)?
+# abs for int, float, and complex?
+# use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
 # implement typecasts, how does contiguous work here?
 # documentation!

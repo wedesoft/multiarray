@@ -124,7 +124,7 @@ module Hornetseye
       end
 
       def construct( r, g, b )
-        new Hornetseye::RGB( r, g, b )
+        new RGB.new( r, g, b )
       end
 
       def memory
@@ -136,7 +136,7 @@ module Hornetseye
       end
 
       def default
-        Hornetseye::RGB 0, 0, 0
+        RGB.new 0, 0, 0
       end
 
       def directive
