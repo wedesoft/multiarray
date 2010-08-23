@@ -53,6 +53,14 @@ module Hornetseye
       end
     end
 
+    def +@
+      self
+    end
+
+    def -@
+      Complex.new -@real, -@imag
+    end
+
   end
 
   class COMPLEX_ < Element
@@ -66,7 +74,7 @@ module Hornetseye
       end
 
       def construct( real, imag )
-        new Complex.new( 0, 0 )
+        new Complex.new( real, imag )
       end
 
       def memory
@@ -201,7 +209,7 @@ module Hornetseye
       def fit( *values )
         if values.all? { |value| value.is_a? Complex or value.is_a? Float or
                                  value.is_a? Integer }
-          if values.any? { |value| value.is_a? RGB }
+          if values.any? { |value| value.is_a? Complex }
             elements = values.inject( [] ) do |arr,value|
               if value.is_a? Complex
                 arr + [ value.real, value.imag ]
@@ -248,6 +256,17 @@ module Hornetseye
   SCOMPLEX = COMPLEX SFLOAT
 
   DCOMPLEX = COMPLEX DFLOAT
+
+  def SCOMPLEX( value )
+    SCOMPLEX.new value
+  end
+
+  def DCOMPLEX( value )
+    DCOMPLEX.new value
+  end
+
+  module_function :SCOMPLEX
+  module_function :DCOMPLEX
 
 end
 
