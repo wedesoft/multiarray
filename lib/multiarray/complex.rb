@@ -74,6 +74,17 @@ module Hornetseye
       end
     end
 
+    def -( other )
+      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+        Complex.new @real - other.real, @imag - other.imag
+      elsif Complex.generic? other
+        Complex.new @real - other, @imag
+      else
+        x, y = other.coerce self
+        x - y
+      end
+    end
+
   end
 
   class COMPLEX_ < Element
