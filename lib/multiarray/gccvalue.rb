@@ -121,6 +121,10 @@ module Hornetseye
       self
     end
 
+    def abs
+      ( self >= 0 ).conditional self, -self
+    end
+
     def r
       self
     end

@@ -145,6 +145,10 @@ module Hornetseye
         coercion( other ).bool
       end
 
+      def scalar
+        Hornetseye::Sequence element_type.scalar, num_elements
+      end
+
       def maxint
         Hornetseye::Sequence element_type.maxint, num_elements
       end

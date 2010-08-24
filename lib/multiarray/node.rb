@@ -135,6 +135,10 @@ module Hornetseye
         BOOL
       end
 
+      def scalar
+        self
+      end
+
       # Get boolean-based datatype for binary operation
       #
       # @return [Class] Returns +BOOL+.

@@ -177,6 +177,10 @@ module Hornetseye
         [ element_type ] * 3
       end
 
+      def scalar
+        element_type.float
+      end
+
       def maxint
         Hornetseye::RGB element_type.maxint
       end

@@ -59,6 +59,7 @@ module Hornetseye
     define_unary_op :~
     define_unary_op :-@
     define_unary_op :conj
+    define_unary_op :abs, :scalar
     define_unary_op :floor
     define_unary_op :ceil
     define_unary_op :round

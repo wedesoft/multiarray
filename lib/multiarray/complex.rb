@@ -59,6 +59,10 @@ module Hornetseye
       Complex.new @real, -@imag
     end
 
+    def abs
+      Math.hypot @real, @imag
+    end
+
     def +@
       self
     end
@@ -198,6 +202,10 @@ module Hornetseye
 
       def typecodes
         [ element_type ] * 2
+      end
+
+      def scalar
+        element_type.float
       end
 
       def maxint
