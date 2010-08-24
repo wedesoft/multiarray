@@ -73,6 +73,8 @@ module Hornetseye
           [ proc { |expr| "(#{identifiers.first})mallocToPtr( #{expr} )" } ] # !!!
         elsif @typecode < RGB_
           GCCType.new( @typecode.element_type ).r2c * 3
+        elsif @typecode < COMPLEX_
+          GCCType.new( @typecode.element_type ).r2c * 2
         else
           raise "No conversion available for #{@typecode.inspect}"
         end

@@ -120,6 +120,16 @@ module Hornetseye
       @real.nonzero?.or @imag.nonzero?
     end
 
+    def ==( other )
+      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+        @real.eq( other.real ).and( @imag.eq( other.imag ) )
+      elsif Complex.generic? other
+        @real.eq( other ).and( @imag.eq( 0 ) )
+      else
+        false
+      end
+    end
+
     def abs2
       @real * @real + @imag * @imag
     end

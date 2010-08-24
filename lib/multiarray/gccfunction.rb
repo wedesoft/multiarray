@@ -36,13 +36,14 @@ module Hornetseye
           GCCContext.build do |context|
             function = new context, method_name,
                            *( retval_keys + keys ).collect { |var| var.meta }
+            Thread.current[ :function ] = function
             term_subst = ( 0 ... keys.size ).collect do |i|
               { keys[i] => function.param( i + retval_keys.size ) }
             end.inject( {} ) { |a,b| a.merge b }
             retval_subst = ( 0 ... retval_keys.size ).collect do |i|
               { retval_keys[ i ] => function.param( i ) }
             end.inject( {} ) { |a,b| a.merge b }
-            Thread.current[ :function ] = function
+            # Thread.current[ :function ] = function
             Hornetseye::lazy do
               retval_term.subst( retval_subst ).store term.subst( term_subst )
             end
