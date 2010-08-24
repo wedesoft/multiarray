@@ -139,6 +139,10 @@ module Hornetseye
         self
       end
 
+      def float_scalar
+        float.scalar
+      end
+
       # Get boolean-based datatype for binary operation
       #
       # @return [Class] Returns +BOOL+.

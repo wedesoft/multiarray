@@ -125,6 +125,10 @@ module Hornetseye
       ( self >= 0 ).conditional self, -self
     end
 
+    def arg
+      ( self >= 0 ).conditional 0, Math::PI
+    end
+
     def r
       self
     end

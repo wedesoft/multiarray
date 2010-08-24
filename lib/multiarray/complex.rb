@@ -63,6 +63,10 @@ module Hornetseye
       Math.hypot @real, @imag
     end
 
+    def arg
+      Math.atan2 @imag, @real
+    end
+
     def +@
       self
     end

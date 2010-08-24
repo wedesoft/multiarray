@@ -149,6 +149,10 @@ module Hornetseye
         Hornetseye::Sequence element_type.scalar, num_elements
       end
 
+      def float_scalar
+        Hornetseye::Sequence element_type.float_scalar, num_elements
+      end
+
       def maxint
         Hornetseye::Sequence element_type.maxint, num_elements
       end
