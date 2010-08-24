@@ -117,6 +117,10 @@ module Hornetseye
       end
     end
 
+    def conj
+      self
+    end
+
     def r
       self
     end
