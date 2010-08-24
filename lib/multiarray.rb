@@ -456,6 +456,7 @@ class Array
 
 end
 
+require 'complex'
 require 'malloc'
 require 'rbconfig'
 require 'set'

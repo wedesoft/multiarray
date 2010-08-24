@@ -34,7 +34,7 @@ module Hornetseye
     end
 
     def inspect
-      "Complex(#{@real.inspect},#{@imag.inspect})"
+      "Hornetseye::Complex(#{@real.inspect},#{@imag.inspect})"
     end
 
     def to_s
@@ -48,6 +48,8 @@ module Hornetseye
     def coerce( other )
       if other.is_a? Complex
         return other, self
+      elsif other.is_a? ::Complex
+        return Complex.new( other.real, other.imag ), self
       else
         return Complex.new( other, 0 ), self
       end
@@ -59,6 +61,17 @@ module Hornetseye
 
     def -@
       Complex.new -@real, -@imag
+    end
+
+    def +( other )
+      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+        Complex.new @real + other.real, @imag + other.imag
+      elsif Complex.generic? other
+        Complex.new @real + other, @imag
+      else
+        x, y = other.coerce self
+        x + y
+      end
     end
 
   end
@@ -74,7 +87,11 @@ module Hornetseye
       end
 
       def construct( real, imag )
-        new Complex.new( real, imag )
+        if Thread.current[ :function ]
+          new Complex.new( real, imag )
+        else
+          new Kernel::Complex( real, imag )
+        end
       end
 
       def memory
@@ -86,7 +103,11 @@ module Hornetseye
       end
 
       def default
-        Complex.new 0, 0
+        if Thread.current[ :function ]
+          Complex.new 0, 0
+        else
+          Kernel::Complex 0, 0
+        end
       end
 
       def directive
@@ -131,7 +152,7 @@ module Hornetseye
         if other < COMPLEX_
           Hornetseye::COMPLEX element_type.coercion( other.element_type )
         elsif other < INT_ or other < FLOAT_
-          Hornetseye::COMPLEX element_type.coercion ( other )
+          Hornetseye::COMPLEX element_type.coercion( other )
         else
           super other
         end
@@ -207,8 +228,8 @@ module Hornetseye
     module Match
 
       def fit( *values )
-        if values.all? { |value| value.is_a? Complex or value.is_a? Float or
-                                 value.is_a? Integer }
+        if values.all? { |value| value.is_a? Complex or value.is_a? ::Complex or
+                                 value.is_a? Float or value.is_a? Integer }
           if values.any? { |value| value.is_a? Complex }
             elements = values.inject( [] ) do |arr,value|
               if value.is_a? Complex
