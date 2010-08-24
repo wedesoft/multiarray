@@ -55,6 +55,10 @@ module Hornetseye
       end
     end
 
+    def conj
+      Complex.new @real, -@imag
+    end
+
     def +@
       self
     end
@@ -83,6 +87,41 @@ module Hornetseye
         x, y = other.coerce self
         x - y
       end
+    end
+
+    def *( other )
+      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+        Complex.new @real * other.real - @imag * other.imag,
+                    @real * other.imag + @imag * other.real
+      elsif Complex.generic? other
+        Complex.new @real * other, @imag * other
+      else
+        x, y = other.coerce self
+        x * y
+      end
+    end
+
+    def /( other )
+      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+        self * other.conj / other.abs2
+      elsif Complex.generic? other
+        Complex.new @real / other, @imag / other
+      else
+        x, y = other.coerce self
+        x / y
+      end
+    end
+
+    def zero?
+      @real.zero?.and @imag.zero?
+    end
+
+    def nonzero?
+      @real.nonzero?.or @imag.nonzero?
+    end
+
+    def abs2
+      @real * @real + @imag * @imag
     end
 
   end
@@ -241,9 +280,9 @@ module Hornetseye
       def fit( *values )
         if values.all? { |value| value.is_a? Complex or value.is_a? ::Complex or
                                  value.is_a? Float or value.is_a? Integer }
-          if values.any? { |value| value.is_a? Complex }
+          if values.any? { |value| value.is_a? Complex or value.is_a? ::Complex }
             elements = values.inject( [] ) do |arr,value|
-              if value.is_a? Complex
+              if value.is_a? Complex or value.is_a? ::Complex
                 arr + [ value.real, value.imag ]
               else
                 arr + [ value ]
