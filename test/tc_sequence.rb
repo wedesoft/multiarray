@@ -410,6 +410,10 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_pow
     assert_equal [ 1, 4, 9 ], ( S[ 1, 2, 3 ] ** 2 ).to_a
+    assert_in_delta 0.0, ( ( S( X, 1 )[ X( 1, 2 ) ] ** 2 )[ 0 ] - X( -3, 4 ) ).abs,
+                    1.0e-5
+    assert_in_delta 0.0, ( Math::E ** S( X, 1 )[ X( 0, Math::PI ) ][ 0 ] + 1 ).abs,
+                    1.0e-5
   end
 
   def test_eq

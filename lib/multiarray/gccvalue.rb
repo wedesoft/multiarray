@@ -62,7 +62,8 @@ module Hornetseye
         mod.module_eval do
           define_method( "#{op}_with_gcc" ) do |a,b|
             if a.is_a? GCCValue or b.is_a? GCCValue
-              GCCValue.new a.function, "#{opcode}( #{a}, #{b} )"
+              function = a.is_a?( GCCValue ) ? a.function : b.function
+              GCCValue.new function, "#{opcode}( #{a}, #{b} )"
             else
               send "#{op}_without_gcc", a, b
             end
@@ -210,7 +211,12 @@ module Hornetseye
     end
 
     def **( other )
-      GCCValue.new @function, "pow( #{self}, #{other} )"
+      if GCCValue.generic? other
+        GCCValue.new @function, "pow( #{self}, #{other} )"
+      else
+        x, y = other.coerce self
+        x ** y
+      end
     end
 
     def major( other )

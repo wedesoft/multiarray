@@ -25,6 +25,10 @@ module Hornetseye
         value.is_a?( Numeric ) or value.is_a?( GCCValue )
       end
 
+      def polar( r, theta )
+        new r * Math.cos( theta ), r * Math.sin( theta )
+      end
+
     end
 
     attr_accessor :real, :imag
@@ -65,6 +69,10 @@ module Hornetseye
 
     def arg
       Math.atan2 @imag, @real
+    end
+
+    def polar
+      return abs, arg
     end
 
     def +@
@@ -117,6 +125,23 @@ module Hornetseye
       else
         x, y = other.coerce self
         x / y
+      end
+    end
+
+    def **( other )
+      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+        r, theta = polar
+        ore = other.real
+        oim = other.imag
+        nr = Math.exp ore * Math.log( r ) - oim * theta
+        ntheta = theta * ore + oim * Math.log( r )
+        Complex.polar nr, ntheta
+      elsif Complex.generic? other
+        r, theta = polar
+        Complex.polar r ** other, theta * other
+      else
+        x, y = other.coerce self
+        x ** y
       end
     end
 
