@@ -28,6 +28,7 @@ class TC_Sequence < Test::Unit::TestCase
   I = Hornetseye::INT
   S = Hornetseye::Sequence
   C = Hornetseye::INTRGB
+  X = Hornetseye::DCOMPLEX
 
   def S( *args )
     Hornetseye::Sequence *args
@@ -35,6 +36,10 @@ class TC_Sequence < Test::Unit::TestCase
 
   def C( *args )
     Hornetseye::RGB *args
+  end
+
+  def X( *args )
+    Kernel::Complex *args
   end
   
   def sum( *args, &action )
@@ -85,6 +90,7 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal B, S[ false, true ].typecode
     assert_equal I, S[ -2 ** 31, 2 ** 31 - 1 ].typecode
     assert_equal C, S[ C( -2 ** 31, 2 ** 31 - 1, 0 ) ].typecode
+    assert_equal X, S[ X( 1.5, 2.5 ) ].typecode
   end
 
   def test_sequence_typecode
@@ -92,6 +98,7 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal B, S( B, 3 ).typecode
     assert_equal I, S( I, 3 ).typecode
     assert_equal C, S( C, 3 ).typecode
+    assert_equal X, S( X, 3 ).typecode
   end
 
   def test_sequence_dimension
@@ -177,6 +184,8 @@ class TC_Sequence < Test::Unit::TestCase
   def test_equal
     assert_equal S[ 2, 3, 5 ], S[ 2, 3, 5 ]
     assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 7 ]
+    assert_equal S[ X( 1, 2 ), 3 ], S[ X( 1, 2 ), X( 3, 0 ) ]
+    assert_not_equal S[ X( 1, 2 ), 3 ], S[ X( 1, 3 ), 3 ]
     #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3 ] # !!!
     #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 5, 7 ]
     assert_not_equal S[ 2, 2, 2 ], 2
@@ -190,6 +199,7 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal C( 3, 5, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].inject { |a,b| a + b }
     assert_equal C( 5, 6, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].
                                inject( C( 2, 1, 0 ) ) { |a,b| a + b }
+    assert_equal X( -5, 10 ), S( X, 2 )[ X( 1, 2 ), X( 3, 4 ) ].inject { |a,b| a * b }
   end
 
   def test_sum
@@ -198,6 +208,7 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 1, 2, 3 ], sum { || t[ 1, 2, 3 ] }.to_a
     end
     assert_equal C( 3, 5, 8 ), sum { |i| S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ][i] }
+    assert_equal X( 4, 6 ), sum { |i| S[ X( 1, 2 ), X( 3, 4 ) ][i] }
   end
 
   def test_min
@@ -241,6 +252,8 @@ class TC_Sequence < Test::Unit::TestCase
     end
     assert_equal S[ false, false, false, true ],
                  S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].zero?
+    assert_equal S[ true, false, false ],
+                 S[ X( 0, 0 ), X( 1, 0 ), X( 0, 1 ) ].zero?
   end
 
   def test_nonzero
@@ -248,6 +261,8 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ -1, nil, 1 ], S( O, 3 )[ -1, 0, 1 ].nonzero?
     assert_equal S[ true, true, true, false ],
                  S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].nonzero?
+    assert_equal S[ false, true, true ],
+                 S[ X( 0, 0 ), X( 1, 0 ), X( 0, 1 ) ].nonzero?
   end
 
   def test_not
@@ -349,6 +364,7 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ C( 2, 3, 4 ), C( 5, 6, 7 ) ], S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ] + 1
     assert_equal S[ C( 2, 3, 4 ), C( 5, 6, 7 ) ], 1 + S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ]
     assert_equal S[ C( 2, 3, 4 ), C( 3, 4, 5 ) ], S[ 1, 2 ] + C( 1, 2, 3 )
+    assert_equal S[ X( 4, 6 ) ], S[ X( 1, 2 ) ] + S[ X( 3, 4 ) ]
   end
 
   def test_minus
@@ -358,14 +374,34 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ], S[ C( 2, 3, 4 ), C( 5, 6, 7 ) ] - 1
     assert_equal S[ C( 6, 5, 4 ), C( 3, 2, 1 ) ], 7 - S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ]
     assert_equal S[ C( 3, 2, 1 ), C( 4, 3, 2 ) ], S[ 4, 5 ] - C( 1, 2, 3 )
+    assert_equal S[ X( -1.0, 2.0 ) ], -S[ X( 1.0, -2.0 ) ]
+  end
+
+  def test_conj
+    assert_equal S[ 1.5, 2.5 ], S[ 1.5, 2.5 ].conj
+    assert_equal S[ X( 1.5, -2.5 ) ], S[ X( 1.5, 2.5 ) ].conj
+  end
+
+  def test_abs
+    assert_equal [ 1, 0, 1 ], S[ -1, 0, 1 ].abs.to_a
+    assert_equal [ 5 ], S[ X( 3, 4 ) ].abs.to_a
+  end
+
+  def test_arg
+    assert_equal S[ 0.0, Math::PI ], S[ 1, -1 ].arg
+    assert_equal S[ 0.0, Math::PI / 2, Math::PI, -Math::PI / 2 ],
+                 S[ X( 1, 0 ), X( 0, 1 ), X( -1, 0 ), X( 0, -1 ) ].arg
   end
 
   def test_mul
     assert_equal S[ 6, 12, 20 ], S[ 2, 3, 4 ] * S[ 3, 4, 5 ]
+    assert_equal S[ C( -2, 0, 4 ) ], S[ C( 2, 3, 4 ) ] * S[ C( -1, 0, 1 ) ]
+    assert_equal S[ X( -11, 2 ) ], S[ X( -1, 2 ) ] * S[ X( 3, 4 ) ]
   end
 
   def test_div
     assert_equal S[ 2, 3, 4 ], S[ 6, 12, 20 ] / S[ 3, 4, 5 ]
+    assert_equal S[ X( -1, 2 ) ], S[ X( -11, 2 ) ] / S[ X( 3, 4 ) ]
   end
 
   def test_mod
@@ -378,6 +414,10 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_eq
     assert_equal S[ false, true, false ], S[ 1, 2, 3 ].eq( 2 )
+    assert_equal S[ false, true ],
+                 S[ C( 1, 2, 1 ), C( 2, 1, 0 ) ].eq( S[ C( 1, 2, 3 ), C( 2, 1, 0 ) ] )
+    assert_equal S[ false, true, false ],
+                 X( 1, 2 ).eq( S[ X( 1, 1 ), X( 1, 2 ), X( 2, 2 ) ] )
   end
 
   def test_ne

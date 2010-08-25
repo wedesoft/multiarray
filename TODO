@@ -1,8 +1,8 @@
-# complex numbers, factor out composite numbers
-# abs for int, float, and complex?
+# prevent buffer overruns
+# complex numbers, factor out composite numbers, tests
+# implement typecasts, extract r, g, b, real, imag (what is contiguous here?)
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
-# implement typecasts, how does contiguous work here?
 # documentation!
 
 # histogram (implement using injection)
@@ -22,19 +22,12 @@
 #  end
 #end
 
-
 # cache <-> demand/get? what about store?
-# Composite numbers?
-# change Convolve#demand to generate GCC code
 # inspect method (type method to get MultiArray( ... ) or Sequence( ... ))
-# put JIT-calls into 'force'-method, don't call JIT for OBJECT
-# -> multiarray gem
-# pointer-increments for better efficiency
-# use pid, allow creation of library for pre-loading cache
+# allow creation of library for pre-loading cache
 
 # histogram
-# binary operations, equality: ( a == b ).inject( true ) { |e,b| e && b }
-# inject: min, max, equal, n-d clips for warp
+# use inject for n-d clips for warp
 # block(var1,var2,...) with smart subst?
 
 # downsampling after correlation?
