@@ -99,12 +99,23 @@ module Hornetseye
     #
     # @return [Node,Object] Result of inserting +i+ for lambda argument.
     def element( i )
-      i = Node.match( i ).new i unless i.is_a? Node
+      unless i.is_a? Node
+        unless ( 0 ... shape.last ).member? i
+          raise "Index must be in 0 ... #{shape.last} (was #{i})"
+        end
+        i = Node.match( i ).new i
+      end
       i.size.store @index.size if @index.size.get and i.is_a? Variable
       @term.subst @index => i
     end
 
     def slice( start, length )
+      unless start.is_a?( Node ) or length.is_a?( Node )
+        if start < 0 or start + length > shape.last
+          raise "Range must be in 0 ... #{shape.last} " +
+                "(was #{start} ... #{start + length})"
+        end
+      end
       start = Node.match( start ).new start unless start.is_a? Node
       length = Node.match( length ).new length unless length.is_a? Node
       index = Variable.new Hornetseye::INDEX( length )
