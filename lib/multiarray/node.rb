@@ -462,6 +462,14 @@ module Hornetseye
       value = indices.pop
       value = Node.match( value ).new value unless value.is_a? Node
       if indices.empty?
+        if dimension < value.dimension
+          raise "#{value.array_type.inspect} has #{value.dimension} dimension(s) " +
+                "but should not have more than #{dimension}"
+        end
+        if shape.last( value.dimension ) != value.shape
+          raise "#{value.array_type.inspect} has shape #{value.shape.inspect} " +
+                "(does not match last value(s) of #{shape.inspect})"
+        end
         unless compilable? and value.compilable? and dimension > 0
           store value
         else

@@ -155,6 +155,9 @@ class TC_Sequence < Test::Unit::TestCase
       end
       assert_raise( RuntimeError ) { s[ -1 ] }
       assert_raise( RuntimeError ) { s[ 3 ] }
+      assert_raise( RuntimeError ) { s[ -1 ] = 0 }
+      assert_raise( RuntimeError ) { s[ 3 ] = 0 }
+      assert_raise( RuntimeError ) { s[ 0 ] = s }
     end
   end
 
@@ -171,10 +174,19 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 1, 6, 7, 4 ], s.to_a
       s[ 1 ... 3 ] = S[ 8, 9 ]
       assert_equal [ 1, 8, 9, 4 ], s.to_a
+      assert_nothing_raised { s[ 0 .. 3 ] }
+      assert_nothing_raised { s[ 0 ... 4 ] }
       assert_raise( RuntimeError ) { s[ -1 .. 1 ] }
       assert_raise( RuntimeError ) { s[ 2 .. 4 ] }
       assert_raise( RuntimeError ) { s[ -1 ... 1 ] }
       assert_raise( RuntimeError ) { s[ 2 ... 5 ] }
+      assert_nothing_raised { s[ 0 .. 3 ] = 0 }
+      assert_nothing_raised { s[ 0 ... 4 ] = 0 }
+      assert_raise( RuntimeError ) { s[ -1 .. 1 ] = 0 }
+      assert_raise( RuntimeError ) { s[ 2 .. 4 ] = 0 }
+      assert_raise( RuntimeError ) { s[ -1 ... 1 ] = 0 }
+      assert_raise( RuntimeError ) { s[ 2 ... 5 ] = 0 }
+      assert_raise( RuntimeError ) { s[ 1 .. 3 ] = s[ 1 .. 2 ] }
     end
   end
 

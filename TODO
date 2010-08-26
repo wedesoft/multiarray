@@ -6,6 +6,7 @@
 # documentation!
 
 # histogram (implement using injection)
+# Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
 # inject: n-d clips for warp
 # block(var1,var2,...) with smart subst?
 
@@ -26,7 +27,6 @@
 # inspect method (type method to get MultiArray( ... ) or Sequence( ... ))
 # allow creation of library for pre-loading cache
 
-# histogram
 # use inject for n-d clips for warp
 # block(var1,var2,...) with smart subst?
 
@@ -63,11 +63,3 @@ combined histograms?
 circle:
 [ sin( i ) * r, cos( i ) * r ].hist
 
-Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
-
-array: lazy retrieval? jit code for address computation
-OBJECT: object with type information
-Lazy( Sequence( INT, 3 ) )
-
-interpretation: type coercion, actual operation, jit,
-collection of jit arguments (e.g. tensor)

@@ -160,18 +160,131 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_at_assign
-    m = M.new O, 3, 2
-    for j in 0 ... 2
-      for i in 0 ... 3
-        assert_equal j * 3 + i + 1, m[ j ][ i ] = j * 3 + i + 1
-        assert_equal j * 3 + i + 1, m[ i, j ] = j * 3 + i + 1
+    [ M( O, 3, 2 ), M( I, 3, 2 ) ].each do |t|
+      m = t.new
+      for j in 0 ... 2
+        for i in 0 ... 3
+          assert_equal j * 3 + i + 1, m[ j ][ i ] = j * 3 + i + 1
+          assert_equal j * 3 + i + 1, m[ i, j ] = j * 3 + i + 1
+        end
       end
+      for j in 0 ... 2
+        for i in 0 ... 3
+          assert_equal j * 3 + i + 1, m[ j ][ i ]
+          assert_equal j * 3 + i + 1, m[ i, j ]
+        end
+      end
+      assert_raise( RuntimeError ) { m[ -1 ] }
+      assert_raise( RuntimeError ) { m[ 2 ] }
+      assert_nothing_raised { m[ 0 ] }
+      assert_nothing_raised { m[ 1 ] }
+      assert_raise( RuntimeError ) { m[ -1 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 2 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 3, 1 ] }
+      assert_raise( RuntimeError ) { m[ 3, 1 ]  = 0 }
+      assert_raise( RuntimeError ) { m[ -1, 1 ] }
+      assert_raise( RuntimeError ) { m[ -1, 1 ]  = 0 }
+      assert_raise( RuntimeError ) { m[ 2, -1 ] }
+      assert_raise( RuntimeError ) { m[ 2, -1 ]  = 0 }
+      assert_raise( RuntimeError ) { m[ 2, 2 ] }
+      assert_raise( RuntimeError ) { m[ 2, 2 ]  = 0 }
+      assert_nothing_raised { m[ 0, 0 ] }
+      assert_nothing_raised { m[ 2, 1 ] }
+      assert_raise( RuntimeError ) { m[ 0 ] = m }
+      assert_raise( RuntimeError ) { m[ 0 ] = S[ 0, 1 ] }
+      assert_nothing_raised { m[ 0 ] = 0 }
+      assert_nothing_raised { m[ 1 ] = 0 }
+      assert_nothing_raised { m[ 0 ] = m[ 1 ] }
     end
-    for j in 0 ... 2
-      for i in 0 ... 3
-        assert_equal j * 3 + i + 1, m[ j ][ i ]
-        assert_equal j * 3 + i + 1, m[ i, j ]
-      end
+  end
+
+  def test_slice
+    [ M( O, 5, 4 ), M( I, 5, 4 ) ].each do |t|
+      m = t.indgen[]
+      assert_equal [ [ 5, 10 ], [ 6, 11 ], [ 7, 12 ], [ 8, 13 ], [ 9, 14 ] ],
+                   m[ 1 .. 2 ].to_a
+      assert_equal [ [ 6, 7, 8 ], [ 11, 12, 13 ] ],
+                   m[ 1 .. 2 ][ 1 .. 3 ].to_a
+      assert_equal [ [ 6, 7, 8 ], [ 11, 12, 13 ] ],
+                   m[ 1 .. 3, 1 .. 2 ].to_a
+      m[ 1 .. 2 ] = 0
+      assert_equal [ [ 0, 1, 2, 3, 4 ], [ 0, 0, 0, 0, 0 ],
+                     [ 0, 0, 0, 0, 0 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
+      m[ 1 ... 3 ] = 1
+      assert_equal [ [ 0, 1, 2, 3, 4 ], [ 1, 1, 1, 1, 1 ],
+                     [ 1, 1, 1, 1, 1 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
+      m[ 1 .. 2 ] = S[ 2, 3, 4, 5, 6 ]
+      assert_equal [ [ 0, 1, 2, 3, 4 ], [ 2, 3, 4, 5, 6 ],
+                     [ 2, 3, 4, 5, 6 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
+      m[ 1 ... 3 ] = S[ 3, 4, 5, 6, 7 ]
+      assert_equal [ [ 0, 1, 2, 3, 4 ], [ 3, 4, 5, 6, 7 ],
+                     [ 3, 4, 5, 6, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
+      m[ 1 .. 3, 1 .. 2 ] = 0
+      assert_equal [ [ 0, 1, 2, 3, 4 ], [ 3, 0, 0, 0, 7 ],
+                     [ 3, 0, 0, 0, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
+      m[ 1 ... 4, 1 ... 3 ] = 1
+      assert_equal [ [ 0, 1, 2, 3, 4 ], [ 3, 1, 1, 1, 7 ],
+                     [ 3, 1, 1, 1, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
+      assert_raise( RuntimeError ) { m[ 2 .. 4 ] }
+      assert_raise( RuntimeError ) { m[ 2 .. 4 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 2 .. 4 ] = m[ 1 .. 3 ] }
+      assert_raise( RuntimeError ) { m[ 2 .. 3 ] = m[ 1 .. 3 ] }
+      assert_raise( RuntimeError ) { m[ 2 ... 5 ] }
+      assert_raise( RuntimeError ) { m[ 2 ... 5 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 2 ... 5 ] = m[ 1 ... 4 ] }
+      assert_raise( RuntimeError ) { m[ 2 ... 4 ] = m[ 1 ... 4 ] }
+      assert_raise( RuntimeError ) { m[ -1 .. 0 ] }
+      assert_raise( RuntimeError ) { m[ -1 .. 0 ] = 0 }
+      assert_raise( RuntimeError ) { m[ -1 .. 0 ] = m[ 0 .. 1 ] }
+      assert_raise( RuntimeError ) { m[ -1 ... 1 ] }
+      assert_raise( RuntimeError ) { m[ -1 ... 1 ] = 0 }
+      assert_raise( RuntimeError ) { m[ -1 ... 1 ] = m[ 0 ... 2 ] }
+      assert_nothing_raised { m[ 0 .. 3 ] }
+      assert_nothing_raised { m[ 0 .. 3 ] = 0 }
+      assert_nothing_raised { m[ 0 .. 3 ] = m[ 0 .. 3 ] }
+      assert_nothing_raised { m[ 0 ... 4 ] }
+      assert_nothing_raised { m[ 0 ... 4 ] = 0 }
+      assert_nothing_raised { m[ 0 ... 4 ] = m[ 0 ... 4 ] }
+      assert_raise( RuntimeError ) { m[ 1 .. 5, 1 ] }
+      assert_raise( RuntimeError ) { m[ 1 .. 5, 1 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 1 .. 5, 1 ] = m[ 0 .. 4, 1 ] }
+      assert_raise( RuntimeError ) { m[ 1 .. 4, 1 ] = m[ 0 .. 4, 1 ] }
+      assert_raise( RuntimeError ) { m[ 1 ... 6, 1 ] }
+      assert_raise( RuntimeError ) { m[ 1 ... 6, 1 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 1 ... 6, 1 ] = m[ 0 ... 5, 1 ] }
+      assert_raise( RuntimeError ) { m[ 1 ... 5, 1 ] = m[ 0 ... 5, 1 ] }
+      assert_raise( RuntimeError ) { m[ -1 .. 3, 1 ] }
+      assert_raise( RuntimeError ) { m[ -1 .. 3, 1 ] = 0 }
+      assert_raise( RuntimeError ) { m[ -1 .. 3, 1 ] = m[ 0 .. 4, 1 ] }
+      assert_raise( RuntimeError ) { m[ -1 ... 3, 1 ] }
+      assert_raise( RuntimeError ) { m[ -1 ... 3, 1 ] = 0 }
+      assert_raise( RuntimeError ) { m[ -1 ... 3, 1 ] = m[ 0 ... 4, 1 ] }
+      assert_nothing_raised { m[ 0 .. 4, 1 ] }
+      assert_nothing_raised { m[ 0 .. 4, 1 ] = 0 }
+      assert_nothing_raised { m[ 0 .. 4, 1 ] = m[ 0 .. 4, 0 ] }
+      assert_nothing_raised { m[ 0 ... 5, 1 ] }
+      assert_nothing_raised { m[ 0 ... 5, 1 ] = 0 }
+      assert_nothing_raised { m[ 0 ... 5, 1 ] = m[ 0 ... 5, 0 ] }
+      assert_raise( RuntimeError ) { m[ 1, 1 .. 4 ] }
+      assert_raise( RuntimeError ) { m[ 1, 1 .. 4 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 1, 1 .. 4 ] = m[ 1, 0 .. 3 ] }
+      assert_raise( RuntimeError ) { m[ 1, 1 .. 3 ] = m[ 1, 0 .. 3 ] }
+      assert_raise( RuntimeError ) { m[ 1, 1 ... 5 ] }
+      assert_raise( RuntimeError ) { m[ 1, 1 ... 5 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 1, 1 ... 5 ] = m[ 1, 0 ... 4 ] }
+      assert_raise( RuntimeError ) { m[ 1, 1 ... 4 ] = m[ 1, 0 ... 4 ] }
+      assert_raise( RuntimeError ) { m[ 1, -1 .. 2 ] }
+      assert_raise( RuntimeError ) { m[ 1, -1 .. 2 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 1, -1 .. 2 ] = m[ 1, 0 .. 3 ] }
+      assert_raise( RuntimeError ) { m[ 1, -1 ... 2 ] }
+      assert_raise( RuntimeError ) { m[ 1, -1 ... 2 ] = 0 }
+      assert_raise( RuntimeError ) { m[ 1, -1 ... 2 ] = m[ 1, 0 ... 3 ] }
+      assert_nothing_raised { m[ 1, 0 .. 3 ] }
+      assert_nothing_raised { m[ 1, 0 .. 3 ] = 0 }
+      assert_nothing_raised { m[ 1, 0 .. 3 ] = m[ 0, 0 .. 3 ] }
+      assert_nothing_raised { m[ 1, 0 ... 4 ] }
+      assert_nothing_raised { m[ 1, 0 ... 4 ] = 0 }
+      assert_nothing_raised { m[ 1, 0 ... 4 ] = m[ 0, 0 ... 4 ] }
     end
   end
 
@@ -182,37 +295,9 @@ class TC_MultiArray < Test::Unit::TestCase
       v[] = 0
       assert_equal [ [ 1, 0, 3 ], [ 4, 0, 6 ] ], m.to_a
     end
-  end
+   end
 
-  def test_slice
-    m = M( I, 5, 4 ).indgen[]
-    assert_equal [ [ 5, 10 ], [ 6, 11 ], [ 7, 12 ], [ 8, 13 ], [ 9, 14 ] ],
-                 m[ 1 .. 2 ].to_a
-    assert_equal [ [ 6, 7, 8 ], [ 11, 12, 13 ] ],
-                 m[ 1 .. 2 ][ 1 .. 3 ].to_a
-    assert_equal [ [ 6, 7, 8 ], [ 11, 12, 13 ] ],
-                 m[ 1 .. 3, 1 .. 2 ].to_a
-    m[ 1 .. 2 ] = 0
-    assert_equal [ [ 0, 1, 2, 3, 4 ], [ 0, 0, 0, 0, 0 ],
-                   [ 0, 0, 0, 0, 0 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
-    m[ 1 ... 3 ] = 1
-    assert_equal [ [ 0, 1, 2, 3, 4 ], [ 1, 1, 1, 1, 1 ],
-                   [ 1, 1, 1, 1, 1 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
-    m[ 1 .. 2 ] = S[ 2, 3, 4, 5, 6 ]
-    assert_equal [ [ 0, 1, 2, 3, 4 ], [ 2, 3, 4, 5, 6 ],
-                   [ 2, 3, 4, 5, 6 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
-    m[ 1 ... 3 ] = S[ 3, 4, 5, 6, 7 ]
-    assert_equal [ [ 0, 1, 2, 3, 4 ], [ 3, 4, 5, 6, 7 ],
-                   [ 3, 4, 5, 6, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
-    m[ 1 .. 3, 1 .. 2 ] = 0
-    assert_equal [ [ 0, 1, 2, 3, 4 ], [ 3, 0, 0, 0, 7 ],
-                   [ 3, 0, 0, 0, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
-    m[ 1 ... 4, 1 ... 3 ] = 1
-    assert_equal [ [ 0, 1, 2, 3, 4 ], [ 3, 1, 1, 1, 7 ],
-                   [ 3, 1, 1, 1, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
-  end
-
-  def test_transpose
+   def test_transpose
     assert_equal [ [ 1, 4 ], [ 2, 5 ], [ 3, 6 ] ],
                  M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].transpose( 1, 0 ).to_a
     assert_equal [ [ [ 0, 3 ], [ 1, 4 ], [ 2, 5 ] ] ],
