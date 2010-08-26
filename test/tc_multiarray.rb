@@ -473,6 +473,28 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ -3, 2, 1 ], [ 8, 6, 4 ] ] +
                  M[ [ 2, 0, 2 ], [ -4, -1, 2 ] ],
                  M[ [ -1, 2, 3 ], [ 4, 5, 6 ] ]
+    assert_equal M[ [ 2, 3, 4 ], [ 6, 7, 8 ] ],
+                 M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + S[ 1, 2 ]
+    assert_equal M[ [ 2, 3, 4 ], [ 6, 7, 8 ] ],
+                 S[ 1, 2 ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    assert_raise( RuntimeError ) do
+      M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + M[ [ 1, 2 ], [ 3, 4 ] ]
+    end
+    assert_raise( RuntimeError ) do
+      M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + M[ [ 1, 2, 3 ] ]
+    end
+    assert_raise( RuntimeError ) do
+      M[ [ 1, 2 ], [ 3, 4 ] ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] 
+    end
+    assert_raise( RuntimeError ) do
+      M[ [ 1, 2, 3 ] ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    end
+    assert_raise( RuntimeError ) do
+      M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + S[ 1, 2, 3 ]
+    end
+    assert_raise( RuntimeError ) do
+      S[ 1, 2, 3 ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    end
   end
 
   def test_major

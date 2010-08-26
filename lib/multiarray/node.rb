@@ -450,6 +450,21 @@ module Hornetseye
       end
     end
 
+    def check_shape( *args )
+      args.each do |arg|
+        if dimension < arg.dimension
+          raise "#{arg.array_type.inspect} has #{arg.dimension} dimension(s) " +
+                "but should not have more than #{dimension}"
+        end
+        if ( shape + arg.shape ).all? { |s| s.is_a? Integer }
+          if shape.last( arg.dimension ) != arg.shape
+            raise "#{arg.array_type.inspect} has shape #{arg.shape.inspect} " +
+                  "(does not match last value(s) of #{shape.inspect})"
+          end
+        end
+      end
+    end
+
     # Assign value to array element(s)
     # 
     # @overload []=( *indices, value )
@@ -462,14 +477,7 @@ module Hornetseye
       value = indices.pop
       value = Node.match( value ).new value unless value.is_a? Node
       if indices.empty?
-        if dimension < value.dimension
-          raise "#{value.array_type.inspect} has #{value.dimension} dimension(s) " +
-                "but should not have more than #{dimension}"
-        end
-        if shape.last( value.dimension ) != value.shape
-          raise "#{value.array_type.inspect} has shape #{value.shape.inspect} " +
-                "(does not match last value(s) of #{shape.inspect})"
-        end
+        check_shape value
         unless compilable? and value.compilable? and dimension > 0
           store value
         else

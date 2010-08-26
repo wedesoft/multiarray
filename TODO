@@ -1,4 +1,4 @@
-# prevent buffer overruns
+# prevent buffer overruns (binary ops, correlate)
 # factor out composite numbers
 # implement typecasts, extract r, g, b, real, imag (what is contiguous here?)
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
@@ -7,6 +7,7 @@
 
 # histogram (implement using injection)
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
+# each, multi_each, collect, multi_collect, zip?
 # inject: n-d clips for warp
 # block(var1,var2,...) with smart subst?
 

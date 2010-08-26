@@ -204,8 +204,8 @@ class TC_Sequence < Test::Unit::TestCase
     assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 7 ]
     assert_equal S[ X( 1, 2 ), 3 ], S[ X( 1, 2 ), X( 3, 0 ) ]
     assert_not_equal S[ X( 1, 2 ), 3 ], S[ X( 1, 3 ), 3 ]
-    #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3 ] # !!!
-    #assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 5, 7 ]
+    assert_not_equal S[ 2, 3, 5 ], S[ 2, 3 ]
+    assert_not_equal S[ 2, 3, 5 ], S[ 2, 3, 5, 7 ]
     assert_not_equal S[ 2, 2, 2 ], 2
   end
 
@@ -383,6 +383,8 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ C( 2, 3, 4 ), C( 5, 6, 7 ) ], 1 + S[ C( 1, 2, 3 ), C( 4, 5, 6 ) ]
     assert_equal S[ C( 2, 3, 4 ), C( 3, 4, 5 ) ], S[ 1, 2 ] + C( 1, 2, 3 )
     assert_equal S[ X( 4, 6 ) ], S[ X( 1, 2 ) ] + S[ X( 3, 4 ) ]
+    assert_raise( RuntimeError ) { S[ 1, 2, 3 ] + S[ 1, 2 ] }
+    assert_raise( RuntimeError ) { S[ 1, 2 ] + S[ 1, 2, 3 ] }
   end
 
   def test_minus
@@ -508,6 +510,8 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_hypot
     assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
+    assert_raise( RuntimeError ) { Math.hypot( S[ 3 ], S[ 4, 3 ] ) }
+    assert_raise( RuntimeError ) { Math.hypot( S[ 3, 4 ], S[ 4 ] ) }
   end
 
   def test_to_type

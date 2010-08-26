@@ -65,6 +65,7 @@ module Hornetseye
     # @param [Node] value Value to apply operation to.
     def initialize( *values )
       @values = values
+      check_shape *values
     end
 
     # Get unique descriptor of this object
