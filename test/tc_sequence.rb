@@ -257,6 +257,7 @@ class TC_Sequence < Test::Unit::TestCase
                    S( t, 5 )[ 0, 0, 0, 0, 1 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
       assert_equal S( t, 4 )[ 1, 2, 3, 0 ],
                    S( t, 4 )[ 0, 1, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+      assert_raise( RuntimeError ) { S[ 1, 2, 3 ].convolve 1 }
     end
     assert_equal S[ C( 1, 0, 0 ), C( 2, 1, 0 ), C( 3, 2, 1 ), C( 0, 3, 2 ),
                     C( 0, 0, 3 ) ],
@@ -481,6 +482,9 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], -1 )
     assert_equal S[ -1, 1 ], S[ false, true ].conditional( 1, S[ -1, -2 ] )
     assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], S[ -1, -2 ] )
+    assert_raise( RuntimeError ) { S[ false, true ].conditional( S[ 1, 2 ], S[ 1 ] ) }
+    assert_raise( RuntimeError ) { S[ false, true ].conditional( S[ 1 ], S[ 1, 2 ] ) }
+    assert_raise( RuntimeError ) { S[ false ].conditional( S[ 1, 2 ], S[ 1, 2 ] ) }
   end
 
   def test_cmp

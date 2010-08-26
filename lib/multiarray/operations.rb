@@ -274,6 +274,11 @@ module Hornetseye
     #
     # @private
     def product( filter )
+      filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
+      if dimension != filter.dimension
+        raise "Filter has #{filter.dimension} dimension(s) but should " +
+              "have #{dimension}"
+      end
       if dimension == 0
         self * filter
       else
@@ -287,6 +292,7 @@ module Hornetseye
     #
     # @return [Node] Result of convolution.
     def convolve( filter )
+      filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
       product( filter ).diagonal { |s,x| s + x }
     end
 

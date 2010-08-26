@@ -371,6 +371,8 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 0, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 0 ] ].convolve( f )
     assert_equal M[ [ 0, 0, 0 ], [ 1, 2, 3 ], [ 4, 5, 6 ] ],
                  M[ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 1, 0 ] ].convolve( f )
+    assert_raise( RuntimeError ) { S[ 1, 2, 3 ].convolve f }
+    assert_raise( RuntimeError ) { M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].convolve S[ 1, 2 ] }
   end
 
   def test_zero
