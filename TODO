@@ -3,6 +3,7 @@
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
 # Sequence[ 1, 2, 3 ].inject( Sequence[ 1 ] ) { |a,b| a + b }
+# Sequence[ false, true ].conditional( MultiArray[ [ 1, 1 ], [ 2, 2 ] ], Sequence[ -1, -2 ] )
 # documentation!
 
 # histogram (implement using injection)
@@ -25,7 +26,6 @@
 #end
 
 # cache <-> demand/get? what about store?
-# inspect method (type method to get MultiArray( ... ) or Sequence( ... ))
 # allow creation of library for pre-loading cache
 
 # use inject for n-d clips for warp
@@ -44,7 +44,6 @@
 #  end
 #end
 
-ranges (rolling, lazy rolling, lazy ranges)
 test type conversions
 
 a = lazy( 16, 32 ) { |i,j| Sequence[ i, j ] } # ???

@@ -523,6 +523,9 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ -1, -1 ], [ 3, 4 ] ],
                  S[ false, true ].
                  conditional( M[ [ 1, 2 ], [ 3, 4 ] ], -1 )
+    assert_equal M[ [ -1, -1 ], [ 3, 4 ] ],
+                 S[ false, true ].
+                 conditional( M[ [ 1, 2 ], [ 3, 4 ] ], S[ -1, -2 ] )
   end
 
   def test_cmp
