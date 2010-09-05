@@ -58,10 +58,12 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_multiarray_inspect
     assert_equal 'MultiArray(OBJECT,3,2)', M( O, 3, 2 ).inspect
+    assert_equal 'MultiArray(OBJECT,3,2)', S( S( O, 3 ), 2 ).inspect
   end
 
   def test_multiarray_to_s
     assert_equal 'MultiArray(OBJECT,3,2)', M( O, 3, 2 ).to_s
+    assert_equal 'MultiArray(OBJECT,3,2)', S( S( O, 3 ), 2 ).to_s
   end
 
   def test_multiarray_default

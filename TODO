@@ -1,6 +1,5 @@
-# prevent buffer overruns (correlate)
+# implement typecasts (use import), extract r, g, b, real, imag
 # factor out composite numbers
-# implement typecasts, extract r, g, b, real, imag (what is contiguous here?)
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
 # Sequence[ 1, 2, 3 ].inject( Sequence[ 1 ] ) { |a,b| a + b }

@@ -188,7 +188,7 @@ module Hornetseye
   # @see ElementWise_.conversion
   #
   # @private
-  def ElementWise( operation, key, conversion = :contiguous )
+  def ElementWise( operation, key, conversion = proc { |t| t.send :contiguous } )
     retval = Class.new ElementWise_
     retval.operation = operation
     retval.key = key
