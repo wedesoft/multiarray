@@ -223,6 +223,9 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal C( 3, 5, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].inject { |a,b| a + b }
     assert_equal C( 5, 6, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].
                                inject( C( 2, 1, 0 ) ) { |a,b| a + b }
+    assert_equal C( 7, 8, 9 ), S[ 1, 2, 3 ].inject( C( 1, 2, 3 ) ) { |a,b| a + b }
+    assert_equal C( 4, 6, 9 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].
+                               inject( 1 ) { |a,b| a + b }
     assert_equal X( -5, 10 ), S( X, 2 )[ X( 1, 2 ), X( 3, 4 ) ].inject { |a,b| a * b }
   end
 

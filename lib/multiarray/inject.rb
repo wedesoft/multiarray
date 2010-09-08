@@ -49,7 +49,7 @@ module Hornetseye
     end
 
     def array_type
-      @value.array_type
+      @value.to_type( @block.typecode ).array_type
     end
 
     # Reevaluate computation
@@ -61,7 +61,7 @@ module Hornetseye
     # @private
     def demand
       if @initial
-        retval = @initial.simplify # !!!
+        retval = @initial.to_type( typecode ).simplify # !!!
         offset = INT.new 0
       else
         retval = @value.subst( @index => INT.new( 0 ) ).simplify # !!!
