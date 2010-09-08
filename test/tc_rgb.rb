@@ -151,6 +151,10 @@ class TC_RGB < Test::Unit::TestCase
                  inject( RGB( 2, 3, 4 ) ) { |a,b| a + b }[]
   end
 
+  def test_decompose
+    assert_equal [ 1, 2, 3 ], RGB( 1, 2, 3 ).decompose.to_a
+  end
+
   def test_not
     assert !RGB( 0, 0, 0 ).not
     assert !RGB( 1, 2, 3 ).not

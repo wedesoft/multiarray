@@ -209,6 +209,12 @@ class TC_Sequence < Test::Unit::TestCase
     assert_not_equal S[ 2, 2, 2 ], 2
   end
 
+  def test_r_g_b
+    assert_equal S[ 1, 4, 5 ], S[ C( 1, 2, 3 ), 4, 5 ].r
+    assert_equal S[ 2, 4, 5 ], S[ C( 1, 2, 3 ), 4, 5 ].g
+    assert_equal S[ 3, 4, 5 ], S[ C( 1, 2, 3 ), 4, 5 ].b
+  end
+
   def test_inject
     assert_equal 6, S[ 1, 2, 3 ].inject { |a,b| a + b }
     assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }

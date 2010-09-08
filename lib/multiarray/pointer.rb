@@ -140,6 +140,16 @@ module Hornetseye
       end
     end
 
+    def decompose
+      if self.class.target < RGB_
+        pointer = Hornetseye::Pointer( self.class.target.element_type ).new @value
+        var = Variable.new Hornetseye::INDEX( INT.new( 3 ) )
+        Lambda.new var, Lookup.new( pointer, var, INT.new( 1 ) )
+      else
+        super
+      end
+    end
+
     def values
       [ @value ]
     end

@@ -88,7 +88,7 @@ module Hornetseye
 
       def []( *args )
         retval = new
-        recursion = proc do |element,args|
+        recursion = lambda do |element,args|
           if element.dimension > 0
             args.each_with_index do |arg,i|
               recursion.call element.element( i ), arg

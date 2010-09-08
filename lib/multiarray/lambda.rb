@@ -123,6 +123,10 @@ module Hornetseye
                          skip( index, start ) ).unroll
     end
 
+    def decompose
+      Lambda.new @index, @term.decompose
+    end
+
     def compilable?
       @term.compilable?
     end

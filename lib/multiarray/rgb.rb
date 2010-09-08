@@ -111,6 +111,10 @@ module Hornetseye
       end
     end
 
+    def decompose
+      Hornetseye::Sequence[ @r, @g, @b ]
+    end
+
   end
 
   class RGB_ < Element
@@ -220,6 +224,11 @@ module Hornetseye
 
       def eql?( other )
         self == other
+      end
+
+      def decompose
+        Hornetseye::Sequence( self.class.element_type,
+                              3 )[ @value.r, @value.g, @value.b ]
       end
 
     end

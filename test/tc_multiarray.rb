@@ -322,6 +322,12 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_not_equal M[ [ 1, 1 ], [ 1, 1 ] ], S[ 1, 1 ]
   end
 
+  def test_r_g_b
+    assert_equal M[ [ 1, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].r
+    assert_equal M[ [ 2, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].g
+    assert_equal M[ [ 3, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].b
+  end
+
   def test_inject
     assert_equal 21, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject { |a,b| a + b }
     assert_equal 28, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject( 7 ) { |a,b| a + b }

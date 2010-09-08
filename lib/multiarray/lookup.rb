@@ -93,6 +93,14 @@ module Hornetseye
       Lookup.new @p.slice( start, length ), @index, @stride
     end
 
+    def decompose
+      if typecode < RGB_
+        Lookup.new @p.decompose, @index, @stride * 3
+      else
+        Lookup.new @p.decompose, @index, @stride
+      end
+    end
+
   end
 
 end

@@ -118,75 +118,54 @@ class TC_Float < Test::Unit::TestCase
     assert_equal D( 3.0 ), D( 3.0 )
   end
 
-if false
+  def test_r_g_b
+    assert_equal D( 3.5 ), D( 3.5 ).r
+    assert_equal D( 3.5 ), D( 3.5 ).g
+    assert_equal D( 3.5 ), D( 3.5 ).b
+  end
 
   def test_inject
-    assert_equal 2, I( 2 ).inject { |a,b| a + b }[]
-    assert_equal 3, I( 2 ).inject( 1 ) { |a,b| a + b }[]
+    assert_equal 2.5, D( 2.5 ).inject { |a,b| a + b }[]
+    assert_equal 4.0, D( 2.5 ).inject( 1.5 ) { |a,b| a + b }[]
   end
 
   def test_not
-    assert !I( 0 ).not[]
-    assert !I( 3 ).not[]
+    assert !D( 0.0 ).not[]
+    assert !D( 3.0 ).not[]
   end
 
   def test_sum
-    assert_equal 3, sum { || 3 }
+    assert_equal 3.5, sum { || 3.5 }
   end
 
   def test_zero
-    assert I( 0 ).zero?[]
-    assert !I( 3 ).zero?[]
+    assert D( 0.0 ).zero?[]
+    assert !D( 3.0 ).zero?[]
   end
 
   def test_nonzero
-    assert !I( 0 ).nonzero?[]
-    assert I( 3 ).nonzero?[]
+    assert !D( 0.0 ).nonzero?[]
+    assert D( 3.0 ).nonzero?[]
   end
 
-  def test_bitwise_not
-    assert_equal I( -3 ), ~I( 2 )
-  end
-
-  def test_bitwise_and
-    assert_equal I( 2 ), I( 3 ) & I( 6 )
-  end
-
-  def test_bitwise_or
-    assert_equal I( 7 ), I( 3 ) | I( 6 )
-  end
-
-  def test_bitwise_xor
-    assert_equal I( 1 ), I( 3 ) ^ I( 2 )
-  end
-
-  def test_shl
-    assert_equal I( 4 ), I( 2 ) << I( 1 )
-  end
-
-  def test_shr
-    assert_equal I( 2 ), I( 4 ) >> I( 1 )
-  end
 
   def test_negate
-    assert_equal I( -5 ), -I( 5 )
+    assert_equal D( -3.5 ), -D( 3.5 )
   end
 
   def test_plus
-    assert_equal I( 3 + 5 ), I( 3 ) + I( 5 )
+    assert_equal D( 3.5 + 1.5 ), D( 3.5 ) + D( 1.5 )
   end
 
   def test_major
-    assert_equal I( 4 ), I( 3 ).major( I( 4 ) )
-    assert_equal I( 5 ), I( 5 ).major( I( 3 ) )
+    assert_equal D( 4.3 ), D( 3.1 ).major( D( 4.3 ) )
+    assert_equal D( 5.1 ), D( 5.1 ).major( D( 3.5 ) )
   end
 
   def test_minor
-    assert_equal I( 3 ), I( 3 ).minor( I( 4 ) )
-    assert_equal I( 4 ), I( 5 ).minor( I( 4 ) )
+    assert_equal D( 3.1 ), D( 3.1 ).minor( D( 4.3 ) )
+    assert_equal D( 3.5 ), D( 5.1 ).minor( D( 3.5 ) )
   end
-
-end
 
 end
 

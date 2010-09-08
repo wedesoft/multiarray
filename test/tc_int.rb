@@ -133,6 +133,12 @@ class TC_Int < Test::Unit::TestCase
     assert_equal I( 3 ), I( 3 )
   end
 
+  def test_r_g_b
+    assert_equal I( 3 ), I( 3 ).r
+    assert_equal I( 3 ), I( 3 ).g
+    assert_equal I( 3 ), I( 3 ).b
+  end
+
   def test_inject
     assert_equal 2, I( 2 ).inject { |a,b| a + b }[]
     assert_equal 3, I( 2 ).inject( 1 ) { |a,b| a + b }[]

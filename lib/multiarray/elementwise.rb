@@ -163,6 +163,11 @@ module Hornetseye
       self.class.new( *values ).demand
     end
 
+    def decompose
+      values = @values.collect { |value| value.decompose }
+      self.class.new( *values ).demand
+    end
+
     # Check whether this term is compilable
     #
     # @return [FalseClass,TrueClass] Returns whether this term is compilable.
@@ -188,7 +193,7 @@ module Hornetseye
   # @see ElementWise_.conversion
   #
   # @private
-  def ElementWise( operation, key, conversion = proc { |t| t.send :contiguous } )
+  def ElementWise( operation, key, conversion = lambda { |t| t.send :contiguous } )
     retval = Class.new ElementWise_
     retval.operation = operation
     retval.key = key
