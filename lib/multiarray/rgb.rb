@@ -239,8 +239,8 @@ module Hornetseye
         @value = value
       else
         r = GCCValue.new Thread.current[ :function ], value.r.to_s
-        g = GCCValue.new Thread.current[ :function ], value.r.to_s
-        b = GCCValue.new Thread.current[ :function ], value.r.to_s
+        g = GCCValue.new Thread.current[ :function ], value.g.to_s
+        b = GCCValue.new Thread.current[ :function ], value.b.to_s
         @value = RGB.new r, g, b
       end
     end

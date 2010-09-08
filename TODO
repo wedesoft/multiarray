@@ -1,5 +1,6 @@
+# Test collect
 # Sequence[ 1, 2, 3 ].inject( Sequence[ 1 ] ) { |a,b| a + b }
-# implement collect (similar to inject)
+# implement collect using ElementWise (similar to inject)
 # Sequence( OBJECT, 1 )[ RGB( 1, 2, 3 ) ].r
 # factor out composite numbers
 # r, g, b, real, imag; r=, g=, ...

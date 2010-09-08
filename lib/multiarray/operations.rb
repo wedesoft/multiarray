@@ -166,6 +166,13 @@ module Hornetseye
       end
     end
 
+    def collect( &action )
+      var = Variable.new typecode
+      block = action.call var
+      conversion = lambda { |t| t.to_type( action.call( Variable.new( t.typecode ) ) ) }
+      ElementWise( action, block.to_s, conversion ).new( self ).force
+    end
+
     def inject( initial = nil, options = {} )
       unless initial.nil?
         initial = Node.match( initial ).new initial unless initial.is_a? Node
