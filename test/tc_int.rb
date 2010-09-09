@@ -144,6 +144,10 @@ class TC_Int < Test::Unit::TestCase
     assert_equal 3, I( 2 ).inject( 1 ) { |a,b| a + b }[]
   end
 
+  def test_collect
+    assert_equal 3, I( 2 ).collect { |x| x + 1 }
+  end
+
   def test_not
     assert !I( 0 ).not[]
     assert !I( 3 ).not[]

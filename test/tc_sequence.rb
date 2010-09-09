@@ -229,6 +229,10 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal X( -5, 10 ), S( X, 2 )[ X( 1, 2 ), X( 3, 4 ) ].inject { |a,b| a * b }
   end
 
+  def test_collect
+    assert_equal S[ 2, 3 ], S[ 1, 2 ].collect { |x| x + 1 }
+  end
+
   def test_sum
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal 6, sum { |i| t[ 1, 2, 3 ][ i ] }

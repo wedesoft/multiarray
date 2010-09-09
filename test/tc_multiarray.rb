@@ -333,6 +333,11 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal 28, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject( 7 ) { |a,b| a + b }
   end
 
+  def test_collect
+    assert_equal M[ [ 2, 3, 4 ], [ 5, 6, 7 ] ], 
+                 M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].collect { |x| x + 1 }
+  end
+
   def test_sum
     m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
     assert_equal 21, sum { |i,j| m[ i, j ] }

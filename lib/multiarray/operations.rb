@@ -169,8 +169,8 @@ module Hornetseye
     def collect( &action )
       var = Variable.new typecode
       block = action.call var
-      conversion = lambda { |t| t.to_type( action.call( Variable.new( t.typecode ) ) ) }
-      ElementWise( action, block.to_s, conversion ).new( self ).force
+      conversion = lambda { |t| t.to_type action.call( Variable.new( t.typecode ) ) }
+      Hornetseye::ElementWise( action, block.to_s, conversion ).new( self ).force
     end
 
     def inject( initial = nil, options = {} )
