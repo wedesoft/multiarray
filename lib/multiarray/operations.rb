@@ -64,6 +64,9 @@ module Hornetseye
     define_unary_op :floor
     define_unary_op :ceil
     define_unary_op :round
+    define_unary_op :r, :scalar
+    define_unary_op :g, :scalar
+    define_unary_op :b, :scalar
     define_binary_op :+
     define_binary_op :-
     define_binary_op :*
@@ -302,6 +305,36 @@ module Hornetseye
       filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
       product( filter ).diagonal { |s,x| s + x }
     end
+
+    def r_with_decompose
+      if typecode < RGB_
+        decompose.roll.element 0
+      else
+        r_without_decompose
+      end
+    end
+
+    alias_method_chain :r, :decompose
+
+    def g_with_decompose
+      if typecode < RGB_
+        decompose.roll.element 1
+      else
+        g_without_decompose
+      end
+    end
+
+    alias_method_chain :g, :decompose
+
+    def b_with_decompose
+      if typecode < RGB_
+        decompose.roll.element 2
+      else
+        b_without_decompose
+      end
+    end
+
+    alias_method_chain :b, :decompose
 
   end
 

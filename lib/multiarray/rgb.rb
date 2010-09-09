@@ -182,7 +182,7 @@ module Hornetseye
       end
 
       def scalar
-        element_type.float
+        element_type
       end
 
       def maxint

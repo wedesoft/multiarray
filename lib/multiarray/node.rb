@@ -586,29 +586,29 @@ module Hornetseye
       self
     end
 
-    def r
-      if typecode < RGB_
-        decompose.roll.element 0
-      else
-        self
-      end
-    end
+    #def r
+    #  if typecode < RGB_
+    #    decompose.roll.element 0
+    #  else
+    #    self
+    #  end
+    #end
 
-    def g
-      if typecode < RGB_
-        decompose.roll.element 1
-      else
-        self
-      end
-    end
+    #def g
+    #  if typecode < RGB_
+    #    decompose.roll.element 1
+    #  else
+    #    self
+    #  end
+    #end
 
-     def b
-      if typecode < RGB_
-        decompose.roll.element 2
-      else
-        self
-      end
-    end
+    # def b
+    #  if typecode < RGB_
+    #    decompose.roll.element 2
+    #  else
+    #    self
+    #  end
+    #end
 
   end
 

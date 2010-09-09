@@ -210,9 +210,11 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_r_g_b
-    assert_equal S[ 1, 4, 5 ], S[ C( 1, 2, 3 ), 4, 5 ].r
-    assert_equal S[ 2, 4, 5 ], S[ C( 1, 2, 3 ), 4, 5 ].g
-    assert_equal S[ 3, 4, 5 ], S[ C( 1, 2, 3 ), 4, 5 ].b
+    [ S( O, 3 ), S( C, 3 ) ].each do |t|
+      assert_equal [ 1, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].r.to_a
+      assert_equal [ 2, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].g.to_a
+      assert_equal [ 3, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].b.to_a
+    end
   end
 
   def test_inject

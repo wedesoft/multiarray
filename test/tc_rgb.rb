@@ -144,6 +144,12 @@ class TC_RGB < Test::Unit::TestCase
     assert_not_equal RGB( 3, 3, 3 ), 4
   end
 
+  def test_r_g_b
+    assert_equal 1, RGB( 1, 2, 3 ).r
+    assert_equal 2, RGB( 1, 2, 3 ).g
+    assert_equal 3, RGB( 1, 2, 3 ).b
+  end
+
   def test_inject
     assert_equal RGB( 1, 2, 3 ), INTRGB( RGB( 1, 2, 3 ) ).
                  inject { |a,b| a + b }[]
