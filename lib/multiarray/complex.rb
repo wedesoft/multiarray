@@ -153,6 +153,10 @@ module Hornetseye
       @real.nonzero?.or @imag.nonzero?
     end
 
+    def abs2
+      @real * @real + @imag * @imag
+    end
+
     def ==( other )
       if other.is_a?( Complex ) or other.is_a?( ::Complex )
         @real.eq( other.real ).and( @imag.eq( other.imag ) )
@@ -163,8 +167,8 @@ module Hornetseye
       end
     end
 
-    def abs2
-      @real * @real + @imag * @imag
+    def decompose
+      Hornetseye::Sequence[ @real, @imag ]
     end
 
   end
@@ -276,6 +280,11 @@ module Hornetseye
 
       def eql?( other )
         self == other
+      end
+
+      def decompose
+        Hornetseye::Sequence( self.class.element_type,
+                              2 )[ @value.real, @value.imag ]
       end
 
     end

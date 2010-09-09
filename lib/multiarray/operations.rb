@@ -67,6 +67,8 @@ module Hornetseye
     define_unary_op :r, :scalar
     define_unary_op :g, :scalar
     define_unary_op :b, :scalar
+    define_unary_op :real, :scalar
+    define_unary_op :imag, :scalar
     define_binary_op :+
     define_binary_op :-
     define_binary_op :*
@@ -309,8 +311,10 @@ module Hornetseye
     def r_with_decompose
       if typecode < RGB_
         decompose.roll.element 0
-      else
+      elsif typecode == OBJECT
         r_without_decompose
+      else
+        self
       end
     end
 
@@ -319,8 +323,10 @@ module Hornetseye
     def g_with_decompose
       if typecode < RGB_
         decompose.roll.element 1
-      else
+      elsif typecode == OBJECT
         g_without_decompose
+      else
+        self
       end
     end
 
@@ -329,12 +335,38 @@ module Hornetseye
     def b_with_decompose
       if typecode < RGB_
         decompose.roll.element 2
-      else
+      elsif typecode == OBJECT
         b_without_decompose
+      else
+        self
       end
     end
 
     alias_method_chain :b, :decompose
+
+    def real_with_decompose
+      if typecode < COMPLEX_
+        decompose.roll.element 0
+      elsif typecode == OBJECT
+        real_without_decompose
+      else
+        self
+      end
+    end
+
+    alias_method_chain :real, :decompose
+
+    def imag_with_decompose
+      if typecode < COMPLEX_
+        decompose.roll.element 1
+      elsif typecode == OBJECT
+        imag_without_decompose
+      else
+        lazy( *shape ) { typecode.new( 0 ) }
+      end
+    end
+
+    alias_method_chain :imag, :decompose
 
   end
 

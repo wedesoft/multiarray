@@ -96,6 +96,8 @@ module Hornetseye
     def decompose
       if typecode < RGB_
         Lookup.new @p.decompose, @index, @stride * 3
+      elsif typecode < COMPLEX_
+        Lookup.new @p.decompose, @index, @stride * 2
       else
         Lookup.new @p.decompose, @index, @stride
       end

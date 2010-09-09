@@ -1,9 +1,9 @@
-# Sequence[ 1, 2, 3 ].inject( Sequence[ 1 ] ) { |a,b| a + b }
 # factor out composite numbers
-# r, g, b, real, imag; r=, g=, ...
+# real, imag (tests); r=, g=, ...
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
 # documentation!
+# random numbers
 
 # histogram (implement using injection)
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
