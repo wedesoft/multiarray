@@ -27,6 +27,7 @@ class TC_MultiArray < Test::Unit::TestCase
   B = Hornetseye::BOOL
   I = Hornetseye::INT
   C = Hornetseye::INTRGB
+  X = Hornetseye::DCOMPLEX
   S = Hornetseye::Sequence
   M = Hornetseye::MultiArray
 
@@ -34,6 +35,10 @@ class TC_MultiArray < Test::Unit::TestCase
     Hornetseye::RGB *args
   end
 
+  def X( *args )
+    Kernel::Complex *args
+  end
+  
   def S( *args )
     Hornetseye::Sequence *args
   end
@@ -326,6 +331,11 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ 1, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].r
     assert_equal M[ [ 2, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].g
     assert_equal M[ [ 3, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].b
+  end
+
+  def test_real_imag
+    assert_equal M[ [ 1, 3 ], [ 4, 5 ] ], M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].real
+    assert_equal M[ [ 2, 0 ], [ 0, 0 ] ], M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].imag
   end
 
   def test_inject

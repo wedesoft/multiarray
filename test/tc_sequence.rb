@@ -215,6 +215,18 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 2, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].g.to_a
       assert_equal [ 3, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].b.to_a
     end
+    assert_equal S[ 1, 2 ], S[ 1, 2 ].r
+    assert_equal S[ 1, 2 ], S[ 1, 2 ].g
+    assert_equal S[ 1, 2 ], S[ 1, 2 ].b
+  end
+
+  def test_real_imag
+    [ S( O, 2 ), S( X, 2 ) ].each do |t|
+      assert_equal [ 1, 3 ], t[ X( 1, 2 ), 3 ].real.to_a
+      assert_equal [ 2, 0 ], t[ X( 1, 2 ), 3 ].imag.to_a
+    end
+    assert_equal S[ 1, 2 ], S[ 1, 2 ].real
+    assert_equal S[ 0, 0 ], S[ 1, 2 ].imag
   end
 
   def test_inject

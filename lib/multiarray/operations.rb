@@ -362,7 +362,7 @@ module Hornetseye
       elsif typecode == OBJECT
         imag_without_decompose
       else
-        lazy( *shape ) { typecode.new( 0 ) }
+        Hornetseye::lazy( *shape ) { typecode.new( 0 ) }
       end
     end
 
