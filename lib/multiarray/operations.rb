@@ -397,7 +397,7 @@ module Hornetseye
         decompose.roll[ 0 ] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
-          value + imag * Complex::I
+          value + imag * ::Complex::I
         end
       else
         self[] = value
@@ -421,7 +421,7 @@ module Hornetseye
         decompose.roll[ 1 ] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
-          real + value * Complex::I
+          real + value * ::Complex::I
         end
       else
         raise "Cannot assign imaginary values to object of type #{array_type.inspect}"
