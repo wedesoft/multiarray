@@ -214,6 +214,14 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 1, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].r.to_a
       assert_equal [ 2, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].g.to_a
       assert_equal [ 3, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].b.to_a
+      s = t[ 0, 0, 0 ]
+      assert_equal 1, s.r = 1
+      assert_equal S[ 1, 2, 3 ], s.g = S[ 1, 2, 3 ]
+      assert_equal S( O, 3 )[ 4, 5, 6 ], s.b = S( O, 3 )[ 4, 5, 6 ]
+      assert_equal t[ C( 1, 1, 4 ), C( 1, 2, 5 ), C( 1, 3, 6 ) ], s
+      assert_raise( RuntimeError ) { s.r = S[ 1, 2 ] }
+      assert_raise( RuntimeError ) { s.g = S[ 1, 2 ] }
+      assert_raise( RuntimeError ) { s.b = S[ 1, 2, 3, 4 ] }
     end
     assert_equal S[ 1, 2 ], S[ 1, 2 ].r
     assert_equal S[ 1, 2 ], S[ 1, 2 ].g

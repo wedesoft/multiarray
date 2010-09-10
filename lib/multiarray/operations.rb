@@ -325,7 +325,7 @@ module Hornetseye
         decompose.roll[ 0 ] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
-          value * RGB( 1, 0, 0 ) + g * RGB( 0, 1, 0 ) + b * RGB( 0, 0, 1 )
+          value * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
         end
       else
         raise "Cannot assign red channel to object of type #{array_type.inspect}"
@@ -349,7 +349,7 @@ module Hornetseye
         decompose.roll[ 1 ] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
-          r * RGB( 1, 0, 0 ) + value * RGB( 0, 1, 0 ) + b * RGB( 0, 0, 1 )
+          r * RGB.new( 1, 0, 0 ) + value * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
         end
       else
         raise "Cannot assign green channel to object of type #{array_type.inspect}"
@@ -373,7 +373,7 @@ module Hornetseye
         decompose.roll[ 2 ] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
-          r * RGB( 1, 0, 0 ) + g * RGB( 0, 1, 0 ) + value * RGB( 0, 0, 1 )
+          r * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + value * RGB.new( 0, 0, 1 )
         end
       else
         raise "Cannot assign blue channel to object of type #{array_type.inspect}"
