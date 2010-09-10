@@ -145,9 +145,14 @@ class TC_RGB < Test::Unit::TestCase
   end
 
   def test_r_g_b
-    assert_equal 1, RGB( 1, 2, 3 ).r
-    assert_equal 2, RGB( 1, 2, 3 ).g
-    assert_equal 3, RGB( 1, 2, 3 ).b
+    c = RGB 1, 2, 3
+    assert_equal 1, c.r
+    assert_equal 2, c.g
+    assert_equal 3, c.b
+    assert_equal 4, c.r = 4
+    assert_equal 5, c.g = 5
+    assert_equal 6, c.b = 6
+    assert_equal RGB( 4, 5, 6 ), c
   end
 
   def test_inject

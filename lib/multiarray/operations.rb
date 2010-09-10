@@ -320,6 +320,18 @@ module Hornetseye
 
     alias_method_chain :r, :decompose
 
+    def r=( value )
+      if typecode < RGB_
+        decompose.roll[ 0 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          value * RGB( 1, 0, 0 ) + g * RGB( 0, 1, 0 ) + b * RGB( 0, 0, 1 )
+        end
+      else
+        raise "Cannot assign red channel to object of type #{array_type.inspect}"
+      end
+    end
+
     def g_with_decompose
       if typecode < RGB_
         decompose.roll.element 1
@@ -331,6 +343,18 @@ module Hornetseye
     end
 
     alias_method_chain :g, :decompose
+
+    def g=( value )
+      if typecode < RGB_
+        decompose.roll[ 1 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          r * RGB( 1, 0, 0 ) + value * RGB( 0, 1, 0 ) + b * RGB( 0, 0, 1 )
+        end
+      else
+        raise "Cannot assign green channel to object of type #{array_type.inspect}"
+      end
+    end
 
     def b_with_decompose
       if typecode < RGB_
@@ -344,6 +368,18 @@ module Hornetseye
 
     alias_method_chain :b, :decompose
 
+    def b=( value )
+      if typecode < RGB_
+        decompose.roll[ 2 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          r * RGB( 1, 0, 0 ) + g * RGB( 0, 1, 0 ) + value * RGB( 0, 0, 1 )
+        end
+      else
+        raise "Cannot assign blue channel to object of type #{array_type.inspect}"
+      end
+    end
+
     def real_with_decompose
       if typecode < COMPLEX_
         decompose.roll.element 0
@@ -356,6 +392,18 @@ module Hornetseye
 
     alias_method_chain :real, :decompose
 
+    def real=( value )
+      if typecode < COMPLEX_
+        decompose.roll[ 0 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          value + imag * Complex::I
+        end
+      else
+        self[] = value
+      end
+    end
+
     def imag_with_decompose
       if typecode < COMPLEX_
         decompose.roll.element 1
@@ -367,6 +415,18 @@ module Hornetseye
     end
 
     alias_method_chain :imag, :decompose
+
+    def imag=( value )
+      if typecode < COMPLEX_
+        decompose.roll[ 1 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          real + value * Complex::I
+        end
+      else
+        raise "Cannot assign imaginary values to object of type #{array_type.inspect}"
+      end
+    end
 
   end
 

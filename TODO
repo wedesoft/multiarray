@@ -1,5 +1,5 @@
 # factor out composite numbers
-# r=, g=, ...
+# tests for r=, g=, ... (check shape)
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
 # documentation!
