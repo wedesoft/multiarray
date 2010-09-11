@@ -1,10 +1,9 @@
 # factor out composite numbers
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
-# documentation!
-# random numbers
 
 # histogram (implement using injection)
+# random numbers
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
 # each, multi_each, collect, multi_collect, zip?
 # inject: n-d masks for warp

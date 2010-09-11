@@ -39,7 +39,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def X( *args )
-    Kernel::Complex *args
+    Complex *args
   end
   
   def sum( *args, &action )

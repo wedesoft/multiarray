@@ -173,30 +173,20 @@ module Hornetseye
 
   end
 
-  class COMPLEX_ < Element
+  class COMPLEX_ < Composite
 
     class << self
 
-      attr_accessor :element_type
-
-      def fetch( ptr )
-        construct *ptr.load( self )
+      def inherited( subclass )
+        subclass.num_elements = 2
       end
 
       def construct( real, imag )
         if Thread.current[ :function ]
           new Complex.new( real, imag )
         else
-          new Kernel::Complex( real, imag )
+          new Complex( real, imag )
         end
-      end
-
-      def memory
-        element_type.memory
-      end
-
-      def storage_size
-        element_type.storage_size * 2
       end
 
       def default
@@ -207,10 +197,6 @@ module Hornetseye
         end
       end
 
-      def directive
-        element_type.directive * 2
-      end
-
       def inspect
         unless element_type.nil?
           { SFLOAT => 'SCOMPLEX',
@@ -219,26 +205,6 @@ module Hornetseye
         else
           super
         end
-      end
-
-      def descriptor( hash )
-        unless element_type.nil?
-          inspect
-        else
-          super
-        end
-      end
-
-      def basetype
-        element_type
-      end
-
-      def typecodes
-        [ element_type ] * 2
-      end
-
-      def scalar
-        element_type.float
       end
 
       def maxint
@@ -280,11 +246,6 @@ module Hornetseye
 
       def eql?( other )
         self == other
-      end
-
-      def decompose
-        Hornetseye::Sequence( self.class.element_type,
-                              2 )[ @value.real, @value.imag ]
       end
 
     end

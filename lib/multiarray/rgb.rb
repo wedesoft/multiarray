@@ -117,34 +117,20 @@ module Hornetseye
 
   end
 
-  class RGB_ < Element
+  class RGB_ < Composite
 
     class << self
 
-      attr_accessor :element_type
-
-      def fetch( ptr )
-        construct *ptr.load( self )
+      def inherited( subclass )
+        subclass.num_elements = 3
       end
 
       def construct( r, g, b )
         new RGB.new( r, g, b )
       end
 
-      def memory
-        element_type.memory
-      end
-
-      def storage_size
-        element_type.storage_size * 3
-      end
-
       def default
         RGB.new 0, 0, 0
-      end
-
-      def directive
-        element_type.directive * 3
       end
 
       def inspect
@@ -163,26 +149,6 @@ module Hornetseye
         else
           super
         end
-      end
-
-      def descriptor( hash )
-        unless element_type.nil?
-          inspect
-        else
-          super
-        end
-      end
-
-      def basetype
-        element_type
-      end
-
-      def typecodes
-        [ element_type ] * 3
-      end
-
-      def scalar
-        element_type
       end
 
       def maxint
@@ -224,11 +190,6 @@ module Hornetseye
 
       def eql?( other )
         self == other
-      end
-
-      def decompose
-        Hornetseye::Sequence( self.class.element_type,
-                              3 )[ @value.r, @value.g, @value.b ]
       end
 
     end

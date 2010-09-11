@@ -36,7 +36,7 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def X( *args )
-    Kernel::Complex *args
+    Complex *args
   end
   
   def S( *args )
