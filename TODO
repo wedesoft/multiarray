@@ -1,4 +1,3 @@
-# factor out composite numbers
 # use descriptors ('c','f',...)? GCCValue.identifiers is not modular
 # pointer-increments for better efficiency, optimize Node#diagonal
 
