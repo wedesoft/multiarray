@@ -50,10 +50,8 @@ module Hornetseye
           [ 'void *' ]
         elsif @typecode < INDEX_
           [ 'int' ]
-        elsif @typecode < RGB_ # !!!
-          GCCType.new( @typecode.element_type ).identifiers * 3
-        elsif @typecode < COMPLEX_ # !!!
-          GCCType.new( @typecode.element_type ).identifiers * 2
+        elsif @typecode < Composite
+          GCCType.new( @typecode.element_type ).identifiers * @typecode.num_elements
         else
           raise "No identifier available for #{@typecode.inspect}"
         end
@@ -71,10 +69,8 @@ module Hornetseye
       else
         if @typecode < Pointer_
           [ lambda { |expr| "(#{identifiers.first})mallocToPtr( #{expr} )" } ] # !!!
-        elsif @typecode < RGB_
-          GCCType.new( @typecode.element_type ).r2c * 3
-        elsif @typecode < COMPLEX_
-          GCCType.new( @typecode.element_type ).r2c * 2
+        elsif @typecode < Composite
+          GCCType.new( @typecode.element_type ).r2c * @typecode.num_elements
         else
           raise "No conversion available for #{@typecode.inspect}"
         end
