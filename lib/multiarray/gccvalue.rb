@@ -104,7 +104,7 @@ module Hornetseye
       offset = 0
       typecode.typecodes.collect do |t|
         value = GCCValue.new @function,
-          "*(#{GCCType.new( t ).identifiers.first} *)( #{self} + #{offset} )" # !!!
+          "*(#{GCCType.new( t ).identifier} *)( #{self} + #{offset} )"
         offset += t.storage_size
         value
       end
@@ -113,7 +113,7 @@ module Hornetseye
     def save( value )
       offset = 0
       value.class.typecodes.zip( value.values ).each do |t,v|
-        @function << "#{@function.indent}*(#{GCCType.new( t ).identifiers.first} *)( #{self} + #{offset} ) = #{v};\n" # !!!
+        @function << "#{@function.indent}*(#{GCCType.new( t ).identifier} *)( #{self} + #{offset} ) = #{v};\n"
         offset += t.storage_size
       end
     end

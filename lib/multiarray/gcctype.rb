@@ -23,38 +23,44 @@ module Hornetseye
       @typecode = typecode
     end
 
-    def identifiers
+    def identifier
       case @typecode
       when nil
-        [ 'void' ]
+        'void'
       when BOOL
-        [ 'char' ]
+        'char'
       when BYTE
-        [ 'char' ]
+        'char'
       when UBYTE
-        [ 'unsigned char' ]
+        'unsigned char'
       when SINT
-        [ 'short int' ]
+        'short int'
       when USINT
-        [ 'unsigned short int' ]
+        'unsigned short int'
       when INT
-        [ 'int' ]
+        'int'
       when UINT
-        [ 'unsigned int' ]
+        'unsigned int'
       when SFLOAT
-        [ 'float' ]
-        when DFLOAT
-        [ 'double' ]
+        'float'
+      when DFLOAT
+        'double'
       else
         if @typecode < Pointer_
-          [ 'void *' ]
+          'void *'
         elsif @typecode < INDEX_
-          [ 'int' ]
-        elsif @typecode < Composite
-          GCCType.new( @typecode.element_type ).identifiers * @typecode.num_elements
+          'int'
         else
           raise "No identifier available for #{@typecode.inspect}"
         end
+      end
+    end
+
+    def identifiers
+      if @typecode < Composite
+        GCCType.new( @typecode.element_type ).identifiers * @typecode.num_elements
+      else
+        [ GCCType.new( @typecode ).identifier ]
       end
     end
 
@@ -68,7 +74,7 @@ module Hornetseye
         [ lambda { |expr| "NUM2DBL( #{expr} )" } ]
       else
         if @typecode < Pointer_
-          [ lambda { |expr| "(#{identifiers.first})mallocToPtr( #{expr} )" } ] # !!!
+          [ lambda { |expr| "(#{identifier})mallocToPtr( #{expr} )" } ]
         elsif @typecode < Composite
           GCCType.new( @typecode.element_type ).r2c * @typecode.num_elements
         else

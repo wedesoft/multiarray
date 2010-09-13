@@ -285,6 +285,86 @@ module Hornetseye
 
   end
 
+  module Operations
+
+    define_unary_op :r, :scalar
+    define_unary_op :g, :scalar
+    define_unary_op :b, :scalar
+
+    def r_with_decompose
+      if typecode < RGB_
+        decompose.roll.element 0
+      elsif typecode == OBJECT
+        r_without_decompose
+      else
+        self
+      end
+    end
+
+    alias_method_chain :r, :decompose
+
+    def r=( value )
+      if typecode < RGB_
+        decompose.roll[ 0 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          value * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
+        end
+      else
+        raise "Cannot assign red channel to object of type #{array_type.inspect}"
+      end
+    end
+
+    def g_with_decompose
+      if typecode < RGB_
+        decompose.roll.element 1
+      elsif typecode == OBJECT
+        g_without_decompose
+      else
+        self
+      end
+    end
+
+    alias_method_chain :g, :decompose
+
+    def g=( value )
+      if typecode < RGB_
+        decompose.roll[ 1 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          r * RGB.new( 1, 0, 0 ) + value * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
+        end
+      else
+        raise "Cannot assign green channel to object of type #{array_type.inspect}"
+      end
+    end
+
+    def b_with_decompose
+      if typecode < RGB_
+        decompose.roll.element 2
+      elsif typecode == OBJECT
+        b_without_decompose
+      else
+        self
+      end
+    end
+
+    alias_method_chain :b, :decompose
+
+    def b=( value )
+      if typecode < RGB_
+        decompose.roll[ 2 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          r * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + value * RGB.new( 0, 0, 1 )
+        end
+      else
+        raise "Cannot assign blue channel to object of type #{array_type.inspect}"
+      end
+    end
+
+  end
+
   def RGB( arg, g = nil, b = nil )
     if g.nil? and b.nil?
       retval = Class.new RGB_

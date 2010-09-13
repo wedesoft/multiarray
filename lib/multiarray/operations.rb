@@ -64,11 +64,6 @@ module Hornetseye
     define_unary_op :floor
     define_unary_op :ceil
     define_unary_op :round
-    define_unary_op :r, :scalar
-    define_unary_op :g, :scalar
-    define_unary_op :b, :scalar
-    define_unary_op :real, :scalar
-    define_unary_op :imag, :scalar
     define_binary_op :+
     define_binary_op :-
     define_binary_op :*
@@ -306,126 +301,6 @@ module Hornetseye
     def convolve( filter )
       filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
       product( filter ).diagonal { |s,x| s + x }
-    end
-
-    def r_with_decompose
-      if typecode < RGB_
-        decompose.roll.element 0
-      elsif typecode == OBJECT
-        r_without_decompose
-      else
-        self
-      end
-    end
-
-    alias_method_chain :r, :decompose
-
-    def r=( value )
-      if typecode < RGB_
-        decompose.roll[ 0 ] = value
-      elsif typecode == OBJECT
-        self[] = Hornetseye::lazy do
-          value * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
-        end
-      else
-        raise "Cannot assign red channel to object of type #{array_type.inspect}"
-      end
-    end
-
-    def g_with_decompose
-      if typecode < RGB_
-        decompose.roll.element 1
-      elsif typecode == OBJECT
-        g_without_decompose
-      else
-        self
-      end
-    end
-
-    alias_method_chain :g, :decompose
-
-    def g=( value )
-      if typecode < RGB_
-        decompose.roll[ 1 ] = value
-      elsif typecode == OBJECT
-        self[] = Hornetseye::lazy do
-          r * RGB.new( 1, 0, 0 ) + value * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
-        end
-      else
-        raise "Cannot assign green channel to object of type #{array_type.inspect}"
-      end
-    end
-
-    def b_with_decompose
-      if typecode < RGB_
-        decompose.roll.element 2
-      elsif typecode == OBJECT
-        b_without_decompose
-      else
-        self
-      end
-    end
-
-    alias_method_chain :b, :decompose
-
-    def b=( value )
-      if typecode < RGB_
-        decompose.roll[ 2 ] = value
-      elsif typecode == OBJECT
-        self[] = Hornetseye::lazy do
-          r * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + value * RGB.new( 0, 0, 1 )
-        end
-      else
-        raise "Cannot assign blue channel to object of type #{array_type.inspect}"
-      end
-    end
-
-    def real_with_decompose
-      if typecode < COMPLEX_
-        decompose.roll.element 0
-      elsif typecode == OBJECT
-        real_without_decompose
-      else
-        self
-      end
-    end
-
-    alias_method_chain :real, :decompose
-
-    def real=( value )
-      if typecode < COMPLEX_
-        decompose.roll[ 0 ] = value
-      elsif typecode == OBJECT
-        self[] = Hornetseye::lazy do
-          value + imag * ::Complex::I
-        end
-      else
-        self[] = value
-      end
-    end
-
-    def imag_with_decompose
-      if typecode < COMPLEX_
-        decompose.roll.element 1
-      elsif typecode == OBJECT
-        imag_without_decompose
-      else
-        Hornetseye::lazy( *shape ) { typecode.new( 0 ) }
-      end
-    end
-
-    alias_method_chain :imag, :decompose
-
-    def imag=( value )
-      if typecode < COMPLEX_
-        decompose.roll[ 1 ] = value
-      elsif typecode == OBJECT
-        self[] = Hornetseye::lazy do
-          real + value * ::Complex::I
-        end
-      else
-        raise "Cannot assign imaginary values to object of type #{array_type.inspect}"
-      end
     end
 
   end

@@ -333,6 +333,61 @@ module Hornetseye
 
   end
 
+  module Operations
+
+    define_unary_op :real, :scalar
+    define_unary_op :imag, :scalar
+
+    def real_with_decompose
+      if typecode < COMPLEX_
+        decompose.roll.element 0
+      elsif typecode == OBJECT
+        real_without_decompose
+      else
+        self
+      end
+    end
+
+    alias_method_chain :real, :decompose
+
+    def real=( value )
+      if typecode < COMPLEX_
+        decompose.roll[ 0 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          value + imag * ::Complex::I
+        end
+      else
+        self[] = value
+      end
+    end
+
+    def imag_with_decompose
+      if typecode < COMPLEX_
+        decompose.roll.element 1
+      elsif typecode == OBJECT
+        imag_without_decompose
+      else
+        Hornetseye::lazy( *shape ) { typecode.new( 0 ) }
+      end
+    end
+
+    alias_method_chain :imag, :decompose
+
+    def imag=( value )
+      if typecode < COMPLEX_
+        decompose.roll[ 1 ] = value
+      elsif typecode == OBJECT
+        self[] = Hornetseye::lazy do
+          real + value * ::Complex::I
+        end
+      else
+        raise "Cannot assign imaginary values to object of type #{array_type.inspect}"
+      end
+    end
+
+  end
+
   def COMPLEX( arg )
     retval = Class.new COMPLEX_
     retval.element_type = arg
