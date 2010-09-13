@@ -17,6 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing native booleans
   class BOOL < Element
 
     class << self
@@ -135,6 +136,13 @@ module Hornetseye
 
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +BOOL.new+.
+  #
+  # @param [FalseClass,TrueClass] value Boolean value.
+  #
+  # @return [BOOL] The wrapped boolean value.
   def BOOL( value )
     BOOL.new value
   end

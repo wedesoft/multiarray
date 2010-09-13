@@ -21,7 +21,13 @@ class Module
 
   unless method_defined? :alias_method_chain
 
-    # Method for creating alias chains.
+    # Method for creating alias chains
+    #
+    # @param [Symbol,String] target Method to rename.
+    # @param [Symbol,String] feature Feature to use for renaming.
+    # @param [Symbol,String] vocalize Override to use when renaming operators.
+    #
+    # @return [Module] Returns this module.
     #
     # @private
     def alias_method_chain( target, feature, vocalize = target )
@@ -43,6 +49,8 @@ class Proc
     # Proc#bind is defined if it does not exist already
     #
     # @param [Object] object Object to bind this instance of +Proc+ to.
+    #
+    # @return [Method] The bound method.
     #
     # @private
     def bind( object )
@@ -416,18 +424,30 @@ end
 
 class Numeric
 
+  # Compute complex conjugate
+  #
+  # @return [Numeric] Returns +self+.
   def conj
     self
   end
 
+  # Get red component
+  #
+  # @return [Numeric] Returns +self+.
   def r
     self
   end
 
+  # Get green component
+  #
+  # @return [Numeric] Returns +self+.
   def g
     self
   end
 
+  # Get blue component
+  #
+  # @return [Numeric] Returns +self+.
   def b
     self
   end

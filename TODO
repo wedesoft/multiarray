@@ -1,7 +1,5 @@
-# use descriptors ('c','f',...)? GCCValue.identifiers is not modular
-# pointer-increments for better efficiency, optimize Node#diagonal
-
 # histogram (implement using injection)
+# pointer-increments for better efficiency, optimize Node#diagonal
 # random numbers
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
 # each, multi_each, collect, multi_collect, zip?

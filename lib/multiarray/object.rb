@@ -69,6 +69,13 @@ module Hornetseye
         nil
       end
 
+      # Compute balanced type for binary operation
+      #
+      # @param [Class] other Other type to coerce with.
+      #
+      # @return [Array<Class>] Result of coercion.
+      #
+      # @private
       def coercion( other )
         if other < Sequence_
           other.coercion self

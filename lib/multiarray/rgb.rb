@@ -169,6 +169,13 @@ module Hornetseye
         end
       end
 
+      # Compute balanced type for binary operation
+      #
+      # @param [Class] other Other type to coerce with.
+      #
+      # @return [Array<Class>] Result of coercion.
+      #
+      # @private
       def coerce( other )
         if other < RGB_
           return other, self

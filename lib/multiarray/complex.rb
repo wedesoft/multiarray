@@ -17,7 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  class Complex
+  class InternalComplex
 
     class << self
 
@@ -38,11 +38,11 @@ module Hornetseye
     end
 
     def inspect
-      "Hornetseye::Complex(#{@real.inspect},#{@imag.inspect})"
+      "InternalComplex(#{@real.inspect},#{@imag.inspect})"
     end
 
     def to_s
-      "Complex(#{@real.to_s},#{@imag.to_s})"
+      "InternalComplex(#{@real.to_s},#{@imag.to_s})"
     end
 
     def store( value )
@@ -50,17 +50,17 @@ module Hornetseye
     end
 
     def coerce( other )
-      if other.is_a? Complex
+      if other.is_a? InternalComplex
         return other, self
-      elsif other.is_a? ::Complex
-        return Complex.new( other.real, other.imag ), self
+      elsif other.is_a? Complex
+        return InternalComplex.new( other.real, other.imag ), self
       else
-        return Complex.new( other, 0 ), self
+        return InternalComplex.new( other, 0 ), self
       end
     end
 
     def conj
-      Complex.new @real, -@imag
+      InternalComplex.new @real, -@imag
     end
 
     def abs
@@ -80,14 +80,14 @@ module Hornetseye
     end
 
     def -@
-      Complex.new -@real, -@imag
+      InternalComplex.new -@real, -@imag
     end
 
     def +( other )
-      if other.is_a?( Complex ) or other.is_a?( ::Complex )
-        Complex.new @real + other.real, @imag + other.imag
-      elsif Complex.generic? other
-        Complex.new @real + other, @imag
+      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+        InternalComplex.new @real + other.real, @imag + other.imag
+      elsif InternalComplex.generic? other
+        InternalComplex.new @real + other, @imag
       else
         x, y = other.coerce self
         x + y
@@ -95,10 +95,10 @@ module Hornetseye
     end
 
     def -( other )
-      if other.is_a?( Complex ) or other.is_a?( ::Complex )
-        Complex.new @real - other.real, @imag - other.imag
-      elsif Complex.generic? other
-        Complex.new @real - other, @imag
+      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+        InternalComplex.new @real - other.real, @imag - other.imag
+      elsif InternalComplex.generic? other
+        InternalComplex.new @real - other, @imag
       else
         x, y = other.coerce self
         x - y
@@ -106,11 +106,11 @@ module Hornetseye
     end
 
     def *( other )
-      if other.is_a?( Complex ) or other.is_a?( ::Complex )
-        Complex.new @real * other.real - @imag * other.imag,
+      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+        InternalComplex.new @real * other.real - @imag * other.imag,
                     @real * other.imag + @imag * other.real
-      elsif Complex.generic? other
-        Complex.new @real * other, @imag * other
+      elsif InternalComplex.generic? other
+        InternalComplex.new @real * other, @imag * other
       else
         x, y = other.coerce self
         x * y
@@ -118,10 +118,10 @@ module Hornetseye
     end
 
     def /( other )
-      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         self * other.conj / other.abs2
-      elsif Complex.generic? other
-        Complex.new @real / other, @imag / other
+      elsif InternalComplex.generic? other
+        InternalComplex.new @real / other, @imag / other
       else
         x, y = other.coerce self
         x / y
@@ -129,16 +129,16 @@ module Hornetseye
     end
 
     def **( other )
-      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         r, theta = polar
         ore = other.real
         oim = other.imag
         nr = Math.exp ore * Math.log( r ) - oim * theta
         ntheta = theta * ore + oim * Math.log( r )
-        Complex.polar nr, ntheta
-      elsif Complex.generic? other
+        InternalComplex.polar nr, ntheta
+      elsif InternalComplex.generic? other
         r, theta = polar
-        Complex.polar r ** other, theta * other
+        InternalComplex.polar r ** other, theta * other
       else
         x, y = other.coerce self
         x ** y
@@ -158,9 +158,9 @@ module Hornetseye
     end
 
     def ==( other )
-      if other.is_a?( Complex ) or other.is_a?( ::Complex )
+      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         @real.eq( other.real ).and( @imag.eq( other.imag ) )
-      elsif Complex.generic? other
+      elsif InternalComplex.generic? other
         @real.eq( other ).and( @imag.eq( 0 ) )
       else
         false
@@ -183,7 +183,7 @@ module Hornetseye
 
       def construct( real, imag )
         if Thread.current[ :function ]
-          new Complex.new( real, imag )
+          new InternalComplex.new( real, imag )
         else
           new Complex( real, imag )
         end
@@ -191,9 +191,9 @@ module Hornetseye
 
       def default
         if Thread.current[ :function ]
-          Complex.new 0, 0
+          InternalComplex.new 0, 0
         else
-          Kernel::Complex 0, 0
+          Complex 0, 0
         end
       end
 
@@ -225,6 +225,13 @@ module Hornetseye
         end
       end
 
+      # Compute balanced type for binary operation
+      #
+      # @param [Class] other Other type to coerce with.
+      #
+      # @return [Array<Class>] Result of coercion.
+      #
+      # @private
       def coerce( other )
         if other < COMPLEX_
           return other, self
@@ -257,7 +264,7 @@ module Hornetseye
       else
         real = GCCValue.new Thread.current[ :function ], value.real.to_s
         imag = GCCValue.new Thread.current[ :function ], value.imag.to_s
-        @value = Complex.new real, imag
+        @value = InternalComplex.new real, imag
       end
     end
 
@@ -267,7 +274,7 @@ module Hornetseye
         imag = Thread.current[ :function ].variable self.class.element_type, 'v'
         real.store @value.real
         imag.store @value.imag
-        self.class.new Complex.new( real, imag )
+        self.class.new InternalComplex.new( real, imag )
       else
         self.class.new get
       end
@@ -295,11 +302,11 @@ module Hornetseye
     module Match
 
       def fit( *values )
-        if values.all? { |value| value.is_a? Complex or value.is_a? ::Complex or
+        if values.all? { |value| value.is_a? InternalComplex or value.is_a? Complex or
                                  value.is_a? Float or value.is_a? Integer }
-          if values.any? { |value| value.is_a? Complex or value.is_a? ::Complex }
+          if values.any? { |value| value.is_a? InternalComplex or value.is_a? Complex }
             elements = values.inject( [] ) do |arr,value|
-              if value.is_a? Complex or value.is_a? ::Complex
+              if value.is_a? InternalComplex or value.is_a? Complex
                 arr + [ value.real, value.imag ]
               else
                 arr + [ value ]
@@ -355,7 +362,7 @@ module Hornetseye
         decompose.roll[ 0 ] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
-          value + imag * ::Complex::I
+          value + imag * Complex::I
         end
       else
         self[] = value
@@ -379,7 +386,7 @@ module Hornetseye
         decompose.roll[ 1 ] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
-          real + value * ::Complex::I
+          real + value * Complex::I
         end
       else
         raise "Cannot assign imaginary values to object of type #{array_type.inspect}"
