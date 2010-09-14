@@ -96,14 +96,14 @@ module Hornetseye
 
     # Return string with information about this object.
     #
-    # @return [String] Returns a string (e.g. +"RGB(1,2,3)"+).
+    # @return [String] Returns a string (e.g. "RGB(1,2,3)").
     def inspect
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
     # Return string with information about this object.
     #
-    # @return [String] Returns a string (e.g. +"RGB(1,2,3)"+).
+    # @return [String] Returns a string (e.g. "RGB(1,2,3)").
     def to_s
       "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
     end
@@ -157,6 +157,11 @@ module Hornetseye
       end
     end
 
+    # Decompose RGB number
+    #
+    # This method decomposes the RGB value into an array.
+    #
+    # @return [Node] An array with the three channel values as elements.
     def decompose
       Hornetseye::Sequence[ @r, @g, @b ]
     end
@@ -171,14 +176,31 @@ module Hornetseye
         subclass.num_elements = 3
       end
 
+      # Construct new object from arguments
+      #
+      # @param [Object] r Value for red channel.
+      # @param [Object] g Value for green channel.
+      # @param [Object] b Value for blue channel.
+      #
+      # @return [RGB] New object of this type.
+      #
+      # @private
       def construct( r, g, b )
         new RGB.new( r, g, b )
       end
 
+      # Get default value for elements of this type
+      #
+      # @return [Object] Returns +RGB( 0, 0, 0 )+.
+      #
+      # @private
       def default
         RGB.new 0, 0, 0
       end
 
+      # Diplay information about this class
+      #
+      # @return [String] Text with information about this class (e.g. "DFLOATRGB").
       def inspect
         unless element_type.nil?
           { BYTE    => 'BYTERGB',
@@ -249,10 +271,22 @@ module Hornetseye
           element_type == other.element_type
       end
 
+      # Compute hash value for this class.
+      #
+      # @return [Fixnum] Hash value
+      #
+      # @private
       def hash
         [ :RGB_, element_type ].hash
       end
 
+      # Equality for hash operations
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      #
+      # @private
       def eql?( other )
         self == other
       end

@@ -24,7 +24,7 @@ module Hornetseye
 
       # Get string with information about this class
       #
-      # @return [String] Returns +'BOOL'+
+      # @return [String] Returns 'BOOL'
       def inspect
         'BOOL'
       end
@@ -82,7 +82,7 @@ module Hornetseye
 
       # Directive for packing/unpacking elements of this type
       #
-      # @return [String] Returns +'c'+.
+      # @return [String] Returns 'c'.
       #
       # @private
       def directive

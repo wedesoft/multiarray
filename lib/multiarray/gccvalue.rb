@@ -92,10 +92,16 @@ module Hornetseye
       @descriptor = descriptor
     end
 
+    # Display descriptor of this object
+    #
+    # @return [String] Returns the descriptor of this object.
     def inspect
       @descriptor
     end
 
+    # Get descriptor of this object
+    #
+    # @return [String] Returns the descriptor of this object.
     def to_s
       @descriptor
     end

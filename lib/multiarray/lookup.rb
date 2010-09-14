@@ -93,6 +93,11 @@ module Hornetseye
       Lookup.new @p.slice( start, length ), @index, @stride
     end
 
+    # Decompose composite elements
+    #
+    # This method decomposes composite elements into array.
+    #
+    # @return [Node] Result of decomposition.
     def decompose
       if typecode < Composite
         Lookup.new @p.decompose, @index, @stride * typecode.num_elements

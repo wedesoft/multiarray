@@ -582,6 +582,11 @@ module Hornetseye
       end
     end
 
+    # Decompose composite elements
+    #
+    # This method decomposes composite elements into array.
+    #
+    # @return [Node] Returns +self+.
     def decompose
       self
     end

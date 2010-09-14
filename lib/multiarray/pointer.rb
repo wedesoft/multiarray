@@ -25,10 +25,20 @@ module Hornetseye
       # @return [Node] Type of object the pointer is pointing at.
       attr_accessor :target
 
+      # Construct new object from arguments
+      #
+      # @param [Array<Object>] *args Arguments for constructor.
+      #
+      # @return [Element] New object of this type.
+      #
+      # @private
       def construct( *args )
         new *args
       end
 
+      # Display string with information about this class
+      #
+      # @return [String] String with information about this class (e.g. '*(UBYTE)').
       def inspect
         "*(#{target.inspect})"
       end
@@ -46,7 +56,7 @@ module Hornetseye
 
       # Get default value for elements of this type
       #
-      # @return [Memory,List] Memory for storing object of type +target+.
+      # @return [Memory,List] Memory for storing one object of type +target+.
       def default
         target.memory.new target.storage_size
       end
@@ -61,10 +71,22 @@ module Hornetseye
           target == other.target
       end
 
+      # Compute hash value for this class.
+      #
+      # @return [Fixnum] Hash value
+      #
+      # @private
       def hash
         [ :Pointer_, target ].hash
       end
 
+      # Equality for hash operations
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      #
+      # @private
       def eql?
         self == other
       end
@@ -145,6 +167,11 @@ module Hornetseye
       end
     end
 
+    # Decompose composite elements
+    #
+    # This method decomposes composite elements into array.
+    #
+    # @return [Node] Result of decomposition.
     def decompose
       if self.class.target < Composite
         pointer = Hornetseye::Pointer( self.class.target.element_type ).new @value

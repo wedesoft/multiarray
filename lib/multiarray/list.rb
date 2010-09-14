@@ -24,6 +24,9 @@ module Hornetseye
       @offset = options[ :offset ] || 0
     end
 
+    # Display information about this object
+    #
+    # @return [String] String with information about this object (e.g. "List(5)").
     def inspect
       "List(#{@array.size - @offset})"
     end

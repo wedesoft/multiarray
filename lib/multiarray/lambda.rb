@@ -123,6 +123,11 @@ module Hornetseye
                          skip( index, start ) ).unroll
     end
 
+    # Decompose composite elements
+    #
+    # This method decomposes composite elements into array.
+    #
+    # @return [Node] Result of decomposition.
     def decompose
       Lambda.new @index, @term.decompose
     end

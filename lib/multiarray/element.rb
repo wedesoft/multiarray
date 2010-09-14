@@ -32,6 +32,13 @@ module Hornetseye
         construct *ptr.load( self )
       end
 
+      # Construct new object from arguments
+      #
+      # @param [Array<Object>] *args Arguments for constructor.
+      #
+      # @return [Element] New object of this type.
+      #
+      # @private
       def construct( *args )
         new *args
       end

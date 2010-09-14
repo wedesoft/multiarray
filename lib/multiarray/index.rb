@@ -26,6 +26,10 @@ module Hornetseye
       # @return [Object] Size of range for this index.
       attr_accessor :size
 
+      # Display information about this class
+      #
+      # @return [String] Returns string with information about this class (e.g.
+      #         "INDEX(INT(5))").
       def inspect
         "INDEX(#{size.inspect})"
       end

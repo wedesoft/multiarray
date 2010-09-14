@@ -69,6 +69,11 @@ module Hornetseye
       # @return [Integer] num_elements Number of elements.
       attr_accessor :num_elements
 
+      # Get default value for elements of this type
+      #
+      # @return [Object] Returns an array of default values.
+      #
+      # @private
       def default
         Hornetseye::lazy( num_elements ) do |i|
           if element_type.dimension > 0

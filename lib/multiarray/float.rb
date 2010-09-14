@@ -31,6 +31,11 @@ module Hornetseye
         double ? 8 : 4
       end
 
+      # Get default value for elements of this type
+      #
+      # @return [Object] Returns +0.0+.
+      #
+      # @private
       def default
         0.0
       end
@@ -79,7 +84,7 @@ module Hornetseye
 
       # Return string with information about this class.
       #
-      # @return [String] Returns a string (e.g. +"SFLOAT"+).
+      # @return [String] Returns a string (e.g. "SFLOAT").
       def inspect
         "#{ double ? 'D' : 'S' }FLOAT"
       end
@@ -97,10 +102,22 @@ module Hornetseye
         other.is_a? Class and other < FLOAT_ and double == other.double
       end
 
+      # Compute hash value for this class.
+      #
+      # @return [Fixnum] Hash value
+      #
+      # @private
       def hash
         [ :FLOAT_, double ].hash
       end
 
+      # Equality for hash operations
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      #
+      # @private
       def eql?( other )
         self == other
       end

@@ -24,7 +24,7 @@ module Hornetseye
 
       # Get string with information about this class
       #
-      # @return [String] Returns +'OBJECT'+.
+      # @return [String] Returns 'OBJECT'.
       def inspect
         'OBJECT'
       end

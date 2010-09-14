@@ -48,14 +48,14 @@ module Hornetseye
 
     # Return string with information about this object.
     #
-    # @return [String] Returns a string (e.g. +"InternalComplex(1,2)"+).
+    # @return [String] Returns a string (e.g. "InternalComplex(1,2)").
     def inspect
       "InternalComplex(#{@real.inspect},#{@imag.inspect})"
     end
 
     # Return string with information about this object.
     #
-    # @return [String] Returns a string (e.g. +"InternalComplex(1,2)"+).
+    # @return [String] Returns a string (e.g. "InternalComplex(1,2)").
     def to_s
       "InternalComplex(#{@real.to_s},#{@imag.to_s})"
     end
@@ -188,6 +188,12 @@ module Hornetseye
       end
     end
 
+    # Decompose complex number
+    #
+    # This method decomposes the complex number into an array.
+    #
+    # @return [Node] Returns an array with the real and imaginary component as
+    #         elements.
     def decompose
       Hornetseye::Sequence[ @real, @imag ]
     end
@@ -202,6 +208,14 @@ module Hornetseye
         subclass.num_elements = 2
       end
 
+      # Construct new object from arguments
+      #
+      # @param [Object] real Real component of complex number.
+      # @param [Object] imag Imaginary component of complex number.
+      #
+      # @return [Complex,InternalComplex] New complex number object.
+      #
+      # @private
       def construct( real, imag )
         if Thread.current[ :function ]
           new InternalComplex.new( real, imag )
@@ -210,6 +224,12 @@ module Hornetseye
         end
       end
 
+      # Get default value for elements of this type
+      #
+      # @return [Object,InternalComplex] Returns complex number object with zero real
+      #         and imaginary component.
+      #
+      # @private
       def default
         if Thread.current[ :function ]
           InternalComplex.new 0, 0
@@ -218,6 +238,10 @@ module Hornetseye
         end
       end
 
+      # Display information about this class
+      #
+      # @return [String] Returns string with information about this class (e.g.
+      #         "SCOMPLEX").
       def inspect
         unless element_type.nil?
           { SFLOAT => 'SCOMPLEX',
@@ -280,10 +304,22 @@ module Hornetseye
           element_type == other.element_type
       end
 
+      # Compute hash value for this class.
+      #
+      # @return [Fixnum] Hash value
+      #
+      # @private
       def hash
         [ :COMPLEX_, element_type ].hash
       end
 
+      # Equality for hash operations
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      #
+      # @private
       def eql?( other )
         self == other
       end

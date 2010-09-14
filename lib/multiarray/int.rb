@@ -53,7 +53,7 @@ module Hornetseye
 
       # Get default value for elements of this type
       #
-      # @return [Object] Returns +false+.
+      # @return [Object] Returns +0+.
       #
       # @private
       def default
@@ -112,7 +112,8 @@ module Hornetseye
 
       # Get string with information about this class
       #
-      # @return [String] Returns string with information about this class.
+      # @return [String] Returns string with information about this class (e.g.
+      #         "BYTE").
       def inspect
         unless bits.nil? or signed.nil?
           retval = { [  8, true  ] => 'BYTE',
@@ -154,10 +155,22 @@ module Hornetseye
           bits == other.bits and signed == other.signed
       end
 
+      # Compute hash value for this class.
+      #
+      # @return [Fixnum] Hash value
+      #
+      # @private
       def hash
         [ :INT_, bits, signed ].hash
       end
 
+      # Equality for hash operations
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      #
+      # @private
       def eql?( other )
         self == other
       end
