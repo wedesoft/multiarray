@@ -134,12 +134,30 @@ module Hornetseye
   SFLOAT = FLOAT SINGLE
   DFLOAT = FLOAT DOUBLE
 
+  # Shortcut for constructor
+  #
+  # The method calls +SFLOAT.new+.
+  #
+  # @param [Float] value Floating point value.
+  #
+  # @return [SFLOAT] The wrapped floating point value.
+  #
+  # @private
   def SFLOAT( value )
     SFLOAT.new value
   end
 
   module_function :SFLOAT
 
+  # Shortcut for constructor
+  #
+  # The method calls +DFLOAT.new+.
+  #
+  # @param [Float] value Floating point value.
+  #
+  # @return [DFLOAT] The wrapped floating point value.
+  #
+  # @private
   def DFLOAT( value )
     DFLOAT.new value
   end

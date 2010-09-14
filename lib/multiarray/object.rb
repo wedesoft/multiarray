@@ -143,6 +143,13 @@ module Hornetseye
 
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +OBJECT.new+.
+  #
+  # @param [Object] value Ruby object.
+  #
+  # @return [OBJECT] The wrapped Ruby object.
   def OBJECT( value )
     OBJECT.new value
   end

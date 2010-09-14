@@ -7,7 +7,7 @@
 # block(var1,var2,...) with smart subst?
 
 # downsampling after correlation?
-# YARD documentation with pictures, demo video
+# YARD documentation with pictures, demo video, @group ..., @endgroup
 # CK_Thesis.pdf: tensor voting
 
 # f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy

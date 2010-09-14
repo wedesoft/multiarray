@@ -404,42 +404,132 @@ module Hornetseye
 
   DFLOATRGB = RGB DFLOAT
 
+  # Shortcut for constructor
+  #
+  # The method calls +BYTERGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [BYTERGB] The wrapped RGB value.
+  #
+  # @private
   def BYTERGB( value )
     BYTERGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +UBYTERGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [UBYTERGB] The wrapped RGB value.
+  #
+  # @private
   def UBYTERGB( value )
     UBYTERGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +SINTRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [SINTRGB] The wrapped RGB value.
+  #
+  # @private
   def SINTRGB( value )
     SINTRGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +USINTRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [USINTRGB] The wrapped RGB value.
+  #
+  # @private
   def USINTRGB( value )
     USINTRGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +INTRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [INTRGB] The wrapped RGB value.
+  #
+  # @private
   def INTRGB( value )
     INTRGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +UINTRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [UINTRGB] The wrapped RGB value.
+  #
+  # @private
   def UINTRGB( value )
     UINTRGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +LONGRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [LONGRGB] The wrapped RGB value.
+  #
+  # @private
   def LONGRGB( value )
     LONGRGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +ULONGRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [ULONGRGB] The wrapped RGB value.
+  #
+  # @private
   def ULONGRGB( value )
     ULONGRGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +SFLOATRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [SFLOATRGB] The wrapped RGB value.
+  #
+  # @private
   def SFLOATRGB( value )
     SFLOATRGB.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +DFLOATRGB.new+.
+  #
+  # @param [RGB] value RGB value.
+  #
+  # @return [DFLOATRGB] The wrapped RGB value.
+  #
+  # @private
   def DFLOATRGB( value )
     DFLOATRGB.new value
   end

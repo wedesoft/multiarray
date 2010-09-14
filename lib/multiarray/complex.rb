@@ -407,10 +407,28 @@ module Hornetseye
 
   DCOMPLEX = COMPLEX DFLOAT
 
+  # Shortcut for constructor
+  #
+  # The method calls +SCOMPLEX.new+.
+  #
+  # @param [Complex] value Complex value.
+  #
+  # @return [SCOMPLEX] The wrapped Complex value.
+  #
+  # @private
   def SCOMPLEX( value )
     SCOMPLEX.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +DCOMPLEX.new+.
+  #
+  # @param [Complex] value Complex value.
+  #
+  # @return [DCOMPLEX] The wrapped Complex value.
+  #
+  # @private
   def DCOMPLEX( value )
     DCOMPLEX.new value
   end

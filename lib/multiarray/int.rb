@@ -240,6 +240,7 @@ module Hornetseye
   # @overload INT( value )
   #   This is a shortcut for +INT.new( value )+.
   #   @param [Integer] value Initial value for integer object.
+  #   @return [INT] Wrapped integer value.
   #
   # @see INT_
   # @see INT_.bits
@@ -281,30 +282,93 @@ module Hornetseye
   # 64-bit unsigned integer
   ULONG = INT 64, UNSIGNED
 
+  # Shortcut for constructor
+  #
+  # The method calls +BYTE.new+.
+  #
+  # @param [Integer] value Integer value.
+  #
+  # @return [BYTE] The wrapped integer value.
+  #
+  # @private
   def BYTE( value )
     BYTE.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +UBYTE.new+.
+  #
+  # @param [Integer] value Integer value.
+  #
+  # @return [UBYTE] The wrapped integer value.
+  #
+  # @private
   def UBYTE( value )
     UBYTE.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +SINT.new+.
+  #
+  # @param [Integer] value Integer value.
+  #
+  # @return [SINT] The wrapped integer value.
+  #
+  # @private
   def SINT( value )
     SINT.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +USINT.new+.
+  #
+  # @param [Integer] value Integer value.
+  #
+  # @return [USINT] The wrapped integer value.
+  #
+  # @private
   def USINT( value )
     USINT.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +UINT.new+.
+  #
+  # @param [Integer] value Integer value.
+  #
+  # @return [UINT] The wrapped integer value.
+  #
+  # @private
   def UINT( value )
     UINT.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +LONG.new+.
+  #
+  # @param [Integer] value Integer value.
+  #
+  # @return [LONG] The wrapped integer value.
+  #
+  # @private
   def LONG( value )
     LONG.new value
   end
 
+  # Shortcut for constructor
+  #
+  # The method calls +ULONG.new+.
+  #
+  # @param [Integer] value Integer value.
+  #
+  # @return [ULONG] The wrapped integer value.
+  #
+  # @private
   def ULONG( value )
     ULONG.new value
   end

@@ -52,6 +52,7 @@ Rake::TestTask.new do |t|
 end
 
 begin
+  # For development just run it with "yard server --reload".
   require 'yard'
   YARD::Rake::YardocTask.new :yard do |y|
     y.options << '--no-private'

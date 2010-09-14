@@ -143,6 +143,8 @@ module Hornetseye
   # @param [FalseClass,TrueClass] value Boolean value.
   #
   # @return [BOOL] The wrapped boolean value.
+  #
+  # @private
   def BOOL( value )
     BOOL.new value
   end
