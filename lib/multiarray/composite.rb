@@ -17,26 +17,55 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Base class for composite types
   class Composite < Element
 
     class << self
 
+      # Access element type of composite type
+      #
+      # @return [Class] The element type.
       attr_accessor :element_type
 
+      # Get number of elements of composite type
+      #
+      # @return [Integer] Number of elements.
       attr_accessor :num_elements
 
+      # Memory type required to store elements of this type
+      #
+      # @return [Class] Returns +element_type.memory+.
+      #
+      # @private
       def memory
         element_type.memory
       end
 
+      # Get storage size to store an element of this type
+      #
+      # @return [Integer] Returns +element_type.storage_size * num_elements+.
+      #
+      # @private
       def storage_size
         element_type.storage_size * num_elements
       end
 
+      # Directive for packing/unpacking elements of this type
+      #
+      # @return [String] Returns string with directive.
+      #
+      # @private
       def directive
         element_type.directive * num_elements
       end
 
+      # Get unique descriptor of this class
+      #
+      # @param [Hash] hash Labels for any variables.
+      #
+      # @return [String] Descriptor of this class.
+      #
+      # @private
       def descriptor( hash )
         unless element_type.nil?
           inspect
@@ -45,6 +74,11 @@ module Hornetseye
         end
       end
 
+      # Base type of this data type
+      #
+      # @return [Class] Returns +element_type+.
+      #
+      # @private
       def basetype
         element_type
       end

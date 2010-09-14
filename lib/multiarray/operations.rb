@@ -234,7 +234,7 @@ module Hornetseye
     # @option options [Variable] :var1 First variable defining operation.
     # @option options [Variable] :var2 Second variable defining operation.
     # @option options [Variable] :block (yield( var1, var2 )) The operation to
-    # apply diagonally.
+    #         apply diagonally.
     # @yield Optional operation to apply diagonally.
     #
     # @return [Node] Result of operation.

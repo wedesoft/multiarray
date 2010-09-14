@@ -122,6 +122,11 @@ module Hornetseye
         element_type.typecode
       end
 
+      # Base type of this data type
+      #
+      # @return [Class] Returns +element_type+.
+      #
+      # @private
       def basetype
         element_type.basetype
       end

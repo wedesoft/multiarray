@@ -66,6 +66,11 @@ module Hornetseye
         self
       end
 
+      # Base type of this data type
+      #
+      # @return [Class] Returns +element_type+.
+      #
+      # @private
       def basetype
         self
       end
