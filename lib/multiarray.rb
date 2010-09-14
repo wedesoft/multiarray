@@ -474,6 +474,13 @@ end
 
 class Array
 
+  # Element-wise operation based on element and its index
+  #
+  # Same as +Array#collect+ but with index.
+  #
+  # @param &action Closure accepting an element and an index.
+  #
+  # @return [Array<Object>] Array with results.
   def collect_with_index( &action )
     zip( ( 0 ... size ).to_a ).collect &action
   end

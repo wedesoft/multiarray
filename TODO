@@ -9,6 +9,7 @@
 # downsampling after correlation?
 # YARD documentation with pictures, demo video, @group ..., @endgroup
 # CK_Thesis.pdf: tensor voting
+# maxint -> native_int
 
 # f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy
 # lut(g(i))

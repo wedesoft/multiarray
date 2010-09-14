@@ -75,6 +75,11 @@ module Hornetseye
         self
       end
 
+      # Get list of types of composite type
+      #
+      # @return [Array<Class>] List of types.
+      #
+      # @private
       def typecodes
         [ self ]
       end
@@ -140,6 +145,9 @@ module Hornetseye
         BOOL
       end
 
+      # Get corresponding scalar type
+      #
+      # @return [Class] Returns +self+.
       def scalar
         self
       end
@@ -155,6 +163,11 @@ module Hornetseye
         other.coercion( self ).bool
       end
 
+      # Get corresponding maximal integer type
+      #
+      # @return [Class] Returns +self+.
+      #
+      # @private
       def maxint
         self
       end

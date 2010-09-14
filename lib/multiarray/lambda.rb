@@ -102,6 +102,11 @@ module Hornetseye
       end
     end
 
+    # Skip elements of an array
+    #
+    # @return [Node] Return lambda expression with elements skipped.
+    #
+    # @private
     def skip( index, start )
       Lambda.new @index, @term.skip( index, start )
     end

@@ -139,6 +139,10 @@ module Hornetseye
            self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
     end
 
+    # Skip elements of an array
+    #
+    # @return [Node] Returns element-wise operation with elements skipped on each
+    #         operand.
     def skip( index, start )
       skipped = *@values.collect { |value| value.skip( index, start ) }
       self.class.new( *skipped ).demand

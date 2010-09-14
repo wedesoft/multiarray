@@ -120,6 +120,11 @@ module Hornetseye
       Lookup.new self, value, stride
     end
 
+    # Skip elements of an array
+    #
+    # @return [Node] Return variable with offset added or +self+.
+    #
+    # @private
     def skip( index, start )
       if index == self
         self + start

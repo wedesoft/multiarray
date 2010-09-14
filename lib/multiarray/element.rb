@@ -127,6 +127,11 @@ module Hornetseye
       end
     end
 
+    # Skip elements of an array
+    #
+    # @return [Node] Returns +self+.
+    #
+    # @private
     def skip( index, start )
       self
     end

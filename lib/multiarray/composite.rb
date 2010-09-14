@@ -83,10 +83,20 @@ module Hornetseye
         element_type
       end
 
+      # Get list of types of composite type
+      #
+      # @return [Array<Class>] List of types.
+      #
+      # @private
       def typecodes
         [ element_type ] * num_elements
       end
 
+      # Scalar type to this type
+      #
+      # @return [Class] Returns +element_type+.
+      #
+      # @private
       def scalar
         element_type
       end

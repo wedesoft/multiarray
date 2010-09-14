@@ -262,6 +262,11 @@ module Hornetseye
         end
       end
 
+      # Get corresponding maximal integer type
+      #
+      # @return [Class] Corresponding type based on integers.
+      #
+      # @private
       def maxint
         Hornetseye::COMPLEX element_type.maxint
       end

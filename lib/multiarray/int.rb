@@ -60,6 +60,11 @@ module Hornetseye
         0
       end
 
+      # Get corresponding maximal integer type.
+      #
+      # @return [Class] Returns 32 bit integer or self whichever has more bits.
+      #
+      # @private
       def maxint
         Hornetseye::INT [ 32, bits ].max, signed
       end

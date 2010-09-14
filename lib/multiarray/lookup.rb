@@ -82,6 +82,11 @@ module Hornetseye
       end
     end
 
+    # Skip elements of an array
+    #
+    # @return [Node] Lookup object with elements skipped.
+    #
+    # @private
     def skip( index, start )
       if @index == index
         Lookup.new @p.lookup( start, @stride ), @index, @stride

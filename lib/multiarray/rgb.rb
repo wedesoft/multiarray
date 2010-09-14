@@ -229,6 +229,11 @@ module Hornetseye
         end
       end
 
+      # Get corresponding maximum integer type
+      #
+      # @return [Class] Returns RGB type based on integers.
+      #
+      # @private
       def maxint
         Hornetseye::RGB element_type.maxint
       end

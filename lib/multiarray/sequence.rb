@@ -160,6 +160,9 @@ module Hornetseye
         coercion( other ).bool
       end
 
+      # Get corresponding scalar type
+      #
+      # @return [Class] Returns type for array of scalars.
       def scalar
         Hornetseye::Sequence element_type.scalar, num_elements
       end
@@ -168,6 +171,9 @@ module Hornetseye
         Hornetseye::Sequence element_type.float_scalar, num_elements
       end
 
+      # Get corresponding maximum integer type
+      #
+      # @return [Class] Returns type based on maximum integers.
       def maxint
         Hornetseye::Sequence element_type.maxint, num_elements
       end
