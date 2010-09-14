@@ -74,9 +74,9 @@ module Hornetseye
         [ self ]
       end
 
-      # Array type of this term
+      # Get type of result of delayed operation
       #
-      # @return [Class] Resulting array type.
+      # @return [Class] Type of result.
       #
       # @private
       def array_type
@@ -158,9 +158,11 @@ module Hornetseye
         coercion( other ).maxint
       end
 
-      # Get corresponding floating-point datatype
+      # Convert to type based on floating point numbers
       #
-      # @return [Class] Returns +DFLOAT+.
+      # @return [Class] Corresponding type based on floating point numbers.
+      #
+      # @private
       def float
         DFLOAT
       end
@@ -243,9 +245,11 @@ module Hornetseye
 
     end
 
-    # Array type of this term
+    # Get type of result of delayed operation
     #
-    # @return [Class] Resulting array type.
+    # @return [Class] Type of result.
+    #
+    # @private
     def array_type
       self.class.array_type
     end
@@ -400,6 +404,9 @@ module Hornetseye
       'Node()'
     end
 
+    # Duplicate object
+    #
+    # @return [Node] Duplicate of +self+.
     def dup
       retval = array_type.new
       retval[] = self

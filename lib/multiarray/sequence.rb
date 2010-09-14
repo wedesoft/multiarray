@@ -126,6 +126,11 @@ module Hornetseye
         element_type.basetype
       end
 
+      # Get type of result of delayed operation
+      #
+      # @return [Class] Type of result.
+      #
+      # @private
       def array_type
         self
       end
@@ -174,6 +179,11 @@ module Hornetseye
         coercion( other ).byte
       end
 
+      # Convert to type based on floating point numbers
+      #
+      # @return [Class] Corresponding type based on floating point numbers.
+      #
+      # @private
       def float
         Hornetseye::Sequence element_type.float, num_elements
       end

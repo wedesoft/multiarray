@@ -55,6 +55,11 @@ module Hornetseye
       @meta.size = value
     end
 
+    # Get type of result of delayed operation
+    #
+    # @return [Class] Type of result.
+    #
+    # @private
     def array_type
       @meta.array_type
     end

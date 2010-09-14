@@ -134,6 +134,8 @@ module Hornetseye
     # Get value of this native element
     #
     # @return [Object] Value of this native element.
+    #
+    # @private
     def get
       @value
     end
@@ -143,6 +145,8 @@ module Hornetseye
     # @param [Object] value New value for native element.
     #
     # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       if @value.respond_to? :store
         @value.store value.simplify.get
@@ -164,6 +168,11 @@ module Hornetseye
       ptr.save self
     end
 
+    # Get array with components of this value
+    #
+    # @return [Array<Object>] Get array with value of this object as single element.
+    #
+    # @private
     def values
       [ @value ]
     end

@@ -99,6 +99,11 @@ module Hornetseye
         target.basetype
       end
 
+      # Get type of result of delayed operation
+      #
+      # @return [Class] Type of result.
+      #
+      # @private
       def array_type
         target
       end
@@ -135,6 +140,13 @@ module Hornetseye
       "#{self.class.to_s}(#{@value.to_s})"
     end
 
+    # Store new value in this pointer
+    #
+    # @param [Object] value New value for this pointer object.
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       result = value.simplify
       self.class.target.new( result.get ).write @value
@@ -183,6 +195,11 @@ module Hornetseye
       end
     end
 
+    # Get array with components of this value
+    #
+    # @return [Array<Object>] Get array with value of this object as single element.
+    #
+    # @private
     def values
       [ @value ]
     end

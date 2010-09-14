@@ -36,6 +36,11 @@ module Hornetseye
       "Lambda(#{@index.descriptor( hash )},#{@term.descriptor( hash )})"
     end
 
+    # Get type of result of delayed operation
+    #
+    # @return [Class] Type of result.
+    #
+    # @private
     def array_type
       Hornetseye::Sequence @term.array_type, @index.size.get
     end
@@ -64,6 +69,15 @@ module Hornetseye
       Lambda.new subst_var, @term.subst( @index => subst_var ).subst( hash )
     end
 
+    # Store new value in this object
+    #
+    # Element-wise copies the values from +value+ and stores them in this object.
+    #
+    # @param [Object] value New value(s).
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       shape.last.times do |i|
         node = value.dimension == 0 ? value : value.element( INT.new( i ) )

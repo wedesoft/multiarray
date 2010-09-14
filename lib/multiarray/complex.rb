@@ -60,6 +60,13 @@ module Hornetseye
       "InternalComplex(#{@real.to_s},#{@imag.to_s})"
     end
 
+    # Store other value in this object
+    #
+    # @param [Object] value New value for this object.
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       @real, @imag = value.real, value.imag
     end
@@ -204,6 +211,9 @@ module Hornetseye
 
     class << self
 
+      # Set base class attribute
+      #
+      # Sets number of elements to two.
       def inherited( subclass )
         subclass.num_elements = 2
       end
@@ -256,6 +266,11 @@ module Hornetseye
         Hornetseye::COMPLEX element_type.maxint
       end
 
+      # Convert to type based on floating point numbers
+      #
+      # @return [Class] Corresponding type based on floating point numbers.
+      #
+      # @private
       def float
         Hornetseye::COMPLEX element_type.float
       end
@@ -337,6 +352,9 @@ module Hornetseye
       end
     end
 
+    # Duplicate object
+    #
+    # @return [COMPLEX_] Duplicate of +self+.
     def dup
       if Thread.current[ :function ]
         real = Thread.current[ :function ].variable self.class.element_type, 'v'
@@ -349,6 +367,13 @@ module Hornetseye
       end
     end
 
+    # Store new value in this object
+    #
+    # @param [Object] value New value for this object.
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       value = value.simplify
       if @value.real.respond_to? :store
@@ -364,6 +389,12 @@ module Hornetseye
       value
     end
 
+    # Get array with components of this value
+    #
+    # @return [Array<Object>] Returns array with real and imaginary component as
+    #         elements.
+    #
+    # @private
     def values
       [ @value.real, @value.imag ]
     end

@@ -108,6 +108,13 @@ module Hornetseye
       "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
     end
 
+    # Store new value in this RGB object
+    #
+    # @param [Object] value New value for this object.
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       @r, @g, @b = value.r, value.g, value.b
     end
@@ -172,6 +179,9 @@ module Hornetseye
 
     class << self
 
+      # Set base class attribute
+      #
+      # Sets number of elements to three.
       def inherited( subclass )
         subclass.num_elements = 3
       end
@@ -223,6 +233,11 @@ module Hornetseye
         Hornetseye::RGB element_type.maxint
       end
 
+      # Convert to type based on floating point numbers
+      #
+      # @return [Class] Corresponding type based on floating point numbers.
+      #
+      # @private
       def float
         Hornetseye::RGB element_type.float
       end
@@ -305,6 +320,9 @@ module Hornetseye
       end
     end
 
+    # Duplicate object
+    #
+    # @return [RGB_] Duplicate of +self+.
     def dup
       if Thread.current[ :function ]
         r = Thread.current[ :function ].variable self.class.element_type, 'v'
@@ -319,6 +337,13 @@ module Hornetseye
       end
     end
 
+    # Store new value in this object
+    #
+    # @param [Object] value New value for this object.
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       value = value.simplify
       if @value.r.respond_to? :store
@@ -339,6 +364,11 @@ module Hornetseye
       value
     end
 
+    # Get values of composite number
+    #
+    # @return [Array<Object>] Returns array with red, green, and blue component.
+    #
+    # @private
     def values
       [ @value.r, @value.g, @value.b ]
     end

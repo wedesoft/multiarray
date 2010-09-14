@@ -97,6 +97,11 @@ module Hornetseye
         self
       end
 
+      # Convert to type based on floating point numbers
+      #
+      # @return [Class] Corresponding type based on floating point numbers.
+      #
+      # @private
       def float
         OBJECT
       end

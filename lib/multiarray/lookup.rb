@@ -35,6 +35,11 @@ module Hornetseye
         "#{@stride.descriptor( hash )})"
     end
 
+    # Get type of result of delayed operation
+    #
+    # @return [Class] Type of result.
+    #
+    # @private
     def array_type
       @p.array_type
     end

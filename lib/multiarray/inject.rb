@@ -48,6 +48,11 @@ module Hornetseye
          "#{@index.descriptor( hash )},#{@block.descriptor( hash )})"
     end
 
+    # Get type of result of delayed operation
+    #
+    # @return [Class] Type of result.
+    #
+    # @private
     def array_type
       @value.to_type( @block.typecode ).array_type
     end

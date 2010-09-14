@@ -80,9 +80,9 @@ module Hornetseye
         "(#{@values.collect { |value| value.descriptor( hash ) }.join ','})"
     end
 
-    # Array type of this term
+    # Get type of result of delayed operation
     #
-    # @return [Class] Resulting array type.
+    # @return [Class] Type of result.
     #
     # @private
     def array_type

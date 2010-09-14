@@ -106,6 +106,11 @@ module Hornetseye
       @descriptor
     end
 
+    # Store new value in this object
+    #
+    # @param [Object] value The new value.
+    #
+    # @return [Object] Returns +value+.
     def store( value )
       @function << "#{@function.indent}#{self} = #{value};\n"
       value
