@@ -45,6 +45,11 @@ module Hornetseye
       Hornetseye::Sequence @term.array_type, @index.size.get
     end
 
+    # Get variables contained in this term
+    #
+    # @return [Set] Returns list of variables.
+    #
+    # @private
     def variables
       @term.variables - @index.variables + @index.meta.variables
     end
@@ -64,6 +69,15 @@ module Hornetseye
       return vars + meta_vars, values + meta_values, Lambda.new( var, term )
     end
 
+    # Substitute variables
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       subst_var = @index.subst hash
       Lambda.new subst_var, @term.subst( @index => subst_var ).subst( hash )
@@ -165,6 +179,11 @@ module Hornetseye
       Lambda.new @index, @term.decompose
     end
 
+    # Check whether this term is compilable
+    #
+    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    #
+    # @private
     def compilable?
       @term.compilable?
     end
