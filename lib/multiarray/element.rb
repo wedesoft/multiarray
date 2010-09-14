@@ -38,9 +38,11 @@ module Hornetseye
 
       # Type coercion for native elements
       #
-      # @param [Node] other Other native datatype to coerce with.
+      # @param [Class] other Other native datatype to coerce with.
       #
-      # @return [Array<Node>] Result of coercion.
+      # @return [Class] Result of coercion.
+      #
+      # @private
       def coercion( other )
         if self == other
           self

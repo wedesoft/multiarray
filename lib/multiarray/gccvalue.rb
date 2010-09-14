@@ -21,6 +21,15 @@ module Hornetseye
 
     class << self
 
+      # Check compatibility of other type.
+      #
+      # This method checks whether binary operations with the other Ruby object can
+      # be performed without requiring coercion.
+      #
+      # @param [Object] value The other Ruby object.
+      #
+      # @return [FalseClass,TrueClass] Returns +false+ if Ruby object requires
+      #         coercion.
       def generic?( value )
         value.is_a?( GCCValue ) or value.is_a?( Fixnum ) or
           value.is_a?( Float )

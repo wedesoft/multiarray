@@ -51,6 +51,11 @@ module Hornetseye
         target.memory.new target.storage_size
       end
 
+      # Test equality of classes
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < Pointer_ and
           target == other.target

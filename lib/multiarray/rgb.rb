@@ -17,20 +17,40 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Representation for colour pixel
   class RGB
 
     class << self
 
+      # Check compatibility of other type
+      #
+      # This method checks whether binary operations with the other Ruby object can
+      # be performed without requiring coercion.
+      #
+      # @param [Object] value The other Ruby object.
+      #
+      # @return [FalseClass,TrueClass] Returns +false+ if Ruby object requires
+      #         coercion.
       def generic?( value )
         value.is_a?( Numeric ) or value.is_a?( GCCValue )
       end
 
+      # Defines a unary operation
+      #
+      # This method uses meta-programming to define channel-wise unary operations.
+      #
+      # @param [Symbol,String] op Operation to define channel-wise operation.
       def define_unary_op( op )
         define_method( op ) do
           RGB.new r.send( op ), g.send( op ), b.send( op )
         end
       end
 
+      # Defines a binary operation
+      #
+      # This method uses meta-programming to define channel-wise binary operations.
+      #
+      # @param [Symbol,String] op Operation to define channel-wise operation.
       def define_binary_op( op )
         define_method( op ) do |other|
           if other.is_a? RGB
@@ -48,16 +68,42 @@ module Hornetseye
 
     end
 
-    attr_accessor :r, :g, :b
+    # Access red channel
+    #
+    # @return [Object] Value of red channel.
+    attr_accessor :r
 
+    # Access green channel
+    #
+    # @return [Object] Value of green channel.
+    attr_accessor :g
+
+    # Access blue channel
+    #
+    # @return [Object] Value of blue channel.
+    attr_accessor :b
+
+    # Constructor
+    #
+    # Create new RGB object.
+    #
+    # @param [Object] r Red colour component.
+    # @param [Object] g Green colour component.
+    # @param [Object] b Blue colour component.
     def initialize( r, g, b )
       @r, @g, @b = r, g, b
     end
 
+    # Return string with information about this object.
+    #
+    # @return [String] Returns a string (e.g. +"RGB(1,2,3)"+).
     def inspect
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
+    # Return string with information about this object.
+    #
+    # @return [String] Returns a string (e.g. +"RGB(1,2,3)"+).
     def to_s
       "RGB(#{@r.to_s},#{@g.to_s},#{@b.to_s})"
     end
@@ -159,6 +205,13 @@ module Hornetseye
         Hornetseye::RGB element_type.float
       end
 
+      # Compute balanced type for binary operation
+      #
+      # @param [Class] other Other native datatype to coerce with.
+      #
+      # @return [Class] Result of coercion.
+      #
+      # @private
       def coercion( other )
         if other < RGB_
           Hornetseye::RGB element_type.coercion( other.element_type )
@@ -169,7 +222,7 @@ module Hornetseye
         end
       end
 
-      # Compute balanced type for binary operation
+      # Type coercion for native elements
       #
       # @param [Class] other Other type to coerce with.
       #
@@ -186,6 +239,11 @@ module Hornetseye
         end
       end
 
+      # Test equality of classes
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < RGB_ and
           element_type == other.element_type

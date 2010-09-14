@@ -213,12 +213,24 @@ module Hornetseye
         end
       end
 
+      # Test equality of classes
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < Sequence_ and
           other.element_type == element_type and
           other.num_elements == num_elements
       end
 
+      # Type coercion for native elements
+      #
+      # @param [Class] other Other native datatype to coerce with.
+      #
+      # @return [Class] Result of coercion.
+      #
+      # @private
       def coercion( other )
         if other < Sequence_
           Hornetseye::Sequence element_type.coercion( other.element_type ),

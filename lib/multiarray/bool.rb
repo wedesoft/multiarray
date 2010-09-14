@@ -46,7 +46,7 @@ module Hornetseye
       #
       # @see Malloc#load
       #
-       # @return [BOOL] Result of fetch operation.
+      # @return [BOOL] Result of fetch operation.
       #
       # @private
       def fetch( ptr )

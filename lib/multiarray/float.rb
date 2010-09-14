@@ -35,6 +35,13 @@ module Hornetseye
         0.0
       end
 
+      # Compute balanced type for binary operation
+      #
+      # @param [Class] other Other native datatype to coerce with.
+      #
+      # @return [Class] Result of coercion.
+      #
+      # @private
       def coercion( other )
         if other < FLOAT_
           Hornetseye::FLOAT( ( double or other.double ) )
@@ -45,7 +52,7 @@ module Hornetseye
         end
       end
 
-      # Compute balanced type for binary operation
+      # Type coercion for native elements
       #
       # @param [Class] other Other type to coerce with.
       #
@@ -70,6 +77,9 @@ module Hornetseye
         double ? 'd' : 'f'
       end
 
+      # Return string with information about this class.
+      #
+      # @return [String] Returns a string (e.g. +"SFLOAT"+).
       def inspect
         "#{ double ? 'D' : 'S' }FLOAT"
       end
@@ -78,6 +88,11 @@ module Hornetseye
         inspect
       end
 
+      # Test equality of classes
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < FLOAT_ and double == other.double
       end

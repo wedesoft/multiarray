@@ -64,6 +64,13 @@ module Hornetseye
         Hornetseye::INT [ 32, bits ].max, signed
       end
 
+      # Compute balanced type for binary operation
+      #
+      # @param [Class] other Other native datatype to coerce with.
+      #
+      # @return [Class] Result of coercion.
+      #
+      # @private
       def coercion( other )
         if other < INT_
           Hornetseye::INT [ bits, other.bits ].max, ( signed or other.signed )
@@ -72,7 +79,7 @@ module Hornetseye
         end
       end
 
-      # Compute balanced type for binary operation
+      # Type coercion for native elements
       #
       # @param [Class] other Other type to coerce with.
       #
@@ -137,11 +144,11 @@ module Hornetseye
         end
       end
 
-      # Comparison operator
+      # Test equality of classes
       #
-      # @param [Object] other Other object to compare with.
+      # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Result of comparison.
+      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < INT_ and
           bits == other.bits and signed == other.signed

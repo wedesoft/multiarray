@@ -21,6 +21,15 @@ module Hornetseye
 
     class << self
 
+      # Check compatibility of other type.
+      #
+      # This method checks whether binary operations with the other Ruby object can
+      # be performed without requiring coercion.
+      #
+      # @param [Object] value The other Ruby object.
+      #
+      # @return [FalseClass,TrueClass] Returns +false+ if Ruby object requires
+      #         coercion.
       def generic?( value )
         value.is_a?( Numeric ) or value.is_a?( GCCValue )
       end
@@ -37,10 +46,16 @@ module Hornetseye
       @real, @imag = real, imag
     end
 
+    # Return string with information about this object.
+    #
+    # @return [String] Returns a string (e.g. +"InternalComplex(1,2)"+).
     def inspect
       "InternalComplex(#{@real.inspect},#{@imag.inspect})"
     end
 
+    # Return string with information about this object.
+    #
+    # @return [String] Returns a string (e.g. +"InternalComplex(1,2)"+).
     def to_s
       "InternalComplex(#{@real.to_s},#{@imag.to_s})"
     end
@@ -157,6 +172,12 @@ module Hornetseye
       @real * @real + @imag * @imag
     end
 
+    # Test on equality
+    #
+    # @param [Object] other Object to compare with.
+    #
+    # @return [FalseClass,TrueClass] Returns boolean indicating whether objects are
+    #         equal or not.
     def ==( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         @real.eq( other.real ).and( @imag.eq( other.imag ) )
@@ -215,6 +236,13 @@ module Hornetseye
         Hornetseye::COMPLEX element_type.float
       end
 
+      # Compute balanced type for binary operation
+      #
+      # @param [Class] other Other native datatype to coerce with.
+      #
+      # @return [Class] Result of coercion.
+      #
+      # @private
       def coercion( other )
         if other < COMPLEX_
           Hornetseye::COMPLEX element_type.coercion( other.element_type )
@@ -225,7 +253,7 @@ module Hornetseye
         end
       end
 
-      # Compute balanced type for binary operation
+      # Type coercion for native elements
       #
       # @param [Class] other Other type to coerce with.
       #
@@ -242,6 +270,11 @@ module Hornetseye
         end        
       end
 
+      # Test equality of classes
+      #
+      # @param [Object] other Object to compare with.
+      #
+      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < COMPLEX_ and
           element_type == other.element_type

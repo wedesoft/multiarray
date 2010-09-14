@@ -73,7 +73,7 @@ module Hornetseye
       #
       # @param [Class] other Other type to coerce with.
       #
-      # @return [Array<Class>] Result of coercion.
+      # @return [Class] Result of coercion.
       #
       # @private
       def coercion( other )
@@ -84,7 +84,7 @@ module Hornetseye
         end
       end
 
-      # Coerce with other object
+      # Type coercion for native elements
       #
       # @param [Node,Object] other Other object.
       #
