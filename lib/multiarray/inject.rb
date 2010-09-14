@@ -21,6 +21,11 @@ module Hornetseye
 
     class << self
 
+      # Check whether objects of this class are finalised computations
+      #
+      # @return [FalseClass,TrueClass] Returns +false+.
+      #
+      # @private
       def finalised?
         false
       end
@@ -84,6 +89,8 @@ module Hornetseye
     # @param [Integer,Node] i Index of desired element.
     #
     # @return [Node,Object] Element of injection.
+    #
+    # @private
     def element( i )
       Inject.new @value.element( i ), @index, @initial, @block, @var1, @var2
     end

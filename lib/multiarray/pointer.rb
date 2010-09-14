@@ -117,6 +117,11 @@ module Hornetseye
         self
       end
 
+      # Check whether objects of this class are finalised computations
+      #
+      # @return [FalseClass,TrueClass] Returns +false+.
+      #
+      # @private
       def finalised?
         false
       end

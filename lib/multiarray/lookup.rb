@@ -84,6 +84,9 @@ module Hornetseye
 
     # Skip elements of an array
     #
+    # @param [Variable] index Variable identifying index of array.
+    # @param [Node] start Wrapped integer with number of elements to skip.
+    #
     # @return [Node] Lookup object with elements skipped.
     #
     # @private
@@ -95,10 +98,25 @@ module Hornetseye
       end
     end
 
+    # Get element if lookup term
+    #
+    # @param [Integer,Node] i Index of desired element.
+    #
+    # @return [Node,Object] Element of lookup term.
+    #
+    # @private
     def element( i )
       Lookup.new @p.element( i ), @index, @stride
     end
 
+    # Extract array view with part of array
+    #
+    # @param [Integer,Node] start Number of elements to skip.
+    # @param [Integer,Node] length Size of array view.
+    #
+    # @return [Node] Array view with the specified elements.
+    #
+    # @private
     def slice( start, length )
       Lookup.new @p.slice( start, length ), @index, @stride
     end

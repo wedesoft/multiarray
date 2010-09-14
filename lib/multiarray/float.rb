@@ -23,10 +23,20 @@ module Hornetseye
 
       attr_accessor :double
 
+      # Memory type required to store elements of this type
+      #
+      # @return [Class] Returns +Malloc+.
+      #
+      # @private
       def memory
         Malloc
       end
 
+      # Get storage size to store an element of this type
+      #
+      # @return [Integer] Returns +4+ or +8+.
+      #
+      # @private
       def storage_size
         double ? 8 : 4
       end
@@ -83,6 +93,11 @@ module Hornetseye
         self
       end
 
+      # Directive for packing/unpacking elements of this type
+      #
+      # @return [String] Returns 'f' or 'd'.
+      #
+      # @private
       def directive
         double ? 'd' : 'f'
       end

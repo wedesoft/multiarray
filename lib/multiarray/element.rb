@@ -129,6 +129,9 @@ module Hornetseye
 
     # Skip elements of an array
     #
+    # @param [Variable] index Variable identifying index of array.
+    # @param [Node] start Wrapped integer with number of elements to skip.
+    #
     # @return [Node] Returns +self+.
     #
     # @private

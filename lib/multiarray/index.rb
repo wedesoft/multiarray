@@ -72,10 +72,24 @@ module Hornetseye
         end
       end
 
+      # Substitute variables
+      #
+      # Substitute the variables with the values given in the hash.
+      #
+      # @param [Hash] hash Substitutions to apply.
+      #
+      # @return [Class] Class with substitutions applied.
+      #
+      # @private
       def subst( hash )
         Hornetseye::INDEX size.subst( hash )
       end
 
+      # Get variables contained in this class
+      #
+      # @return [Set] Returns set of variables.
+      #
+      # @private
       def variables
         size.variables
       end

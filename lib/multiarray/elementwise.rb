@@ -54,6 +54,11 @@ module Hornetseye
         inspect
       end
 
+      # Check whether objects of this class are finalised computations
+      #
+      # @return [FalseClass,TrueClass] Returns +false+.
+      #
+      # @private
       def finalised?
         false
       end
@@ -141,8 +146,13 @@ module Hornetseye
 
     # Skip elements of an array
     #
+    # @param [Variable] index Variable identifying index of array.
+    # @param [Node] start Wrapped integer with number of elements to skip.
+    #
     # @return [Node] Returns element-wise operation with elements skipped on each
     #         operand.
+    #
+    # @private
     def skip( index, start )
       skipped = *@values.collect { |value| value.skip( index, start ) }
       self.class.new( *skipped ).demand
@@ -153,6 +163,8 @@ module Hornetseye
     # @param [Integer,Node] i Index of desired element.
     #
     # @return [Node,Object] Element of unary operation.
+    #
+    # @private
     def element( i )
       values = @values.collect do |value|
         value.dimension == 0 ? value : value.element( i )
@@ -160,6 +172,14 @@ module Hornetseye
       self.class.new( *values ).demand
     end
 
+    # Extract array view with part of array
+    #
+    # @param [Integer,Node] start Number of elements to skip.
+    # @param [Integer,Node] length Size of array view.
+    #
+    # @return [Node] Array view with the specified elements.
+    #
+    # @private
     def slice( start, length )
       values = @values.collect do |value|
         value.dimension == 0 ? value : value.slice( start, length )

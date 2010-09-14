@@ -104,6 +104,9 @@ module Hornetseye
 
     # Skip elements of an array
     #
+    # @param [Variable] index Variable identifying index of array.
+    # @param [Node] start Wrapped integer with number of elements to skip.
+    #
     # @return [Node] Return lambda expression with elements skipped.
     #
     # @private
@@ -112,11 +115,14 @@ module Hornetseye
     end
 
     # Get element of this term
+    #
     # Pass +i+ as argument to this lambda object.
     #
     # @param [Integer,Node] i Index of desired element.
     #
     # @return [Node,Object] Result of inserting +i+ for lambda argument.
+    #
+    # @private
     def element( i )
       unless i.is_a? Node
         unless ( 0 ... shape.last ).member? i
@@ -128,6 +134,14 @@ module Hornetseye
       @term.subst @index => i
     end
 
+    # Extract array view with part of array
+    #
+    # @param [Integer,Node] start Number of elements to skip.
+    # @param [Integer,Node] length Size of array view.
+    #
+    # @return [Node] Array view with the specified elements.
+    #
+    # @private
     def slice( start, length )
       unless start.is_a?( Node ) or length.is_a?( Node )
         if start < 0 or start + length > shape.last
@@ -155,6 +169,12 @@ module Hornetseye
       @term.compilable?
     end
 
+    # Check whether this object is a finalised computation
+    #
+    # @return [FalseClass,TrueClass] Returns boolean indicating whether the lambda
+    #         term is finalised or not.
+    #
+    # @private
     def finalised?
       @term.finalised?
     end

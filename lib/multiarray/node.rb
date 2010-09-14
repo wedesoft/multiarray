@@ -257,6 +257,11 @@ module Hornetseye
         true
       end
 
+      # Check whether objects of this class are finalised computations
+      #
+      # @return [FalseClass,TrueClass] Returns +true+.
+      #
+      # @private
       def finalised?
         true
       end
@@ -453,6 +458,11 @@ module Hornetseye
       typecode.compilable?
     end
 
+    # Check whether this object is a finalised computation
+    #
+    # @return [FalseClass,TrueClass] Returns +self.class.finalised?+.
+    #
+    # @private
     def finalised?
       self.class.finalised?
     end
