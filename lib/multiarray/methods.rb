@@ -19,6 +19,9 @@ module Hornetseye
 
   module Methods
 
+    # Extend some methods in the specified module.
+    #
+    # @param [Module] mod The mathematics module.
     def Methods.included( mod )
       define_unary_method  mod, :sqrt , :float
       define_unary_method  mod, :log  , :float
@@ -36,6 +39,11 @@ module Hornetseye
       define_binary_method mod, :hypot, :floating
     end
 
+    # Extend unary method with capability to handle arrays.
+    #
+    # @param [Module] mod The mathematics module.
+    # @param [Symbol,String] op The unary method to extend.
+    # @param [Symbol,String] conversion A method for doing the type conversion.
     def define_unary_method( mod, op, conversion = :contiguous )
       mod.module_eval do
         define_method( "#{op}_with_hornetseye" ) do |a|
@@ -61,6 +69,11 @@ module Hornetseye
 
     module_function :define_unary_method
 
+    # Extend binary method with capability to handle arrays.
+    #
+    # @param [Module] mod The mathematics module.
+    # @param [Symbol,String] op The binary method to extend.
+    # @param [Symbol,String] conversion A method for doing the type balancing.
     def define_binary_method( mod, op, coercion = :coercion )
       mod.module_eval do
         define_method( "#{op}_with_hornetseye" ) do |a,b|

@@ -452,6 +452,11 @@ class Numeric
     self
   end
 
+  # Get larger number of two numbers
+  #
+  # @param [Numeric] other The other number.
+  #
+  # @return [Numeric] The larger number of the two.
   def major( other )
     if other.is_a? Numeric
       ( self >= other ).conditional self, other
@@ -461,6 +466,11 @@ class Numeric
     end
   end
 
+  # Get smaller number of two numbers
+  #
+  # @param [Numeric] other The other number.
+  #
+  # @return [Numeric] The smaller number of the two.
   def minor( other )
     if other.is_a? Numeric
       ( self <= other ).conditional self, other

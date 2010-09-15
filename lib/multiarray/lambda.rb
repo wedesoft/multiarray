@@ -181,7 +181,7 @@ module Hornetseye
 
     # Check whether this term is compilable
     #
-    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    # @return [Boolean] Returns whether this term is compilable.
     #
     # @private
     def compilable?
@@ -190,7 +190,7 @@ module Hornetseye
 
     # Check whether this object is a finalised computation
     #
-    # @return [FalseClass,TrueClass] Returns boolean indicating whether the lambda
+    # @return [Boolean] Returns boolean indicating whether the lambda
     #         term is finalised or not.
     #
     # @private

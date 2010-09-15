@@ -28,6 +28,10 @@ module Hornetseye
       @meta = meta
     end
 
+    # Display string with information about this object
+    #
+    # @return [String] String with information about this object (e.g.
+    #         'Variable(INT)').
     def inspect
       "Variable(#{@meta.inspect})"
     end
@@ -47,10 +51,18 @@ module Hornetseye
       end
     end
 
+    # Get array size for index variable
+    #
+    # @return [Node] Get the dimension of the array if this is an index variable.
     def size
       @meta.size
     end
 
+    # Set array size for index variable
+    #
+    # Set the dimension of the array assuming this is an index variable.
+    #
+    # @param [Node] value The new size.
     def size=( value )
       @meta.size = value
     end

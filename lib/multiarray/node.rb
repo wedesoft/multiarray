@@ -118,6 +118,9 @@ module Hornetseye
         1
       end
 
+      # Check whether the type is an empty array
+      #
+      # @return [Boolean] Returns whether this type represents an empty array.
       def empty?
         size == 0
       end
@@ -172,6 +175,9 @@ module Hornetseye
         self
       end
 
+      # Get maximum integer based datatype for binary operation
+      #
+      # @return [Class] Returns type based on maximum integer.
       def coercion_maxint( other )
         coercion( other ).maxint
       end
@@ -185,14 +191,27 @@ module Hornetseye
         DFLOAT
       end
 
+      # Get floating point based datatype for binary operation
+      #
+      # @return [Class] Returns type based on floating point numbers.
       def floating( other )
         other.coercion( self ).float
       end
 
+      # Convert to type based on bytes
+      #
+      # @return [Class] Corresponding type based on bytes.
+      #
+      # @private
       def byte
         BYTE
       end
 
+      # Get byte-based datatype for binary operation
+      #
+      # @param [Class] other The other type.
+      #
+      # @return [Class] Returns type based on bytes.
       def coercion_byte( other )
         coercion( other ).byte
       end
@@ -202,6 +221,11 @@ module Hornetseye
         Hornetseye::MultiArray( t.typecode, *shape ).coercion t
       end
 
+      # Convert to different element type
+      #
+      # @param [Class] dest Element type to convert to.
+      #
+      # @return [Class] Type based on the different element type.
       def to_type( dest )
         dest
       end
@@ -217,7 +241,7 @@ module Hornetseye
 
       # Category operator
       #
-      # @return [FalseClass,TrueClass] Check for equality or kind.
+      # @return [Boolean] Check for equality or kind.
       def ===( other )
         ( other == self ) or ( other.is_a? self ) or ( other.class == self )
       end
@@ -250,7 +274,7 @@ module Hornetseye
 
       # Check whether this term is compilable
       #
-      # @return [FalseClass,TrueClass] Returns +true+.
+      # @return [Boolean] Returns +true+.
       #
       # @private
       def compilable?
@@ -259,7 +283,7 @@ module Hornetseye
 
       # Check whether objects of this class are finalised computations
       #
-      # @return [FalseClass,TrueClass] Returns +true+.
+      # @return [Boolean] Returns +true+.
       #
       # @private
       def finalised?
@@ -309,6 +333,9 @@ module Hornetseye
       array_type.size
     end
 
+    # Check whether this object is an empty array.
+    #
+    # @return [Boolean] Returns whether this object is an empty array.
     def empty?
       array_type.empty?
     end
@@ -451,7 +478,7 @@ module Hornetseye
 
     # Check whether this term is compilable
     #
-    # @return [FalseClass,TrueClass] Returns +typecode.compilable?+.
+    # @return [Boolean] Returns +typecode.compilable?+.
     #
     # @private
     def compilable?
@@ -460,7 +487,7 @@ module Hornetseye
 
     # Check whether this object is a finalised computation
     #
-    # @return [FalseClass,TrueClass] Returns +self.class.finalised?+.
+    # @return [Boolean] Returns +self.class.finalised?+.
     #
     # @private
     def finalised?

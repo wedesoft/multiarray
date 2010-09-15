@@ -199,7 +199,7 @@ module Hornetseye
 
     # Equality operator
     #
-    # @return [FalseClass,TrueClass] Returns result of comparison.
+    # @return [Boolean] Returns result of comparison.
     def eq_with_multiarray( other )
       if other.is_a? Node
         if variables.empty?

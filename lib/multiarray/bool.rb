@@ -115,7 +115,7 @@ module Hornetseye
       # Method for matching elements of type BOOL
       #
       # @param [Array<Object>] *values Values to find matching native element
-      # type for.
+      #        type for.
       #
       # @return [Class] Native type fitting all values.
       #
@@ -140,7 +140,7 @@ module Hornetseye
   #
   # The method calls +BOOL.new+.
   #
-  # @param [FalseClass,TrueClass] value Boolean value.
+  # @param [Boolean] value Boolean value.
   #
   # @return [BOOL] The wrapped boolean value.
   #

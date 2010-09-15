@@ -243,7 +243,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
+      # @return [Boolean] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < Sequence_ and
           other.element_type == element_type and
@@ -301,8 +301,8 @@ module Hornetseye
 
       # Method for matching elements of type Sequence_
       #
-      # 'param [Array<Object>] *values Values to find matching native element
-      # type for.
+      # @param [Array<Object>] *values Values to find matching native element
+      #        type for.
       #
       # @return [Class] Native type fitting all values.
       #
@@ -323,6 +323,14 @@ module Hornetseye
         end
       end
 
+      # Perform type alignment
+      #
+      # Align this type to another. This is used to prefer single-precision
+      # floating point in certain cases.
+      #
+      # @param [Class] context Other type to align with.
+      #
+      # @private
       def align( context )
         if self < Sequence_
           Hornetseye::Sequence element_type.align( context ), num_elements

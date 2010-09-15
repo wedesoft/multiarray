@@ -29,7 +29,7 @@ module Hornetseye
 
       # Boolean indicating whether this is a signed integer or not
       #
-      # @return [FalseClass,TrueClass] Boolean indicating whether this is a
+      # @return [Boolean] Boolean indicating whether this is a
       # signed integer or not.
       attr_accessor :signed
 
@@ -154,7 +154,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
+      # @return [Boolean] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < INT_ and
           bits == other.bits and signed == other.signed
@@ -173,7 +173,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      # @return [Boolean] Returns +true+ if objects are equal.
       #
       # @private
       def eql?( other )
@@ -201,8 +201,8 @@ module Hornetseye
 
       # Method for matching elements of type INT_
       #
-      # 'param [Array<Object>] *values Values to find matching native element
-      # type for.
+      # @param [Array<Object>] *values Values to find matching native element
+      #        type for.
       #
       # @return [Class] Native type fitting all values.
       #
@@ -259,7 +259,7 @@ module Hornetseye
   #   Create a class deriving from +INT_+. The aprameters +bits+ and +signed+
   #   are assigned to the corresponding attributes of the resulting class.
   #   @param [Integer] bits Number of bits of native integer.
-  #   @param [FalseClass,TrueClass] signed Specify +UNSIGNED+ or +SIGNED+ here.
+  #   @param [Boolean] signed Specify +UNSIGNED+ or +SIGNED+ here.
   #   @return [Class] A class deriving from +INT_+.
   #
   # @overload INT( value )

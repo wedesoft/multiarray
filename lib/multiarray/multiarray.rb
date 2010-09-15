@@ -17,10 +17,15 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # This class provides methods for initialising multi-dimensional arrays
   class MultiArray
 
     class << self
 
+      # Create new multi-dimensional array
+      #
+      # @param [Class] typecode The type of elements
+      # @param [Array<Integer>] *shape The shape of the multi-dimensional array.
       def new( typecode, *shape )
         options = shape.last.is_a?( Hash ) ? shape.pop : {}
         count = options[ :count ] || 1
@@ -37,6 +42,15 @@ module Hornetseye
         end
       end
 
+      # Convert Ruby array to uniform multi-dimensional array
+      #
+      # Type matching is used to find a common element type. Furthermore the required
+      # shape of the array is determined. Finally the elements are coopied to the
+      # resulting array.
+      #
+      # @param [Array<Object>] *args
+      #
+      # @return [Node] Uniform multi-dimensional array.
       def []( *args )
         target = Node.fit args
         target[ *args ]
@@ -46,6 +60,12 @@ module Hornetseye
 
   end
 
+  # Create multi-dimensional array type
+  #
+  # @param [Class] element_type Type of elements.
+  # @param [Array<Integer>] *shape Shape of array type.
+  #
+  # @return [Class] The array type.
   def MultiArray( element_type, *shape )
     if shape.empty?
       element_type

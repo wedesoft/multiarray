@@ -17,20 +17,33 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  # Class for arrays and array views for native values.
+  # Malloc is extended with a few methods
   #
   # @see List
   class Malloc
 
+    # Read typed value
+    #
+    # @param [Class] typecode Load typed value from memory.
+    #
+    # @return [Node] Value from memory.
     def load( typecode )
       read( typecode.storage_size ).unpack( typecode.directive )
     end
 
+    # Write typed value to memory
+    #
+    # @param [Node] value Value to write to memory.
+    #
+    # @return [Node] Returns +value+.
     def save( value )
       write value.values.pack( value.typecode.directive )
       value
     end
 
+    # Display information about this object.
+    #
+    # @return [String] String with information about this object.
     def to_s
       inspect
     end

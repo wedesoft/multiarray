@@ -56,7 +56,7 @@ module Hornetseye
 
       # Check whether objects of this class are finalised computations
       #
-      # @return [FalseClass,TrueClass] Returns +false+.
+      # @return [Boolean] Returns +false+.
       #
       # @private
       def finalised?
@@ -199,7 +199,7 @@ module Hornetseye
 
     # Check whether this term is compilable
     #
-    # @return [FalseClass,TrueClass] Returns whether this term is compilable.
+    # @return [Boolean] Returns whether this term is compilable.
     #
     # @private
     def compilable?

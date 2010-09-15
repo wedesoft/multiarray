@@ -40,8 +40,11 @@ module Hornetseye
       "List(#{@array.size - @offset})"
     end
 
+    # Display information about this object
+    #
+    # @return [String] String with information about this object (e.g. "List(5)").
     def to_s
-      "List(#{@array[ @offset .. -1 ]})"
+      inspect
     end
 
     # Create array view with specified offset
@@ -55,7 +58,7 @@ module Hornetseye
 
     # Retrieve value of specified typecode
     #
-    # @param [Node] typecode The type of the value.
+    # @param [Class] typecode The type of the value.
     def load( typecode )
       @array[ @offset ]
     end

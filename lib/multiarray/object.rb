@@ -93,6 +93,9 @@ module Hornetseye
         return self, self
       end
 
+      # Get corresponding boolean-based datatype
+      #
+      # @return [Class] Returns +self+.
       def bool
         self
       end
@@ -108,7 +111,7 @@ module Hornetseye
 
       # Check whether this term is compilable
       #
-      # @return [FalseClass,TrueClass] Returns +false+.
+      # @return [Boolean] Returns +false+.
       #
       # @private
       def compilable?
@@ -127,7 +130,7 @@ module Hornetseye
       # Method for matching elements of type OBJECT
       #
       # @param [Array<Object>] *values Values to find matching native element
-      # type for.
+      #        type for.
       #
       # @return [Class] Native type fitting all values.
       #
@@ -138,6 +141,14 @@ module Hornetseye
         OBJECT
       end
 
+      # Perform type alignment
+      #
+      # Align this type to another. This is used to prefer single-precision
+      # floating point in certain cases.
+      #
+      # @param [Class] context Other type to align with.
+      #
+      # @private
       def align( context )
         self
       end

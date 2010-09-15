@@ -43,7 +43,6 @@ module Hornetseye
             retval_subst = ( 0 ... retval_keys.size ).collect do |i|
               { retval_keys[ i ] => function.param( i ) }
             end.inject( {} ) { |a,b| a.merge b }
-            # Thread.current[ :function ] = function
             Hornetseye::lazy do
               retval_term.subst( retval_subst ).store term.subst( term_subst )
             end

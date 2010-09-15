@@ -28,7 +28,7 @@ module Hornetseye
       #
       # @param [Object] value The other Ruby object.
       #
-      # @return [FalseClass,TrueClass] Returns +false+ if Ruby object requires
+      # @return [Boolean] Returns +false+ if Ruby object requires
       #         coercion.
       def generic?( value )
         value.is_a?( Numeric ) or value.is_a?( GCCValue )
@@ -183,7 +183,7 @@ module Hornetseye
     #
     # @param [Object] other Object to compare with.
     #
-    # @return [FalseClass,TrueClass] Returns boolean indicating whether objects are
+    # @return [Boolean] Returns boolean indicating whether objects are
     #         equal or not.
     def ==( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
@@ -318,7 +318,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
+      # @return [Boolean] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < COMPLEX_ and
           element_type == other.element_type
@@ -337,7 +337,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      # @return [Boolean] Returns +true+ if objects are equal.
       #
       # @private
       def eql?( other )
@@ -406,6 +406,16 @@ module Hornetseye
 
     module Match
 
+      # Method for matching elements of type COMPLEX_
+      #
+      # @param [Array<Object>] *values Values to find matching native element
+      #        type for.
+      #
+      # @return [Class] Native type fitting all values.
+      #
+      # @see COMPLEX_
+      #
+      # @private
       def fit( *values )
         if values.all? { |value| value.is_a? InternalComplex or value.is_a? Complex or
                                  value.is_a? Float or value.is_a? Integer }
@@ -431,6 +441,14 @@ module Hornetseye
         end
       end
 
+      # Perform type alignment
+      #
+      # Align this type to another. This is used to prefer single-precision
+      # floating point in certain cases.
+      #
+      # @param [Class] context Other type to align with.
+      #
+      # @private
       def align( context )
         if self < COMPLEX_
           Hornetseye::COMPLEX element_type.align( context )

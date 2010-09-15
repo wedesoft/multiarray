@@ -124,7 +124,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
+      # @return [Boolean] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < FLOAT_ and double == other.double
       end
@@ -142,7 +142,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      # @return [Boolean] Returns +true+ if objects are equal.
       #
       # @private
       def eql?( other )
@@ -151,33 +151,51 @@ module Hornetseye
 
     end
 
-  end
+    module Match
 
-  module Match
-
-    def fit( *values )
-      if values.all? { |value| value.is_a? Float or value.is_a? Integer }
-        if values.any? { |value| value.is_a? Float }
-          DFLOAT
+      # Method for matching elements of type FLOAT_
+      #
+      # @param [Array<Object>] *values Values to find matching native element
+      #        type for.
+      #
+      # @return [Class] Native type fitting all values.
+      #
+      # @see FLOAT_
+      #
+      # @private
+      def fit( *values )
+        if values.all? { |value| value.is_a? Float or value.is_a? Integer }
+          if values.any? { |value| value.is_a? Float }
+            DFLOAT
+          else
+            super *values
+          end
         else
           super *values
         end
-      else
-        super *values
       end
+
+      # Perform type alignment
+      #
+      # Align this type to another. This is used to prefer single-precision
+      # floating point in certain cases.
+      #
+      # @param [Class] context Other type to align with.
+      #
+      # @private
+      def align( context )
+        if self < FLOAT_ and context < FLOAT_
+          context
+        else
+          super context
+        end
+      end
+
     end
 
-    def align( context )
-      if self < FLOAT_ and context < FLOAT_
-        context
-      else
-        super context
-      end
-    end
+    Node.extend Match
 
   end
-
-  Node.extend Match
 
   SINGLE = false
   DOUBLE = true

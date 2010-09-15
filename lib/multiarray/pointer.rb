@@ -65,7 +65,7 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Boolean indicating whether classes are equal.
+      # @return [Boolean] Boolean indicating whether classes are equal.
       def ==( other )
         other.is_a? Class and other < Pointer_ and
           target == other.target
@@ -84,13 +84,16 @@ module Hornetseye
       #
       # @param [Object] other Object to compare with.
       #
-      # @return [FalseClass,TrueClass] Returns +true+ if objects are equal.
+      # @return [Boolean] Returns +true+ if objects are equal.
       #
       # @private
       def eql?
         self == other
       end
 
+      # Get element type
+      #
+      # @return [Class] Returns the corresponding element type.
       def typecode
         target
       end
@@ -113,13 +116,16 @@ module Hornetseye
         target
       end
 
+      # Get corresponding pointer type
+      #
+      # @return [Class] Returns +self+.
       def pointer_type
         self
       end
 
       # Check whether objects of this class are finalised computations
       #
-      # @return [FalseClass,TrueClass] Returns +false+.
+      # @return [Boolean] Returns +false+.
       #
       # @private
       def finalised?
