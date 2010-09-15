@@ -17,8 +17,14 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for lazy array lookup
   class Lookup < Node
 
+    # Create array lookup
+    #
+    # @param [Node] p Object supporting lookup.
+    # @param [Variable] index The array index.
+    # @param [Node] stride The array stride.
     def initialize( p, index, stride )
       @p, @index, @stride = p, index, stride
     end
@@ -44,10 +50,24 @@ module Hornetseye
       @p.array_type
     end
 
+    # Substitute variables
+    #
+    # Substitute the variables with the values given in the hash.
+    #
+    # @param [Hash] hash Substitutions to apply.
+    #
+    # @return [Node] Term with substitutions applied.
+    #
+    # @private
     def subst( hash )
       @p.subst( hash ).lookup @index.subst( hash ), @stride.subst( hash )
     end
 
+    # Get variables contained in this object
+    #
+    # @return [Set] Returns +Set[ self ]+.
+    #
+    # @private
     def variables
       @p.variables + @index.variables + @stride.variables
     end

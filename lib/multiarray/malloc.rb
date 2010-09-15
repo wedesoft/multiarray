@@ -17,6 +17,9 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for arrays and array views for native values.
+  #
+  # @see List
   class Malloc
 
     def load( typecode )

@@ -17,8 +17,17 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Ruby array supporting array views
+  #
+  # @see Malloc
   class List
 
+    # Initialise array
+    #
+    # @param [Integer] n Number of elements.
+    # @option options [Array] :array ([ nil ] * n) Existing Ruby array to create an
+    #         array view.
+    # @option options [Integer] :offset (0) Offset for array view.
     def initialize( n, options = {} )
       @array = options[ :array ] || [ nil ] * n
       @offset = options[ :offset ] || 0
@@ -35,14 +44,25 @@ module Hornetseye
       "List(#{@array[ @offset .. -1 ]})"
     end
 
+    # Create array view with specified offset
+    #
+    # @param [Integer] offset Offset for array view.
+    #
+    # @return [List] The resulting array view.
     def +( offset )
       List.new 0, :array => @array, :offset => @offset + offset
     end
 
+    # Retrieve value of specified typecode
+    #
+    # @param [Node] typecode The type of the value.
     def load( typecode )
       @array[ @offset ]
     end
 
+    # Store value
+    #
+    # @param [Node] value Value to store.
     def save( value )
       @array[ @offset ] = value.get
       value
