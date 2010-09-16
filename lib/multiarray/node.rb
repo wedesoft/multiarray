@@ -100,6 +100,12 @@ module Hornetseye
         Hornetseye::Pointer( self )
       end
 
+      # Generate index array of this type
+      #
+      # @param [Object] offset First value.
+      # @param [Object] offset Increment for consecutive values.
+      #
+      # @return [Object] Returns +offset+.
       def indgen( offset = 0, increment = 1 )
         offset
       end
@@ -155,6 +161,9 @@ module Hornetseye
         self
       end
 
+      # Get corresponding type based on floating-point scalars
+      #
+      # @return [Class] Corresponding type based on floating-point scalars.
       def float_scalar
         float.scalar
       end
