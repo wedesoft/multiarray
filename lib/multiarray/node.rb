@@ -609,15 +609,13 @@ module Hornetseye
         self
       elsif finalised?
         get
+      elsif compilable?
+        GCCFunction.run( pointer_type.new, self ).get
       else
-        unless compilable?
-          Hornetseye::lazy do
-            retval = array_type.new
-            retval[] = self
-            retval.get
-          end
-        else
-          GCCFunction.run( pointer_type.new, self ).get
+        Hornetseye::lazy do
+          retval = array_type.new
+          retval[] = self
+          retval.get
         end
       end
     end
