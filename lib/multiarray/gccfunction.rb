@@ -21,39 +21,30 @@ module Hornetseye
 
     class << self
 
-      def run( retval, block )
+      def run( block )
         keys, values, term = block.strip
-        labels = Hash[ *keys.
-                       zip( ( 0 ... keys.size ).to_a ).flatten ]
-        retval_keys, retval_values, retval_term = retval.strip
-        retval_labels = Hash[ *retval_keys.
-                              zip( ( 0 ... retval_keys.size ).to_a ).flatten ]
-        method_name = ( '_' + retval_term.descriptor( retval_labels ) +
-                        '_' + term.descriptor( labels ) ).
-                      tr( '(),+\-*/%.@?~&|^<=>',
-                          '0123\456789ABCDEFGH' )
+        labels = Hash[ *keys.zip( ( 0 ... keys.size ).to_a ).flatten ]
+        method_name = ( '_' + term.descriptor( labels ) ).
+                            tr( '(),+\-*/%.@?~&|^<=>',
+                                '0123\456789ABCDEFGH' )
         unless GCCCache.respond_to? method_name
           GCCContext.build do |context|
-            function = new context, method_name,
-                           *( retval_keys + keys ).collect { |var| var.meta }
+            function = GCCFunction.new context, method_name,
+                                       *keys.collect { |var| var.meta }
             Thread.current[ :function ] = function
             term_subst = ( 0 ... keys.size ).collect do |i|
-              { keys[i] => function.param( i + retval_keys.size ) }
-            end.inject( {} ) { |a,b| a.merge b }
-            retval_subst = ( 0 ... retval_keys.size ).collect do |i|
-              { retval_keys[ i ] => function.param( i ) }
+              { keys[i] => function.param( i ) }
             end.inject( {} ) { |a,b| a.merge b }
             Hornetseye::lazy do
-              retval_term.subst( retval_subst ).store term.subst( term_subst )
+              term.subst( term_subst ).demand
             end
             Thread.current[ :function ] = nil
             function.insn_return
             function.compile
           end
         end
-        args = ( retval_values + values ).collect { |arg| arg.values }.flatten
+        args = values.collect { |arg| arg.values }.flatten
         GCCCache.send method_name, *args
-        retval.simplify
       end
 
     end

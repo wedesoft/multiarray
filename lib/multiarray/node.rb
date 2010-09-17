@@ -552,7 +552,8 @@ module Hornetseye
         unless compilable? and value.compilable? and dimension > 0
           store value
         else
-          GCCFunction.run self, value
+          GCCFunction.run Store.new( self, value )
+          value
         end
       else
         if indices.last.is_a? Range
@@ -610,13 +611,16 @@ module Hornetseye
       elsif finalised?
         get
       elsif compilable?
-        GCCFunction.run( pointer_type.new, self ).get
+        retval = pointer_type.new
+        GCCFunction.run Store.new( retval, self )
+        retval.demand.get
       else
-        Hornetseye::lazy do
-          retval = array_type.new
-          retval[] = self
-          retval.get
-        end
+        Store.new( array_type.new, self ).demand.get
+        #Hornetseye::lazy do
+        #  retval = array_type.new
+        #  retval[] = self
+        #  retval.get
+        #end
       end
     end
 
