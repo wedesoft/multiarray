@@ -83,23 +83,6 @@ module Hornetseye
       Lambda.new subst_var, @term.subst( @index => subst_var ).subst( hash )
     end
 
-    # Store new value in this object
-    #
-    # Element-wise copies the values from +value+ and stores them in this object.
-    #
-    # @param [Object] value New value(s).
-    #
-    # @return [Object] Returns +value+.
-    #
-    # @private
-    def store( value )
-      shape.last.times do |i|
-        node = value.dimension == 0 ? value : value.element( INT.new( i ) )
-        element( INT.new( i ) ).store node
-      end
-      value
-    end
-
     # Lookup element of an array
     #
     # @param [Node] value Index of element.

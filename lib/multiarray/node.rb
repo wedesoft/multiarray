@@ -550,11 +550,11 @@ module Hornetseye
       if indices.empty?
         check_shape value
         unless compilable? and value.compilable? and dimension > 0
-          store value
+          Store.new( self, value ).demand
         else
           GCCFunction.run Store.new( self, value )
-          value
         end
+        value
       else
         if indices.last.is_a? Range
           view = slice indices.last.min, indices.last.size
