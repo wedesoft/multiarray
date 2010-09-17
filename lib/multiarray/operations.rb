@@ -303,6 +303,23 @@ module Hornetseye
       product( filter ).diagonal { |s,x| s + x }
     end
 
+    def histogram( *ret_shape )
+      if shape.first != 1 and ret_shape.size == 1
+        right = lazy( 1 ) { |i| self }.unroll
+      else
+        right = self
+      end
+      left = MultiArray.new UINT, *ret_shape
+      left[] = 0
+      block = Histogram.new left, right
+      if block.compilable?
+        GCCFunction.run block
+      else
+        block.demand
+      end
+      left
+    end
+
   end
 
   class Node
