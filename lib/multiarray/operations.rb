@@ -226,6 +226,10 @@ module Hornetseye
       inject { |a,b| a.major b }
     end
 
+    def range
+      min .. max
+    end
+
     # Apply accumulative operation over elements diagonally
     #
     # This method is used internally to implement convolutions.
@@ -309,7 +313,24 @@ module Hornetseye
       if shape.first != 1 and ret_shape.size == 1
         right = Hornetseye::lazy( 1 ) { |i| self }.unroll
       else
+        if shape.first != ret_shape.size
+          raise "First dimension of array (#{shape.first}) differs from number of " +
+                "dimensions of histogram (#{ret_shape.size})"
+        end
         right = self
+      end
+      if options[ :safe ]
+        for i in 0 ... right.shape.first
+          range = right.roll[ i ].range
+          if range.begin < 0
+            raise "#{i+1}th dimension of index must be in 0 ... #{ret_shape[i]} " +
+                  "(but was #{range.begin})"
+          end
+          if range.end >= ret_shape[ i ]
+            raise "#{i+1}th dimension of index must be in 0 ... #{ret_shape[i]} " +
+                  "(but was #{range.end})"
+          end
+        end
       end
       left = MultiArray.new options[ :target ], *ret_shape
       left[] = 0

@@ -364,6 +364,10 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal 7, M[ [ 5, 3, 7 ], [ 2, 1, 6 ] ].max
   end
 
+  def test_range
+    assert_equal 1 .. 7, M[ [ 5, 3, 7 ], [ 2, 1, 6 ] ].range
+  end
+
   def test_diagonal
     assert_equal S[ 'b1a2', 'c1b2a3', 'c2b3' ],
                  M[ [ 'a1', 'a2', 'a3' ],
@@ -403,6 +407,11 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 1, 2 ], [ 3, 3 ] ].histogram( 5, :target => I )
     assert_equal M( I, 2, 2 )[ [ 1, 0 ], [ 1, 1 ] ],
                  M[ [ 0, 0 ], [ 0, 1 ], [ 1, 1 ] ].histogram( 2, 2, :target => I )
+    assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 4, 4 }
+    assert_raise( RuntimeError ) { M[ [ -1, 0 ] ].histogram 3, 2 }
+    assert_raise( RuntimeError ) { M[ [ 0, -1 ] ].histogram 3, 2 }
+    assert_raise( RuntimeError ) { M[ [ 3, 0 ] ].histogram 3, 2 }
+    assert_raise( RuntimeError ) { M[ [ 0, 2 ] ].histogram 3, 2 }
   end
 
   def test_zero
