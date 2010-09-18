@@ -1,4 +1,4 @@
-# test histograms
+# clips for histograms
 # pointer-increments for better efficiency, optimize Node#diagonal
 # random numbers
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?

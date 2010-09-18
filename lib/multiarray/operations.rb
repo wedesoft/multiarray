@@ -304,12 +304,14 @@ module Hornetseye
     end
 
     def histogram( *ret_shape )
+      options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
+      options = { :target => UINT, :safe => true }.merge options
       if shape.first != 1 and ret_shape.size == 1
-        right = lazy( 1 ) { |i| self }.unroll
+        right = Hornetseye::lazy( 1 ) { |i| self }.unroll
       else
         right = self
       end
-      left = MultiArray.new UINT, *ret_shape
+      left = MultiArray.new options[ :target ], *ret_shape
       left[] = 0
       block = Histogram.new left, right
       if block.compilable?

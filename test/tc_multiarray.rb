@@ -398,6 +398,13 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_raise( RuntimeError ) { M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].convolve S[ 1, 2 ] }
   end
 
+  def test_histogram
+    assert_equal S( I, 5 )[ 0, 1, 1, 2, 0 ],
+                 M[ [ 1, 2 ], [ 3, 3 ] ].histogram( 5, :target => I )
+    assert_equal M( I, 2, 2 )[ [ 1, 0 ], [ 1, 1 ] ],
+                 M[ [ 0, 0 ], [ 0, 1 ], [ 1, 1 ] ].histogram( 2, 2, :target => I )
+  end
+
   def test_zero
     assert_equal M[ [ false, true ], [ true, false ] ],
                  M[ [ -1, 0 ], [ 0, 1 ] ].zero?

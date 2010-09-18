@@ -312,6 +312,13 @@ class TC_Sequence < Test::Unit::TestCase
                  convolve( S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ) ] )
   end
 
+  def test_histogram
+    [ O, I ].each do |t|
+      assert_equal S( t, 5 )[ 0, 1, 2, 1, 1 ],
+                   S( t, 5 )[ 1, 2, 2, 3, 4 ].histogram( 5, :target => t )
+    end
+  end
+
   def test_zero
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal [ false, true, false ], t[ -1, 0, 1 ].zero?.to_a
