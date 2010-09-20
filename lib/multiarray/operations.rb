@@ -343,6 +343,24 @@ module Hornetseye
       left
     end
 
+    def lut( table, options = {} )
+      options = { :safe => true }.merge options
+      if shape.first != 1 and table.dimension == 1
+        source = Hornetseye::lazy( 1 ) { |i| self }.unroll
+      else
+        source = self
+      end
+      if source.dimension <= 1 and variables.empty?
+        result = table
+        ( table.dimension - 1 ).downto( 0 ) do |i|
+          result = result.element source.element( INT.new( i ) ).demand
+        end
+        result
+      else
+        Lut.new( source, table, options[ :n ] ).force # !!!
+      end
+    end
+
   end
 
   class Node

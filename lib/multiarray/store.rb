@@ -39,7 +39,7 @@ module Hornetseye
             Store.new( dest, source ).demand
           end  
         else
-          @dest.store @source
+          @dest.store @source.demand
         end
         @dest
       else

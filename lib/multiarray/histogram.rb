@@ -18,6 +18,14 @@ module Hornetseye
 
   class Histogram < Node
 
+    class << self
+
+      def finalised?
+        false
+      end
+
+    end
+
     def initialize( dest, source )
       @dest, @source = dest, source
     end
@@ -61,7 +69,7 @@ module Hornetseye
     def strip
       vars1, values1, term1 = @dest.strip
       vars2, values2, term2 = @source.strip
-      return vars1 + vars2, values1 + values2, Histogram.new( term1, term2 )
+      return vars1 + vars2, values1 + values2, self.class.new( term1, term2 )
     end
 
     def compilable?

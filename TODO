@@ -1,4 +1,11 @@
-# clips for histograms
+# n-dimensional maps, warps: clipping?
+#   initial indices: select from @source, final indices: select from @table, look up
+#   remaining
+# map -> lut?
+# test step-wise lookup with x and y coming from different tables
+# problem: histogram with x and y coming from different tables
+# RGB histogram
+# mask <-> integral/warp?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # random numbers
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
