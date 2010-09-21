@@ -1,7 +1,6 @@
 # n-dimensional lut/warp: clipping?
 # test step-wise lookup with x and y coming from different tables
 # problem: histogram with x and y coming from different tables
-# RGB histogram
 # mask <-> integral/warp?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # random numbers

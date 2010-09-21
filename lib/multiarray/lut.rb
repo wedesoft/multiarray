@@ -80,6 +80,10 @@ module Hornetseye
       raise 'not implemented yet'
     end
 
+    def decompose
+      self.class.new @source, @table.decompose, @n
+    end
+
     def compilable?
       @source.compilable? and @table.compilable?
     end

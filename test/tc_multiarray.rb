@@ -407,6 +407,8 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 1, 2 ], [ 3, 3 ] ].histogram( 5, :target => I )
     assert_equal M( I, 2, 2 )[ [ 1, 0 ], [ 1, 1 ] ],
                  M[ [ 0, 0 ], [ 0, 1 ], [ 1, 1 ] ].histogram( 2, 2, :target => I )
+    assert_equal M( I, 2, 2, 1 )[ [ [ 0, 1 ], [ 1, 0 ] ] ],
+                 S[ C( 1, 0, 0 ), C( 0, 1, 0 ) ].histogram( 2, 2, 1, :target => I )
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 4, 4 }
     assert_raise( RuntimeError ) { M[ [ -1, 0 ] ].histogram 3, 2 }
     assert_raise( RuntimeError ) { M[ [ 0, -1 ] ].histogram 3, 2 }

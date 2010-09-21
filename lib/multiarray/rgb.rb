@@ -515,6 +515,16 @@ module Hornetseye
       end
     end
 
+    def histogram_with_rgb( *ret_shape )
+      if typecode < RGB_
+        decompose.histogram_without_rgb *ret_shape
+      else
+        histogram_without_rgb *ret_shape
+      end
+    end
+
+    alias_method_chain :histogram, :rgb
+
   end
 
   def RGB( arg, g = nil, b = nil )
