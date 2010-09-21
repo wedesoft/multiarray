@@ -68,7 +68,7 @@ module Hornetseye
         source = source.element i
         self.class.new source, table, @n
       elsif table.dimension > @n
-        @n.times { table = table.unroll }
+        @n.times { table = table.unroll } # !!!
         table = table.element i
         self.class.new source, table, @n
       else
@@ -77,7 +77,17 @@ module Hornetseye
     end
 
     def slice( start, length )
-      raise 'not implemented yet'
+      source, table = @source, @table
+      if source.dimension > 1
+        source = source.slice( start, length ).roll
+        self.class.new( source, table, @n ).unroll
+      elsif table.dimension > @n
+        @n.times { table = table.unroll } # !!!
+        table = table.slice( start, length ).roll
+        self.class.new( source, table, @n ).unroll
+      else
+        super i
+      end
     end
 
     def decompose

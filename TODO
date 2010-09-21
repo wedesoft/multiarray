@@ -1,4 +1,5 @@
-# n-dimensional lut/warp: clipping?
+# lut/warp: clipping? slicing?
+#   lazy { Sequence[ 1, 1, 0, 0 ].lut( Sequence[ RGB( 1, 0, 0 ), RGB( 0, 1, 0 ) ] ) }
 # test step-wise lookup with x and y coming from different tables
 # problem: histogram with x and y coming from different tables
 # mask <-> integral/warp?
