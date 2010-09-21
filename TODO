@@ -1,7 +1,4 @@
-# n-dimensional maps, warps: clipping?
-#   initial indices: select from @source, final indices: select from @table, look up
-#   remaining
-# map -> lut?
+# n-dimensional lut/warp: clipping?
 # test step-wise lookup with x and y coming from different tables
 # problem: histogram with x and y coming from different tables
 # RGB histogram

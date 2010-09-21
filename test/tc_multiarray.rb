@@ -414,6 +414,18 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_raise( RuntimeError ) { M[ [ 0, 2 ] ].histogram 3, 2 }
   end
 
+  def test_lut
+    assert_equal M[ [ 1, 2 ], [ 3, 1 ] ],
+                 M[ [ 0, 1 ], [ 2, 0 ] ].lut( S[ 1, 2, 3, 4 ] )
+    assert_equal M[ 1, 3, 4 ],
+                 M[ [ 0, 0 ], [ 0, 1 ], [ 1, 1 ] ].lut( M[ [ 1, 2 ], [ 3, 4 ] ] )
+    assert_raise( RuntimeError ) { S[ 0, 1, 2 ].lut M[ [ 1, 2 ], [ 3, 4 ] ] }
+    assert_raise( RuntimeError ) { M[ [ -1, 0 ] ].lut M[ [ 1, 2 ] ] }
+    assert_raise( RuntimeError ) { M[ [ 0, -1 ] ].lut M[ [ 1, 2 ] ] }
+    assert_raise( RuntimeError ) { M[ [ 2, 0 ] ].lut M[ [ 1, 2 ] ] }
+    assert_raise( RuntimeError ) { M[ [ 0, 1 ] ].lut M[ [ 1, 2 ] ] }
+  end
+
   def test_zero
     assert_equal M[ [ false, true ], [ true, false ] ],
                  M[ [ -1, 0 ], [ 0, 1 ] ].zero?

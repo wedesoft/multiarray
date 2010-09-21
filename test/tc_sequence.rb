@@ -265,6 +265,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_collect
     assert_equal S[ 2, 3 ], S[ 1, 2 ].collect { |x| x + 1 }
+    assert_equal S[ 2, 4 ], S[ 1, 2 ].map { |x| 2 * x }
   end
 
   def test_sum
@@ -319,6 +320,16 @@ class TC_Sequence < Test::Unit::TestCase
     end
     assert_raise( RuntimeError ) { S[ -1, 0, 1 ].histogram 3 }
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 3 }
+    assert_raise( RuntimeError ) { S[ 0, 0, 0 ].histogram 3, 2 }
+  end
+
+  def test_lut
+    [ O, I ].each do |t|
+      assert_equal S( t, 4 )[ 3, 1, 2, 1 ],
+                   S( t, 4 )[ 0, 2, 1, 2 ].lut( S( t, 3 )[ 3, 2, 1 ] )
+    end
+    assert_raise( RuntimeError ) { S[ -1, 0 ].lut S[ 0, 1 ] }
+    assert_raise( RuntimeError ) { S[ 1, 2 ].lut S[ 0, 1 ] }
   end
 
   def test_zero
@@ -465,9 +476,13 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_arg
-    assert_equal S[ 0.0, Math::PI ], S[ 1, -1 ].arg
-    assert_equal S[ 0.0, Math::PI / 2, Math::PI, -Math::PI / 2 ],
-                 S[ X( 1, 0 ), X( 0, 1 ), X( -1, 0 ), X( 0, -1 ) ].arg
+    [ 0.0, Math::PI ].zip( S[ 1, -1 ].arg.to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    r = S[ X( 1, 0 ), X( 0, 1 ), X( -1, 0 ), X( 0, -1 ) ].arg
+    [ 0.0, Math::PI / 2, Math::PI, -Math::PI / 2 ].zip( r.to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
   end
 
   def test_mul

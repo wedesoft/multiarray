@@ -173,6 +173,8 @@ module Hornetseye
       Hornetseye::ElementWise( action, block.to_s, conversion ).new( self ).force
     end
 
+    alias_method :map, :collect
+
     def inject( initial = nil, options = {} )
       unless initial.nil?
         initial = Node.match( initial ).new initial unless initial.is_a? Node
@@ -310,13 +312,17 @@ module Hornetseye
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
       options = { :target => UINT, :safe => true }.merge options
-      if shape.first != 1 and ret_shape.size == 1
-        right = Hornetseye::lazy( 1 ) { |i| self }.unroll
-      else
-        if shape.first != ret_shape.size
-          raise "First dimension of array (#{shape.first}) differs from number of " +
-                "dimensions of histogram (#{ret_shape.size})"
+      if options[ :safe ]
+        if shape.first != 1 and ret_shape.size == 1
+          right = Hornetseye::lazy( 1 ) { |i| self }.unroll
+        else
+          if shape.first != ret_shape.size
+            raise "First dimension of array (#{shape.first}) differs from number of " +
+                  "dimensions of histogram (#{ret_shape.size})"
+          end
+          right = self
         end
+      else
         right = self
       end
       if options[ :safe ]
@@ -345,10 +351,31 @@ module Hornetseye
 
     def lut( table, options = {} )
       options = { :safe => true }.merge options
-      if shape.first != 1 and table.dimension == 1
-        source = Hornetseye::lazy( 1 ) { |i| self }.unroll
+      if options[ :safe ]
+        if shape.first != 1 and table.dimension == 1
+          source = Hornetseye::lazy( 1 ) { |i| self }.unroll
+        else
+          if shape.first != table.dimension
+            raise "First dimension of array (#{shape.first}) differs from number of " +
+                  "dimensions of LUT (#{table.dimension})"
+          end
+          source = self
+        end
       else
         source = self
+      end
+      if options[ :safe ]
+        for i in 0 ... table.dimension
+          range = source.roll[ i ].range
+          if range.begin < 0
+            raise "#{i+1}th dimension of index must be in 0 ... #{table.shape[i]} " +
+                  "(but was #{range.begin})"
+          end
+          if range.end >= table.shape[ i ]
+            raise "#{i+1}th dimension of index must be in 0 ... #{table.shape[i]} " +
+                  "(but was #{range.end})"
+          end
+        end
       end
       if source.dimension <= 1 and variables.empty?
         result = table

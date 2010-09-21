@@ -41,7 +41,7 @@ module Hornetseye
     end
 
     def demand
-      @source.lut @table, :n => @n
+      @source.lut @table, :n => @n, :safe => false
     end
 
     def subst( hash )
