@@ -207,6 +207,29 @@ module Hornetseye
 
   end
 
+end
+
+module Math
+
+  def sqrt_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      real = sqrt( ( z.abs + z.real ) / 2 )
+      imag = ( z.imag < 0 ).conditional -sqrt( ( z.abs - z.real ) / 2 ),
+                                        sqrt( ( z.abs - z.real ) / 2 )
+      Hornetseye::InternalComplex.new real, imag
+    else
+      sqrt_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :sqrt, :internalcomplex
+  module_function :sqrt_without_internalcomplex
+  module_function :sqrt
+
+end
+
+module Hornetseye
+
   class COMPLEX_ < Composite
 
     class << self

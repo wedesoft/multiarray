@@ -362,7 +362,7 @@ module Hornetseye
           source = Hornetseye::lazy( 1 ) { |i| self }.unroll
         else
           if shape.first > table.dimension
-            raise "First dimension of array (#{shape.first}) is greater than the "
+            raise "First dimension of array (#{shape.first}) is greater than the " +
                   " number of dimensions of LUT (#{table.dimension})"
           end
           source = self

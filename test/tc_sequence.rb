@@ -581,6 +581,11 @@ class TC_Sequence < Test::Unit::TestCase
   def test_sqrt
     assert_equal S( O, 3 )[ 1, 2, 3 ], Math.sqrt( S( O, 3 )[ 1, 4, 9 ] )
     assert_equal S[ 1.0, 2.0, 3.0 ], Math.sqrt( S[ 1.0, 4.0, 9.0 ] )
+    [ Math.sqrt( X( 1, 2 ) ), Math.sqrt( X( 2, -1 ) ) ].
+      zip( Math.sqrt( S[ X( 1, 2 ), X( 2, -1 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
   end
 
   def test_hypot

@@ -1,3 +1,5 @@
+# complex exp, cos, sin, tan, sinh, cosh, tanh, log, log10, acos, asin, atan, atan2,
+#   acosh, asinh, atanh
 # lut/warp,histogram: clipping?
 # lut,histogram with x and y coming from different tables?
 # mask <-> integral/warp?
@@ -5,19 +7,13 @@
 # random numbers
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
 # each, multi_each, collect, multi_collect, zip?
-# inject: n-d masks for warp
-# complex cos, sin, sqrt, exp, ...
 
 # downsampling after correlation?
 # YARD documentation with pictures, demo video, @group ..., @endgroup
 # CK_Thesis.pdf: tensor voting
 # maxint -> native_int
 
-# use inject for n-d clips for warp
-# block(var1,var2,...) with smart subst?
-
 # downsampling after correlation?
-# ruby -Ilib -rrubygems -rmultiarray -rtest test/tc_sequence.rb
 
 test type conversions
 
