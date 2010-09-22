@@ -345,6 +345,42 @@ module Math
   module_function :log10_without_internalcomplex
   module_function :log10
 
+  def acos_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      -Complex::I * log( z + Complex::I * sqrt( 1.0 - z * z ) )
+    else
+      acos_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :acos, :internalcomplex
+  module_function :acos_without_internalcomplex
+  module_function :acos
+
+  def asin_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      -Complex::I * log( Complex::I * z + sqrt( 1.0 - z * z ) )
+    else
+      asin_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :asin, :internalcomplex
+  module_function :asin_without_internalcomplex
+  module_function :asin
+
+  def atan_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      Complex::I * log( ( Complex::I + z ) / ( Complex::I - z ) ) / 2.0
+    else
+      atan_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :atan, :internalcomplex
+  module_function :atan_without_internalcomplex
+  module_function :atan
+
 end
 
 module Hornetseye

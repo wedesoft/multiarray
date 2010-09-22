@@ -682,6 +682,42 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_acos
+    [ Math.acos( 0.3 ), Math.acos( 0.6 ) ].
+      zip( Math.acos( S[ 0.3, 0.6 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.acos( X( 0.2, 0.3 ) ) ].
+      zip( Math.acos( S[ X( 0.2, 0.3 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
+  def test_asin
+    [ Math.asin( 0.3 ), Math.asin( 0.6 ) ].
+      zip( Math.asin( S[ 0.3, 0.6 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.asin( X( 0.2, 0.3 ) ) ].
+      zip( Math.asin( S[ X( 0.2, 0.3 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
+  def test_atan
+    [ Math.atan( 0.3 ), Math.atan( 0.6 ) ].
+      zip( Math.atan( S[ 0.3, 0.6 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.atan( X( 0.2, 0.3 ) ) ].
+      zip( Math.atan( S[ X( 0.2, 0.3 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
   def test_hypot
     assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
     assert_raise( RuntimeError ) { Math.hypot( S[ 3 ], S[ 4, 3 ] ) }
