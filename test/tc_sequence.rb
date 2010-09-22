@@ -628,6 +628,39 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_cosh
+    [ Math.cosh( 2 ), Math.cosh( 3 ) ].
+      zip( Math.cosh( S[ 2, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.cosh( X( 1, 2 ) ) ].zip( Math.cosh( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
+  def test_sinh
+    [ Math.sinh( 2 ), Math.sinh( 3 ) ].
+      zip( Math.sinh( S[ 2, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.sinh( X( 1, 2 ) ) ].zip( Math.sinh( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
+  def test_tanh
+    [ Math.tanh( 2 ), Math.tanh( 3 ) ].
+      zip( Math.tanh( S[ 2, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.tanh( X( 1, 2 ) ) ].zip( Math.tanh( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
   def test_hypot
     assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
     assert_raise( RuntimeError ) { Math.hypot( S[ 3 ], S[ 4, 3 ] ) }

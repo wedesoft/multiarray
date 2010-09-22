@@ -280,6 +280,46 @@ module Math
   module_function :tan_without_internalcomplex
   module_function :tan
 
+  def cosh_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      real = cosh( z.real ) * cos( z.imag )
+      imag = sinh( z.real ) * sin( z.imag )
+      Hornetseye::InternalComplex.new real, imag
+    else
+      cosh_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :cosh, :internalcomplex
+  module_function :cosh_without_internalcomplex
+  module_function :cosh
+
+  def sinh_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      real = sinh( z.real ) * cos( z.imag )
+      imag = cosh( z.real ) * sin( z.imag )
+      Hornetseye::InternalComplex.new real, imag
+    else
+      sinh_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :sinh, :internalcomplex
+  module_function :sinh_without_internalcomplex
+  module_function :sinh
+
+  def tanh_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      sinh( z ) / cosh( z )
+    else
+      tanh_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :tanh, :internalcomplex
+  module_function :tanh_without_internalcomplex
+  module_function :tanh
+
 end
 
 module Hornetseye

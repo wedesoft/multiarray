@@ -1,4 +1,4 @@
-# complex sinh, cosh, tanh, log, log10, acos, asin, atan, atan2,
+# complex log, log10, acos, asin, atan, atan2,
 #   acosh, asinh, atanh
 # lut/warp,histogram: clipping?
 # lut,histogram with x and y coming from different tables?
