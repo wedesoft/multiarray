@@ -349,6 +349,12 @@ module Hornetseye
       left
     end
 
+    def histogram_with_composite( *ret_shape )
+      decompose.histogram_without_composite *ret_shape
+    end
+
+    alias_method_chain :histogram, :composite
+
     def lut( table, options = {} )
       options = { :safe => true }.merge options
       if options[ :safe ]
@@ -387,6 +393,12 @@ module Hornetseye
         Lut.new( source, table, options[ :n ] ).force
       end
     end
+
+    def lut_with_composite( table, options = {} )
+      decompose.lut_without_composite table, options
+    end
+
+    alias_method_chain :lut, :composite
 
   end
 

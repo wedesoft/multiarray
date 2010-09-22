@@ -1,42 +1,23 @@
-# lut/warp: clipping? slicing?
-#   lazy { Sequence[ 1, 1, 0, 0 ].lut( Sequence[ RGB( 1, 0, 0 ), RGB( 0, 1, 0 ) ] ) }
-# test step-wise lookup with x and y coming from different tables
-# problem: histogram with x and y coming from different tables
+# lut/warp,histogram: clipping?
+# lut,histogram with x and y coming from different tables?
 # mask <-> integral/warp?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # random numbers
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
 # each, multi_each, collect, multi_collect, zip?
 # inject: n-d masks for warp
-# block(var1,var2,...) with smart subst?
+# complex cos, sin, sqrt, exp, ...
 
 # downsampling after correlation?
 # YARD documentation with pictures, demo video, @group ..., @endgroup
 # CK_Thesis.pdf: tensor voting
 # maxint -> native_int
 
-# f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy
-# lut(g(i))
-# f(warp(i))
-
-# cache <-> demand/get? what about store?
-# allow creation of library for pre-loading cache
-
 # use inject for n-d clips for warp
 # block(var1,var2,...) with smart subst?
 
 # downsampling after correlation?
 # ruby -Ilib -rrubygems -rmultiarray -rtest test/tc_sequence.rb
-# README.rdoc, demo video
-
-# f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy
-# lut(g(i))
-# f(warp(i))
-#class Node
-#  def map( lut, options = {} ) # !!!
-#    
-#  end
-#end
 
 test type conversions
 
