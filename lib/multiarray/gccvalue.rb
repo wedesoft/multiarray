@@ -196,6 +196,7 @@ module Hornetseye
     define_binary_op :>=
     define_unary_method Math, :sqrt
     define_unary_method Math, :log
+    define_unary_method Math, :log10
     define_unary_method Math, :exp
     define_unary_method Math, :cos
     define_unary_method Math, :sin

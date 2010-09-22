@@ -661,6 +661,27 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_log
+    [ Math.log( 2 ), Math.log( 3 ) ].zip( Math.log( S[ 2, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.log( X( 1, 2 ) ) ].zip( Math.log( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
+  def test_log10
+    [ Math.log10( 2 ), Math.log10( 3 ) ].
+      zip( Math.log10( S[ 2, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.log10( X( 1, 2 ) ) ].zip( Math.log10( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
   def test_hypot
     assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
     assert_raise( RuntimeError ) { Math.hypot( S[ 3 ], S[ 4, 3 ] ) }

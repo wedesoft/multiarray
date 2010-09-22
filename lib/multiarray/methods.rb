@@ -25,6 +25,7 @@ module Hornetseye
     def Methods.included( mod )
       define_unary_method  mod, :sqrt , :float
       define_unary_method  mod, :log  , :float
+      define_unary_method  mod, :log10, :float
       define_unary_method  mod, :exp  , :float
       define_unary_method  mod, :cos  , :float
       define_unary_method  mod, :sin  , :float

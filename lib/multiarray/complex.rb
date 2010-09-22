@@ -320,6 +320,31 @@ module Math
   module_function :tanh_without_internalcomplex
   module_function :tanh
 
+  def log_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      r, theta = z.polar
+      Hornetseye::InternalComplex.new log( r.abs ), theta
+    else
+      log_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :log, :internalcomplex
+  module_function :log_without_internalcomplex
+  module_function :log
+
+  def log10_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      log( z ) / log( 10 )
+    else
+      log10_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :log10, :internalcomplex
+  module_function :log10_without_internalcomplex
+  module_function :log10
+
 end
 
 module Hornetseye
