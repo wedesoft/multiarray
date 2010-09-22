@@ -1,4 +1,4 @@
-# complex atan2, acosh, asinh, atanh
+# complex atan2
 # lut/warp,histogram: clipping?
 # lut,histogram with x and y coming from different tables?
 # mask <-> integral/warp?

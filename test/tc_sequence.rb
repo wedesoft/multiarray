@@ -753,6 +753,21 @@ class TC_Sequence < Test::Unit::TestCase
       assert_in_delta x.imag, y.imag, 1.0e-5
     end
   end
+
+  def test_atan2
+    [ Math.atan2( 3, 4 ), Math.atan2( 4, 3 ) ].
+      zip( Math.atan2( S[ 3, 4 ], S[ 4, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.atan2( X( 1, 2 ), X( 3, 4 ) ) ].
+      zip( Math.atan2( S[ X( 1, 2 ) ], S[ X( 3, 4 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+    assert_raise( RuntimeError ) { Math.atan2( S[ 3 ], S[ 4, 3 ] ) }
+    assert_raise( RuntimeError ) { Math.atan2( S[ 3, 4 ], S[ 4 ] ) }
+  end
+
   def test_hypot
     assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
     assert_raise( RuntimeError ) { Math.hypot( S[ 3 ], S[ 4, 3 ] ) }

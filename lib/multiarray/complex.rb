@@ -417,6 +417,18 @@ module Math
   module_function :atanh_without_internalcomplex
   module_function :atanh
 
+  def atan2_with_internalcomplex( y, x )
+    if [ x, y ].any? { |v| v.is_a? Hornetseye::InternalComplex }
+      -1.0.im * log( ( x + 1.0.im * y ) / sqrt( x * x + y * y ) )
+    else
+      atan2_without_internalcomplex y, x
+    end
+  end
+
+  alias_method_chain :atan2, :internalcomplex
+  module_function :atan2_without_internalcomplex
+  module_function :atan2
+
 end
 
 module Hornetseye
