@@ -400,7 +400,7 @@ module Hornetseye
           else
             retval = '[ '
             for i in 0 ... array_type.num_elements
-              x = Hornetseye::lazy { element i }
+              x = element i
               if x.dimension > 0
                 if i > 0
                   retval += ",\n  "

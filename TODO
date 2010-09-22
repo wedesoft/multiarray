@@ -18,11 +18,6 @@
 # f(g(i)) # g(i), f(g(i)) all can be vectors and all can be lazy
 # lut(g(i))
 # f(warp(i))
-#class Node
-#  def map( lut, options = {} )
-#    
-#  end
-#end
 
 # cache <-> demand/get? what about store?
 # allow creation of library for pre-loading cache

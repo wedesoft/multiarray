@@ -68,9 +68,7 @@ module Hornetseye
         source = source.element i
         self.class.new source, table, @n
       elsif table.dimension > @n
-        @n.times { table = table.unroll } # !!!
-        table = table.element i
-        self.class.new source, table, @n
+        self.class.new source, table.unroll( @n ).element( i ).roll( @n ), @n
       else
         super i
       end
@@ -82,9 +80,9 @@ module Hornetseye
         source = source.slice( start, length ).roll
         self.class.new( source, table, @n ).unroll
       elsif table.dimension > @n
-        @n.times { table = table.unroll } # !!!
-        table = table.slice( start, length ).roll
-        self.class.new( source, table, @n ).unroll
+        self.class.new( source,
+                        table.unroll( @n ).slice( start, length ).roll( @n + 1 ),
+                        @n ).unroll
       else
         super i
       end

@@ -195,6 +195,10 @@ module Hornetseye
       end
     end
 
+    def skip( index, start )
+      self
+    end
+
     # Decompose composite elements
     #
     # This method decomposes composite elements into array.

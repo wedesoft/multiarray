@@ -355,9 +355,9 @@ module Hornetseye
         if shape.first != 1 and table.dimension == 1
           source = Hornetseye::lazy( 1 ) { |i| self }.unroll
         else
-          if shape.first != table.dimension
-            raise "First dimension of array (#{shape.first}) differs from number of " +
-                  "dimensions of LUT (#{table.dimension})"
+          if shape.first > table.dimension
+            raise "First dimension of array (#{shape.first}) is greater than the "
+                  " number of dimensions of LUT (#{table.dimension})"
           end
           source = self
         end
@@ -365,7 +365,7 @@ module Hornetseye
         source = self
       end
       if options[ :safe ]
-        for i in 0 ... table.dimension
+        for i in 0 ... source.shape.first
           range = source.roll[ i ].range
           if range.begin < 0
             raise "#{i+1}th dimension of index must be in 0 ... #{table.shape[i]} " +
@@ -384,7 +384,7 @@ module Hornetseye
         end
         result
       else
-        Lut.new( source, table, options[ :n ] ).force # !!!
+        Lut.new( source, table, options[ :n ] ).force
       end
     end
 
