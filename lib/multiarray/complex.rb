@@ -268,6 +268,18 @@ module Math
   module_function :sin_without_internalcomplex
   module_function :sin
 
+  def tan_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      sin( z ) / cos( z )
+    else
+      tan_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :tan, :internalcomplex
+  module_function :tan_without_internalcomplex
+  module_function :tan
+
 end
 
 module Hornetseye
