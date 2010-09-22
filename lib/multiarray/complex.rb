@@ -226,6 +226,20 @@ module Math
   module_function :sqrt_without_internalcomplex
   module_function :sqrt
 
+  def exp_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      real = exp( z.real ) * cos( z.imag )
+      imag = exp( z.real ) * sin( z.imag )
+      Hornetseye::InternalComplex.new real, imag
+    else
+      exp_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :exp, :internalcomplex
+  module_function :exp_without_internalcomplex
+  module_function :exp
+
 end
 
 module Hornetseye
