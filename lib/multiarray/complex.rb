@@ -240,6 +240,34 @@ module Math
   module_function :exp_without_internalcomplex
   module_function :exp
 
+  def cos_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      real = cos( z.real ) * cosh( z.imag )
+      imag = -sin( z.real ) * sinh( z.imag )
+      Hornetseye::InternalComplex.new real, imag
+    else
+      cos_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :cos, :internalcomplex
+  module_function :cos_without_internalcomplex
+  module_function :cos
+
+  def sin_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      real = sin( z.real ) * cosh( z.imag )
+      imag = cos( z.real ) * sinh( z.imag )
+      Hornetseye::InternalComplex.new real, imag
+    else
+      sin_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :sin, :internalcomplex
+  module_function :sin_without_internalcomplex
+  module_function :sin
+
 end
 
 module Hornetseye

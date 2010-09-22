@@ -598,6 +598,26 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_cos
+    [ Math.cos( 2 ), Math.cos( 3 ) ].zip( Math.cos( S[ 2, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.cos( X( 1, 2 ) ) ].zip( Math.cos( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
+  def test_sin
+    [ Math.sin( 2 ), Math.sin( 3 ) ].zip( Math.sin( S[ 2, 3 ] ).to_a ).each do |x,y|
+      assert_in_delta x, y, 1.0e-5
+    end
+    [ Math.sin( X( 1, 2 ) ) ].zip( Math.sin( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.real, y.real, 1.0e-5
+      assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+  end
+
   def test_hypot
     assert_equal S[ 5.0, 5.0 ], Math.hypot( S[ 3, 4 ], S[ 4, 3 ] )
     assert_raise( RuntimeError ) { Math.hypot( S[ 3 ], S[ 4, 3 ] ) }
