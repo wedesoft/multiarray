@@ -207,6 +207,9 @@ module Hornetseye
     define_unary_method Math, :cosh
     define_unary_method Math, :sinh
     define_unary_method Math, :tanh
+    define_unary_method Math, :acosh
+    define_unary_method Math, :asinh
+    define_unary_method Math, :atanh
     define_binary_method Math, :atan2
     define_binary_method Math, :hypot
 

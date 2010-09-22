@@ -36,6 +36,9 @@ module Hornetseye
       define_unary_method  mod, :cosh , :float
       define_unary_method  mod, :sinh , :float
       define_unary_method  mod, :tanh , :float
+      define_unary_method  mod, :acosh, :float
+      define_unary_method  mod, :asinh, :float
+      define_unary_method  mod, :atanh, :float
       define_binary_method mod, :atan2, :floating
       define_binary_method mod, :hypot, :floating
     end

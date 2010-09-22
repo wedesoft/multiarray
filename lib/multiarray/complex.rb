@@ -347,7 +347,7 @@ module Math
 
   def acos_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
-      -Complex::I * log( z + Complex::I * sqrt( 1.0 - z * z ) )
+      -1.0.im * log( z + 1.0.im * sqrt( 1.0 - z * z ) )
     else
       acos_without_internalcomplex z
     end
@@ -359,7 +359,7 @@ module Math
 
   def asin_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
-      -Complex::I * log( Complex::I * z + sqrt( 1.0 - z * z ) )
+      -1.0.im * log( 1.0.im * z + sqrt( 1.0 - z * z ) )
     else
       asin_without_internalcomplex z
     end
@@ -371,7 +371,7 @@ module Math
 
   def atan_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
-      Complex::I * log( ( Complex::I + z ) / ( Complex::I - z ) ) / 2.0
+      1.0.im * log( ( 1.0.im + z ) / ( 1.0.im - z ) ) / 2.0
     else
       atan_without_internalcomplex z
     end
@@ -380,6 +380,42 @@ module Math
   alias_method_chain :atan, :internalcomplex
   module_function :atan_without_internalcomplex
   module_function :atan
+
+  def acosh_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      log( z + sqrt( z * z - 1.0 ) )
+    else
+      acosh_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :acosh, :internalcomplex
+  module_function :acosh_without_internalcomplex
+  module_function :acosh
+
+  def asinh_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      log( z + sqrt( 1.0 + z * z ) )
+    else
+      asinh_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :asinh, :internalcomplex
+  module_function :asinh_without_internalcomplex
+  module_function :asinh
+
+  def atanh_with_internalcomplex( z )
+    if z.is_a? Hornetseye::InternalComplex
+      log( ( 1.0 + z ) / ( 1.0 - z ) ) / 2.0
+    else
+      atanh_without_internalcomplex z
+    end
+  end
+
+  alias_method_chain :atanh, :internalcomplex
+  module_function :atanh_without_internalcomplex
+  module_function :atanh
 
 end
 
