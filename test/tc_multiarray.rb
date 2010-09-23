@@ -589,5 +589,11 @@ class TC_MultiArray < Test::Unit::TestCase
                  M( I, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].to_type( C )
   end
 
+  def test_integral
+    assert_equal M( O, 3, 2 )[ [ 1, 3, 6 ], [ 5, 12, 21 ] ],
+                 M( O, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].integral
+    assert_equal M( I, 3, 2 )[ [ 1, 3, 6 ], [ 5, 12, 21 ] ],
+                 M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].integral
+  end
 
 end

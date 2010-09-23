@@ -50,7 +50,7 @@ module Hornetseye
             Store.new( dest, dest + @dest.element( INT.new( i ) - 1 ) ).demand
           end
         else
-          @dest.store @source.demand
+          Store.new( @dest, @source ).demand
         end
         @dest
       else

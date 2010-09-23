@@ -401,7 +401,7 @@ module Hornetseye
     alias_method_chain :lut, :composite
 
     def integral
-      left = array_type.new
+      left = pointer_type.new
       block = Integral.new left, self
       if block.compilable?
         GCCFunction.run block

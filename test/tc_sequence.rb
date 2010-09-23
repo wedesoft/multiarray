@@ -780,4 +780,9 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S( C, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_type( C )
   end
 
+  def test_integral
+    assert_equal S( O, 3 )[ 1, 3, 6 ], S( O, 3 )[ 1, 2, 3 ].integral
+    assert_equal S( I, 3 )[ 1, 3, 6 ], S( I, 3 )[ 1, 2, 3 ].integral
+  end
+
 end

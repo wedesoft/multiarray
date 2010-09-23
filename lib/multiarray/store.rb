@@ -34,8 +34,9 @@ module Hornetseye
       if variables.empty?
         if dimension > 0
           shape.last.times do |i|
-            dest = @dest.element( INT.new( i ) )
-            source = @source.dimension == 0 ? @source : @source.element( INT.new( i ) )
+            dest = @dest.element INT.new( i )
+            source = @source.dimension == 0 ? @source :
+                                              @source.element( INT.new( i ) )
             Store.new( dest, source ).demand
           end  
         else
