@@ -209,6 +209,12 @@ class TC_Int < Test::Unit::TestCase
     assert_equal I( 4 ), I( 5 ).minor( I( 4 ) )
   end
 
+  def test_fill
+    i = I 0
+    assert_equal I( 3 ), i.fill!( 3 )
+    assert_equal I( 3 ), i
+  end
+
   def test_integral
     assert_equal I( 3 ), I( 3 ).integral
   end

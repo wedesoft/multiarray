@@ -774,6 +774,14 @@ class TC_Sequence < Test::Unit::TestCase
     assert_raise( RuntimeError ) { Math.hypot( S[ 3, 4 ], S[ 4 ] ) }
   end
 
+  def test_fill
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      s = t[ 1, 2, 3 ]
+      assert_equal t[ 1, 1, 1 ], s.fill!( 1 )
+      assert_equal t[ 1, 1, 1 ], s
+    end
+  end
+
   def test_to_type
     assert_equal S( O, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_object
     assert_equal S( I, 3 )[ 1, 2, 3 ], S( O, 3 )[ 1, 2, 3 ].to_int

@@ -232,6 +232,11 @@ module Hornetseye
       min .. max
     end
 
+    def fill!( value = typecode.default )
+      self[] = value
+      self
+    end
+
     # Apply accumulative operation over elements diagonally
     #
     # This method is used internally to implement convolutions.

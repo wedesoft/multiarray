@@ -584,6 +584,12 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ 1, 1 ], [ 0, -1 ] ], 3 <=> M[ [ 1, 2 ], [ 3, 4 ] ]
   end
 
+  def test_fill
+    m = M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    assert_equal M( I, 3, 2 )[ [ 1, 1, 1 ], [ 1, 1, 1 ] ], m.fill!( 1 )
+    assert_equal M( I, 3, 2 )[ [ 1, 1, 1 ], [ 1, 1, 1 ] ], m
+  end
+
   def test_to_type
     assert_equal M( C, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ],
                  M( I, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].to_intrgb

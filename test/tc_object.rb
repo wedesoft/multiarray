@@ -134,6 +134,12 @@ class TC_Object < Test::Unit::TestCase
     assert_equal O( 2 ), O( true ).conditional( O( 2 ), O( 1 ) )
   end
 
+  def test_fill
+    o = O 3
+    assert_equal O( 1 ), o.fill!( 1 )
+    assert_equal O( 1 ), o
+  end
+
   def test_integral
     assert_equal O( 3 ), O( 3 ).integral
   end
