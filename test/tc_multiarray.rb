@@ -586,7 +586,7 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_to_type
     assert_equal M( C, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ],
-                 M( I, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].to_type( C )
+                 M( I, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].to_intrgb
   end
 
   def test_integral

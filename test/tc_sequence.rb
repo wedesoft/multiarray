@@ -127,8 +127,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_typecode
-    assert_equal O, S.new( O, 3 ).typecode
-    assert_equal I, S.new( I, 3 ).typecode
+    assert_equal O, S.object( 3 ).typecode
+    assert_equal I, S.int( 3 ).typecode
   end
 
   def test_dimension
@@ -775,9 +775,9 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_to_type
-    assert_equal S( O, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_type( O )
-    assert_equal S( I, 3 )[ 1, 2, 3 ], S( O, 3 )[ 1, 2, 3 ].to_type( I )
-    assert_equal S( C, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_type( C )
+    assert_equal S( O, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_object
+    assert_equal S( I, 3 )[ 1, 2, 3 ], S( O, 3 )[ 1, 2, 3 ].to_int
+    assert_equal S( C, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_intrgb
   end
 
   def test_integral
