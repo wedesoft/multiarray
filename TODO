@@ -1,6 +1,7 @@
+# improve 'upto'?
+# mask <-> integral/warp?
 # lut/warp,histogram: clipping?
 # lut,histogram with x and y coming from different tables?
-# mask <-> integral/warp?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # random numbers
 # Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
