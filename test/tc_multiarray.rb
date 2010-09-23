@@ -364,6 +364,10 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal 7, M[ [ 5, 3, 7 ], [ 2, 1, 6 ] ].max
   end
 
+  def test_sum
+    assert_equal 24, M[ [ 5, 3, 7 ], [ 2, 1, 6 ] ].sum
+  end
+
   def test_range
     assert_equal 1 .. 7, M[ [ 5, 3, 7 ], [ 2, 1, 6 ] ].range
   end

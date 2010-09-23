@@ -291,6 +291,13 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal C( 3, 2, 3 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].max
   end
 
+  def test_sum
+    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal 9, t[ 4, 2, 3 ].sum
+    end
+    assert_equal C( 4, 4, 4 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].sum
+  end
+
   def test_convolve
     [ O, I ].each do |t|
       assert_equal S( t, 5 )[ 2, 3, 0, 0, 0 ],

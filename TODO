@@ -1,9 +1,10 @@
+# weighted histograms
 # lut/warp, histogram: clipping, masks?
 # lut, histogram with x and y coming from different tables?
 # pointer-increments for better efficiency, optimize Node#diagonal
 # random numbers
-# Geometric Hashing? Bounded Hough Transform!!! RANSAC? histogram weights?
-# each, multi_each, collect, multi_collect, zip?
+# Geometric Hashing? Bounded Hough Transform!!! RANSAC?
+# each, each_with_index, multi_each, collect, multi_collect, zip?
 
 # downsampling after correlation?
 # YARD documentation with pictures, demo video, @group ..., @endgroup
@@ -11,8 +12,6 @@
 # maxint -> native_int
 
 # downsampling after correlation?
-
-test type conversions
 
 a = lazy( 16, 32 ) { |i,j| Sequence[ i, j ] } # ???
 a = lazy( 8, 8 ) { |i,j| Sequence[ i, a[j] * sin( i + b[j] ) ] }.hist 8, 8

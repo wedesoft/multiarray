@@ -228,6 +228,10 @@ module Hornetseye
       inject { |a,b| a.major b }
     end
 
+    def sum
+      inject { |a,b| a + b }
+    end
+
     def range
       min .. max
     end
