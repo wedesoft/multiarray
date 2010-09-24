@@ -3,4 +3,5 @@ pkg
 multiarray-*.tar.*
 .yardoc
 *.gem
+*.swp
 
