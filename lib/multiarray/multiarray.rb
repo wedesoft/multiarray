@@ -30,13 +30,15 @@ module Hornetseye
         options = shape.last.is_a?( Hash ) ? shape.pop : {}
         count = options[ :count ] || 1
         if shape.empty?
-          memory = typecode.memory.new typecode.storage_size * count
+          memory = options[ :memory ] ||
+                   typecode.memory.new( typecode.storage_size * count )
           Hornetseye::Pointer( typecode ).new memory
         else
           size = shape.pop
           stride = shape.inject( 1 ) { |a,b| a * b }
           Hornetseye::lazy( size ) do |index|
-            pointer = new typecode, *( shape + [ :count => count * size ] )
+            pointer = new typecode, *( shape + [ :count => count * size,
+                                                 :memory => options[ :memory ] ] )
             Lookup.new pointer, index, INT.new( stride )
           end
         end

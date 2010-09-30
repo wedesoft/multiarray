@@ -24,6 +24,10 @@ module Hornetseye
       @term = term
     end
 
+    def memory
+      @term.memory
+    end
+
     # Get unique descriptor of this object
     #
     # @param [Hash] hash Labels for any variables.

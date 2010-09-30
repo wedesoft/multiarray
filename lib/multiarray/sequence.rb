@@ -110,8 +110,20 @@ module Hornetseye
         element_type.shape + [ num_elements ]
       end
 
+      def width
+        shape[0]
+      end
+
+      def height
+        shape[1]
+      end
+
       def size
         num_elements * element_type.size
+      end
+
+      def storage_size
+        num_elements * element_type.storage_size
       end
 
       def empty?
@@ -282,8 +294,8 @@ module Hornetseye
         end
       end
 
-      def new
-        MultiArray.new typecode, *shape
+      def new( memory = nil )
+        MultiArray.new typecode, *shape, :memory => memory
       end
 
       def compilable?

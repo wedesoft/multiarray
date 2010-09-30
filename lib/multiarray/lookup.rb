@@ -29,6 +29,13 @@ module Hornetseye
       @p, @index, @stride = p, index, stride
     end
 
+    def memory
+      if array_type.storage_size != @stride.get * typecode.storage_size
+        raise 'Memory is not contiguous'
+      end
+      @p.memory
+    end
+
     # Get unique descriptor of this object
     #
     # @param [Hash] hash Labels for any variables.

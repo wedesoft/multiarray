@@ -117,6 +117,14 @@ module Hornetseye
         []
       end
 
+      def width
+        shape[0]
+      end
+
+      def height
+        shape[1]
+      end
+
       # Get size (number of elements) of this value
       #
       # @return [Integer] Returns +1+.
@@ -333,6 +341,14 @@ module Hornetseye
     # @return [Array<Integer>] Returns +array_type.shape+.
     def shape
       array_type.shape
+    end
+
+    def width
+      array_type.width
+    end
+
+    def height
+      array_type.height
     end
 
     # Get size (number of elements) of this value

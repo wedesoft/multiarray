@@ -138,6 +138,10 @@ module Hornetseye
       @value = value
     end
 
+    def memory
+      @value
+    end
+
     # Strip of all values
     #
     # Split up into variables, values, and a term where all values have been
