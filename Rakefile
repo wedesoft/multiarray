@@ -20,7 +20,7 @@ AUTHOR = %q{Jan Wedekind}
 EMAIL = %q{jan@wedesoft.de}
 HOMEPAGE = %q{http://wedesoft.github.com/multiarray/}
 
-$SITELIBDIR = Config::CONFIG[ 'sitelibdir' ]
+$SITELIBDIR = RbConfig::CONFIG[ 'sitelibdir' ]
 
 task :default => :all
 
