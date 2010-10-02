@@ -295,7 +295,7 @@ module Hornetseye
       end
 
       def new( memory = nil )
-        MultiArray.new typecode, *shape, :memory => memory
+        MultiArray.new typecode, *( shape + [ :memory => memory ] )
       end
 
       def compilable?
