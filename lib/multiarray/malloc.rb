@@ -41,13 +41,6 @@ module Hornetseye
       value
     end
 
-    # Display information about this object.
-    #
-    # @return [String] String with information about this object.
-    def to_s
-      inspect
-    end
-
   end
 
 end
