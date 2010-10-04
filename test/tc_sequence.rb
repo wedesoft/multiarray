@@ -509,6 +509,7 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_pow
     assert_equal [ 1, 4, 9 ], ( S[ 1, 2, 3 ] ** 2 ).to_a
+    assert_equal [ C( 2, 4, 8 ) ], ( 2 ** S[ C( 1, 2, 3 ) ] ).to_a
     assert_in_delta 0.0, ( ( S( X, 1 )[ X( 1, 2 ) ] ** 2 )[ 0 ] - X( -3, 4 ) ).abs,
                     1.0e-5
     assert_in_delta 0.0, ( Math::E ** S( X, 1 )[ X( 0, Math::PI ) ][ 0 ] + 1 ).abs,
@@ -545,14 +546,17 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_floor
     assert_equal S[ 0.0, 0.0, 1.0 ], S[ 0.3, 0.7, 1.3 ].floor
+    assert_equal S[ C( 0.0, 0.0, 1.0 ) ], S[ C( 0.3, 0.7, 1.3 ) ].floor
   end
 
   def test_ceil
     assert_equal S[ 1.0, 1.0, 2.0 ], S[ 0.3, 0.7, 1.3 ].ceil
+    assert_equal S[ C( 1.0, 1.0, 2.0 ) ], S[ C( 0.3, 0.7, 1.3 ) ].ceil
   end
 
   def test_round
     assert_equal S[ 0.0, 1.0, 1.0 ], S[ 0.3, 0.7, 1.3 ].round
+    assert_equal S[ C( 0.0, 1.0, 1.0 ) ], S[ C( 0.3, 0.7, 1.3 ) ].round
   end
 
   def test_cond
