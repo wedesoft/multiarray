@@ -102,6 +102,22 @@ module Hornetseye
       end
     end
 
+    def to_type_with_rgb( dest )
+      if typecode < RGB_
+        if dest < FLOAT_
+          lazy { r * 0.299 + g * 0.587 + b * 0.114 }.to_type dest
+        elsif dest < INT_
+          lazy { ( r * 0.299 + g * 0.587 + b * 0.114 ).round }.to_type dest
+        else
+          to_type_without_rgb dest
+        end
+      else
+        to_type_without_rgb dest
+      end
+    end
+
+    alias_method_chain :to_type, :rgb
+
     def conditional( a, b )
       unless a.is_a? Node
         a = Node.match( a, b.is_a?( Node ) ? b : nil ).new a
