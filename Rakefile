@@ -6,11 +6,11 @@ require 'rake/packagetask'
 require 'rbconfig'
 
 PKG_NAME = 'multiarray'
-PKG_VERSION = '0.6.0'
+PKG_VERSION = '0.6.1'
 RB_FILES = FileList[ 'lib/**/*.rb' ]
 TC_FILES = FileList[ 'test/tc_*.rb' ]
 TS_FILES = FileList[ 'test/ts_*.rb' ]
-PKG_FILES = [ 'Rakefile', 'README.md', 'COPYING', 'TODO', '.document' ] +
+PKG_FILES = [ 'Rakefile', 'README.md', 'COPYING', '.document' ] +
             RB_FILES + TS_FILES + TC_FILES
 BIN_FILES = [ 'README.md', 'COPYING', '.document' ] +
             RB_FILES + TS_FILES + TC_FILES
