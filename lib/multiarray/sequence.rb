@@ -32,6 +32,13 @@ module Hornetseye
         MultiArray.new typecode, size
       end
 
+      def import( typecode, string, size )
+        t = Hornetseye::Sequence typecode, size
+        memory = Malloc.new t.storage_size
+        memory.write string
+        t.new memory
+      end
+
       # Convert array to uniform array
       #
       # A native type which fits all elements is determined and used to create

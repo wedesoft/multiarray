@@ -144,6 +144,12 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal 3, S[ 1, 2, 3 ].size
   end
 
+  def test_import
+    assert_equal [ 1, 2, 3 ],
+                 S.import( I, "\001\000\000\000\002\000\000\000\003\000\000\000", 3 ).
+                 to_a
+  end
+
   def test_at_assign
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       s = t.new

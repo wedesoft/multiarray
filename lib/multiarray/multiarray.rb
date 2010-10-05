@@ -44,6 +44,13 @@ module Hornetseye
         end
       end
 
+      def import( typecode, string, *shape )
+        t = Hornetseye::MultiArray typecode, *shape
+        memory = Malloc.new t.storage_size
+        memory.write string
+        t.new memory
+      end
+
       # Convert Ruby array to uniform multi-dimensional array
       #
       # Type matching is used to find a common element type. Furthermore the required

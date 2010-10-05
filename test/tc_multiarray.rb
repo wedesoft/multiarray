@@ -166,6 +166,13 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal 6, M( O, 3, 2 ).new.size
   end
 
+  def test_import
+    assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
+                 M.import( I, "\001\000\000\000\002\000\000\000\003\000\000\000" +
+                           "\004\000\000\000\005\000\000\000\006\000\000\000",
+                           3, 2 ).to_a
+  end
+
   def test_at_assign
     [ M( O, 3, 2 ), M( I, 3, 2 ) ].each do |t|
       m = t.new
