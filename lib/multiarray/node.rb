@@ -358,6 +358,12 @@ module Hornetseye
       array_type.size
     end
 
+    def memory
+      tmp = pointer_type.new
+      tmp[] = self
+      tmp.memory
+    end
+
     # Check whether this object is an empty array.
     #
     # @return [Boolean] Returns whether this object is an empty array.
