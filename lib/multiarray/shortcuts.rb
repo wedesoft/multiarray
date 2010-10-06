@@ -17,7 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  module ConstructorShortcuts
+  module MultiArrayConstructor
 
     def method_missing( name, *args )
       if name.to_s =~ /^[a-z]+$/
@@ -39,11 +39,11 @@ module Hornetseye
 
   end
 
-  Sequence.extend ConstructorShortcuts
+  Sequence.extend MultiArrayConstructor
 
-  MultiArray.extend ConstructorShortcuts
+  MultiArray.extend MultiArrayConstructor
 
-  module ConversionShortcuts
+  module MultiArrayConversion
 
     def method_missing( name, *args )
       if name.to_s =~ /^to_[a-z]+$/
@@ -65,7 +65,7 @@ module Hornetseye
 
   end
 
-  Node.class_eval { include ConversionShortcuts }
+  Node.class_eval { include MultiArrayConversion }
 
 end
 

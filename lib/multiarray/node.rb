@@ -359,9 +359,7 @@ module Hornetseye
     end
 
     def memory
-      tmp = pointer_type.new
-      tmp[] = self
-      tmp.memory
+      nil
     end
 
     # Check whether this object is an empty array.
