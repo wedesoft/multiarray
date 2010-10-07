@@ -220,6 +220,9 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 1, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].r.to_a
       assert_equal [ 2, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].g.to_a
       assert_equal [ 3, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].b.to_a
+      #assert_equal [ 1, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].collect { |x| x.r }.to_a
+      #assert_equal [ 2, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].collect { |x| x.g }.to_a
+      #assert_equal [ 3, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].collect { |x| x.b }.to_a
       s = t[ 0, 0, 0 ]
       assert_equal 1, s.r = 1
       assert_equal S[ 1, 2, 3 ], s.g = S[ 1, 2, 3 ]
@@ -239,6 +242,8 @@ class TC_Sequence < Test::Unit::TestCase
     [ S( O, 2 ), S( X, 2 ) ].each do |t|
       assert_equal [ 1, 3 ], t[ X( 1, 2 ), 3 ].real.to_a
       assert_equal [ 2, 0 ], t[ X( 1, 2 ), 3 ].imag.to_a
+      #assert_equal [ 1, 3 ], t[ X( 1, 2 ), 3 ].collect { |x| x.real }.to_a
+      #assert_equal [ 2, 0 ], t[ X( 1, 2 ), 3 ].collect { |x| x.imag }.to_a
       s = t[ 0, 0 ]
       assert_equal 1, s.real = 1
       assert_equal S[ 2, 3 ], s.imag = S[ 2, 3 ]
