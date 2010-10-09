@@ -636,11 +636,6 @@ module Hornetseye
         retval.demand.get
       else
         Store.new( array_type.new, self ).demand.get
-        #Hornetseye::lazy do
-        #  retval = array_type.new
-        #  retval[] = self
-        #  retval.get
-        #end
       end
     end
 
@@ -652,11 +647,6 @@ module Hornetseye
     #
     # @private
     def simplify
-      #if Thread.current[ :function ] and dimension == 0
-      #  demand.dup
-      #else
-      #  demand
-      #end
       dimension == 0 ? demand.dup : demand
     end
 
