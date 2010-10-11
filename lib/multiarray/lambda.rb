@@ -83,8 +83,10 @@ module Hornetseye
     #
     # @private
     def subst( hash )
+      # subst_var = @index.subst hash
+      # Lambda.new subst_var, @term.subst( @index => subst_var ).subst( hash )
       subst_var = @index.subst hash
-      Lambda.new subst_var, @term.subst( @index => subst_var ).subst( hash )
+      Lambda.new subst_var, @term.subst( hash.merge( @index => subst_var ) )
     end
 
     # Lookup element of an array

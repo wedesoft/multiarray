@@ -232,10 +232,14 @@ module Hornetseye
       end
 
       def inspect
-        if dimension == 1
-          "Sequence(#{typecode.inspect},#{num_elements.inspect})"
+        if element_type and num_elements
+          if dimension == 1
+            "Sequence(#{typecode.inspect},#{num_elements.inspect})"
+          else
+            "MultiArray(#{typecode.inspect},#{shape.join ','})"
+          end
         else
-          "MultiArray(#{typecode.inspect},#{shape.join ','})"
+          'MultiArray(?,?)'
         end
       end
 
@@ -251,10 +255,14 @@ module Hornetseye
       #
       # @private
       def descriptor( hash )
-        if dimension == 1
-          "Sequence(#{typecode.descriptor( hash )},#{num_elements.to_s})"
+        if element_type and num_elements
+          if dimension == 1
+            "Sequence(#{typecode.descriptor( hash )},#{num_elements.to_s})"
+          else
+            "MultiArray(#{typecode.descriptor( hash )},#{shape.join ','})"
+          end
         else
-          "MultiArray(#{typecode.descriptor( hash )},#{shape.join ','})"
+          'MultiArray(?,?)'
         end
       end
 
