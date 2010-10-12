@@ -155,6 +155,10 @@ module Hornetseye
         self
       end
 
+      def rgb?
+        false
+      end
+
       # Get corresponding boolean-based datatype
       #
       # @return [Class] Returns +BOOL+.
@@ -374,6 +378,10 @@ module Hornetseye
     # @return [Array<Integer>] Returns +array_type.dimension+.
     def dimension
       array_type.dimension
+    end
+
+    def rgb?
+      array_type.rgb?
     end
 
     # Extract native value if this is an element

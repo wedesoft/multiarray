@@ -167,6 +167,10 @@ module Hornetseye
         element_type.dimension + 1
       end
 
+      def rgb?
+        element_type.rgb?
+      end
+
       def contiguous
         self
       end

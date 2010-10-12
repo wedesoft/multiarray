@@ -315,6 +315,10 @@ module Hornetseye
         self == other
       end
 
+      def rgb?
+        true
+      end
+
     end
 
     def initialize( value = self.class.default )
