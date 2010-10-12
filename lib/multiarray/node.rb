@@ -362,6 +362,10 @@ module Hornetseye
       array_type.size
     end
 
+    def storage_size
+      array_type.storage_size
+    end
+
     def memory
       nil
     end
