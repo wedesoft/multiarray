@@ -302,6 +302,11 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal C( 3, 2, 3 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].max
   end
 
+  def test_normalise
+    assert_equal [ 0.0, 85.0, 255.0 ], S[ 1, 2, 4 ].normalise.to_a
+    assert_equal [ C( 0.0, 85.0, 255.0 ) ], S[ C( 1, 2, 4 ) ].normalise.to_a
+  end
+
   def test_sum
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal 9, t[ 4, 2, 3 ].sum

@@ -252,6 +252,27 @@ module Hornetseye
       min .. max
     end
 
+    def normalise( range = 0 .. 0xFF )
+      if range.exclude_end?
+        raise "Normalisation does not support ranges with end value " +
+              "excluded (such as #{range})"
+      end
+      lower, upper = min, max
+      if lower.is_a? RGB or upper.is_a? RGB
+        current = [ lower.r, lower.g, lower.b ].min ..
+                  [ upper.r, upper.g, upper.b ].max
+      else
+        current = min .. max
+      end
+      if current.last != current.first
+        factor =
+          ( range.last - range.first ).to_f / ( current.last - current.first )
+        self * factor + ( range.first - current.first * factor )
+      else
+        self + ( range.first - current.first )
+      end
+    end
+
     def fill!( value = typecode.default )
       self[] = value
       self
