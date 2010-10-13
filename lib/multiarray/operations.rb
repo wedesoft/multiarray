@@ -423,9 +423,10 @@ module Hornetseye
             raise "#{i+1}th dimension of index must be in 0 ... #{table.shape[i]} " +
                   "(but was #{range.begin})"
           end
-          if range.end >= table.shape[ i ]
-            raise "#{i+1}th dimension of index must be in 0 ... #{table.shape[i]} " +
-                  "(but was #{range.end})"
+          offset = table.dimension - source.shape.first
+          if range.end >= table.shape[ i + offset ]
+            raise "#{i+1}th dimension of index must be in 0 ... " +
+                  "#{table.shape[ i + offset ]} (but was #{range.end})"
           end
         end
       end
