@@ -695,10 +695,10 @@ module Hornetseye
     define_unary_op :imag, :scalar
 
     def real_with_decompose
-      if typecode < COMPLEX_
-        decompose 0
-      elsif typecode == OBJECT
+      if typecode == OBJECT or is_a?( Variable )
         real_without_decompose
+      elsif typecode < COMPLEX_
+        decompose 0
       else
         self
       end
@@ -719,10 +719,10 @@ module Hornetseye
     end
 
     def imag_with_decompose
-      if typecode < COMPLEX_
-        decompose 1
-      elsif typecode == OBJECT
+      if typecode == OBJECT or is_a?( Variable )
         imag_without_decompose
+      elsif typecode < COMPLEX_
+        decompose 1
       else
         Hornetseye::lazy( *shape ) { typecode.new( 0 ) }
       end

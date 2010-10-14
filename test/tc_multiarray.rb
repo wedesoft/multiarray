@@ -338,21 +338,21 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ 1, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].r
     assert_equal M[ [ 2, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].g
     assert_equal M[ [ 3, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].b
-    #assert_equal M[ [ 1, 4 ], [ 5, 6 ] ],
-    #             M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].collect { |x| x.r }
-    #assert_equal M[ [ 2, 4 ], [ 5, 6 ] ],
-    #             M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].collect { |x| x.g }
-    #assert_equal M[ [ 3, 4 ], [ 5, 6 ] ],
-    #             M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].collect { |x| x.b }
+    assert_equal M[ [ 1, 4 ], [ 5, 6 ] ],
+                 M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].collect { |x| x.r }
+    assert_equal M[ [ 2, 4 ], [ 5, 6 ] ],
+                 M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].collect { |x| x.g }
+    assert_equal M[ [ 3, 4 ], [ 5, 6 ] ],
+                 M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].collect { |x| x.b }
   end
 
   def test_real_imag
     assert_equal M[ [ 1, 3 ], [ 4, 5 ] ], M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].real
     assert_equal M[ [ 2, 0 ], [ 0, 0 ] ], M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].imag
-    #assert_equal M[ [ 1, 3 ], [ 4, 5 ] ],
-    #             M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].collect { |x| x.real }
-    #assert_equal M[ [ 2, 0 ], [ 0, 0 ] ],
-    #             M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].collect { |x| x.imag }
+    assert_equal M[ [ 1, 3 ], [ 4, 5 ] ],
+                 M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].collect { |x| x.real }
+    assert_equal M[ [ 2, 0 ], [ 0, 0 ] ],
+                 M[ [ X( 1, 2 ), 3 ], [ 4, 5 ] ].collect { |x| x.imag }
   end
 
   def test_inject
