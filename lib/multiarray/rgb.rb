@@ -179,6 +179,10 @@ module Hornetseye
 
   end
 
+end
+
+module Hornetseye
+
   class RGB_ < Composite
 
     class << self

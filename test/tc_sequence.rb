@@ -580,6 +580,10 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], -1 )
     assert_equal S[ -1, 1 ], S[ false, true ].conditional( 1, S[ -1, -2 ] )
     assert_equal S[ -1, 2 ], S[ false, true ].conditional( S[ 1, 2 ], S[ -1, -2 ] )
+    assert_equal S[ C( 4, 5, 6 ), C( 1, 2, 3 ) ],
+                 S[ false, true ].conditional( C( 1, 2, 3 ), C( 4, 5, 6 ) )
+    assert_equal S[ X( 3, 4 ), X( 1, 2 ) ],
+                 S[ false, true ].conditional( X( 1, 2 ), X( 3, 4 ) )
     assert_raise( RuntimeError ) { S[ false, true ].conditional( S[ 1, 2 ], S[ 1 ] ) }
     assert_raise( RuntimeError ) { S[ false, true ].conditional( S[ 1 ], S[ 1, 2 ] ) }
     assert_raise( RuntimeError ) { S[ false ].conditional( S[ 1, 2 ], S[ 1, 2 ] ) }

@@ -173,6 +173,28 @@ module Hornetseye
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end
 
+    def conditional_with_rgb( a, b )
+      if a.is_a?( RGB ) or b.is_a?( RGB )
+        Hornetseye::RGB( conditional( a.r, b.r ), conditional( a.g, b.g ),
+                         conditional( a.b, b.b ) )
+      else
+        conditional_without_rgb a, b
+      end
+    end
+
+    alias_method_chain :conditional, :rgb
+
+    def conditional_with_complex( a, b )
+      if a.is_a?( InternalComplex ) or b.is_a?( InternalComplex )
+        InternalComplex.new conditional( a.real, b.real ),
+                            conditional( a.imag, b.imag )
+      else
+        conditional_without_complex a, b
+      end
+    end
+
+    alias_method_chain :conditional, :complex
+
     define_unary_op :not, '!'
     define_unary_op :~
     define_unary_op :-@, :-
