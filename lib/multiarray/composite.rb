@@ -103,6 +103,10 @@ module Hornetseye
 
     end
 
+    def decompose( i )
+      self.class.element_type.new @value.decompose( i )
+    end
+
   end
 
 end
