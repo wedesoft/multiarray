@@ -208,12 +208,10 @@ module Hornetseye
     # This method decomposes composite elements into array.
     #
     # @return [Node] Result of decomposition.
-    def decompose
+    def decompose( i )
       if self.class.target < Composite
         pointer = Hornetseye::Pointer( self.class.target.element_type ).new @value
-        num_elements = self.class.target.num_elements
-        var = Variable.new Hornetseye::INDEX( INT.new( num_elements ) )
-        Lambda.new var, Lookup.new( pointer, var, INT.new( 1 ) )
+        pointer.lookup INT.new( i ), INT.new( 1 )
       else
         super
       end

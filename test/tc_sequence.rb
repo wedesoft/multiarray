@@ -277,6 +277,7 @@ class TC_Sequence < Test::Unit::TestCase
   def test_collect
     assert_equal S[ 2, 3 ], S[ 1, 2 ].collect { |x| x + 1 }
     assert_equal S[ 2, 4 ], S[ 1, 2 ].map { |x| 2 * x }
+    assert_equal S[ 6 ], S[ C( 1, 2, 3 ) ].collect { |x| x.r + x.g + x.b }
   end
 
   def test_sum

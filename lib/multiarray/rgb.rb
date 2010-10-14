@@ -173,8 +173,8 @@ module Hornetseye
     # This method decomposes the RGB value into an array.
     #
     # @return [Node] An array with the three channel values as elements.
-    def decompose
-      Hornetseye::Sequence[ @r, @g, @b ]
+    def decompose( i )
+      [ @r, @g, @b ][ i ]
     end
 
   end
@@ -456,10 +456,10 @@ module Hornetseye
     define_unary_op :b, :scalar
 
     def r_with_decompose
-      if typecode < RGB_
-        decompose.roll.element 0
-      elsif typecode == OBJECT
+      if typecode == OBJECT or is_a?( Variable )
         r_without_decompose
+      elsif typecode < RGB_
+        decompose 0
       else
         self
       end
@@ -469,7 +469,7 @@ module Hornetseye
 
     def r=( value )
       if typecode < RGB_
-        decompose.roll[ 0 ] = value
+        decompose( 0 )[] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
           value * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
@@ -480,10 +480,10 @@ module Hornetseye
     end
 
     def g_with_decompose
-      if typecode < RGB_
-        decompose.roll.element 1
-      elsif typecode == OBJECT
+      if typecode == OBJECT or is_a?( Variable )
         g_without_decompose
+      elsif typecode < RGB_
+        decompose 1
       else
         self
       end
@@ -493,7 +493,7 @@ module Hornetseye
 
     def g=( value )
       if typecode < RGB_
-        decompose.roll[ 1 ] = value
+        decompose( 1 )[] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
           r * RGB.new( 1, 0, 0 ) + value * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
@@ -504,10 +504,10 @@ module Hornetseye
     end
 
     def b_with_decompose
-      if typecode < RGB_
-        decompose.roll.element 2
-      elsif typecode == OBJECT
+      if typecode == OBJECT or is_a?( Variable )
         b_without_decompose
+      elsif typecode < RGB_
+        decompose 2
       else
         self
       end
@@ -517,7 +517,7 @@ module Hornetseye
 
     def b=( value )
       if typecode < RGB_
-        decompose.roll[ 2 ] = value
+        decompose( 2 )[] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
           r * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + value * RGB.new( 0, 0, 1 )

@@ -88,8 +88,8 @@ module Hornetseye
       end
     end
 
-    def decompose
-      self.class.new @source, @table.decompose, @n
+    def decompose( i )
+      self.class.new @source, @table.decompose( i ), @n
     end
 
     def compilable?

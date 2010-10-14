@@ -164,8 +164,8 @@ module Hornetseye
     # This method decomposes composite elements into array.
     #
     # @return [Node] Result of decomposition.
-    def decompose
-      Lambda.new @index, @term.decompose
+    def decompose( i )
+      Lambda.new @index, @term.decompose( i )
     end
 
     # Check whether this term is compilable

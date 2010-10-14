@@ -192,8 +192,8 @@ module Hornetseye
     # This method decomposes composite elements into array.
     #
     # @return [Node] Result of decomposition.
-    def decompose
-      values = @values.collect { |value| value.decompose }
+    def decompose( i )
+      values = @values.collect { |value| value.decompose i }
       self.class.new( *values ).demand
     end
 

@@ -201,8 +201,8 @@ module Hornetseye
     #
     # @return [Node] Returns an array with the real and imaginary component as
     #         elements.
-    def decompose
-      Hornetseye::Sequence[ @real, @imag ]
+    def decompose( i )
+      [ @real, @imag ][ i ]
     end
 
   end
@@ -696,7 +696,7 @@ module Hornetseye
 
     def real_with_decompose
       if typecode < COMPLEX_
-        decompose.roll.element 0
+        decompose 0
       elsif typecode == OBJECT
         real_without_decompose
       else
@@ -708,7 +708,7 @@ module Hornetseye
 
     def real=( value )
       if typecode < COMPLEX_
-        decompose.roll[ 0 ] = value
+        decompose( 0 )[] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
           value + imag * Complex::I
@@ -720,7 +720,7 @@ module Hornetseye
 
     def imag_with_decompose
       if typecode < COMPLEX_
-        decompose.roll.element 1
+        decompose 1
       elsif typecode == OBJECT
         imag_without_decompose
       else
@@ -732,7 +732,7 @@ module Hornetseye
 
     def imag=( value )
       if typecode < COMPLEX_
-        decompose.roll[ 1 ] = value
+        decompose( 1 )[] = value
       elsif typecode == OBJECT
         self[] = Hornetseye::lazy do
           real + value * Complex::I
