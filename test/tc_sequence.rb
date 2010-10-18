@@ -29,6 +29,7 @@ class TC_Sequence < Test::Unit::TestCase
   S = Hornetseye::Sequence
   C = Hornetseye::INTRGB
   X = Hornetseye::DCOMPLEX
+  Malloc = Hornetseye::Malloc
 
   def S( *args )
     Hornetseye::Sequence *args
@@ -145,9 +146,12 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_import
-    assert_equal [ 1, 2, 3 ],
-                 S.import( I, "\001\000\000\000\002\000\000\000\003\000\000\000", 3 ).
+    str = "\001\000\000\000\002\000\000\000\003\000\000\000"
+    assert_equal [ 1, 2, 3 ], S.import( I, str, 3 ).
                  to_a
+    m = Malloc.new str.bytesize
+    m.write str
+    assert_equal [ 1, 2, 3 ], S.import( I, m, 3 ).to_a
   end
 
   def test_at_assign

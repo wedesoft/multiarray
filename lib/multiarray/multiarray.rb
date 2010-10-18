@@ -46,8 +46,12 @@ module Hornetseye
 
       def import( typecode, string, *shape )
         t = Hornetseye::MultiArray typecode, *shape
-        memory = Malloc.new t.storage_size
-        memory.write string
+        if string.is_a? Malloc
+          memory = string
+        else
+          memory = Malloc.new t.storage_size
+          memory.write string
+        end
         t.new memory
       end
 

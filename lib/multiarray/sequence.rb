@@ -34,8 +34,12 @@ module Hornetseye
 
       def import( typecode, string, size )
         t = Hornetseye::Sequence typecode, size
-        memory = Malloc.new t.storage_size
-        memory.write string
+        if string.is_a? Malloc
+          memory = string
+        else
+          memory = Malloc.new t.storage_size
+          memory.write string
+        end
         t.new memory
       end
 
