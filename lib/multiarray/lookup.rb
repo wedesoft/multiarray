@@ -30,9 +30,9 @@ module Hornetseye
     end
 
     def memory
-      if array_type.storage_size != @stride.get * typecode.storage_size
-        raise 'Memory is not contiguous'
-      end
+      #if array_type.storage_size != @stride.get * typecode.storage_size
+      #  raise 'Memory is not contiguous'
+      #end
       @p.memory
     end
 
