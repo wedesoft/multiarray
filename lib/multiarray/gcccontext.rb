@@ -20,12 +20,11 @@ module Hornetseye
   class GCCContext
 
     LDSHARED = Config::CONFIG[ 'LDSHARED' ] # c:\mingw\bin\gcc
-    STRIP = Config::CONFIG[ 'STRIP' ]
     RUBYHDRDIR = Config::CONFIG.member?( 'rubyhdrdir' ) ?
       "-I#{Config::CONFIG['rubyhdrdir']} " +
       "-I#{Config::CONFIG['rubyhdrdir']}/#{Config::CONFIG['arch']}" :
       "-I#{Config::CONFIG['archdir']}"
-    LIBRUBYARG = Config::CONFIG[ 'LIBRUBYARG' ]
+    LIBRUBYARG = "-L#{RbConfig::CONFIG[ 'libdir' ]} #{Config::CONFIG[ 'LIBRUBYARG' ]}"
     DIRNAME = "#{Dir.tmpdir}/hornetseye-ruby#{RUBY_VERSION}-" +
               "#{ENV[ 'USER' ] || ENV[ 'USERNAME' ]}"
     LOCKFILE = "#{DIRNAME}/lock"
@@ -131,10 +130,8 @@ EOS
       gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -O " +
             "-o #{DIRNAME}/#{@lib_name}.so " +
             "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
-      strip = "#{STRIP} #{DIRNAME}/#{@lib_name}.so"
       # puts template
       raise "Error compiling #{DIRNAME}/#{@lib_name}.c" unless system gcc
-      raise "Error stripping #{DIRNAME}/#{@lib_name}.so" unless system strip
       require "#{DIRNAME}/#{@lib_name}.so"
     end
 
