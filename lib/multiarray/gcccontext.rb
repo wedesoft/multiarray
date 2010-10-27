@@ -19,12 +19,18 @@ module Hornetseye
   
   class GCCContext
 
-    LDSHARED = Config::CONFIG[ 'LDSHARED' ] # c:\mingw\bin\gcc
-    RUBYHDRDIR = Config::CONFIG.member?( 'rubyhdrdir' ) ?
-      "-I#{Config::CONFIG['rubyhdrdir']} " +
-      "-I#{Config::CONFIG['rubyhdrdir']}/#{Config::CONFIG['arch']}" :
-      "-I#{Config::CONFIG['archdir']}"
-    LIBRUBYARG = "-L#{RbConfig::CONFIG[ 'libdir' ]} #{Config::CONFIG[ 'LIBRUBYARG' ]}"
+    CFG = RbConfig::CONFIG
+    if CFG[ 'rubyhdrdir' ]
+      CFLAGS = "-DNDEBUG #{CFG[ 'CFLAGS' ]} " +
+        "-I#{CFG['rubyhdrdir']} -I#{CFG['rubyhdrdir']}/#{CFG['arch']}"
+    else
+      CFLAGS = "-DNDEBUG #{CFG[ 'CFLAGS' ]} " +
+        "-I#{CFG['archdir']}"
+    end
+    LIBRUBYARG = "-L#{CFG[ 'libdir' ]} #{CFG[ 'LIBRUBYARG' ]} #{CFG[ 'LDFLAGS' ]} "
+                 "#{CFG[ 'SOLIBS' ]} #{CFG[ 'DLDLIBS' ]}"
+    LDSHARED = CFG[ 'LDSHARED' ]
+    DLEXT = CFG[ 'DLEXT' ]
     DIRNAME = "#{Dir.tmpdir}/hornetseye-ruby#{RUBY_VERSION}-" +
               "#{ENV[ 'USER' ] || ENV[ 'USERNAME' ]}"
     LOCKFILE = "#{DIRNAME}/lock"
@@ -37,8 +43,8 @@ module Hornetseye
     @@lib_name = 'hornetseye_aaaaaaaa'
 
     if ENV[ 'HORNETSEYE_PRELOAD_CACHE' ]
-      while File.exist? "#{DIRNAME}/#{@@lib_name}.so"
-        require "#{DIRNAME}/#{@@lib_name}.so"        
+      while File.exist? "#{DIRNAME}/#{@@lib_name}.#{DLEXT}"
+        require "#{DIRNAME}/#{@@lib_name}"        
         @@lib_name = @@lib_name.succ
       end
     end
@@ -127,12 +133,11 @@ EOS
       File.open "#{DIRNAME}/#{@lib_name}.c", 'w', 0600 do |f|
         f << template
       end
-      gcc = "#{LDSHARED} -fPIC #{RUBYHDRDIR} -O " +
-            "-o #{DIRNAME}/#{@lib_name}.so " +
+      gcc = "#{LDSHARED} #{CFLAGS} -o #{DIRNAME}/#{@lib_name}.#{DLEXT} " +
             "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
       # puts template
       raise "Error compiling #{DIRNAME}/#{@lib_name}.c" unless system gcc
-      require "#{DIRNAME}/#{@lib_name}.so"
+      require "#{DIRNAME}/#{@lib_name}"
     end
 
     def <<( str )
