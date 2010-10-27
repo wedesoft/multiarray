@@ -47,7 +47,7 @@ module Hornetseye
         'double'
       else
         if @typecode < Pointer_
-          'void *'
+          'unsigned char *'
         elsif @typecode < INDEX_
           'int'
         else
