@@ -136,7 +136,7 @@ EOS
       gcc = "#{LDSHARED} #{CFLAGS} -o #{DIRNAME}/#{@lib_name}.#{DLEXT} " +
             "#{DIRNAME}/#{@lib_name}.c #{LIBRUBYARG}"
       # puts template
-      raise "Error compiling #{DIRNAME}/#{@lib_name}.c" unless system gcc
+      raise "The following command failed: #{gcc}" unless system gcc
       require "#{DIRNAME}/#{@lib_name}"
     end
 
