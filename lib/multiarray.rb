@@ -378,6 +378,21 @@ class Fixnum
 
   alias_method_chain :>>, :hornetseye, :shr
 
+  if method_defined? :rpower
+
+    def power_with_hornetseye( other )
+      if other.is_a? Hornetseye::Node
+        x, y = other.coerce self
+        x ** y
+      else
+        power_without_hornetseye other
+      end
+    end
+
+    alias_method_chain :**, :hornetseye, :power
+
+  end
+
 end
 
 # +Range+ is extended with a few methods

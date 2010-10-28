@@ -703,3 +703,23 @@ module Hornetseye
   module_function :DFLOATRGB
 
 end
+
+class Fixnum
+
+  if method_defined? :rpower
+
+    def power_with_rgb( other )
+      if other.is_a? Hornetseye::RGB
+        x, y = other.coerce self
+        x ** y
+      else
+        power_without_rgb other
+      end
+    end
+
+    alias_method_chain :**, :rgb, :power
+
+  end
+
+end
+
