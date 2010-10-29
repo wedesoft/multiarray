@@ -99,21 +99,32 @@ module Hornetseye
         end
       end
 
+      DIRECTIVES = { [  8, true  ] => 'c',
+                     [  8, false ] => 'C',
+                     [ 16, true  ] => 's',
+                     [ 16, false ] => 'S',
+                     [ 32, true  ] => 'i',
+                     [ 32, false ] => 'I',
+                     [ 64, true  ] => 'q',
+                     [ 64, false ] => 'Q' }
+
       # Directive for packing/unpacking elements of this type
       #
       # @private
       def directive
-        retval = { [  8, true  ] => 'c',
-                   [  8, false ] => 'C',
-                   [ 16, true  ] => 's',
-                   [ 16, false ] => 'S',
-                   [ 32, true  ] => 'i',
-                   [ 32, false ] => 'I',
-                   [ 64, true  ] => 'q',
-                   [ 64, false ] => 'Q' }[ [ bits, signed ] ]
+        retval = DIRECTIVES[ [ bits, signed ] ]
         raise "No directive for packing/unpacking #{inspect}" unless retval
         retval
       end
+
+      IDENTIFIER = { [  8, true  ] => 'BYTE',
+                     [  8, false ] => 'UBYTE',
+                     [ 16, true  ] => 'SINT',
+                     [ 16, false ] => 'USINT',
+                     [ 32, true  ] => 'INT',
+                     [ 32, false ] => 'UINT',
+                     [ 64, true  ] => 'LONG',
+                     [ 64, false ] => 'ULONG' }
 
       # Get string with information about this class
       #
@@ -121,15 +132,8 @@ module Hornetseye
       #         "BYTE").
       def inspect
         unless bits.nil? or signed.nil?
-          retval = { [  8, true  ] => 'BYTE',
-                     [  8, false ] => 'UBYTE',
-                     [ 16, true  ] => 'SINT',
-                     [ 16, false ] => 'USINT',
-                     [ 32, true  ] => 'INT',
-                     [ 32, false ] => 'UINT',
-                     [ 64, true  ] => 'LONG',
-                     [ 64, false ] => 'ULONG' }[ [ bits, signed ] ] ||
-                   "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
+          IDENTIFIER[ [ bits, signed ] ] ||
+            "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
         else
           super
         end

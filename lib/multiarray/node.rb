@@ -43,7 +43,7 @@ module Hornetseye
       #
       # @private
       def descriptor( hash )
-        'Node'
+        name
       end
 
       # Find matching native datatype to a Ruby value
@@ -554,13 +554,15 @@ module Hornetseye
     end
 
     def check_shape( *args )
+      _shape = shape
       args.each do |arg|
-        if dimension < arg.dimension
+        _arg_shape = arg.shape
+        if _shape.size < _arg_shape.size
           raise "#{arg.array_type.inspect} has #{arg.dimension} dimension(s) " +
                 "but should not have more than #{dimension}"
         end
-        if ( shape + arg.shape ).all? { |s| s.is_a? Integer }
-          if shape.last( arg.dimension ) != arg.shape
+        if ( _shape + _arg_shape ).all? { |s| s.is_a? Integer }
+          if _shape.last( _arg_shape.size ) != _arg_shape
             raise "#{arg.array_type.inspect} has shape #{arg.shape.inspect} " +
                   "(does not match last value(s) of #{shape.inspect})"
           end
@@ -578,7 +580,7 @@ module Hornetseye
     # @return [Object,Node] Returns the value.
     def []=( *indices )
       value = indices.pop
-      value = Node.match( value ).new value unless value.is_a? Node
+      value = typecode.new value unless value.is_a? Node
       if indices.empty?
         check_shape value
         unless compilable? and value.compilable? and dimension > 0
@@ -638,10 +640,10 @@ module Hornetseye
     #
     # @private
     def force
-      if ( dimension > 0 and Thread.current[ :lazy ] ) or not variables.empty?
-        self
-      elsif finalised?
+      if finalised?
         get
+      elsif ( dimension > 0 and Thread.current[ :lazy ] ) or not variables.empty?
+        self
       elsif compilable?
         retval = pointer_type.new
         GCCFunction.run Store.new( retval, self )

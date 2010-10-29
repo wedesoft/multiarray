@@ -216,21 +216,23 @@ module Hornetseye
         RGB.new 0, 0, 0
       end
 
+      IDENTIFIER = { BYTE    => 'BYTERGB',
+                     UBYTE   => 'UBYTERGB',
+                     SINT    => 'SINTRGB',
+                     USINT   => 'USINTRGB',
+                     INT     => 'INTRGB',
+                     UINT    => 'UINTRGB',
+                     LONG    => 'LONGRGB',
+                     ULONG   => 'ULONGRGB',
+                     SFLOAT  => 'SFLOATRGB',
+                     DFLOAT  => 'DFLOATRGB' }
+
       # Diplay information about this class
       #
       # @return [String] Text with information about this class (e.g. "DFLOATRGB").
       def inspect
         unless element_type.nil?
-          { BYTE    => 'BYTERGB',
-            UBYTE   => 'UBYTERGB',
-            SINT    => 'SINTRGB',
-            USINT   => 'USINTRGB',
-            INT     => 'INTRGB',
-            UINT    => 'UINTRGB',
-            LONG    => 'LONGRGB',
-            ULONG   => 'ULONGRGB',
-            SFLOAT  => 'SFLOATRGB',
-            DFLOAT  => 'DFLOATRGB' }[ element_type ] ||
+          IDENTIFIER[ element_type ] ||
             "RGB(#{element_type.inspect})"
         else
           super

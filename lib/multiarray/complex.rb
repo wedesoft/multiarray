@@ -474,15 +474,17 @@ module Hornetseye
         end
       end
 
+      IDENTIFIER = { SFLOAT => 'SCOMPLEX',
+                     DFLOAT => 'DCOMPLEX' }
+
       # Display information about this class
       #
       # @return [String] Returns string with information about this class (e.g.
       #         "SCOMPLEX").
       def inspect
         unless element_type.nil?
-          { SFLOAT => 'SCOMPLEX',
-            DFLOAT => 'DCOMPLEX' }[ element_type ] ||
-          "COMPLEX(#{element_type.inspect})"
+          IDENTIFIER[ element_type ] ||
+            "COMPLEX(#{element_type.inspect})"
         else
           super
         end
