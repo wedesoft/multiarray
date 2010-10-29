@@ -209,8 +209,9 @@ module Hornetseye
         end
       else
         index = Variable.new Hornetseye::INDEX( nil )
-        value = element( index ).
-          inject nil, :block => block, :var1 => var1, :var2 => var2
+        value = element( index ).inject nil, :block => block,
+                                        :var1 => var1, :var2 => var2
+        value = typecode.new value unless value.is_a? Node
         Inject.new( value, index, initial, block, var1, var2 ).force
       end
     end
@@ -360,7 +361,7 @@ module Hornetseye
       options = { :target => UINT, :safe => true }.merge options
       if options[ :safe ]
         if shape.first != 1 and ret_shape.size == 1
-          right = Hornetseye::lazy( 1 ) { |i| self }.unroll
+          right = Hornetseye::lazy( 1 ) { self }.unroll
         else
           if shape.first != ret_shape.size
             raise "First dimension of array (#{shape.first}) differs from number of " +

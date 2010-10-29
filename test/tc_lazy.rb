@@ -98,6 +98,8 @@ class TC_Lazy < Test::Unit::TestCase
     assert_equal 10, lazy( 5 ) { |i| i }.inject { |a,b| a + b }
     assert_equal [ 0, 3, 6, 9 ], sum { |k| lazy( 4, 3 ) { |i,j| i }[ k ] }.to_a
     assert_equal [ 3, 3, 3, 3 ], sum { |k| lazy( 4, 3 ) { |i,j| j }[ k ] }.to_a
+    assert_equal 0, lazy( 3 ) { 0 }.inject { |a,b| a.minor b }
+    assert_equal 0, lazy( 3, 2 ) { 0 }.inject { |a,b| a.minor b }
   end
 
   def test_indgen_diagonal
