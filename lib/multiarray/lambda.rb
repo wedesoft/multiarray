@@ -131,7 +131,7 @@ module Hornetseye
         unless ( 0 ... shape.last ).member? i
           raise "Index must be in 0 ... #{shape.last} (was #{i})"
         end
-        i = Node.match( i ).new i
+        i = INT.new i
       end
       i.size.store @index.size if @index.size.get and i.is_a? Variable
       @term.subst @index => i
@@ -152,8 +152,8 @@ module Hornetseye
                 "(was #{start} ... #{start + length})"
         end
       end
-      start = Node.match( start ).new start unless start.is_a? Node
-      length = Node.match( length ).new length unless length.is_a? Node
+      start = INT.new start unless start.is_a? Node
+      length = INT.new length unless length.is_a? Node
       index = Variable.new Hornetseye::INDEX( length )
       Lambda.new( index, @term.subst( @index => index ).
                          skip( index, start ) ).unroll
