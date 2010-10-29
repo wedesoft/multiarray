@@ -19,23 +19,38 @@ module Hornetseye
 
   module MultiArrayConstructor
 
-    def method_missing( name, *args )
-      if name.to_s =~ /^[a-z]+$/
-        target = name.to_s.upcase
-        if Hornetseye.const_defined? target
-          target = Hornetseye.const_get target
-          if target.is_a? Class and target < Element
-            new target, *args
-          else
-            super name, *args
-          end
-        else
-          super name, *args
-        end
-      else
-        super name, *args
+    def constructor_shortcut( target )
+      define_method( target.to_s.downcase ) do |*args|
+        new target, *args
       end
     end
+
+    module_function :constructor_shortcut
+
+    constructor_shortcut OBJECT
+    constructor_shortcut BOOL
+    constructor_shortcut BYTE
+    constructor_shortcut UBYTE
+    constructor_shortcut SINT
+    constructor_shortcut USINT
+    constructor_shortcut INT
+    constructor_shortcut UINT
+    constructor_shortcut LONG
+    constructor_shortcut ULONG
+    constructor_shortcut SFLOAT
+    constructor_shortcut DFLOAT
+    constructor_shortcut SCOMPLEX
+    constructor_shortcut DCOMPLEX
+    constructor_shortcut BYTERGB
+    constructor_shortcut UBYTERGB
+    constructor_shortcut SINTRGB
+    constructor_shortcut USINTRGB
+    constructor_shortcut INTRGB
+    constructor_shortcut UINTRGB
+    constructor_shortcut LONGRGB
+    constructor_shortcut ULONGRGB
+    constructor_shortcut SFLOATRGB
+    constructor_shortcut DFLOATRGB
 
   end
 
@@ -45,23 +60,38 @@ module Hornetseye
 
   module MultiArrayConversion
 
-    def method_missing( name, *args )
-      if name.to_s =~ /^to_[a-z]+$/
-        target = name.to_s[ 3 .. -1 ].upcase
-        if Hornetseye.const_defined? target
-          target = Hornetseye.const_get target
-          if target.is_a? Class and target < Element
-            to_type target, *args
-          else
-            super target, *args
-          end
-        else
-          super name, *args
-        end
-      else
-        super name, *args
+    def to_type_shortcut( target )
+      define_method( "to_#{target.to_s.downcase}" ) do
+        to_type target
       end
     end
+
+    module_function :to_type_shortcut
+
+    to_type_shortcut OBJECT
+    to_type_shortcut BOOL
+    to_type_shortcut BYTE
+    to_type_shortcut UBYTE
+    to_type_shortcut SINT
+    to_type_shortcut USINT
+    to_type_shortcut INT
+    to_type_shortcut UINT
+    to_type_shortcut LONG
+    to_type_shortcut ULONG
+    to_type_shortcut SFLOAT
+    to_type_shortcut DFLOAT
+    to_type_shortcut SCOMPLEX
+    to_type_shortcut DCOMPLEX
+    to_type_shortcut BYTERGB
+    to_type_shortcut UBYTERGB
+    to_type_shortcut SINTRGB
+    to_type_shortcut USINTRGB
+    to_type_shortcut INTRGB
+    to_type_shortcut UINTRGB
+    to_type_shortcut LONGRGB
+    to_type_shortcut ULONGRGB
+    to_type_shortcut SFLOATRGB
+    to_type_shortcut DFLOATRGB
 
   end
 
