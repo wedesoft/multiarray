@@ -71,33 +71,46 @@ module Hornetseye
 
     def function( descriptor, *param_types )
       @instructions << <<EOS
-void #{descriptor}(#{
-if param_types.empty?
-  ''
-else
-  ' ' + param_types.collect do |t|
-    t.identifiers
-  end.flatten.collect_with_index do |ident,i|
-    "#{ident} param#{i}"
-  end.join( ', ' ) + ' '
-end
-}) {
+struct Arguments
+{
+#{
+param_types.collect do |t|
+  t.identifiers
+end.flatten.collect_with_index do |ident,i|
+  "  #{ident} param#{i};"
+end.join( "\n" )
+}
+};
+
+VALUE #{descriptor}( void *args )
+{
+#{
+param_types.collect do |t|
+  t.identifiers
+end.flatten.collect_with_index do |ident,i|
+  "  #{ident} param#{i} = ((struct Arguments *)args)->param#{i};"
+end.join( "\n" )
+}
 EOS
 
       @wrappers << <<EOS
 VALUE wrap#{descriptor.capitalize}( int argc, VALUE *argv, VALUE rbSelf )
 {
-  #{descriptor}(#{
-if param_types.empty?
-  ''
+  struct Arguments args;
+#{
+param_types.collect do |t|
+  t.r2c
+end.flatten.collect_with_index do |conv,i|
+  "  args.param#{i} = #{conv.call "argv[ #{i} ]"};"
+end.join( "\n" )
+}
+#{
+if RUBY_VERSION < '1.9.0'
+  "  #{descriptor}( &args );"
 else
-  s = ' ' + param_types.collect do |t|
-    t.r2c
-  end.flatten.collect_with_index do |conv,i|
-    conv.call "argv[ #{i} ]"
-  end.join( ', ' ) + ' '
+  "  rb_thread_blocking_region( &#{descriptor}, &args, RUBY_UBF_PROCESS, NULL );"
 end
-});
+}
   return Qnil;
 }
 EOS
