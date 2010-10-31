@@ -242,10 +242,14 @@ module Hornetseye
       def inspect
         if element_type and num_elements
           if dimension == 1
-            "Sequence(#{typecode.inspect},#{num_elements.inspect})"
+            retval = "Sequence(#{typecode.inspect},#{num_elements.inspect})"
           else
-            "MultiArray(#{typecode.inspect},#{shape.join ','})"
+            retval = "MultiArray(#{typecode.inspect},#{shape.join ','})"
           end
+          ( class << self; self; end ).instance_eval do
+            define_method( :inspect ) { retval }
+          end
+          retval
         else
           'MultiArray(?,?)'
         end

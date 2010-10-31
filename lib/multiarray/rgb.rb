@@ -232,8 +232,11 @@ module Hornetseye
       # @return [String] Text with information about this class (e.g. "DFLOATRGB").
       def inspect
         unless element_type.nil?
-          IDENTIFIER[ element_type ] ||
-            "RGB(#{element_type.inspect})"
+          retval = IDENTIFIER[ element_type ] || "RGB(#{element_type.inspect})"
+          ( class << self; self; end ).instance_eval do
+            define_method( :inspect ) { retval }
+          end
+          retval
         else
           super
         end

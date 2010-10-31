@@ -483,8 +483,11 @@ module Hornetseye
       #         "SCOMPLEX").
       def inspect
         unless element_type.nil?
-          IDENTIFIER[ element_type ] ||
-            "COMPLEX(#{element_type.inspect})"
+          retval = IDENTIFIER[ element_type ] || "COMPLEX(#{element_type.inspect})"
+          ( class << self; self; end ).instance_eval do
+            define_method( :inspect ) { retval }
+          end
+          retval
         else
           super
         end

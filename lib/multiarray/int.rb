@@ -132,8 +132,12 @@ module Hornetseye
       #         "BYTE").
       def inspect
         unless bits.nil? or signed.nil?
-          IDENTIFIER[ [ bits, signed ] ] ||
-            "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
+          retval = IDENTIFIER[ [ bits, signed ] ] ||
+                   "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
+          ( class << self; self; end ).instance_eval do
+            define_method( :inspect ) { retval }
+          end
+          retval
         else
           super
         end
