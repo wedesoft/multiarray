@@ -67,6 +67,13 @@ class TC_Lazy < Test::Unit::TestCase
     assert_equal [ [ 0, 0, 0 ], [ 1, 1, 1 ] ], lazy( 3, 2 ) { |i,j| j }.to_a
   end
 
+  def test_at
+    assert_equal [ [ -1, 4 ], [ 2, 5 ], [ 3, 6 ] ],
+                 lazy { |i| lazy { |j| @m[i,j] } }.to_a
+    assert_equal [ [ -1, 4 ], [ 2, 5 ], [ 3, 6 ] ],
+                 lazy { |i,j| @m[j,i] }.to_a
+  end
+
   def test_minus_at
     assert_equal -2, lazy { ( -@s )[ 1 ] } 
   end
