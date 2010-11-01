@@ -54,7 +54,11 @@ module Hornetseye
     #
     # @private
     def array_type
-      @p.array_type
+      retval = @p.array_type
+      ( class << self; self; end ).instance_eval do
+        define_method( :array_type ) { retval }
+      end
+      retval
     end
 
     # Substitute variables

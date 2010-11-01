@@ -92,7 +92,11 @@ module Hornetseye
     # @private
     def array_type
       array_types = @values.collect { |value| value.array_type }
-      self.class.conversion.call *array_types
+      retval = self.class.conversion.call *array_types
+      ( class << self; self; end ).instance_eval do
+        define_method( :array_type ) { retval }
+      end
+      retval
     end
 
     # Reevaluate computation

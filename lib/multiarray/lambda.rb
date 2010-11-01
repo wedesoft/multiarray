@@ -46,7 +46,11 @@ module Hornetseye
     #
     # @private
     def array_type
-      Hornetseye::Sequence @term.array_type, @index.size.get
+      retval = Hornetseye::Sequence @term.array_type, @index.size.get
+      ( class << self; self; end ).instance_eval do
+        define_method( :array_type ) { retval }
+      end
+      retval
     end
 
     # Get variables contained in this term

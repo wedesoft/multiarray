@@ -35,7 +35,11 @@ module Hornetseye
     end
 
     def array_type
-      @dest.array_type
+      retval = @dest.array_type
+      ( class << self; self; end ).instance_eval do
+        define_method( :array_type ) { retval }
+      end
+      retval
     end
 
     def demand

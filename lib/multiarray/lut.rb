@@ -37,7 +37,11 @@ module Hornetseye
 
     def array_type
       shape = @table.shape.first( @table.dimension - @n ) + @source.shape[ 1 .. -1 ]
-      Hornetseye::MultiArray @table.typecode, *shape
+      retval = Hornetseye::MultiArray @table.typecode, *shape
+      ( class << self; self; end ).instance_eval do
+        define_method( :array_type ) { retval }
+      end
+      retval
     end
 
     def demand

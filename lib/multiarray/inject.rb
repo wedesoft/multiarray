@@ -59,7 +59,11 @@ module Hornetseye
     #
     # @private
     def array_type
-      @value.to_type( @block.typecode ).array_type
+      retval = @value.to_type( @block.typecode ).array_type
+      ( class << self; self; end ).instance_eval do
+        define_method( :array_type ) { retval }
+      end
+      retval
     end
 
     # Reevaluate computation

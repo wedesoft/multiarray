@@ -67,7 +67,11 @@ module Hornetseye
     #
     # @private
     def array_type
-      Hornetseye::MultiArray @block.typecode, *@value.shape
+      retval = Hornetseye::MultiArray @block.typecode, *@value.shape
+      ( class << self; self; end ).instance_eval do
+        define_method( :array_type ) { retval }
+      end
+      retval
     end
 
     # Reevaluate computation
