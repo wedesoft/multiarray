@@ -29,6 +29,12 @@ module Hornetseye
         method_name = ( '_' + term.descriptor( labels ) ).
                             tr( '(),+\-*/%.@?~&|^<=>',
                                 '0123\456789ABCDEFGH' )
+        compile method_name, term, *keys
+        args = values.collect { |arg| arg.values }.flatten
+        GCCCache.send method_name, *args
+      end
+
+      def compile( method_name, term, *keys )
         @@mutex.synchronize do
           unless GCCCache.respond_to? method_name
             GCCContext.build do |context|
@@ -47,8 +53,6 @@ module Hornetseye
             end
           end
         end
-        args = values.collect { |arg| arg.values }.flatten
-        GCCCache.send method_name, *args
       end
 
     end
