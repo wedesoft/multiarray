@@ -164,10 +164,22 @@ module Hornetseye
       self
     end
 
+    # Negate complex value
+    #
+    # @return [InternalComplex] The result
+    #
+    # @private
     def -@
       InternalComplex.new -@real, -@imag
     end
 
+    # Add complex values
+    #
+    # @param [Object] Second operand for binary operation.
+    #
+    # @return [InternalComplex] The result
+    #
+    # @private
     def +( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         InternalComplex.new @real + other.real, @imag + other.imag
@@ -179,6 +191,13 @@ module Hornetseye
       end
     end
 
+    # Subtract complex values
+    #
+    # @param [Object] Second operand for binary operation.
+    #
+    # @return [InternalComplex] The result
+    #
+    # @private
     def -( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         InternalComplex.new @real - other.real, @imag - other.imag
@@ -190,6 +209,13 @@ module Hornetseye
       end
     end
 
+    # Multiply complex values
+    #
+    # @param [Object] Second operand for binary operation.
+    #
+    # @return [InternalComplex] The result
+    #
+    # @private
     def *( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         InternalComplex.new @real * other.real - @imag * other.imag,
@@ -202,6 +228,13 @@ module Hornetseye
       end
     end
 
+    # Divide complex values
+    #
+    # @param [Object] Second operand for binary operation.
+    #
+    # @return [InternalComplex] The result
+    #
+    # @private
     def /( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         self * other.conj / other.abs2
@@ -213,6 +246,14 @@ module Hornetseye
       end
     end
 
+    
+    # Complex exponentiation
+    #
+    # @param [Object] Second operand for binary operation.
+    #
+    # @return [InternalComplex] The result
+    #
+    # @private
     def **( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         r, theta = polar

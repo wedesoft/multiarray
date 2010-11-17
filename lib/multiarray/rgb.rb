@@ -31,6 +31,8 @@ module Hornetseye
       #
       # @return [Boolean] Returns +false+ if Ruby object requires
       #         coercion.
+      #
+      # @private
       def generic?( value )
         value.is_a?( Numeric ) or value.is_a?( GCCValue )
       end
@@ -40,6 +42,10 @@ module Hornetseye
       # This method uses meta-programming to define channel-wise unary operations.
       #
       # @param [Symbol,String] op Operation to define channel-wise operation.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
       def define_unary_op( op )
         define_method( op ) do
           RGB.new r.send( op ), g.send( op ), b.send( op )
@@ -51,6 +57,10 @@ module Hornetseye
       # This method uses meta-programming to define channel-wise binary operations.
       #
       # @param [Symbol,String] op Operation to define channel-wise operation.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
       def define_binary_op( op )
         define_method( op ) do |other|
           if other.is_a? RGB
@@ -190,6 +200,12 @@ module Hornetseye
       # Set base class attribute
       #
       # Sets number of elements to three.
+      #
+      # @param [Class] subclass The class inheriting from +RGB_+.
+      #
+      # @return The return value should be ignored.
+      #
+      # @private
       def inherited( subclass )
         subclass.num_elements = 3
       end

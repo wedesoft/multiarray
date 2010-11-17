@@ -17,10 +17,16 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing native floating point numbers
   class FLOAT_ < Element
 
     class << self
 
+      # Boolean indicating whether this number is single or double precision
+      #
+      # @return [Boolean] +true+ for double precision, +false+ for single precision.
+      #
+      # @private
       attr_accessor :double
 
       # Memory type required to store elements of this type

@@ -17,13 +17,23 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Clas for representing variables
+  #
+  # @private
   class Variable < Node
 
     # Type information about this variable
     #
     # @return [Class] Returns type information about this variable.
+    #
+    # @private
     attr_reader :meta
 
+    # Constructor creating a variable
+    #
+    # @param [Class] meta The type of this variable.
+    #
+    # @private
     def initialize( meta )
       @meta = meta
     end
@@ -32,6 +42,8 @@ module Hornetseye
     #
     # @return [String] String with information about this object (e.g.
     #         'Variable(INT)').
+    #
+    # @private
     def inspect
       "Variable(#{@meta.inspect})"
     end
@@ -54,6 +66,8 @@ module Hornetseye
     # Get array size for index variable
     #
     # @return [Node] Get the dimension of the array if this is an index variable.
+    #
+    # @private
     def size
       @meta.size
     end
@@ -63,6 +77,10 @@ module Hornetseye
     # Set the dimension of the array assuming this is an index variable.
     #
     # @param [Node] value The new size.
+    #
+    # @return [Node] Returns +value+.
+    #
+    # @private
     def size=( value )
       @meta.size = value
     end
@@ -151,3 +169,4 @@ module Hornetseye
   end
 
 end
+
