@@ -26,7 +26,7 @@ module Hornetseye
       # @return [Proc] A closure with the operation.
       attr_accessor :operation
 
-      # Unique key to identify operation.
+      # Unique key to identify operation
       #
       # @return [Symbol,String] A unique key to identify this operation.
       attr_accessor :key

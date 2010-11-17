@@ -60,7 +60,7 @@ module Hornetseye
         0
       end
 
-      # Get corresponding maximal integer type.
+      # Get corresponding maximal integer type
       #
       # @return [Class] Returns 32 bit integer or self whichever has more bits.
       #
@@ -168,7 +168,7 @@ module Hornetseye
           bits == other.bits and signed == other.signed
       end
 
-      # Compute hash value for this class.
+      # Compute hash value for this class
       #
       # @return [Fixnum] Hash value
       #

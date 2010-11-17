@@ -102,7 +102,7 @@ module Hornetseye
         double ? 'd' : 'f'
       end
 
-      # Return string with information about this class.
+      # Return string with information about this class
       #
       # @return [String] Returns a string (e.g. "SFLOAT").
       def inspect
@@ -133,7 +133,7 @@ module Hornetseye
         other.is_a? Class and other < FLOAT_ and double == other.double
       end
 
-      # Compute hash value for this class.
+      # Compute hash value for this class
       #
       # @return [Fixnum] Hash value
       #

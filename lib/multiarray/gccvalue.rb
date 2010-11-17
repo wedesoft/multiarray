@@ -21,7 +21,7 @@ module Hornetseye
 
     class << self
 
-      # Check compatibility of other type.
+      # Check compatibility of other type
       #
       # This method checks whether binary operations with the other Ruby object can
       # be performed without requiring coercion.

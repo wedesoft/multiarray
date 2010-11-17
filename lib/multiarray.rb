@@ -75,6 +75,10 @@ class Object
 
     # Object#instance_exec is defined if it does not exist already
     #
+    # @param [Array<Object>] arguments The arguments to pass to the block.
+    # @param [Proc] block The block to be executed in the object's environment.
+    # @return [Object] The result of executing the block.
+    # 
     # @private
     def instance_exec( *arguments, &block )
       block.bind( self )[ *arguments ]
@@ -310,6 +314,9 @@ class Fixnum
 
   # +&+ is modified to work with this library
   #
+  # @param [Object] other Second operand for binary +and+ operation.
+  # @return [Object] Result of binary operation.
+  #
   # @private
   def intand_with_hornetseye( other )
     if other.is_a? Integer
@@ -323,6 +330,9 @@ class Fixnum
   alias_method_chain :&, :hornetseye, :intand
 
   # +|+ is modified to work with this library
+  #
+  # @param [Object] other Second operand for binary +or+ operation.
+  # @return [Object] Result of binary operation.
   #
   # @private
   def intor_with_hornetseye( other )
@@ -338,6 +348,9 @@ class Fixnum
 
   # +^+ is modified to work with this library
   #
+  # @param [Object] other Second operand for binary +xor+ operation.
+  # @return [Object] Result of binary operation.
+  #
   # @private
   def intxor_with_hornetseye( other )
     if other.is_a? Integer
@@ -351,6 +364,9 @@ class Fixnum
   alias_method_chain :^, :hornetseye, :intxor
 
   # +<<+ is modified to work with this library
+  #
+  # @param [Object] other Second operand for binary +shl+ operation.
+  # @return [Object] Result of binary operation.
   #
   # @private
   def shl_with_hornetseye( other )
@@ -366,6 +382,9 @@ class Fixnum
 
   # +>>+ is modified to work with this library
   #
+  # @param [Object] other Second operand for binary +shr+ operation.
+  # @return [Object] Result of binary operation.
+  #
   # @private
   def shr_with_hornetseye( other )
     if other.is_a? Integer
@@ -380,6 +399,12 @@ class Fixnum
 
   if method_defined? :rpower
 
+    # +**+ is modified to work with this library
+    #
+    # @param [Object] other Second operand for binary operation.
+    # @return [Object] Result of binary operation.
+    #
+    # @private
     def power_with_hornetseye( other )
       if other.is_a? Hornetseye::Node
         x, y = other.coerce self

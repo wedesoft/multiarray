@@ -370,7 +370,7 @@ module Hornetseye
       nil
     end
 
-    # Check whether this object is an empty array.
+    # Check whether this object is an empty array
     #
     # @return [Boolean] Returns whether this object is an empty array.
     def empty?

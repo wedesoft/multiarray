@@ -71,7 +71,7 @@ module Hornetseye
           target == other.target
       end
 
-      # Compute hash value for this class.
+      # Compute hash value for this class
       #
       # @return [Fixnum] Hash value
       #

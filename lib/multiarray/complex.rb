@@ -17,11 +17,14 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # When compiling operations this class replaces +Complex+
+  #
+  # @private
   class InternalComplex
 
     class << self
 
-      # Check compatibility of other type.
+      # Check compatibility of other type
       #
       # This method checks whether binary operations with the other Ruby object can
       # be performed without requiring coercion.
@@ -30,30 +33,58 @@ module Hornetseye
       #
       # @return [Boolean] Returns +false+ if Ruby object requires
       #         coercion.
+      #
+      # @private
       def generic?( value )
         value.is_a?( Numeric ) or value.is_a?( GCCValue )
       end
 
+      # Construct complex number using polar coordinates
+      #
+      # @param [GCCValue,Numeric] r Radius or complex modulus.
+      # @param [GCCValue,Numeric] theta Angle or complex argument. 
+      #
+      # @return [InternalComplex] The specified complex number.
+      #
+      # @private
       def polar( r, theta )
         new r * Math.cos( theta ), r * Math.sin( theta )
       end
 
     end
 
-    attr_accessor :real, :imag
+    # Get real component of complex number
+    #
+    # @return [GCCValue,Numeric] The real component.
+    #
+    # @private
+    attr_accessor :real
 
+    # Get imaginary component of complex number
+    #
+    # @return [GCCValue,Numeric] The imaginary component.
+    #
+    # @private
+    attr_accessor :imag
+
+    # Constructor for complex number
+    #
+    # @param [GCCValue,Numeric] real The real component.
+    # @param [GCCValue,Numeric] imag The imaginary component.
+    #
+    # @return [InternalComplex] The complex number.
     def initialize( real, imag )
       @real, @imag = real, imag
     end
 
-    # Return string with information about this object.
+    # Return string with information about this object
     #
     # @return [String] Returns a string (e.g. "InternalComplex(1,2)").
     def inspect
       "InternalComplex(#{@real.inspect},#{@imag.inspect})"
     end
 
-    # Return string with information about this object.
+    # Return string with information about this object
     #
     # @return [String] Returns a string (e.g. "InternalComplex(1,2)").
     def to_s
@@ -71,6 +102,13 @@ module Hornetseye
       @real, @imag = value.real, value.imag
     end
 
+    # Coerce with other object
+    #
+    # @param [InternalComplex,Object] other Other object.
+    #
+    # @return [Array<InternalComplex>] Result of coercion.
+    #
+    # @private
     def coerce( other )
       if other.is_a? InternalComplex
         return other, self
@@ -81,22 +119,47 @@ module Hornetseye
       end
     end
 
+    # Compute complex conjugate
+    #
+    # @return [InternalComplex] The result.
+    #
+    # @private
     def conj
       InternalComplex.new @real, -@imag
     end
 
+    # Compute complex modulus
+    #
+    # @return [InternalComplex] The result.
+    #
+    # @private
     def abs
       Math.hypot @real, @imag
     end
 
+    # Compute complex argument
+    #
+    # @return [InternalComplex] The result.
+    #
+    # @private
     def arg
       Math.atan2 @imag, @real
     end
 
+    # Compute polar coordinates
+    #
+    # @return [Array<Object>] Returns complex modulus and argument.
+    #
+    # @private
     def polar
       return abs, arg
     end
 
+    # This operation has no effect
+    #
+    # @return [InternalComplex] Returns +self+.
+    #
+    # @private
     def +@
       self
     end
@@ -555,7 +618,7 @@ module Hornetseye
           element_type == other.element_type
       end
 
-      # Compute hash value for this class.
+      # Compute hash value for this class
       #
       # @return [Fixnum] Hash value
       #

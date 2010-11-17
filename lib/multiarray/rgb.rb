@@ -94,14 +94,14 @@ module Hornetseye
       @r, @g, @b = r, g, b
     end
 
-    # Return string with information about this object.
+    # Return string with information about this object
     #
     # @return [String] Returns a string (e.g. "RGB(1,2,3)").
     def inspect
       "RGB(#{@r.inspect},#{@g.inspect},#{@b.inspect})"
     end
 
-    # Return string with information about this object.
+    # Return string with information about this object
     #
     # @return [String] Returns a string (e.g. "RGB(1,2,3)").
     def to_s
@@ -304,7 +304,7 @@ module Hornetseye
           element_type == other.element_type
       end
 
-      # Compute hash value for this class.
+      # Compute hash value for this class
       #
       # @return [Fixnum] Hash value
       #
