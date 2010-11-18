@@ -16,13 +16,21 @@
 
 # Namespace of Hornetseye computer vision library
 module Hornetseye
-  
+ 
+  # Class representing a compiled function 
   class GCCFunction
 
     @@mutex = Mutex.new
 
     class << self
 
+      # Compile a block of Ruby code if not compiled already and run it
+      #
+      # @param [Node] block Expression to compile and run.
+      #
+      # @return [Object] Result returned by the compiled function.
+      #
+      # @private
       def run( block )
         keys, values, term = block.strip
         labels = Hash[ *keys.zip( ( 0 ... keys.size ).to_a ).flatten ]
@@ -34,7 +42,16 @@ module Hornetseye
         GCCCache.send method_name, *args
       end
 
-      # @see run
+      # Compile a block of Ruby code if not compiled already
+      #
+      # @param [String] method_name Unique method name of function.
+      # @param [Node] term Stripped expression to compile.
+      # @param [Array<Variable>] keys Variables for performing substitutions on
+      #        +term+.
+      #
+      # @return [Object] The return value should be ignored.
+      #
+      # @private
       def compile( method_name, term, *keys )
         @@mutex.synchronize do
           unless GCCCache.respond_to? method_name
@@ -58,6 +75,13 @@ module Hornetseye
 
     end
 
+    # Constructor
+    #
+    # @param [GCContext] context Context object for compiling function.
+    # @param [String] method_name Unique method name.
+    # @param [Array<Class>] param_types Native types of parameters.
+    #
+    # @private
     def initialize( context, method_name, *param_types )
       context.function method_name, *param_types.collect { |t| GCCType.new t }
       @context = context
@@ -67,31 +91,70 @@ module Hornetseye
       @ids = 0
     end
 
+    # Close the function and compile it
+    #
+    # @return [GCCFunction] Returns +self+.
+    #
+    # @private
     def compile
       self << '}'
       @context.compile
       self
     end
 
+    # Create a new identifier unique to this function
+    #
+    # @param [String] prefix Prefix for constructing the identifier.
+    #
+    # @return [String] A new identifier.
+    #
+    # @private
     def id( prefix )
       @ids += 1
       "%s%02d"% [ prefix, @ids ]
     end
 
+    # Create a new C variable of given type
+    #
+    # @param [Class] typecode Native type of variable.
+    # @param [String] prefix Prefix for creating variable name.
+    #
+    # @return [GCCValue] GCC value object refering to the C variable.
+    #
+    # @private
     def variable( typecode, prefix )
       retval = GCCValue.new( self, id( prefix ) )
       self << "#{indent}#{GCCType.new( typecode ).identifier} #{retval};\n"
       retval
     end
 
+    # Auxiliary method for code intendation
+    #
+    # @return [String] String to use for indentation.
+    #
+    # @private
     def indent
       '  ' * @indent
     end
 
+    # Increase/decrease amount of indentation
+    #
+    # @param [Integer] offset Offset to add to current amount of indentation.
+    #
+    # @return [Integer] Resulting amount of indentation.
+    #
+    # @private
     def indent_offset( offset )
       @indent += offset
     end
 
+    # Retrieve a parameter
+    #
+    # @param [Integer] i Parameter to retrieve.
+    #
+    # @return [Node] Object for handling the parameter.
+    #
+    # @private
     def param( i )
       offset = ( 0 ... i ).inject( 0 ) do |s,idx|
         s + GCCType.new( @param_types[ idx ] ).identifiers.size
@@ -101,14 +164,35 @@ module Hornetseye
       @param_types[ i ].construct *args
     end
 
+    # Call the native method
+    #
+    # @param [Array<Node>] args Arguments of method call.
+    #
+    # @return The return value of the native method.
+    #
+    # @private
     def call( *args )
       @context.send @method_name, *args.collect { |v| v.get }
     end
 
+    # Add return instruction to native method
+    #
+    # @param [Object,NilClass] value Return value or +nil+.
+    #
+    # @return [GCCFunction] Returns +self+.
+    #
+    # @private
     def insn_return( value = nil )
       self << "#{indent}return#{ value ? ' ' + value.get.to_s : '' };\n"
     end
 
+    # Add instructions to C function
+    #
+    # @param [String] str C code fragment.
+    #
+    # @return [GCCFunction] Returns +self+.
+    #
+    # @private
     def <<( str )
       @context << str
       self

@@ -22,27 +22,62 @@ module Hornetseye
   # @private
   class GCCContext
 
+    # Ruby configuration
+    #
+    # @private
     CFG = RbConfig::CONFIG
+
     if CFG[ 'rubyhdrdir' ]
+      # GCC compiler flags
+      #
+      # @private
       CFLAGS = "-DNDEBUG #{CFG[ 'CFLAGS' ]} " +
         "-I#{CFG['rubyhdrdir']} -I#{CFG['rubyhdrdir']}/#{CFG['arch']}"
     else
       CFLAGS = "-DNDEBUG #{CFG[ 'CFLAGS' ]} " +
         "-I#{CFG['archdir']}"
     end
+
+    # Arguments for linking the Ruby extension
+    #
+    # @private
     LIBRUBYARG = "-L#{CFG[ 'libdir' ]} #{CFG[ 'LIBRUBYARG' ]} #{CFG[ 'LDFLAGS' ]} "
                  "#{CFG[ 'SOLIBS' ]} #{CFG[ 'DLDLIBS' ]}"
+
+    # Command for linking the Ruby extension
+    #
+    # @private
     LDSHARED = CFG[ 'LDSHARED' ]
+
+    # Shared library file extension under current operating system
+    #
+    # @private
     DLEXT = CFG[ 'DLEXT' ]
+
+    # Directory for storing the Ruby extensions
+    #
+    # @private
     DIRNAME = "#{Dir.tmpdir}/hornetseye-ruby#{RUBY_VERSION}-" +
               "#{ENV[ 'USER' ] || ENV[ 'USERNAME' ]}"
+
+    # Lock file to prevent conflicts
+    #
+    # @private
     LOCKFILE = "#{DIRNAME}/lock"
+
     Dir.mkdir DIRNAME, 0700 unless File.exist? DIRNAME
+
+    # The actual file lock
+    #
+    # @private
     @@lock = File.new LOCKFILE, 'w', 0600
     unless @@lock.flock File::LOCK_EX | File::LOCK_NB
       raise "Could not lock file \"#{LOCKFILE}\""
     end
 
+    # Next available base name for a Ruby extension
+    #
+    # @private
     @@lib_name = 'hornetseye_aaaaaaaa'
 
     if ENV[ 'HORNETSEYE_PRELOAD_CACHE' ]
