@@ -271,14 +271,29 @@ module Hornetseye
       end
     end
 
+    # Check whether value is equal to zero
+    #
+    # @return [Boolean,GCCValue] The result.
+    #
+    # @private
     def zero?
       @real.zero?.and @imag.zero?
     end
 
+    # Check whether value is not equal to zero
+    #
+    # @return [Boolean,GCCValue] The result.
+    #
+    # @private
     def nonzero?
       @real.nonzero?.or @imag.nonzero?
     end
 
+    # Compute square of complex modulus
+    #
+    # @return [Numeric,GCCValue] The result.
+    #
+    # @private
     def abs2
       @real * @real + @imag * @imag
     end
@@ -315,6 +330,13 @@ end
 
 module Math
 
+  # Square root for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def sqrt_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       real = sqrt( ( z.abs + z.real ) / 2 )
@@ -330,6 +352,13 @@ module Math
   module_function :sqrt_without_internalcomplex
   module_function :sqrt
 
+  # Exponent for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def exp_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       real = exp( z.real ) * cos( z.imag )
@@ -344,6 +373,13 @@ module Math
   module_function :exp_without_internalcomplex
   module_function :exp
 
+  # Cosinus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def cos_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       real = cos( z.real ) * cosh( z.imag )
@@ -358,6 +394,13 @@ module Math
   module_function :cos_without_internalcomplex
   module_function :cos
 
+  # Sinus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def sin_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       real = sin( z.real ) * cosh( z.imag )
@@ -372,6 +415,13 @@ module Math
   module_function :sin_without_internalcomplex
   module_function :sin
 
+  # Tangens for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def tan_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       sin( z ) / cos( z )
@@ -384,6 +434,13 @@ module Math
   module_function :tan_without_internalcomplex
   module_function :tan
 
+  # Cosinus hyperbolicus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def cosh_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       real = cosh( z.real ) * cos( z.imag )
@@ -398,6 +455,13 @@ module Math
   module_function :cosh_without_internalcomplex
   module_function :cosh
 
+  # Sinus hyperbolicus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def sinh_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       real = sinh( z.real ) * cos( z.imag )
@@ -412,6 +476,13 @@ module Math
   module_function :sinh_without_internalcomplex
   module_function :sinh
 
+  # Tangens hyperbolicus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def tanh_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       sinh( z ) / cosh( z )
@@ -424,6 +495,13 @@ module Math
   module_function :tanh_without_internalcomplex
   module_function :tanh
 
+  # Logarithm for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def log_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       r, theta = z.polar
@@ -437,6 +515,13 @@ module Math
   module_function :log_without_internalcomplex
   module_function :log
 
+  # Base-10 logarithm for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def log10_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       log( z ) / log( 10 )
@@ -449,6 +534,13 @@ module Math
   module_function :log10_without_internalcomplex
   module_function :log10
 
+  # Arcus cosinus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def acos_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       -1.0.im * log( z + 1.0.im * sqrt( 1.0 - z * z ) )
@@ -461,6 +553,13 @@ module Math
   module_function :acos_without_internalcomplex
   module_function :acos
 
+  # Arcus sinus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def asin_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       -1.0.im * log( 1.0.im * z + sqrt( 1.0 - z * z ) )
@@ -473,6 +572,13 @@ module Math
   module_function :asin_without_internalcomplex
   module_function :asin
 
+  # Arcus tangens for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def atan_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       1.0.im * log( ( 1.0.im + z ) / ( 1.0.im - z ) ) / 2.0
@@ -485,6 +591,13 @@ module Math
   module_function :atan_without_internalcomplex
   module_function :atan
 
+  # Arcus cosinus hyperbolicus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def acosh_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       log( z + sqrt( z * z - 1.0 ) )
@@ -497,6 +610,13 @@ module Math
   module_function :acosh_without_internalcomplex
   module_function :acosh
 
+  # Arcus sinus hyperbolicus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def asinh_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       log( z + sqrt( 1.0 + z * z ) )
@@ -509,6 +629,13 @@ module Math
   module_function :asinh_without_internalcomplex
   module_function :asinh
 
+  # Arcus tangens hyperbolicus for internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def atanh_with_internalcomplex( z )
     if z.is_a? Hornetseye::InternalComplex
       log( ( 1.0 + z ) / ( 1.0 - z ) ) / 2.0
@@ -521,6 +648,13 @@ module Math
   module_function :atanh_without_internalcomplex
   module_function :atanh
 
+  # Arcus tangens of two internal complex numbers
+  #
+  # @param [Object,Hornetseye::InternalComplex] z Parameter for unary method.
+  #
+  # @return [Object,Hornetseye::InternalComplex] Result of method call.
+  #
+  # @private
   def atan2_with_internalcomplex( y, x )
     if [ x, y ].any? { |v| v.is_a? Hornetseye::InternalComplex }
       -1.0.im * log( ( x + 1.0.im * y ) / sqrt( x * x + y * y ) )
@@ -537,6 +671,7 @@ end
 
 module Hornetseye
 
+  # Class for representing native complex values
   class COMPLEX_ < Composite
 
     class << self
@@ -544,6 +679,12 @@ module Hornetseye
       # Set base class attribute
       #
       # Sets number of elements to two.
+      #
+      # @param [Class] subclass The class inheriting from +COMPLEX_+.
+      #
+      # @return The return value should be ignored.
+      #
+      # @private
       def inherited( subclass )
         subclass.num_elements = 2
       end
@@ -681,6 +822,9 @@ module Hornetseye
 
     end
 
+    # Constructor for native complex number
+    #
+    # @param [Complex,InternalComplex] value Complex number.
     def initialize( value = self.class.default )
       if Thread.current[ :function ].nil? or
         [ value.real, value.imag ].all? { |c| c.is_a? GCCValue }
@@ -783,6 +927,8 @@ module Hornetseye
       #
       # @param [Class] context Other type to align with.
       #
+      # @return [Class] Result of type alignment.
+      #
       # @private
       def align( context )
         if self < COMPLEX_
@@ -803,6 +949,9 @@ module Hornetseye
     define_unary_op :real, :scalar
     define_unary_op :imag, :scalar
 
+    # Fast extraction for real values of complex array
+    #
+    # @return [Node] Array with real values.
     def real_with_decompose
       if typecode == OBJECT or is_a?( Variable )
         real_without_decompose
@@ -815,6 +964,11 @@ module Hornetseye
 
     alias_method_chain :real, :decompose
 
+    # Assignment for real values of complex array
+    #
+    # @param [Object] Value or array of values to assign to real components.
+    #
+    # @return [Object] Returns +value+.
     def real=( value )
       if typecode < COMPLEX_
         decompose( 0 )[] = value
@@ -827,6 +981,9 @@ module Hornetseye
       end
     end
 
+    # Fast extraction of imaginary values of complex array
+    #
+    # @return [Node] Array with imaginary values.
     def imag_with_decompose
       if typecode == OBJECT or is_a?( Variable )
         imag_without_decompose
@@ -839,6 +996,11 @@ module Hornetseye
 
     alias_method_chain :imag, :decompose
 
+    # Assignment for imaginary values of complex array
+    #
+    # @param [Object] Value or array of values to assign to imaginary components.
+    #
+    # @return [Object] Returns +value+.
     def imag=( value )
       if typecode < COMPLEX_
         decompose( 1 )[] = value
@@ -853,16 +1015,29 @@ module Hornetseye
 
   end
 
-  def COMPLEX( arg )
+  # Create a class deriving from +COMPLEX_+
+  #
+  # Create a class deriving from +COMPLEX_+. The parameter +element_type+ is assigned
+  # to the corresponding attribute of the resulting class.
+  #
+  # @param [Class] element_type The native type of the complex components.
+  #
+  # @return [Class] A class deriving from +COMPLEX_+.
+  #
+  # @see COMPLEX_
+  # @see COMPLEX_.element_type
+  def COMPLEX( element_type )
     retval = Class.new COMPLEX_
-    retval.element_type = arg
+    retval.element_type = element_type
     retval
   end
 
   module_function :COMPLEX
 
+  # Convenience shortcut for single-precision floating-point complex numbers
   SCOMPLEX = COMPLEX SFLOAT
 
+  # Convenience shortcut for double-precision floating-point complex numbers
   DCOMPLEX = COMPLEX DFLOAT
 
   # Shortcut for constructor

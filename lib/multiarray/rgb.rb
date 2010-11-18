@@ -193,6 +193,7 @@ end
 
 module Hornetseye
 
+  # Class for representing native RGB values
   class RGB_ < Composite
 
     class << self
