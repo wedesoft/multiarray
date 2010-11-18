@@ -16,7 +16,9 @@
 
 # Namespace of Hornetseye computer vision library
 module Hornetseye
-  
+
+  # Class for generating code handling C values
+  # @private
   class GCCValue
 
     class << self
@@ -29,17 +31,35 @@ module Hornetseye
       # @param [Object] value The other Ruby object.
       #
       # @return [Boolean] Returns +false+ if Ruby object requires coercion.
+      #
+      # @private
       def generic?( value )
         value.is_a?( GCCValue ) or value.is_a?( Fixnum ) or
           value.is_a?( Float )
       end
 
+      # Meta-programming method used to define unary operations at the beginning
+      #
+      # @param [Symbol,String] op Name of unary operation.
+      # @param [Symbol,String] opcode Name of unary operation in C.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
       def define_unary_op( op, opcode = op )
         define_method( op ) do
           GCCValue.new @function, "#{opcode}( #{self} )"
         end
       end
 
+      # Meta-programming method used to define unary methods at the beginning
+      #
+      # @param [Symbol,String] op Name of unary method.
+      # @param [Symbol,String] opcode Name of unary method in C.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
       def define_unary_method( mod, op, opcode = op )
         mod.module_eval do
           define_method( "#{op}_with_gcc" ) do |a|
@@ -55,6 +75,14 @@ module Hornetseye
         end
       end
 
+      # Meta-programming method used to define unary methods at the beginning
+      #
+      # @param [Symbol,String] op Name of unary method.
+      # @param [Symbol,String] opcode Name of unary method in C.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
       def define_binary_op( op, opcode = op )
         define_method( op ) do |other|
           if GCCValue.generic? other
@@ -66,6 +94,14 @@ module Hornetseye
         end
       end
 
+      # Meta-programming method used to define binary methods at the beginning
+      #
+      # @param [Symbol,String] op Name of binary method.
+      # @param [Symbol,String] opcode Name of binary method in C.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
       def define_binary_method( mod, op, opcode = op )
         mod.module_eval do
           define_method( "#{op}_with_gcc" ) do |a,b|
@@ -84,8 +120,19 @@ module Hornetseye
 
     end
 
+    # Get current function context
+    #
+    # @return [GCCFunction] The function this value is part of.
+    #
+    # @private
     attr_reader :function
 
+    # Constructor for GCC value
+    #
+    # @param [GCCFunction] function The function context this value is part of.
+    # @param [String] descriptor C code to compute this value.
+    #
+    # @private
     def initialize( function, descriptor ) 
       @function = function
       @descriptor = descriptor
@@ -94,6 +141,8 @@ module Hornetseye
     # Display descriptor of this object
     #
     # @return [String] Returns the descriptor of this object.
+    #
+    # @private
     def inspect
       @descriptor
     end
@@ -101,6 +150,8 @@ module Hornetseye
     # Get descriptor of this object
     #
     # @return [String] Returns the descriptor of this object.
+    #
+    # @private
     def to_s
       @descriptor
     end
@@ -110,15 +161,27 @@ module Hornetseye
     # @param [Object] value The new value.
     #
     # @return [Object] Returns +value+.
+    #
+    # @private
     def store( value )
       @function << "#{@function.indent}#{self} = #{value};\n"
       value
     end
 
+    # Indicate whether this object can be compiled
+    #
+    # @return [Boolean] Returns +false+.
+    #
+    # @private
     def compilable?
       false
     end
 
+    # Add code to read all components of a typed value from memory
+    #
+    # @return [Array<GCCValue>] An array of objects referencing values in C.
+    #
+    # @private
     def load( typecode )
       offset = 0
       typecode.typecodes.collect do |t|
@@ -129,6 +192,13 @@ module Hornetseye
       end
     end
 
+    # Add code to write all components of a typed value to memory
+    #
+    # @param [Node] value Value to write to memory.
+    #
+    # @return [Object] The return value should be ignored.
+    #
+    # @private
     def save( value )
       offset = 0
       value.class.typecodes.zip( value.values ).each do |t,v|
@@ -137,42 +207,98 @@ module Hornetseye
       end
     end
 
+    # Complex conjugate of real value
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def conj
       self
     end
 
+    # Generate code for computing absolute value
+    #
+    # @return [GCCValue] C value referring to the result.
+    #
+    # @private
     def abs
       ( self >= 0 ).conditional self, -self
     end
 
+    # Generate code for computing complex argument of real value
+    #
+    # @return [GCCValue] C value referring to the result.
+    #
+    # @private
     def arg
       ( self >= 0 ).conditional 0, Math::PI
     end
 
+    # Red colour component of real value
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def r
       self
     end
 
+    # Green colour component of real value
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def g
       self
     end
 
+    # Blue colour component of real value
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def b
       self
     end
 
+    # Real component of real value
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def real
       self
     end
 
+    # Imaginary component of real value
+    #
+    # @return [Integer] Returns +0+.
+    #
+    # @private
     def imag
       0
     end
 
+    # Create code for conditional selection of value
+    #
+    # @param [GCCValue,Object] a First value.
+    # @param [GCCValue,Object] b Second value.
+    #
+    # @return [GCCValue] C value referring to result.
+    #
+    # @private
     def conditional( a, b )
       GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
     end
 
+    # Create code for conditional selection of RGB value
+    #
+    # @param [GCCValue,Object] a First value.
+    # @param [GCCValue,Object] b Second value.
+    #
+    # @return [GCCValue] C value referring to result.
+    #
+    # @private
     def conditional_with_rgb( a, b )
       if a.is_a?( RGB ) or b.is_a?( RGB )
         Hornetseye::RGB( conditional( a.r, b.r ), conditional( a.g, b.g ),
@@ -184,6 +310,14 @@ module Hornetseye
 
     alias_method_chain :conditional, :rgb
 
+    # Create code for conditional selection of complex value
+    #
+    # @param [GCCValue,Object] a First value.
+    # @param [GCCValue,Object] b Second value.
+    #
+    # @return [GCCValue] C value referring to result.
+    #
+    # @private
     def conditional_with_complex( a, b )
       if a.is_a?( InternalComplex ) or b.is_a?( InternalComplex )
         InternalComplex.new conditional( a.real, b.real ),
@@ -235,26 +369,58 @@ module Hornetseye
     define_binary_method Math, :atan2
     define_binary_method Math, :hypot
 
+    # Generate code for checking whether value is equal to zero
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def zero?
       GCCValue.new @function, "( #{self} ) == 0"
     end
 
+    # Generate code for checking whether value is not equal to zero
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def nonzero?
       GCCValue.new @function, "( #{self} ) != 0"
     end
 
+    # Generate code for computing largest integer value not greater than this value
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def floor
       GCCValue.new @function, "floor( #{self} )"
     end
 
+    # Generate code for computing smallest integer value not less than this value
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def ceil
       GCCValue.new @function, "ceil( #{self} )"
     end
 
+    # Generate code for rounding to nearest integer
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def round
       GCCValue.new @function, "round( #{self} )"
     end
 
+    # Generate code for computing exponentiation
+    #
+    # @param [Object,GCCValue] other Second operand for binary operation.
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def **( other )
       if GCCValue.generic? other
         GCCValue.new @function, "pow( #{self}, #{other} )"
@@ -264,16 +430,37 @@ module Hornetseye
       end
     end
 
+    # Generate code for selecting larger value
+    #
+    # @param [Object,GCCValue] other Second operand for binary operation.
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def major( other )
       GCCValue.new @function,
         "( ( #{self} ) >= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
     end
 
+    # Generate code for selecting smaller value
+    #
+    # @param [Object,GCCValue] other Second operand for binary operation.
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
     def minor( other )
       GCCValue.new @function,
         "( ( #{self} ) <= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
     end
 
+    # Generate a +for+ loop in C
+    #
+    # @param [Proc] action Code for generating loop body.
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def times( &action )
       i = @function.variable INT, 'i'
       @function << "#{@function.indent}for ( #{i} = 0; " +
@@ -285,6 +472,14 @@ module Hornetseye
       self
     end
 
+    # Generate a +for+ loop in C
+    #
+    # @param [GCCValue,Object] other Upper limit for loop.
+    # @param [Proc] action Code for generating loop body.
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def upto( other, &action )
       i = @function.variable INT, 'i'
       @function << "#{@function.indent}for ( #{i} = #{self}; " +
@@ -296,6 +491,13 @@ module Hornetseye
       self
     end
 
+    # Type coercion for GCC values
+    #
+    # @param [Object] other Other value to coerce with.
+    #
+    # @return [Array<GCCValue>] Result of coercion.
+    #
+    # @private
     def coerce( other )
       if other.is_a? GCCValue
         return other, self
