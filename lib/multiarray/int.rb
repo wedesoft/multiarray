@@ -99,6 +99,9 @@ module Hornetseye
         end
       end
 
+      # Hash table used internally
+      #
+      # @private
       DIRECTIVES = { [  8, true  ] => 'c',
                      [  8, false ] => 'C',
                      [ 16, true  ] => 's',
@@ -117,6 +120,9 @@ module Hornetseye
         retval
       end
 
+      # Hash table used internally
+      #
+      # @private
       IDENTIFIER = { [  8, true  ] => 'BYTE',
                      [  8, false ] => 'UBYTE',
                      [ 16, true  ] => 'SINT',

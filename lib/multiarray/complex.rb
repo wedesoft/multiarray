@@ -331,6 +331,7 @@ module Hornetseye
 
 end
 
+# The +Math+ module is extended with a few methods
 module Math
 
   # Square root for internal complex numbers
@@ -722,6 +723,9 @@ module Hornetseye
         end
       end
 
+      # Identifier array used internally
+      #
+      # @private
       IDENTIFIER = { SFLOAT => 'SCOMPLEX',
                      DFLOAT => 'DCOMPLEX' }
 
@@ -886,6 +890,11 @@ module Hornetseye
       [ @value.real, @value.imag ]
     end
 
+    # Namespace containing method for matching elements of type COMPLEX_
+    #
+    # @see COMPLEX_
+    #
+    # @private
     module Match
 
       # Method for matching elements of type COMPLEX_
@@ -947,6 +956,7 @@ module Hornetseye
 
   end
 
+  # Module providing the operations to manipulate array expressions
   module Operations
 
     define_unary_op :real, :scalar

@@ -161,6 +161,11 @@ module Hornetseye
 
     end
 
+    # Namespace containing method for matching elements of type FLOAT_
+    #
+    # @see FLOAT_
+    #
+    # @private
     module Match
 
       # Method for matching elements of type FLOAT_

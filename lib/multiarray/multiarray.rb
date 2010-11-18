@@ -46,6 +46,15 @@ module Hornetseye
         end
       end
 
+      # Import array from string
+      #
+      # Create an array from raw data provided as a string.
+      #
+      # @param [Class] typecode Type of the elements in the string.
+      # @param [String] string String with raw data.
+      # @param [Array<Integer>] shape Array with dimensions of array.
+      #
+      # @return [Node] Multi-dimensional array with imported data.
       def import( typecode, string, *shape )
         t = Hornetseye::MultiArray typecode, *shape
         if string.is_a? Malloc

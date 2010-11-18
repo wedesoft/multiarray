@@ -17,6 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Module providing the methods to manipulate array expressions
   module Methods
 
     # Extend some methods in the specified module

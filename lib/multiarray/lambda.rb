@@ -17,13 +17,23 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing lambda expressions
   class Lambda < Node
 
+    # Construct lambda term
+    #
+    # @param [Variable] index Variable to bind.
+    # @param [Node] term The term based on that variable.
+    #
+    # @return [Lambda] Lambda object.
     def initialize( index, term )
       @index = index
       @term = term
     end
 
+    # Get storage object if there is any
+    #
+    # @return [Malloc,List,NilClass] Object storing the data.
     def memory
       @term.memory
     end

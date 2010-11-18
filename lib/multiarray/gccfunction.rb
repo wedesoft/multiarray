@@ -20,8 +20,6 @@ module Hornetseye
   # Class representing a compiled function 
   class GCCFunction
 
-    @@mutex = Mutex.new
-
     class << self
 
       # Compile a block of Ruby code if not compiled already and run it
@@ -53,22 +51,20 @@ module Hornetseye
       #
       # @private
       def compile( method_name, term, *keys )
-        @@mutex.synchronize do
-          unless GCCCache.respond_to? method_name
-            GCCContext.build do |context|
-              function = GCCFunction.new context, method_name,
-                                         *keys.collect { |var| var.meta }
-              Thread.current[ :function ] = function
-              term_subst = ( 0 ... keys.size ).collect do |i|
-                { keys[i] => function.param( i ) }
-              end.inject( {} ) { |a,b| a.merge b }
-              Hornetseye::lazy do
-                term.subst( term_subst ).demand
-              end
-              Thread.current[ :function ] = nil
-              function.insn_return
-              function.compile
+        unless GCCCache.respond_to? method_name
+          GCCContext.build do |context|
+            function = GCCFunction.new context, method_name,
+                                       *keys.collect { |var| var.meta }
+            Thread.current[ :function ] = function
+            term_subst = ( 0 ... keys.size ).collect do |i|
+              { keys[i] => function.param( i ) }
+            end.inject( {} ) { |a,b| a.merge b }
+            Hornetseye::lazy do
+              term.subst( term_subst ).demand
             end
+            Thread.current[ :function ] = nil
+            function.insn_return
+            function.compile
           end
         end
       end

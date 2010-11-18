@@ -117,10 +117,16 @@ module Hornetseye
         []
       end
 
+      # Get width of two-dimensional array
+      #
+      # @return [Integer] Width of array.
       def width
         shape[0]
       end
 
+      # Get height of two-dimensional array
+      #
+      # @return [Integer] Height of array.
       def height
         shape[1]
       end
@@ -155,6 +161,9 @@ module Hornetseye
         self
       end
 
+      # Check whether this object is an RGB value
+      #
+      # @return [Boolean] Returns +false+.
       def rgb?
         false
       end
@@ -237,6 +246,12 @@ module Hornetseye
         coercion( other ).byte
       end
 
+      # Get byte-based datatype for ternary operation
+      #
+      # @param [Class] a The second type.
+      # @param [Class] a The third type.
+      #
+      # @return [Class] Returns type based on bytes.
       def cond( a, b )
         t = a.coercion b
         Hornetseye::MultiArray( t.typecode, *shape ).coercion t
@@ -336,6 +351,9 @@ module Hornetseye
       array_type.typecode
     end
 
+    # Base-type of this term
+    #
+    # @return [Class] Base-type of this datatype.
     def basetype
       array_type.basetype
     end
@@ -347,10 +365,16 @@ module Hornetseye
       array_type.shape
     end
 
+    # Get width of two-dimensional array
+    #
+    # @return [Integer] Width of array.
     def width
       array_type.width
     end
 
+    # Get height of two-dimensional array
+    #
+    # @return [Integer] Height of array.
     def height
       array_type.height
     end
@@ -362,10 +386,16 @@ module Hornetseye
       array_type.size
     end
 
+    # Get memory size of object
+    #
+    # @return [Integer] Returns required storage size of this array.
     def storage_size
       array_type.storage_size
     end
 
+    # Get memory object
+    #
+    # @return [Malloc,List,NilClass] This method will return +nil+.
     def memory
       nil
     end
@@ -384,6 +414,9 @@ module Hornetseye
       array_type.dimension
     end
 
+    # Check whether this object is an RGB value
+    #
+    # @return [Boolean] Returns +false+.
     def rgb?
       array_type.rgb?
     end
@@ -553,6 +586,14 @@ module Hornetseye
       end
     end
 
+    # Check arguments for compatible shape
+    #
+    # The method will throw an exception if one of the arguments has an incompatible
+    # shape.
+    #
+    # @param [Array<Node>] args Arguments to check for compatibility.
+    #
+    # @return [Object] The return value should be ignored.
     def check_shape( *args )
       _shape = shape
       args.each do |arg|

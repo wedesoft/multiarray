@@ -17,6 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing element-wise operations
   class ElementWise_ < Node
 
     class << self

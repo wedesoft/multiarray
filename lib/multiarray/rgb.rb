@@ -129,6 +129,13 @@ module Hornetseye
       @r, @g, @b = value.r, value.g, value.b
     end
 
+    # Coerce with other object
+    #
+    # @param [RGB] other Other object.
+    #
+    # @return [Array<RGB>] Result of coercion.
+    #
+    # @private
     def coerce( other )
       if other.is_a? RGB
         return other, self
@@ -137,6 +144,11 @@ module Hornetseye
       end
     end
 
+    # This operation has no effect
+    #
+    # @return [InternalComplex] Returns +self+.
+    #
+    # @private
     def +@
       self
     end
@@ -160,14 +172,32 @@ module Hornetseye
     define_binary_op :minor
     define_binary_op :major
 
+    # Check whether value is equal to zero
+    #
+    # @return [Boolean,GCCValue] The result.
+    #
+    # @private
     def zero?
       @r.zero?.and( @g.zero? ).and( @b.zero? )
     end
 
+    # Check whether value is not equal to zero
+    #
+    # @return [Boolean,GCCValue] The result.
+    #
+    # @private
     def nonzero?
       @r.nonzero?.or( @g.nonzero? ).or( @b.nonzero? )
     end
 
+    # Test on equality
+    #
+    # @param [Object] other Object to compare with.
+    #
+    # @return [Boolean] Returns boolean indicating whether objects are
+    #         equal or not.
+    #
+    # @private
     def ==( other )
       if other.is_a? RGB
         @r.eq( other.r ).and( @g.eq( other.g ) ).and( @b.eq( other.b ) )
@@ -233,6 +263,9 @@ module Hornetseye
         RGB.new 0, 0, 0
       end
 
+      # Identifier array used internally
+      #
+      # @private
       IDENTIFIER = { BYTE    => 'BYTERGB',
                      UBYTE   => 'UBYTERGB',
                      SINT    => 'SINTRGB',
@@ -341,12 +374,18 @@ module Hornetseye
         self == other
       end
 
+      # Check whether this object is an RGB value
+      #
+      # @return [Boolean] Returns +true+.
       def rgb?
         true
       end
 
     end
 
+    # Constructor for native RGB value
+    #
+    # @param [RGB] value Initial RGB value.
     def initialize( value = self.class.default )
       if Thread.current[ :function ].nil? or
          [ value.r, value.g, value.b ].all? { |c| c.is_a? GCCValue }
@@ -412,6 +451,11 @@ module Hornetseye
       [ @value.r, @value.g, @value.b ]
     end
 
+    # Namespace containing method for matching elements of type RGB_
+    #
+    # @see RGB_
+    #
+    # @private
     module Match
 
       # Method for matching elements of type RGB_
@@ -477,6 +521,9 @@ module Hornetseye
     define_unary_op :g, :scalar
     define_unary_op :b, :scalar
 
+    # Fast extraction for red channel of RGB array
+    #
+    # @return [Node] Array with red channel.
     def r_with_decompose
       if typecode == OBJECT or is_a?( Variable )
         r_without_decompose
@@ -489,6 +536,11 @@ module Hornetseye
 
     alias_method_chain :r, :decompose
 
+    # Assignment for red channel values of RGB array
+    #
+    # @param [Object] Value or array of values to assign to red channel.
+    #
+    # @return [Object] Returns +value+.
     def r=( value )
       if typecode < RGB_
         decompose( 0 )[] = value
@@ -501,6 +553,9 @@ module Hornetseye
       end
     end
 
+    # Fast extraction for green channel of RGB array
+    #
+    # @return [Node] Array with green channel.
     def g_with_decompose
       if typecode == OBJECT or is_a?( Variable )
         g_without_decompose
@@ -513,6 +568,11 @@ module Hornetseye
 
     alias_method_chain :g, :decompose
 
+    # Assignment for green channel values of RGB array
+    #
+    # @param [Object] Value or array of values to assign to green channel.
+    #
+    # @return [Object] Returns +value+.
     def g=( value )
       if typecode < RGB_
         decompose( 1 )[] = value
@@ -525,6 +585,9 @@ module Hornetseye
       end
     end
 
+    # Fast extraction for blue channel of RGB array
+    #
+    # @return [Node] Array with blue channel.
     def b_with_decompose
       if typecode == OBJECT or is_a?( Variable )
         b_without_decompose
@@ -537,6 +600,11 @@ module Hornetseye
 
     alias_method_chain :b, :decompose
 
+    # Assignment for blue channel values of RGB array
+    #
+    # @param [Object] Value or array of values to assign to blue channel.
+    #
+    # @return [Object] Returns +value+.
     def b=( value )
       if typecode < RGB_
         decompose( 2 )[] = value
@@ -551,6 +619,25 @@ module Hornetseye
 
   end
 
+  # Create a class deriving from +RGB_+ or instantiate an +RGB+ object
+  #
+  # @overload RGB( element_type )
+  #   Create a class deriving from +RGB_+. The parameters +element_type+ is
+  #   assigned to the corresponding attribute of the resulting class.
+  #   @param [Class] element_type Element type of native RGB value.
+  #   @return [Class] A class deriving from +RGB_+.
+  #
+  # @overload RGB( r, g, b )
+  #   This is a shortcut for +RGB.new( r, g, b )+.
+  #   @param [Object] r Initial value for red channel.
+  #   @param [Object] g Initial value for green channel.
+  #   @param [Object] b Initial value for blue channel.
+  #   @return [RGB] The RGB value.
+  #
+  # @return [Class,RGB] A class deriving from +RGB_+ or an RGB value.
+  #
+  # @see RGB_
+  # @see RGB_.element_type
   def RGB( arg, g = nil, b = nil )
     if g.nil? and b.nil?
       retval = Class.new RGB_
@@ -563,24 +650,34 @@ module Hornetseye
 
   module_function :RGB
 
+  # 24-bit unsigned RGB-triplet
   BYTERGB   = RGB BYTE
 
+  # 24-bit signed RGB-triplet
   UBYTERGB  = RGB UBYTE
 
+  # 48-bit unsigned RGB-triplet
   SINTRGB   = RGB SINT
 
+  # 48-bit signed RGB-triplet
   USINTRGB  = RGB USINT
 
+  # 96-bit unsigned RGB-triplet
   INTRGB    = RGB INT
 
+  # 96-bit signed RGB-triplet
   UINTRGB   = RGB UINT
 
+  # 192-bit unsigned RGB-triplet
   LONGRGB   = RGB LONG
 
+  # 192-bit signed RGB-triplet
   ULONGRGB  = RGB ULONG
 
+  # single precision RGB-triplet
   SFLOATRGB = RGB SFLOAT
 
+  # double precision RGB-triplet
   DFLOATRGB = RGB DFLOAT
 
   # Shortcut for constructor
@@ -730,6 +827,12 @@ class Fixnum
 
   if method_defined? :rpower
 
+    # +**+ is modified to work with RGB values
+    #
+    # @param [Object] other Second operand for binary operation.
+    # @return [Object] Result of binary operation.
+    #
+    # @private
     def power_with_rgb( other )
       if other.is_a? Hornetseye::RGB
         x, y = other.coerce self

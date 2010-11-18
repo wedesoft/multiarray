@@ -29,6 +29,9 @@ module Hornetseye
       @p, @index, @stride = p, index, stride
     end
 
+    # Get storage object if there is any
+    #
+    # @return [Malloc,List,NilClass] Object storing the data.
     def memory
       #if array_type.storage_size != @stride.get * typecode.storage_size
       #  raise 'Memory is not contiguous'

@@ -14,8 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing native pointer types
   class Pointer_ < Node
 
     class << self
@@ -134,10 +136,16 @@ module Hornetseye
 
     end
 
+    # Constructor for pointer object
+    #
+    # @param [Malloc,List] value Initial value for pointer object.
     def initialize( value = self.class.default )
       @value = value
     end
 
+    # Get access to storage object
+    #
+    # @return [Malloc,List] The object used to store the data.
     def memory
       @value
     end
@@ -156,6 +164,13 @@ module Hornetseye
       return [ variable ], [ self ], variable
     end
 
+    # Get unique descriptor of this object
+    #
+    # @param [Hash] hash Labels for any variables.
+    #
+    # @return [String] Descriptor of this object,
+    #
+    # @private
     def descriptor( hash )
       "#{self.class.to_s}(#{@value.to_s})"
     end
@@ -199,6 +214,14 @@ module Hornetseye
       end
     end
 
+    # Skip elements of an array
+    #
+    # @param [Variable] index Variable identifying index of array.
+    # @param [Node] start Wrapped integer with number of elements to skip.
+    #
+    # @return [Node] Lookup object with elements skipped.
+    #
+    # @private
     def skip( index, start )
       self
     end
@@ -228,6 +251,17 @@ module Hornetseye
 
   end
 
+  # Create a class deriving from +Pointer_+
+  #
+  # Create a class deriving from +Pointer_+. The parameter +target+ is assigned to
+  # the corresponding attribute of the resulting class.
+  #
+  # @param [Class] target The native type of the complex components.
+  #
+  # @return [Class] A class deriving from +Pointer_+.
+  #
+  # @see Pointer_
+  # @see Pointer_.target
   def Pointer( target )
     p = Class.new Pointer_
     p.target = target

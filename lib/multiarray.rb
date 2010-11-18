@@ -462,6 +462,7 @@ class Range
 
 end
 
+# The +Numeric+ class is extended with a few methods
 class Numeric
 
   # Compute complex conjugate
@@ -522,6 +523,7 @@ class Numeric
 
 end
 
+# The +Array+ class is extended
 class Array
 
   # Element-wise operation based on element and its index

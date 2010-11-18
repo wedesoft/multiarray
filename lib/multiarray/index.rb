@@ -17,6 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing native array index types
   class INDEX_ < Element
 
     class << self

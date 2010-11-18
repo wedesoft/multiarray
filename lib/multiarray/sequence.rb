@@ -32,6 +32,15 @@ module Hornetseye
         MultiArray.new typecode, size
       end
 
+      # Import array from string
+      #
+      # Create an array from raw data provided as a string.
+      #
+      # @param [Class] typecode Type of the elements in the string.
+      # @param [String] string String with raw data.
+      # @param [Integer] size Size of array.
+      #
+      # @return [Node] One-dimensional array with imported data.
       def import( typecode, string, size )
         t = Hornetseye::Sequence typecode, size
         if string.is_a? Malloc
@@ -95,6 +104,12 @@ module Hornetseye
         end
       end
 
+      # Create (lazy) index array
+      #
+      # @param [Integer] offset First value of array.
+      # @param [Integer] increment Increment for subsequent values.
+      #
+      # @return [Node] Lazy term generating the array.
       def indgen( offset = 0, increment = 1 )
         Hornetseye::lazy( num_elements ) do |i|
           ( element_type.size * increment * i +
@@ -102,6 +117,11 @@ module Hornetseye
         end
       end
 
+      # Construct native array from Ruby array
+      #
+      # @param [Array<Object>] args Array with Ruby values.
+      #
+      # @return [Node] Native array with specified values.
       def []( *args )
         retval = new
         recursion = lambda do |element,args|
@@ -117,30 +137,51 @@ module Hornetseye
         retval
       end
 
+      # Get dimensions of array type
+      #
+      # @return [Array<Integer>] 
       def shape
         element_type.shape + [ num_elements ]
       end
 
+      # Get width of two-dimensional array type
+      #
+      # @return [Integer] Width of array.
       def width
         shape[0]
       end
 
+      # Get height of two-dimensional array
+      #
+      # @return [Integer] Height of array.
       def height
         shape[1]
       end
 
+      # Get size of array type
+      #
+      # @return [Integer] Size of array.
       def size
         num_elements * element_type.size
       end
 
+      # Get storage size of array type
+      #
+      # @return [Integer] Storage size of array.
       def storage_size
         num_elements * element_type.storage_size
       end
 
+      # Check whether type denotes an empty array
+      #
+      # @return [Boolean] Return +true+ for empty array.
       def empty?
         size == 0
       end
 
+      # Get element type of array type
+      #
+      # @return [Class] Element type of array.
       def typecode
         element_type.typecode
       end
@@ -163,26 +204,53 @@ module Hornetseye
         self
       end
 
+      # Get pointer type of delayed operation
+      #
+      # @return [Class] Type of result.
+      #
+      # @private
       def pointer_type
         self
       end
 
+      # Get dimension of type of delayed operation
+      #
+      # @return [Integer] Number of dimensions.
       def dimension
         element_type.dimension + 1
       end
 
+      # Check whether delayed operation will have colour
+      #
+      # @return [Boolean] Boolean indicating whether the array has elements of type
+      #         RGB.
       def rgb?
         element_type.rgb?
       end
 
+      # Get corresponding contiguous type
+      #
+      # @return [Class] Returns +self+.
+      #
+      # @private
       def contiguous
         self
       end
 
+      # Get corresponding boolean type
+      #
+      # @return [Class] Returns type for array of boolean values.
+      #
+      # @private
       def bool
         Hornetseye::Sequence element_type.bool, num_elements
       end
 
+      # Coerce and convert to boolean type
+      #
+      # @return [Class] Returns type for array of boolean values.
+      #
+      # @private
       def coercion_bool( other )
         coercion( other ).bool
       end
@@ -190,10 +258,17 @@ module Hornetseye
       # Get corresponding scalar type
       #
       # @return [Class] Returns type for array of scalars.
+      #
+      # @private
       def scalar
         Hornetseye::Sequence element_type.scalar, num_elements
       end
 
+      # Get corresponding floating point type
+      #
+      # @return [Class] Returns type for array of floating point numbers.
+      #
+      # @private
       def float_scalar
         Hornetseye::Sequence element_type.float_scalar, num_elements
       end
@@ -201,18 +276,35 @@ module Hornetseye
       # Get corresponding maximum integer type
       #
       # @return [Class] Returns type based on maximum integers.
+      #
+      # @private
       def maxint
         Hornetseye::Sequence element_type.maxint, num_elements
       end
 
+      # Coerce and convert to maximum integer type
+      #
+      # @return [Class] Returns type based on maximum integers.
+      #
+      # @private
       def coercion_maxint( other )
         coercion( other ).maxint
       end
 
+      # Get corresponding byte type
+      #
+      # @return [Class] Returns type based on byte.
+      #
+      # @private
       def byte
         Hornetseye::Sequence element_type.byte, num_elements
       end
 
+      # Coerce and convert to byte type
+      #
+      # @return [Class] Returns type based on byte.
+      #
+      # @private
       def coercion_byte( other )
         coercion( other ).byte
       end
@@ -226,19 +318,37 @@ module Hornetseye
         Hornetseye::Sequence element_type.float, num_elements
       end
 
+      # Coerce and convert to type based on floating point numbers
+      #
+      # @return [Class] Corresponding type based on floating point numbers.
+      #
+      # @private
       def floating( other )
         coercion( other ).float
       end
 
+      # Coerce with two other types
+      #
+      # @return [Class] Result of coercion.
+      #
+      # @private
       def cond( a, b )
         t = a.coercion b
         Hornetseye::MultiArray( t.typecode, *shape ).coercion t
       end
 
+      # Replace element type
+      #
+      # @return [Class] Result of conversion.
+      #
+      # @private
       def to_type( dest )
         Hornetseye::Sequence element_type.to_type( dest ), num_elements
       end
 
+      # Display this type
+      #
+      # @return [String] String with description of this type.
       def inspect
         if element_type and num_elements
           if dimension == 1
@@ -255,6 +365,9 @@ module Hornetseye
         end
       end
 
+      # Compute unique descriptor
+      #
+      # @return [String] Unique descriptor of this type.
       def to_s
         descriptor( {} )
       end
@@ -321,10 +434,18 @@ module Hornetseye
         end
       end
 
+      # Instantiate array of this type
+      #
+      # @param [Malloc,List] memory Object for storing array elements.
+      #
+      # @return [Node] The array expression.
       def new( memory = nil )
         MultiArray.new typecode, *( shape + [ :memory => memory ] )
       end
 
+      # Check whether this array expression allows compilation
+      #
+      # @return [Boolean] Returns +true+ if this expression supports compilation.
       def compilable?
         element_type.compilable?
       end
@@ -384,6 +505,19 @@ module Hornetseye
 
   end
 
+  # Create a class deriving from +Sequence_+
+  #
+  # Create a class deriving from +Sequence_+. The parameters +element_type+ and
+  # +num_elements+ are assigned to the corresponding attribute of the resulting class.
+  #
+  # @param [Class] element_type The element type of the native array.
+  # @param [Integer] num_elements The number of elements.
+  #
+  # @return [Class] A class deriving from +Sequence_+.
+  #
+  # @see Sequence_
+  # @see Sequence_.element_type
+  # @see Sequence_.num_elements
   def Sequence( element_type, num_elements )
     retval = Class.new Sequence_
     retval.element_type = element_type

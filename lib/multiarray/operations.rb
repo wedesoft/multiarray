@@ -249,6 +249,11 @@ module Hornetseye
       Hornetseye::ElementWise( action, block.to_s, conversion ).new( self ).force
     end
 
+    # Perform element-wise operation on array
+    #
+    # @param [Proc] action Operation(s) to perform on elements.
+    #
+    # @return [Node] The resulting array.
     alias_method :map, :collect
 
     # Perform cummulative operation on array
@@ -447,6 +452,14 @@ module Hornetseye
       product( filter ).diagonal { |s,x| s + x }
     end
 
+    # Compute histogram of this array
+    #
+    # @overload histogram( *ret_shape, options = {} )
+    #   @param [Array<Integer>] ret_shape Dimensions of resulting histogram.
+    #   @option options [Boolean] :safe (true) Do a boundary check before creating the
+    #           histogram.
+    #
+    # @return [Node] The histogram.
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
       options = { :target => UINT, :safe => true }.merge options
@@ -487,12 +500,13 @@ module Hornetseye
       left
     end
 
-    #def histogram_with_composite( *ret_shape )
-    #  decompose.histogram_without_composite *ret_shape
-    #end
-
-    #alias_method_chain :histogram, :composite
-
+    # Perform element-wise lookup
+    #
+    # @param [Node] table The lookup table (LUT).
+    # @option options [Boolean] :safe (true) Do a boundary check before creating the
+    #         element-wise lookup.
+    #
+    # @return [Node] The result of the lookup operation.
     def lut( table, options = {} )
       options = { :safe => true }.merge options
       if options[ :safe ]
@@ -533,12 +547,9 @@ module Hornetseye
       end
     end
 
-    #def lut_with_composite( table, options = {} )
-    #  decompose.lut_without_composite table, options
-    #end
-
-    #alias_method_chain :lut, :composite
-
+    # Compute integral image
+    #
+    # @return [Node] The integral image of this array.
     def integral
       left = pointer_type.new
       block = Integral.new left, self

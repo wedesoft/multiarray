@@ -16,7 +16,10 @@
 
 # Namespace of Hornetseye computer vision library
 module Hornetseye
-  
+
+  # Class for holding methods compiled during runtime
+  # 
+  # @private  
   class GCCCache
   end
 

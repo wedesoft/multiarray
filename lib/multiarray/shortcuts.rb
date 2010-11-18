@@ -17,8 +17,16 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Module with meta-programming methods for creating constructor shortcut methods
   module MultiArrayConstructor
 
+    # Meta-programming method for creating constructor shortcut methods
+    #
+    # @param [Class] target Element-type to create constructor shortcut for.
+    #
+    # @return [Proc] The new method.
+    #
+    # @private
     def constructor_shortcut( target )
       define_method( target.to_s.downcase ) do |*args|
         new target, *args
@@ -58,8 +66,16 @@ module Hornetseye
 
   MultiArray.extend MultiArrayConstructor
 
+  # Module with meta-programming methods for creating conversion shortcut methods
   module MultiArrayConversion
 
+    # Meta-programming method for creating type conversion shortcut methods
+    #
+    # @param [Class] target Element-type to create type conversion shortcut for.
+    #
+    # @return [Proc] The new method.
+    #
+    # @private
     def to_type_shortcut( target )
       define_method( "to_#{target.to_s.downcase}" ) do
         to_type target
