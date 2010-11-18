@@ -190,11 +190,26 @@ module Hornetseye
 
     end
 
+    # Loop statement
+    #
+    # @param [Proc] action Loop body.
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def times( &action )
       get.times &action
       self
     end
 
+    # Loop statement
+    #
+    # @param [Node] other Upper limit for loop.
+    # @param [Proc] action Loop body.
+    #
+    # @return [GCCValue] Returns +self+.
+    #
+    # @private
     def upto( other, &action )
       get.upto other.get, &action
       self

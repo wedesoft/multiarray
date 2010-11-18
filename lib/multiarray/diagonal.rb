@@ -35,8 +35,18 @@ module Hornetseye
 
     # Constructor
     #
-    # @param [Node] value Initial value of injection
-    # @param [Node] index0 Index for 
+    # @param [Node] value Initial value of injection.
+    # @param [Node] index0 Index to select starting point of injection.
+    # @param [Node] index1 Index to diagonally iterate over +value+.
+    # @param [Node] index2 Index to diagonally iterate over +value+.
+    # @param [Node,NilClass] initial Initial value for injection.
+    # @param [Node] block Expression with body of injection.
+    # @param [Variable] var1 Variable for performing substitutions on body of
+    #        injection.
+    # @param [Variable] var2 Variable for performing substitutions on body of
+    #        injection.
+    #
+    # @private
     def initialize( value, index0, index1, index2, initial, block, var1,
                     var2 )
       @value, @index0, @index1, @index2, @initial, @block, @var1, @var2 =

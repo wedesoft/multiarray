@@ -96,12 +96,22 @@ module Hornetseye
 
     end
 
+    # This value must not be instantiated
+    #
+    # The method throws an exception.
+    #
+    # @private
     def initialize
       raise "#{self.class.inspect} must not be instantiated"
     end
 
   end
 
+  # Instantiate the type of an array index
+  #
+  # @param [INT_,Variable] size Dimension of array.
+  #
+  # @return [Class] Returns a class deriving from +INDEX_+.
   def INDEX( size )
     retval = Class.new INDEX_
     size = INT.new( size ) unless size.is_a? Node

@@ -17,6 +17,7 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Class for representing injections
   class Inject < Node
 
     class << self
@@ -32,6 +33,18 @@ module Hornetseye
 
     end
 
+    # Constructor
+    #
+    # @param [Node] value Initial value of injection.
+    # @param [Node] index Index to iterate over +value+.
+    # @param [Node,NilClass] initial Initial value for injection.
+    # @param [Node] block Expression with body of injection.
+    # @param [Variable] var1 Variable for performing substitutions on body of
+    #        injection.
+    # @param [Variable] var2 Variable for performing substitutions on body of
+    #        injection.
+    #
+    # @private
     def initialize( value, index, initial, block, var1, var2 )
       @value, @index, @initial, @block, @var1, @var2 =
         value, index, initial, block, var1, var2
