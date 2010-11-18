@@ -17,8 +17,17 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
+  # Module providing the operations to manipulate array expressions
   module Operations
 
+    # Meta-programming method to define a unary operation
+    #
+    # @param [Symbol,String] op Name of unary operation.
+    # @param [Symbol,String] conversion Name of method for type conversion.
+    #
+    # @return [Proc] The new method.
+    #
+    # @private
     def define_unary_op( op, conversion = :contiguous )
       define_method( op ) do
         if dimension == 0 and variables.empty?
@@ -34,6 +43,14 @@ module Hornetseye
 
     module_function :define_unary_op
 
+    # Meta-programming method to define a binary operation
+    #
+    # @param [Symbol,String] op Name of binary operation.
+    # @param [Symbol,String] conversion Name of method for type conversion.
+    #
+    # @return [Proc] The new method.
+    #
+    # @private
     def define_binary_op( op, coercion = :coercion )
       define_method( op ) do |other|
         unless other.is_a? Node
@@ -87,10 +104,20 @@ module Hornetseye
     define_binary_op :minor
     define_binary_op :major
 
+    # This operation has no effect
+    #
+    # @return [Node] Returns +self+.
+    #
+    # @private
     def +@
       self
     end
 
+    # Convert array elements to different element type
+    #
+    # @param [Class] dest Element type to convert to.
+    #
+    # @return [Node] Array based on the different element type.
     def to_type( dest )
       if dimension == 0 and variables.empty?
         target = typecode.to_type dest
@@ -102,6 +129,13 @@ module Hornetseye
       end
     end
 
+    # Convert RGB array to scalar array
+    #
+    # This operation is a special case handling colour to greyscale conversion.
+    #
+    # @param [Class] dest Element type to convert to.
+    #
+    # @return [Node] Array based on the different element type.
     def to_type_with_rgb( dest )
       if typecode < RGB_
         if dest < FLOAT_
@@ -118,6 +152,12 @@ module Hornetseye
 
     alias_method_chain :to_type, :rgb
 
+    # Element-wise conditional selection of values
+    #
+    # @param [Node] a First array of values.
+    # @param [Node] b Second array of values.
+    #
+    # @return [Node] Array with selected values.
     def conditional( a, b )
       unless a.is_a? Node
         a = Node.match( a, b.is_a?( Node ) ? b : nil ).new a
@@ -137,6 +177,11 @@ module Hornetseye
       end
     end
 
+    # Element-wise comparison of values
+    #
+    # @param [Node] other Array with values to compare with.
+    #
+    # @return [Node] Array with results.
     def <=>( other )
       Hornetseye::lazy do
         ( self < other ).conditional -1, ( self > other ).conditional( 1, 0 )
@@ -162,6 +207,11 @@ module Hornetseye
         inject( term ) { |retval,var| Lambda.new var, retval }
     end
 
+    # Cycle indices of array
+    #
+    # @param [Integer] n Number of times to cycle indices of array.
+    #
+    # @return [Node] Resulting array expression with different order of indices.
     def roll( n = 1 )
       if n < 0
         unroll -n
@@ -172,6 +222,11 @@ module Hornetseye
       end
     end
 
+    # Reverse-cycle indices of array
+    #
+    # @param [Integer] n Number of times to cycle back indices of array.
+    #
+    # @return [Node] Resulting array expression with different order of indices.
     def unroll( n = 1 )
       if n < 0
         roll -n
@@ -182,6 +237,11 @@ module Hornetseye
       end
     end
 
+    # Perform element-wise operation on array
+    #
+    # @param [Proc] action Operation(s) to perform on elements.
+    #
+    # @return [Node] The resulting array.
     def collect( &action )
       var = Variable.new typecode
       block = action.call var
@@ -191,6 +251,15 @@ module Hornetseye
 
     alias_method :map, :collect
 
+    # Perform cummulative operation on array
+    #
+    # @param [Object] initial Initial value for cummulative operation.
+    # @option options [Variable] :var1 First variable defining operation.
+    # @option options [Variable] :var1 Second variable defining operation.
+    # @option options [Variable] :block (yield( var1, var2 )) The operation to
+    #         apply.
+    #
+    # @return [Object] Result of injection.
     def inject( initial = nil, options = {} )
       unless initial.nil?
         initial = Node.match( initial ).new initial unless initial.is_a? Node
@@ -237,22 +306,39 @@ module Hornetseye
 
     alias_method_chain :==, :multiarray, :eq
 
+    # Find minimum value of array
+    #
+    # @return [Object] Minimum value of array.
     def min
       inject { |a,b| a.minor b }
     end
 
+    # Find maximum value of array
+    #
+    # @return [Object] Maximum value of array.
     def max
       inject { |a,b| a.major b }
     end
 
+    # Compute sum of array
+    #
+    # @return [Object] Sum of array.
     def sum
       inject { |a,b| a + b }
     end
 
+    # Find range of values of array
+    #
+    # @return [Object] Range of values of array.
     def range
       min .. max
     end
 
+    # Normalise values of array
+    #
+    # @param [Range] range Target range of normalisation.
+    #
+    # @return [Node] Array with normalised values.
     def normalise( range = 0 .. 0xFF )
       if range.exclude_end?
         raise "Normalisation does not support ranges with end value " +
@@ -274,6 +360,11 @@ module Hornetseye
       end
     end
 
+    # Fill array with a value
+    #
+    # @param [Object] value Value to fill array with.
+    #
+    # @return [Node] Return +self+.
     def fill!( value = typecode.default )
       self[] = value
       self
