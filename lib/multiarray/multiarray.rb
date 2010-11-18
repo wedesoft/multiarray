@@ -26,6 +26,8 @@ module Hornetseye
       #
       # @param [Class] typecode The type of elements
       # @param [Array<Integer>] *shape The shape of the multi-dimensional array.
+      #
+      # @return [Node] Returns uninitialised native array.
       def new( typecode, *shape )
         options = shape.last.is_a?( Hash ) ? shape.pop : {}
         count = options[ :count ] || 1

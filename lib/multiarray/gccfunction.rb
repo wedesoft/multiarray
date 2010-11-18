@@ -34,6 +34,7 @@ module Hornetseye
         GCCCache.send method_name, *args
       end
 
+      # @see run
       def compile( method_name, term, *keys )
         @@mutex.synchronize do
           unless GCCCache.respond_to? method_name

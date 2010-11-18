@@ -207,9 +207,31 @@ module Hornetseye
 
   end
 
+  # Boolean constant to use as a parameter for creating floating point classes
+  #
+  # The value is +false+.
+  #
+  # @see #FLOAT
   SINGLE = false
+
+  # Boolean constant to use as a parameter for creating floating point classes
+  #
+  # The value is +true+.
+  #
+  # @see #FLOAT
   DOUBLE = true
 
+  # Create a class deriving from +FLOAT_+
+  #
+  # Create a class deriving from +FLOAT_+. The parameters +double+ is assigned to the
+  # corresponding attributes of the resulting class.
+  #
+  # @param [Boolean] double Specify +SINGLE+ or +DOUBLE+ here.
+  #
+  # @return [Class] A class deriving from +FLOAT_+.
+  #
+  # @see FLOAT_
+  # @see FLOAT_.double
   def FLOAT( double )
     retval = Class.new FLOAT_
     retval.double = double
@@ -218,7 +240,10 @@ module Hornetseye
 
   module_function :FLOAT
 
+  # Single-precision floating-point number
   SFLOAT = FLOAT SINGLE
+
+  # Double-precision floating-point number
   DFLOAT = FLOAT DOUBLE
 
   # Shortcut for constructor

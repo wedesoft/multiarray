@@ -304,6 +304,8 @@ module Hornetseye
     #
     # @return [Boolean] Returns boolean indicating whether objects are
     #         equal or not.
+    #
+    # @private
     def ==( other )
       if other.is_a?( InternalComplex ) or other.is_a?( Complex )
         @real.eq( other.real ).and( @imag.eq( other.imag ) )
@@ -316,10 +318,11 @@ module Hornetseye
 
     # Decompose complex number
     #
-    # This method decomposes the complex number into an array.
+    # This method decomposes the complex number.
     #
-    # @return [Node] Returns an array with the real and imaginary component as
-    #         elements.
+    # @return [Numeric,GCCValue] Returns the requested component.
+    #
+    # @private
     def decompose( i )
       [ @real, @imag ][ i ]
     end

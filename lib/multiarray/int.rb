@@ -264,7 +264,7 @@ module Hornetseye
   # Create a class deriving from +INT_+ or instantiate an +INT+ object
   #
   # @overload INT( bits, signed )
-  #   Create a class deriving from +INT_+. The aprameters +bits+ and +signed+
+  #   Create a class deriving from +INT_+. The parameters +bits+ and +signed+
   #   are assigned to the corresponding attributes of the resulting class.
   #   @param [Integer] bits Number of bits of native integer.
   #   @param [Boolean] signed Specify +UNSIGNED+ or +SIGNED+ here.
@@ -274,6 +274,8 @@ module Hornetseye
   #   This is a shortcut for +INT.new( value )+.
   #   @param [Integer] value Initial value for integer object.
   #   @return [INT] Wrapped integer value.
+  #
+  # @return [Class,INT] A class deriving from +INT_+ or a wrapped integer value.
   #
   # @see INT_
   # @see INT_.bits

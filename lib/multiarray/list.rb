@@ -59,6 +59,10 @@ module Hornetseye
     # Retrieve value of specified typecode
     #
     # @param [Class] typecode The type of the value.
+    #
+    # @return [Object] The referenced value.
+    #
+    # @private
     def load( typecode )
       @array[ @offset ]
     end
@@ -66,6 +70,10 @@ module Hornetseye
     # Store value
     #
     # @param [Node] value Value to store.
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
     def save( value )
       @array[ @offset ] = value.get
       value

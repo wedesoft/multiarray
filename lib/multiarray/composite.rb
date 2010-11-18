@@ -103,6 +103,13 @@ module Hornetseye
 
     end
 
+    # Decompose composite number
+    #
+    # This method decomposes the composite number.
+    #
+    # @return [Node] Returns the requested component.
+    #
+    # @private
     def decompose( i )
       self.class.element_type.new @value.decompose( i )
     end

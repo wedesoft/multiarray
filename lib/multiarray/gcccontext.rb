@@ -16,7 +16,10 @@
 
 # Namespace of Hornetseye computer vision library
 module Hornetseye
-  
+
+  # Context object for creating a Ruby extension
+  #
+  # @private
   class GCCContext
 
     CFG = RbConfig::CONFIG
@@ -51,6 +54,15 @@ module Hornetseye
 
     class << self
 
+      # Method for compiling Ruby to C
+      #
+      # @param [Proc] action The code block needs to accept a GCCContext object.
+      #
+      # @return [Object] Returns result of code block.
+      #
+      # @see GCCFunction.run
+      #
+      # @private
       def build( &action )
         lib_name, @@lib_name = @@lib_name, @@lib_name.succ
         new( lib_name ).build &action
@@ -58,6 +70,11 @@ module Hornetseye
 
     end
 
+    # Initialises an empty Ruby extension
+    #
+    # @param [String] lib_name Base name of library to create later.
+    #
+    # @private
     def initialize( lib_name )
       @lib_name = lib_name
       @instructions = ''
@@ -65,10 +82,25 @@ module Hornetseye
       @registrations = ''
     end
 
+    # Create Ruby extension
+    #
+    # @param [Proc] action Code block accepting a GCCContext object.
+    #
+    # @return [Object] Returns result of code block.
+    #
+    # @private
     def build( &action )
       action.call self
     end
 
+    # Add a new function to the Ruby extension
+    #
+    # @param [String] descriptor Method name of function.
+    # @param [Array<GCCType>] param_types Array with parameter types.
+    #
+    # @return [GCCFunction] Object representing the function.
+    #
+    # @private
     def function( descriptor, *param_types )
       @instructions << <<EOS
 struct Arguments
@@ -120,6 +152,15 @@ EOS
                     RUBY_METHOD_FUNC( wrap#{descriptor.capitalize} ), -1 ); 
 EOS
     end
+
+    # Compile the Ruby extension
+    #
+    # This method writes the source code to a file and calls GCC to compile it.
+    # Finally the Ruby extension is loaded.
+    #
+    # @return [Boolean] Returns of loading the Ruby extension.
+    #
+    # @private
     def compile
       template = <<EOS
 #include <ruby.h>
@@ -153,6 +194,15 @@ EOS
       require "#{DIRNAME}/#{@lib_name}"
     end
 
+    # Add instructions to Ruby extension
+    #
+    # The given string is appended to the source code of the Ruby extension.
+    #
+    # @param [String] str String with source code fragment of Ruby extension.
+    #
+    # @return [GCCContext] Returns +self+.
+    #
+    # @private
     def <<( str )
       @instructions << str
       self
