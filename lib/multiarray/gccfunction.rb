@@ -56,9 +56,7 @@ module Hornetseye
             function = GCCFunction.new context, method_name,
                                        *keys.collect { |var| var.meta }
             Thread.current[ :function ] = function
-            term_subst = ( 0 ... keys.size ).collect do |i|
-              { keys[i] => function.param( i ) }
-            end.inject( {} ) { |a,b| a.merge b }
+            term_subst = Hash[ *keys.zip( function.params ).flatten ]
             Hornetseye::lazy do
               term.subst( term_subst ).demand
             end
@@ -144,20 +142,21 @@ module Hornetseye
       @indent += offset
     end
 
-    # Retrieve a parameter
+    # Retrieve all parameters
     #
-    # @param [Integer] i Parameter to retrieve.
-    #
-    # @return [Node] Object for handling the parameter.
+    # @return [Array<Node>] Objects for handling the parameters.
     #
     # @private
-    def param( i )
-      offset = ( 0 ... i ).inject( 0 ) do |s,idx|
-        s + GCCType.new( @param_types[ idx ] ).identifiers.size
+    def params
+      idx = 0
+      @param_types.collect do |param_type|
+        args = GCCType.new( param_type ).identifiers.collect do
+          arg = GCCValue.new self, "param#{idx}"
+          idx += 1
+          arg
+        end
+        param_type.construct *args
       end
-      args = ( 0 ... GCCType.new( @param_types[ i ] ).identifiers.size ).
-        collect { |idx| GCCValue.new self, "param#{ offset + idx }" }
-      @param_types[ i ].construct *args
     end
 
     # Call the native method
