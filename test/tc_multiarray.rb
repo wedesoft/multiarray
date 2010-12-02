@@ -446,6 +446,8 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 0, 1 ], [ 2, 0 ] ].lut( S[ 1, 2, 3, 4 ] )
     assert_equal M[ 1, 3, 4 ],
                  M[ [ 0, 0 ], [ 0, 1 ], [ 1, 1 ] ].lut( M[ [ 1, 2 ], [ 3, 4 ] ] )
+    assert_equal M[ 1, 3, 4 ],
+                 [ S[ 0, 0, 1 ], S[ 0, 1, 1 ] ].lut( M[ [ 1, 2 ], [ 3, 4 ] ] )
     assert_equal M[ [ 3, 4 ], [ 1, 2 ] ],
                  M[ [ 1 ], [ 0 ] ].lut( M[ [ 1, 2 ], [ 3, 4 ] ] )
     assert_raise( RuntimeError ) { S[ 0, 1, 2 ].lut M[ [ 1, 2 ], [ 3, 4 ] ] }
@@ -454,6 +456,10 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_raise( RuntimeError ) { M[ [ 2, 0 ] ].lut M[ [ 1, 2 ] ] }
     assert_raise( RuntimeError ) { M[ [ 0, 1 ] ].lut M[ [ 1, 2 ] ] }
     assert_raise( RuntimeError ) { M[ [ 1 ], [ 2 ] ].lut M[ [ 1, 2 ], [ 3, 4 ] ] }
+    assert_raise( RuntimeError ) { [ S[ -1, 0 ], S[ 0, 1 ] ].
+                                   lut M[ [ 1, 2 ], [ 3, 4 ] ] }
+    assert_raise( RuntimeError ) { [ S[ 0, 0 ], S[ 0, 2 ] ].
+                                   lut M[ [ 1, 2 ], [ 3, 4 ] ] }
   end
 
   def test_zero
