@@ -508,42 +508,10 @@ module Hornetseye
     #
     # @return [Node] The result of the lookup operation.
     def lut( table, options = {} )
-      options = { :safe => true }.merge options
-      if options[ :safe ]
-        if shape.first != 1 and table.dimension == 1
-          source = Hornetseye::lazy( 1 ) { |i| self }.unroll
-        else
-          if shape.first > table.dimension
-            raise "First dimension of array (#{shape.first}) is greater than the " +
-                  " number of dimensions of LUT (#{table.dimension})"
-          end
-          source = self
-        end
+      if shape.first != 1 and table.dimension == 1
+        [ self ].lut table, options
       else
-        source = self
-      end
-      if options[ :safe ]
-        for i in 0 ... source.shape.first
-          range = source.roll[ i ].range
-          if range.begin < 0
-            raise "#{i+1}th dimension of index must be in 0 ... #{table.shape[i]} " +
-                  "(but was #{range.begin})"
-          end
-          offset = table.dimension - source.shape.first
-          if range.end >= table.shape[ i + offset ]
-            raise "#{i+1}th dimension of index must be in 0 ... " +
-                  "#{table.shape[ i + offset ]} (but was #{range.end})"
-          end
-        end
-      end
-      if source.dimension <= 1 and variables.empty?
-        result = table
-        ( table.dimension - 1 ).downto( 0 ) do |i|
-          result = result.element source.element( INT.new( i ) ).demand
-        end
-        result
-      else
-        Lut.new( source, table, options[ :n ] ).force
+        ( 0 ... shape.first ).collect { |i| unroll[i] }.lut table, options
       end
     end
 
@@ -570,3 +538,41 @@ module Hornetseye
   end
 
 end
+
+class Array
+
+  def lut( table, options = {} )
+    options = { :safe => true }.merge options
+    if options[ :safe ]
+      if size > table.dimension
+        raise "Number of arrays for lookup (#{size}) is greater than the " +
+              " number of dimensions of LUT (#{table.dimension})"
+      end
+    end
+    if options[ :safe ]
+      for i in 0 ... size
+        range = self[ i ].range
+        if range.begin < 0
+          raise "#{i+1}th index must be in 0 ... #{table.shape[i]} " +
+                "(but was #{range.begin})"
+        end
+        offset = table.dimension - size
+        if range.end >= table.shape[ i + offset ]
+          raise "#{i+1}th index must be in 0 ... " +
+                "#{table.shape[ i + offset ]} (but was #{range.end})"
+        end
+      end
+    end
+    if all? { |source| source.dimension == 0 and source.variables.empty? }
+      result = table
+      ( table.dimension - 1 ).downto( 0 ) do |i|
+        result = result.element self[ i ].demand
+      end
+      result
+    else
+      Hornetseye::Lut.new( *( self + [ table ] ) ).force
+    end
+  end
+
+end
+

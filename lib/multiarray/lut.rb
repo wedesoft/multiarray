@@ -35,14 +35,13 @@ module Hornetseye
 
     # Constructor
     #
-    # @param [Node] dest Target array to write histogram to.
-    # @param [Node] source Expression to compute histogram of.
-    # @param [Integer] n Number of dimensions of lookup.
+    # @overload initialize( *sources, table )
+    #   @param [Array<Node>] sources Arrays with elements for lookup
+    #   @param [Node] table Lookup table
     #
     # @private
-    def initialize( source, table, n = nil )
-      @source, @table = source, table
-      @n = n || @source.shape.first
+    def initialize( *args )
+      @sources, @table = args[ 0 ... -1 ], args.last
     end
 
     # Get unique descriptor of this object
@@ -53,7 +52,8 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      "Lut(#{@source.descriptor( hash )},#{@table.descriptor( hash )},#{@n})"
+      "Lut(#{@sources.collect { |source| source.descriptor( hash ) }.join ','}," +
+        "#{@table.descriptor( hash )})"
     end
 
     # Get type of result of delayed operation
@@ -62,7 +62,10 @@ module Hornetseye
     #
     # @private
     def array_type
-      shape = @table.shape.first( @table.dimension - @n ) + @source.shape[ 1 .. -1 ]
+      source_type = @sources.collect { |source| source.array_type }.
+        inject { |a,b| a.coercion b }
+      shape = @table.shape.first( @table.dimension - @sources.size ) +
+        source_type.shape
       retval = Hornetseye::MultiArray @table.typecode, *shape
       ( class << self; self; end ).instance_eval do
         define_method( :array_type ) { retval }
@@ -78,7 +81,7 @@ module Hornetseye
     #
     # @private
     def demand
-      @source.lut @table, :n => @n, :safe => false
+      @sources.lut @table, :safe => false
     end
 
     # Substitute variables
@@ -91,7 +94,8 @@ module Hornetseye
     #
     # @private
     def subst( hash )
-      self.class.new @source.subst( hash ), @table.subst( hash ), @n
+      self.class.new *( @sources.collect { |source| source.subst hash } +
+                        [ @table.subst( hash ) ] )
     end
 
     # Get variables contained in this term
@@ -100,7 +104,7 @@ module Hornetseye
     #
     # @private
     def variables
-      @source.variables + @table.variables
+      @sources.inject( @table.variables ) { |a,b| a + b.variables }
     end
 
     # Strip of all values
@@ -113,9 +117,10 @@ module Hornetseye
     #
     # @private
     def strip
-      vars1, values1, term1 = @source.strip
-      vars2, values2, term2 = @table.strip
-      return vars1 + vars2, values1 + values2, self.class.new( term1, term2, @n )
+      stripped = ( @sources + [ @table ] ).collect { |source| source.strip }
+      return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
+           stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
+           self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
     end
 
     # Skip elements of an array
@@ -128,7 +133,8 @@ module Hornetseye
     #
     # @private
     def skip( index, start )
-      self.class.new @source.skip( index, start ), @table.skip( index, start ), @n
+      self.class.new *( @sources.skip( index, start ) +
+                        [ @table.skip( index, start ) ] )
     end
 
     # Get element of unary operation
@@ -139,12 +145,14 @@ module Hornetseye
     #
     # @private
     def element( i )
-      source, table = @source, @table
-      if source.dimension > 1
-        source = source.element i
-        self.class.new source, table, @n
-      elsif table.dimension > @n
-        self.class.new source, table.unroll( @n ).element( i ).roll( @n ), @n
+      sources, table = @sources, @table
+      if sources.any? { |source| source.dimension > 0 }
+        sources = sources.
+          collect { |source| source.dimension > 0 ? source.element( i ) : source }
+        self.class.new *( sources + [ table ] )
+      elsif table.dimension > sources.size
+        n = sources.size
+        self.class.new *( sources + [ table.unroll( n ).element( i ).roll( n ) ] )
       else
         super i
       end
@@ -178,7 +186,7 @@ module Hornetseye
     #
     # @return [Node] Result of decomposition.
     def decompose( i )
-      self.class.new @source, @table.decompose( i ), @n
+      self.class.new *( @sources + [ @table.decompose( i ) ] )
     end
 
     # Check whether this term is compilable
@@ -187,7 +195,7 @@ module Hornetseye
     #
     # @private
     def compilable?
-      @source.compilable? and @table.compilable?
+      @sources.all? { |source| source.compilable? } and @table.compilable?
     end
 
   end
