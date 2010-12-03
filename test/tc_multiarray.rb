@@ -460,6 +460,9 @@ class TC_MultiArray < Test::Unit::TestCase
                                    lut M[ [ 1, 2 ], [ 3, 4 ] ] }
     assert_raise( RuntimeError ) { [ S[ 0, 0 ], S[ 0, 2 ] ].
                                    lut M[ [ 1, 2 ], [ 3, 4 ] ] }
+    assert_raise( RuntimeError ) { [ S[ 0, 0, 1 ], S[ 0, 1 ] ].
+                                   lut M[ [ 1, 2 ], [ 3, 4 ] ] }
+    assert_raise( RuntimeError ) { [ S[ 0, 1 ], S[ 0, 1 ] ].lut S[ 1, 2 ] }
   end
 
   def test_zero

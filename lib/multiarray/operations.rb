@@ -548,6 +548,9 @@ class Array
         raise "Number of arrays for lookup (#{size}) is greater than the " +
               " number of dimensions of LUT (#{table.dimension})"
       end
+      array_types = collect { |source| source.array_type }
+      source_type = array_types.inject { |a,b| a.coercion b }
+      source_type.check_shape *array_types
     end
     if options[ :safe ]
       for i in 0 ... size
