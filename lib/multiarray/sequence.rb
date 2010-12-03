@@ -220,6 +220,31 @@ module Hornetseye
         element_type.dimension + 1
       end
 
+      # Check arguments for compatible shape
+      #
+      # The method will throw an exception if one of the arguments has an incompatible
+      # shape.
+      #
+      # @param [Array<Class>] args Arguments to check for compatibility.
+      #
+      # @return [Object] The return value should be ignored.
+      def check_shape( *args )
+        _shape = shape
+        args.each do |arg|
+          _arg_shape = arg.shape
+          if _shape.size < _arg_shape.size
+            raise "#{arg.inspect} has #{arg.dimension} dimension(s) " +
+                  "but should not have more than #{dimension}"
+          end
+          if ( _shape + _arg_shape ).all? { |s| s.is_a? Integer }
+            if _shape.last( _arg_shape.size ) != _arg_shape
+              raise "#{arg.inspect} has shape #{arg.shape.inspect} " +
+                    "(does not match last value(s) of #{shape.inspect})"
+            end
+          end
+        end
+      end
+
       # Check whether delayed operation will have colour
       #
       # @return [Boolean] Boolean indicating whether the array has elements of type
