@@ -523,7 +523,7 @@ class Numeric
 
 end
 
-# The +Array+ class is extended
+# The +Array+ class is extended with a few methods
 class Array
 
   # Element-wise operation based on element and its index

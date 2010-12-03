@@ -36,11 +36,11 @@ module Hornetseye
     # Constructor
     #
     # @param [Node] dest Target array to write histogram to.
-    # @param [Node] source Expression to compute histogram of.
+    # @param [Array<Node>] sources Arrays with elements to compute histogram of.
     #
     # @private
-    def initialize( dest, source )
-      @dest, @source = dest, source
+    def initialize( dest, *sources )
+      @dest, @sources = dest, sources
     end
 
     # Get unique descriptor of this object
@@ -51,7 +51,8 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      "Histogram(#{@dest.descriptor( hash )},#{@source.descriptor( hash )})"
+      "Histogram(#{@dest.descriptor( hash )}," +
+        "#{@sources.collect { |source| source.descriptor( hash ) }.join ','})"
     end
 
     # Get type of result of delayed operation
@@ -76,15 +77,19 @@ module Hornetseye
     # @private
     def demand
       if variables.empty?
-        if @source.dimension > 1
-          @source.shape.last.times do |i|
-            source = @source.element INT.new( i )
-            Histogram.new( @dest, source ).demand
+        if @sources.any? { |source| source.dimension > 0 }
+          source_type = @sources.collect { |source| source.array_type }.
+            inject { |a,b| a.coercion b }
+          source_type.shape.last.times do |i|
+            sources = @sources.collect do |source|
+              source.dimension > 0 ? source.element( INT.new( i ) ) : source
+            end
+            Histogram.new( @dest, *sources ).demand
           end
         else
           dest = @dest
           ( @dest.dimension - 1 ).downto( 0 ) do |i|
-            dest = dest.element @source.element( INT.new( i ) ).demand
+            dest = dest.element @sources[ i ].demand
           end
           dest.store dest + 1
         end
@@ -113,7 +118,7 @@ module Hornetseye
     #
     # @private
     def variables
-      @dest.variables + @source.variables
+      @sources.inject( @dest.variables ) { |a,b| a + b.variables }
     end
 
     # Strip of all values

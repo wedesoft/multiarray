@@ -456,6 +456,7 @@ module Hornetseye
     #
     # @overload histogram( *ret_shape, options = {} )
     #   @param [Array<Integer>] ret_shape Dimensions of resulting histogram.
+    #   @option options [Class] :target (UINT) Element-type of resulting histogram.
     #   @option options [Boolean] :safe (true) Do a boundary check before creating the
     #           histogram.
     #
@@ -463,41 +464,12 @@ module Hornetseye
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
       options = { :target => UINT, :safe => true }.merge options
-      if options[ :safe ]
-        if shape.first != 1 and ret_shape.size == 1
-          right = Hornetseye::lazy( 1 ) { self }.unroll
-        else
-          if shape.first != ret_shape.size
-            raise "First dimension of array (#{shape.first}) differs from number of " +
-                  "dimensions of histogram (#{ret_shape.size})"
-          end
-          right = self
-        end
+      if shape.first != 1 and ret_shape.size == 1
+        [ self ].histogram *( ret_shape + [ options ] )
       else
-        right = self
+        ( 0 ... shape.first ).collect { |i| unroll[i] }.
+          histogram *( ret_shape + [ options ] )
       end
-      if options[ :safe ]
-        for i in 0 ... right.shape.first
-          range = right.roll[ i ].range
-          if range.begin < 0
-            raise "#{i+1}th dimension of index must be in 0 ... #{ret_shape[i]} " +
-                  "(but was #{range.begin})"
-          end
-          if range.end >= ret_shape[ i ]
-            raise "#{i+1}th dimension of index must be in 0 ... #{ret_shape[i]} " +
-                  "(but was #{range.end})"
-          end
-        end
-      end
-      left = MultiArray.new options[ :target ], *ret_shape
-      left[] = 0
-      block = Histogram.new left, right
-      if block.compilable?
-        GCCFunction.run block
-      else
-        block.demand
-      end
-      left
     end
 
     # Perform element-wise lookup
@@ -539,8 +511,60 @@ module Hornetseye
 
 end
 
+# The +Array+ class is extended with a few methods
 class Array
 
+  # Compute histogram of this array
+  #
+  # @overload histogram( *ret_shape, options = {} )
+  #   @param [Array<Integer>] ret_shape Dimensions of resulting histogram.
+  #   @option options [Class] :target (Hornetseye::UINT) Element-type of resulting
+  #           histogram.
+  #   @option options [Boolean] :safe (true) Do a boundary check before creating the
+  #           histogram.
+  #
+  # @return [Node] The histogram.
+  def histogram( *ret_shape )
+    options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
+    options = { :target => Hornetseye::UINT, :safe => true }.merge options
+    if options[ :safe ]
+      if size != ret_shape.size
+        raise "Number of arrays for histogram (#{size}) differs from number of " +
+              "dimensions of histogram (#{ret_shape.size})"
+      end
+      array_types = collect { |source| source.array_type }
+      source_type = array_types.inject { |a,b| a.coercion b }
+      source_type.check_shape *array_types
+      for i in 0 ... size
+        range = self[ i ].range
+        if range.begin < 0
+          raise "#{i+1}th dimension of index must be in 0 ... #{ret_shape[i]} " +
+                "(but was #{range.begin})"
+        end
+        if range.end >= ret_shape[ i ]
+          raise "#{i+1}th dimension of index must be in 0 ... #{ret_shape[i]} " +
+                "(but was #{range.end})"
+        end
+      end
+    end
+    left = Hornetseye::MultiArray.new options[ :target ], *ret_shape
+    left[] = 0
+    block = Hornetseye::Histogram.new left, *self
+    if block.compilable?
+      GCCFunction.run block
+    else
+      block.demand
+    end
+    left
+  end
+
+  # Perform element-wise lookup
+  #
+  # @param [Node] table The lookup table (LUT).
+  # @option options [Boolean] :safe (true) Do a boundary check before creating the
+  #         element-wise lookup.
+  #
+  # @return [Node] The result of the lookup operation.
   def lut( table, options = {} )
     options = { :safe => true }.merge options
     if options[ :safe ]
@@ -551,8 +575,6 @@ class Array
       array_types = collect { |source| source.array_type }
       source_type = array_types.inject { |a,b| a.coercion b }
       source_type.check_shape *array_types
-    end
-    if options[ :safe ]
       for i in 0 ... size
         range = self[ i ].range
         if range.begin < 0
