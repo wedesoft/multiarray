@@ -551,7 +551,7 @@ class Array
     left[] = 0
     block = Hornetseye::Histogram.new left, *self
     if block.compilable?
-      GCCFunction.run block
+      Hornetseye::GCCFunction.run block
     else
       block.demand
     end

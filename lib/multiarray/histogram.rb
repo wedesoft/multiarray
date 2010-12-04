@@ -109,7 +109,8 @@ module Hornetseye
     #
     # @private
     def subst( hash )
-      self.class.new @dest.subst( hash ), @source.subst( hash )
+      self.class.new @dest.subst( hash ),
+                     *@sources.collect { |source| source.subst hash }
     end
 
     # Get variables contained in this term
@@ -131,9 +132,10 @@ module Hornetseye
     #
     # @private
     def strip
-      vars1, values1, term1 = @dest.strip
-      vars2, values2, term2 = @source.strip
-      return vars1 + vars2, values1 + values2, self.class.new( term1, term2 )
+      stripped = ( [ @dest ] + @sources ).collect { |source| source.strip }
+      return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
+           stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
+           self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
     end
 
     # Check whether this term is compilable
@@ -142,7 +144,7 @@ module Hornetseye
     #
     # @private
     def compilable?
-      @dest.compilable? and @source.compilable?
+      @dest.compilable? and @sources.all? { |source| source.compilable? }
     end
 
   end
