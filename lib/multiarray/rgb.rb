@@ -617,6 +617,17 @@ module Hornetseye
       end
     end
 
+    # Histograms
+    def histogram_with_rgb( *ret_shape )
+      if typecode < RGB_
+        [ r, g, b ].histogram *ret_shape
+      else
+        histogram_without_rgb *ret_shape
+      end
+    end
+
+    alias_method_chain :histogram, :rgb
+
   end
 
   # Create a class deriving from +RGB_+ or instantiate an +RGB+ object
