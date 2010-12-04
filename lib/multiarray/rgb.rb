@@ -628,6 +628,16 @@ module Hornetseye
 
     alias_method_chain :histogram, :rgb
 
+    def lut_with_rgb( table, options = {} )
+      if typecode < RGB_
+        [ r, g, b ].lut table, options
+      else
+        lut_without_rgb table, options
+      end
+    end
+
+    alias_method_chain :lut, :rgb
+
   end
 
   # Create a class deriving from +RGB_+ or instantiate an +RGB+ object
