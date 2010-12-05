@@ -345,6 +345,8 @@ class TC_Sequence < Test::Unit::TestCase
     [ O, I ].each do |t|
       assert_equal S( t, 5 )[ 0, 1, 2, 1, 1 ],
                    S( t, 5 )[ 1, 2, 2, 3, 4 ].histogram( 5, :target => t )
+      assert_equal S( t, 4 )[ 0, 1, 1, 0 ],
+                   S( t, 2 )[ 1.0, 2.0 ].histogram( 4, :target => t )
     end
     assert_raise( RuntimeError ) { S[ -1, 0, 1 ].histogram 3 }
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 3 }
@@ -355,6 +357,8 @@ class TC_Sequence < Test::Unit::TestCase
     [ O, I ].each do |t|
       assert_equal S( t, 4 )[ 3, 1, 2, 1 ],
                    S( t, 4 )[ 0, 2, 1, 2 ].lut( S( t, 3 )[ 3, 2, 1 ] )
+      assert_equal S( t, 2 )[ 2, 1 ],
+                   S( t, 2 )[ 1.0, 2.0 ].lut( S( t, 3 )[ 3, 2, 1 ] )
     end
     assert_raise( RuntimeError ) { S[ -1, 0 ].lut S[ 0, 1 ] }
     assert_raise( RuntimeError ) { S[ 1, 2 ].lut S[ 0, 1 ] }

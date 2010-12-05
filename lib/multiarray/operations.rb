@@ -121,7 +121,7 @@ module Hornetseye
     def to_type( dest )
       if dimension == 0 and variables.empty?
         target = typecode.to_type dest
-        target.new simplify.get
+        target.new( simplify.get ).simplify
       else
         key = "to_#{dest.to_s.downcase}"
         Hornetseye::ElementWise( lambda { |x| x.to_type dest }, key,
