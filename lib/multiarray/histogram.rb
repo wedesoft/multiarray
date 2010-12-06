@@ -36,11 +36,12 @@ module Hornetseye
     # Constructor
     #
     # @param [Node] dest Target array to write histogram to.
+    # @param [Node] weight The weight(s) for the histogram elements.
     # @param [Array<Node>] sources Arrays with elements to compute histogram of.
     #
     # @private
-    def initialize( dest, *sources )
-      @dest, @sources = dest, sources
+    def initialize( dest, weight, *sources )
+      @dest, @weight, @sources = dest, weight, sources
     end
 
     # Get unique descriptor of this object
@@ -52,6 +53,7 @@ module Hornetseye
     # @private
     def descriptor( hash )
       "Histogram(#{@dest.descriptor( hash )}," +
+        "#{@weight.descriptor( hash )}," +
         "#{@sources.collect { |source| source.descriptor( hash ) }.join ','})"
     end
 
@@ -84,14 +86,15 @@ module Hornetseye
             sources = @sources.collect do |source|
               source.dimension > 0 ? source.element( INT.new( i ) ) : source
             end
-            Histogram.new( @dest, *sources ).demand
+            weight = @weight.dimension > 0 ? @weight.element( INT.new( i ) ) : @weight
+            Histogram.new( @dest, weight, *sources ).demand
           end
         else
           dest = @dest
           ( @dest.dimension - 1 ).downto( 0 ) do |i|
             dest = dest.element @sources[ i ].demand
           end
-          dest.store dest + 1
+          dest.store dest + @weight
         end
         @dest
       else
@@ -109,7 +112,7 @@ module Hornetseye
     #
     # @private
     def subst( hash )
-      self.class.new @dest.subst( hash ),
+      self.class.new @dest.subst( hash ), @weight.subst( hash ),
                      *@sources.collect { |source| source.subst hash }
     end
 
@@ -119,7 +122,7 @@ module Hornetseye
     #
     # @private
     def variables
-      @sources.inject( @dest.variables ) { |a,b| a + b.variables }
+      @sources.inject( @dest.variables + @weight.variables ) { |a,b| a + b.variables }
     end
 
     # Strip of all values
@@ -132,7 +135,7 @@ module Hornetseye
     #
     # @private
     def strip
-      stripped = ( [ @dest ] + @sources ).collect { |source| source.strip }
+      stripped = ( [ @dest, @weight ] + @sources ).collect { |source| source.strip }
       return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
            stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
            self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
@@ -144,7 +147,8 @@ module Hornetseye
     #
     # @private
     def compilable?
-      @dest.compilable? and @sources.all? { |source| source.compilable? }
+      @dest.compilable? and @weight.compilable? and
+        @sources.all? { |source| source.compilable? }
     end
 
   end

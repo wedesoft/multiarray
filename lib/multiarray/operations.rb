@@ -456,14 +456,14 @@ module Hornetseye
     #
     # @overload histogram( *ret_shape, options = {} )
     #   @param [Array<Integer>] ret_shape Dimensions of resulting histogram.
-    #   @option options [Class] :target (UINT) Element-type of resulting histogram.
+    #   @option options [Node] :weight (UINT(1)) Weights for computing the histogram.
     #   @option options [Boolean] :safe (true) Do a boundary check before creating the
     #           histogram.
     #
     # @return [Node] The histogram.
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
-      options = { :target => UINT, :safe => true }.merge options
+      options = { :weight => UINT.new( 1 ), :safe => true }.merge options
       if shape.first != 1 and ret_shape.size == 1
         [ self ].histogram *( ret_shape + [ options ] )
       else
@@ -518,7 +518,7 @@ class Array
   #
   # @overload histogram( *ret_shape, options = {} )
   #   @param [Array<Integer>] ret_shape Dimensions of resulting histogram.
-  #   @option options [Class] :target (Hornetseye::UINT) Element-type of resulting
+  #   @option options [Node] :weight (Hornetseye::UINT(1)) Weights for computing the
   #           histogram.
   #   @option options [Boolean] :safe (true) Do a boundary check before creating the
   #           histogram.
@@ -526,7 +526,7 @@ class Array
   # @return [Node] The histogram.
   def histogram( *ret_shape )
     options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
-    options = { :target => Hornetseye::UINT, :safe => true }.merge options
+    options = { :weight => Hornetseye::UINT.new( 1 ), :safe => true }.merge options
     if options[ :safe ]
       if size != ret_shape.size
         raise "Number of arrays for histogram (#{size}) differs from number of " +
@@ -535,6 +535,7 @@ class Array
       array_types = collect { |source| source.array_type }
       source_type = array_types.inject { |a,b| a.coercion b }
       source_type.check_shape *array_types
+      source_type.check_shape options[ :weight ]
       for i in 0 ... size
         range = self[ i ].range
         if range.begin < 0
@@ -547,9 +548,9 @@ class Array
         end
       end
     end
-    left = Hornetseye::MultiArray.new options[ :target ], *ret_shape
+    left = Hornetseye::MultiArray.new options[ :weight ].typecode, *ret_shape
     left[] = 0
-    block = Hornetseye::Histogram.new left, *self
+    block = Hornetseye::Histogram.new left, options[ :weight ], *self
     if block.compilable?
       Hornetseye::GCCFunction.run block
     else

@@ -429,13 +429,16 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_histogram
     assert_equal S( I, 5 )[ 0, 1, 1, 2, 0 ],
-                 M[ [ 1, 2 ], [ 3, 3 ] ].histogram( 5, :target => I )
+                 M[ [ 1, 2 ], [ 3, 3 ] ].histogram( 5, :weight => I.new( 1 ) )
     assert_equal M( I, 2, 2 )[ [ 1, 0 ], [ 1, 1 ] ],
-                 M[ [ 0, 0 ], [ 0, 1 ], [ 1, 1 ] ].histogram( 2, 2, :target => I )
+                 M[ [ 0, 0 ], [ 0, 1 ], [ 1, 1 ] ].
+                 histogram( 2, 2, :weight => I.new( 1 ) )
     assert_equal M( I, 2, 2 )[ [ 1, 0 ], [ 1, 1 ] ],
-                 [ S[ 0, 0, 1 ], S[ 0, 1, 1 ] ].histogram( 2, 2, :target => I )
+                 [ S[ 0, 0, 1 ], S[ 0, 1, 1 ] ].
+                 histogram( 2, 2, :weight => I.new( 1 ) )
     assert_equal M( I, 2, 2, 1 )[ [ [ 0, 1 ], [ 1, 0 ] ] ],
-                 S[ C( 1, 0, 0 ), C( 0, 1, 0 ) ].histogram( 2, 2, 1, :target => I )
+                 S[ C( 1, 0, 0 ), C( 0, 1, 0 ) ].
+                 histogram( 2, 2, 1, :weight => I.new( 1 ) )
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 4, 4 }
     assert_raise( RuntimeError ) { M[ [ -1, 0 ] ].histogram 3, 2 }
     assert_raise( RuntimeError ) { M[ [ 0, -1 ] ].histogram 3, 2 }
