@@ -527,6 +527,7 @@ class Array
   def histogram( *ret_shape )
     options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
     options = { :weight => Hornetseye::UINT.new( 1 ), :safe => true }.merge options
+    weight = options[ :weight ]
     if options[ :safe ]
       if size != ret_shape.size
         raise "Number of arrays for histogram (#{size}) differs from number of " +
@@ -548,9 +549,9 @@ class Array
         end
       end
     end
-    left = Hornetseye::MultiArray.new options[ :weight ].typecode, *ret_shape
+    left = Hornetseye::MultiArray.new weight.typecode, *ret_shape
     left[] = 0
-    block = Hornetseye::Histogram.new left, options[ :weight ], *self
+    block = Hornetseye::Histogram.new left, weight, *self
     if block.compilable?
       Hornetseye::GCCFunction.run block
     else

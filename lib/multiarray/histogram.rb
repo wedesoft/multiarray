@@ -80,8 +80,8 @@ module Hornetseye
     def demand
       if variables.empty?
         if @sources.any? { |source| source.dimension > 0 }
-          source_type = @sources.collect { |source| source.array_type }.
-            inject { |a,b| a.coercion b }
+          source_type = @sources.
+            collect { |source| source.array_type }.inject { |a,b| a.coercion b }
           source_type.shape.last.times do |i|
             sources = @sources.collect do |source|
               source.dimension > 0 ? source.element( INT.new( i ) ) : source
