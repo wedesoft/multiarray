@@ -582,7 +582,7 @@ require 'multiarray/gccfunction'
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  # Method for performing computations in lazy mode
+  # Method for performing computations in lazy mode resulting in a lazy expression
   #
   # @param [Array<Integer>] *shape Optional shape of result. The method
   # attempts to infer the shape if not specified.
@@ -613,14 +613,14 @@ module Hornetseye
 
   module_function :lazy
 
-  # Method for performing computations in eager mode
+  # Method for performing a lazy computation and then forcing the result
   #
   # @param [Array<Integer>] *shape Optional shape of result. The method
   # attempts to infer the shape if not specified.
   # @yield Operation computing array elements.
   #
   # @return [Object,Node] Result of computation.
-  def eager( *shape, &action )
+  def finalise( *shape, &action )
     previous = Thread.current[ :lazy ]
     Thread.current[ :lazy ] = false
     begin
@@ -631,7 +631,7 @@ module Hornetseye
     end
   end
 
-  module_function :eager
+  module_function :finalise
 
   # Method for summing values
   #

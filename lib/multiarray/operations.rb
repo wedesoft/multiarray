@@ -297,7 +297,7 @@ module Hornetseye
       if other.is_a? Node
         if variables.empty?
           if other.array_type == array_type
-            Hornetseye::eager { eq( other ).inject( true ) { |a,b| a.and b } }
+            Hornetseye::finalise { eq( other ).inject( true ) { |a,b| a.and b } }
           else
             false
           end

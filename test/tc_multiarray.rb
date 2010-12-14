@@ -52,8 +52,8 @@ class TC_MultiArray < Test::Unit::TestCase
     Hornetseye::sum *args, &action
   end
 
-  def eager( *args, &action )
-    Hornetseye::eager *args, &action
+  def finalise( *args, &action )
+    Hornetseye::finalise *args, &action
   end
 
   def setup
@@ -373,7 +373,7 @@ class TC_MultiArray < Test::Unit::TestCase
     m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
     assert_equal 21, sum { |i,j| m[ i, j ] }
     assert_equal [ 5, 7, 9 ], sum { |i| m[ i ] }.to_a
-    assert_equal [ 6, 15 ], eager { |j| sum { |i| m[ i, j ] } }.to_a
+    assert_equal [ 6, 15 ], finalise { |j| sum { |i| m[ i, j ] } }.to_a
     assert_equal [ [ 1, 2, 3 ] , [ 4, 5, 6 ] ], sum { || m }.to_a
   end
 
