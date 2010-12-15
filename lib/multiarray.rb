@@ -539,6 +539,7 @@ class Array
 
 end
 
+require 'continuation'
 require 'complex'
 require 'malloc'
 require 'rbconfig'

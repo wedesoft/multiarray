@@ -519,6 +519,20 @@ module Hornetseye
       end
     end
 
+    # Compute integral image
+    #
+    # @return [Node] The integral image of this array.
+    def integral
+      left = pointer_type.new
+      block = Integral.new left, self
+      if block.compilable?
+        GCCFunction.run block
+      else
+        block.demand
+      end
+      left
+    end
+
     # Mirror the array
     #
     # @param [Array<Integer>] dimensions The dimensions which should be flipped.
@@ -535,18 +549,39 @@ module Hornetseye
       warp *field
     end
 
-    # Compute integral image
-    #
-    # @return [Node] The integral image of this array.
-    def integral
-      left = pointer_type.new
-      block = Integral.new left, self
-      if block.compilable?
-        GCCFunction.run block
-      else
-        block.demand
+    def shift( *offset )
+      if offset.size != shape.size
+        raise "#{offset.size} offset(s) were given but array has " +
+              "#{shape.size} dimensions"
       end
-      left
+      retval = array_type.new
+      target, source, open, close = [], [], [], []
+      ( shape.size - 1 ).step( 0, -1 ) do |i|
+        callcc do |pass|
+          delta = offset[i] % shape[i]
+          source[i] = 0 ... shape[i] - delta
+          target[i] = delta ... shape[i]
+          callcc do |c|
+            open[i] = c
+            pass.call
+          end
+          source[i] = shape[i] - delta ... shape[i]
+          target[i] = 0 ... delta
+          callcc do |c|
+            open[i] = c
+            pass.call
+          end
+          close[i].call
+        end
+      end
+      retval[ *target ] = self[ *source ]
+      for i in 0 ... shape.size
+        callcc do |c|
+          close[i] = c
+          open[i].call
+        end
+      end
+      retval
     end
 
   end

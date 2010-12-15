@@ -490,6 +490,13 @@ class TC_MultiArray < Test::Unit::TestCase
     end
   end
 
+  def test_shift
+    [ O, I ].each do |t|
+      assert_equal M( t, 2, 2 )[ [ 4, 3 ], [ 2, 1 ] ],
+                   M( t, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].shift( 1, 1 )
+    end
+  end
+
   def test_zero
     assert_equal M[ [ false, true ], [ true, false ] ],
                  M[ [ -1, 0 ], [ 0, 1 ] ].zero?
