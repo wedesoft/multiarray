@@ -479,6 +479,17 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_raise( RuntimeError ) { [ S[ 0, 1 ], S[ 0, 1 ] ].lut S[ 1, 2 ] }
   end
 
+  def test_flip
+    [ O, I ].each do |t|
+      assert_equal M( t, 3, 2 )[ [ 3, 2, 1 ], [ 6, 5, 4 ] ],
+                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 0 )
+      assert_equal M( t, 3, 2 )[ [ 4, 5, 6 ], [ 1, 2, 3 ] ],
+                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 1 )
+      assert_equal M( t, 3, 2 )[ [ 6, 5, 4 ], [ 3, 2, 1 ] ],
+                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 0, 1 )
+    end
+  end
+
   def test_zero
     assert_equal M[ [ false, true ], [ true, false ] ],
                  M[ [ -1, 0 ], [ 0, 1 ] ].zero?

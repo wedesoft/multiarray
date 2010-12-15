@@ -502,11 +502,6 @@ module Hornetseye
     #
     # @return [Node] The result of the lookup operation.
     def warp( *field )
-
-      #elsif shape.first > lut.dimension or dimension == 1
-      #  reshape( *( [ 1 ] + shape ) ).map lut, options
-
-
       options = field.last.is_a?( Hash ) ? field.pop : {}
       options = { :safe => true, :default => typecode.default }.merge options
       if options[ :safe ]
@@ -522,6 +517,22 @@ module Hornetseye
       else
         field.lut self
       end
+    end
+
+    # Mirror the array
+    #
+    # @param [Array<Integer>] dimensions The dimensions which should be flipped.
+    #
+    # @return [Node] The result of flipping the dimensions.
+    def flip( *dimensions )
+      field = ( 0 ... dimension ).collect do |i|
+        if dimensions.member? i
+          Hornetseye::lazy( *shape ) { |*args| shape[i] - 1 - args[i] }
+        else
+          Hornetseye::lazy( *shape ) { |*args| args[i] }
+        end
+      end
+      warp *field
     end
 
     # Compute integral image

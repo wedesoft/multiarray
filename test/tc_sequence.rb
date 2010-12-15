@@ -375,6 +375,12 @@ class TC_Sequence < Test::Unit::TestCase
   #  end
   #end
 
+  def test_flip
+    [ O, I ].each do |t|
+      assert_equal S( t, 3 )[ 3, 2, 1 ], S( t, 3 )[ 1, 2, 3 ].flip( 0 )
+    end
+  end
+
   def test_zero
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal [ false, true, false ], t[ -1, 0, 1 ].zero?.to_a
