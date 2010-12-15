@@ -593,7 +593,7 @@ class Array
     if all? { |source| source.dimension == 0 and source.variables.empty? }
       result = table
       ( table.dimension - 1 ).downto( 0 ) do |i|
-        result = result.element self[ i ].demand
+        result = result.element( self[ i ].demand ).demand
       end
       result
     else
