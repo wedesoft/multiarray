@@ -333,7 +333,6 @@ class TC_Sequence < Test::Unit::TestCase
                    S( t, 5 )[ 0, 0, 0, 0, 1 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
       assert_equal S( t, 4 )[ 1, 2, 3, 0 ],
                    S( t, 4 )[ 0, 1, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
-      assert_raise( RuntimeError ) { S[ 1, 2, 3 ].convolve 1 }
     end
     assert_equal S[ C( 1, 0, 0 ), C( 2, 1, 0 ), C( 3, 2, 1 ), C( 0, 3, 2 ),
                     C( 0, 0, 3 ) ],
@@ -366,6 +365,15 @@ class TC_Sequence < Test::Unit::TestCase
     assert_raise( RuntimeError ) { S[ -1, 0 ].lut S[ 0, 1 ] }
     assert_raise( RuntimeError ) { S[ 1, 2 ].lut S[ 0, 1 ] }
   end
+
+  #def test_warp
+  #  [ O, I ].each do |t1|
+  #    [ O, I ].each do |t2|
+  #      assert_equal S( t1, 3 )[ 1, 2, t1.default ],
+  #                   S( t1, 2 )[ 1, 2 ].warp( S( t2, 3 )[ 0, 1, 2 ] )
+  #    end
+  #  end
+  #end
 
   def test_zero
     [ S( O, 3 ), S( I, 3 ) ].each do |t|

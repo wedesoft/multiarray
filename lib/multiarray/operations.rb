@@ -183,7 +183,7 @@ module Hornetseye
     #
     # @return [Node] Array with results.
     def <=>( other )
-      Hornetseye::lazy do
+      Hornetseye::finalise do
         ( self < other ).conditional -1, ( self > other ).conditional( 1, 0 )
       end
     end
@@ -431,14 +431,19 @@ module Hornetseye
     # @private
     def product( filter )
       filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
-      if dimension != filter.dimension
+      if filter.dimension > dimension
         raise "Filter has #{filter.dimension} dimension(s) but should " +
-              "have #{dimension}"
+              "not have more than #{dimension}"
       end
-      if dimension == 0
-        self * filter
+      array = self
+      while filter.dimension < dimension
+        filter = Hornetseye::lazy( 1 ) { filter }
+        array = array.unroll
+      end
+      if filter.dimension == 0
+        array * filter
       else
-        Hornetseye::lazy { |i,j| self[j].product filter[i] }
+        Hornetseye::lazy { |i,j| array[j].product filter[i] }
       end
     end
 
@@ -484,6 +489,38 @@ module Hornetseye
         [ self ].lut table, options
       else
         ( 0 ... shape.first ).collect { |i| unroll[i] }.lut table, options
+      end
+    end
+
+    # Warp an array
+    #
+    # @overload warp( *field, options = {} )
+    #   @param [Array<Integer>] ret_shape Dimensions of resulting histogram.
+    #   @option options [Object] :default (typecode.default) Default value for out of
+    #           range warp vectors.
+    #   @option options [Boolean] :safe (true) Apply clip to warp vectors.
+    #
+    # @return [Node] The result of the lookup operation.
+    def warp( *field )
+
+      #elsif shape.first > lut.dimension or dimension == 1
+      #  reshape( *( [ 1 ] + shape ) ).map lut, options
+
+
+      options = field.last.is_a?( Hash ) ? field.pop : {}
+      options = { :safe => true, :default => typecode.default }.merge options
+      if options[ :safe ]
+        if field.size > dimension
+          raise "Number of arrays for warp (#{field.size}) is greater than the " +
+                "number of dimensions of source (#{dimension})"
+        end
+        Hornetseye::lazy do
+          ( 0 ... field.size ).
+            collect { |i| ( field[i] >= 0 ).and( field[i] < shape[i] ) }.
+            inject { |a,b| a.and b }
+        end.conditional Lut.new( *( field + [ self ] ) ), options[ :default ]
+      else
+        field.lut self
       end
     end
 
@@ -572,7 +609,7 @@ class Array
     if options[ :safe ]
       if size > table.dimension
         raise "Number of arrays for lookup (#{size}) is greater than the " +
-              " number of dimensions of LUT (#{table.dimension})"
+              "number of dimensions of LUT (#{table.dimension})"
       end
       array_types = collect { |source| source.array_type }
       source_type = array_types.inject { |a,b| a.coercion b }

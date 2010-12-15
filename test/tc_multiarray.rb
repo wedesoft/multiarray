@@ -417,14 +417,17 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_convolve
     f = M[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+    s = S[ 1, 2, 3 ]
     assert_equal M[ [ 5, 6, 0 ], [ 8, 9, 0 ], [ 0, 0, 0 ] ],
                  M[ [ 1, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ] ].convolve( f )
     assert_equal M[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ],
                  M[ [ 0, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 0 ] ].convolve( f )
     assert_equal M[ [ 0, 0, 0 ], [ 1, 2, 3 ], [ 4, 5, 6 ] ],
                  M[ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 1, 0 ] ].convolve( f )
+    assert_equal M[ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 1, 2, 3 ], [ 0, 0, 0 ], [ 0, 0, 0 ] ],
+                 M[ [ 0, 0, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 0, 0 ] ].
+                 convolve( s )
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].convolve f }
-    assert_raise( RuntimeError ) { M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].convolve S[ 1, 2 ] }
   end
 
   def test_histogram
