@@ -539,7 +539,10 @@ class Array
 
 end
 
-require 'continuation'
+begin
+  require 'continuation'
+rescue Exception
+end
 require 'complex'
 require 'malloc'
 require 'rbconfig'
