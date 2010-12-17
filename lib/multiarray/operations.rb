@@ -329,7 +329,7 @@ module Hornetseye
     #
     # @return [Object] Sum of array.
     def sum
-      inject { |a,b| a + b }
+      lazy { to_type( typecode.maxint ) }.inject { |a,b| a + b }
     end
 
     # Find range of values of array
