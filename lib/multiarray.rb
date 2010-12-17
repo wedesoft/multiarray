@@ -648,7 +648,8 @@ module Hornetseye
     options = shape.last.is_a?( Hash ) ? shape.pop : {}
     arity = options[ :arity ] || [ action.arity, shape.size ].max
     if arity <= 0
-      action.call
+      term = action.call
+      term.is_a?( Node ) ? term.to_type( term.typecode.maxint ) : term
     else
       index = Variable.new shape.empty? ? Hornetseye::INDEX( nil ) :
                            Hornetseye::INDEX( shape.pop )

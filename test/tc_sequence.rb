@@ -286,11 +286,16 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_sum
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
+      assert_equal 6, t[ 1, 2, 3 ].sum
       assert_equal 6, sum { |i| t[ 1, 2, 3 ][ i ] }
       assert_equal [ 1, 2, 3 ], sum { || t[ 1, 2, 3 ] }.to_a
     end
+    assert_equal C( 3, 5, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].sum
     assert_equal C( 3, 5, 8 ), sum { |i| S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ][i] }
+    assert_equal X( 4, 6 ), S[ X( 1, 2 ), X( 3, 4 ) ].sum
     assert_equal X( 4, 6 ), sum { |i| S[ X( 1, 2 ), X( 3, 4 ) ][i] }
+    assert_equal 384, S[ 128, 128, 128 ].sum
+    assert_equal 384, sum { |i| S[ 128, 128, 128 ][i] }
   end
 
   def test_min
