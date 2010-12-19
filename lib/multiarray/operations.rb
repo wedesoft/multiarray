@@ -550,9 +550,9 @@ module Hornetseye
     end
 
     def shift( *offset )
-      if offset.size != shape.size
+      if offset.size != dimension
         raise "#{offset.size} offset(s) were given but array has " +
-              "#{shape.size} dimensions"
+              "#{dimension} dimension(s)"
       end
       retval = array_type.new
       target, source, open, close = [], [], [], []
@@ -582,6 +582,27 @@ module Hornetseye
         end
       end
       retval
+    end
+
+    def downsample( *rate )
+      options = rate.last.is_a?( Hash ) ? rate.pop : {}
+      options = { :offset => rate.collect { |r| r - 1 } }.merge options
+      offset = options[ :offset ]
+      if rate.size != dimension
+        raise "#{rate.size} sampling rate(s) given but array has " +
+              "#{dimension} dimension(s)"
+      end
+      if offset.size != dimension
+        raise "#{offset.size} sampling offset(s) given but array has " +
+              "#{dimension} dimension(s)"
+      end
+      ret_shape = ( 0 ... dimension ).collect do |i|
+        ( shape[i] + rate[i] - 1 - offset[i] ).div rate[i]
+      end
+      field = ( 0 ... dimension ).collect do |i|
+        Hornetseye::lazy( *ret_shape ) { |*args| args[i] * rate[i] + offset[i] }
+      end
+      warp *field
     end
 
   end

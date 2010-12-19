@@ -497,6 +497,16 @@ class TC_MultiArray < Test::Unit::TestCase
     end
   end
 
+  def test_downsample
+    [ O, I ].each do |t|
+      assert_equal M( t, 1, 2 )[ [ 2 ], [ 6 ] ],
+                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 5, 6, 7 ] ].downsample( 2, 1 )
+      assert_equal M( t, 2, 2 )[ [ 1, 3 ], [ 5, 7 ] ],
+                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 5, 6, 7 ] ].
+                   downsample( 2, 1, :offset => [ 0, 0 ] )
+    end
+  end
+
   def test_zero
     assert_equal M[ [ false, true ], [ true, false ] ],
                  M[ [ -1, 0 ], [ 0, 1 ] ].zero?

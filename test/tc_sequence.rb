@@ -386,6 +386,23 @@ class TC_Sequence < Test::Unit::TestCase
     end
   end
 
+  def test_shift
+    [ O, I ].each do |t|
+      assert_equal S( t, 3 )[ 1, 2, 3 ], S( t, 3 )[ 1, 2, 3 ].shift( 0 )
+      assert_equal S( t, 3 )[ 3, 1, 2 ], S( t, 3 )[ 1, 2, 3 ].shift( 1 )
+      assert_equal S( t, 3 )[ 2, 3, 1 ], S( t, 3 )[ 1, 2, 3 ].shift( 2 )
+    end
+  end
+
+  def test_downsample
+    [ O, I ].each do |t|
+      assert_equal S( t, 2 )[ 2, 4 ],
+                   S( t, 4 )[ 1, 2, 3, 4 ].downsample( 2 )
+      assert_equal S( t, 2 )[ 1, 3 ],
+                   S( t, 4 )[ 1, 2, 3, 4 ].downsample( 2, :offset => [ 0 ] )
+    end
+  end
+
   def test_zero
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal [ false, true, false ], t[ -1, 0, 1 ].zero?.to_a
