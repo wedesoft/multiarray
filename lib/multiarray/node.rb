@@ -418,6 +418,24 @@ module Hornetseye
       array_type.storage_size
     end
 
+    # Duplicate array expression if it is not in row-major format
+    #
+    # @return [Node] Duplicate of array or +self+.
+    def memorise
+      if memory
+        contiguous_strides = ( 0 ... dimension ).collect do |i|
+          shape[ 0 ... i ].inject( 1 ) { |a,b| a * b }
+        end
+        if strides == contiguous_strides
+          self
+        else
+          dup
+        end
+      else
+        dup
+      end
+    end
+
     # Get memory object
     #
     # @return [Malloc,List,NilClass] This method will return +nil+.
