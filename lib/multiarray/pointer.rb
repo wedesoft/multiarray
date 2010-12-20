@@ -146,7 +146,7 @@ module Hornetseye
     # Get access to storage object
     #
     # @return [Malloc,List] The object used to store the data.
-    def memory_type
+    def memory
       @value
     end
 

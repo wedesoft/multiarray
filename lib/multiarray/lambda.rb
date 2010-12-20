@@ -34,8 +34,8 @@ module Hornetseye
     # Get storage object if there is any
     #
     # @return [Malloc,List,NilClass] Object storing the data.
-    def memory_type
-      @term.memory_type
+    def memory
+      @term.memory
     end
 
     # Get strides of array

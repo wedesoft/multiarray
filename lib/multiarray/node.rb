@@ -421,7 +421,7 @@ module Hornetseye
     # Get memory object
     #
     # @return [Malloc,List,NilClass] This method will return +nil+.
-    def memory_type
+    def memory
       nil
     end
 
