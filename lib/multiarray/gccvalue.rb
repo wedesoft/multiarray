@@ -343,6 +343,7 @@ module Hornetseye
     define_binary_op :-
     define_binary_op :*
     define_binary_op :/
+    alias_method :div, :/
     define_binary_op :%
     define_binary_op :eq, :==
     define_binary_op :ne, '!='

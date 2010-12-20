@@ -580,7 +580,7 @@ module Hornetseye
           Hornetseye::lazy( *shape ) { |*args| args[i] }
         end
       end
-      warp *field
+      warp *field, :safe => false
     end
 
     def shift( *offset )
@@ -636,8 +636,17 @@ module Hornetseye
       field = ( 0 ... dimension ).collect do |i|
         Hornetseye::lazy( *ret_shape ) { |*args| args[i] * rate[i] + offset[i] }
       end
-      warp *field
+      warp *field, :safe => false
     end
+
+    #def scale( *ret_shape )
+    #  field = ( 0 ... dimension ).collect do |i|
+    #    Hornetseye::lazy( *ret_shape ) do |*args|
+    #      ( args[i] * shape[i].to_f / ret_shape[i] ).to_type INT
+    #    end
+    #  end
+    #  Hornetseye::lazy { to_type typecode.float }.integral
+    #end
 
   end
 
