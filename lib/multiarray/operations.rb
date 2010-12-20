@@ -152,6 +152,40 @@ module Hornetseye
 
     alias_method_chain :to_type, :rgb
 
+    # Skip type conversion if it has no effect
+    #
+    # This operation is a special case handling type conversions to the same type.
+    #
+    # @param [Class] dest Element type to convert to.
+    #
+    # @return [Node] Array based on the different element type.
+    def to_type_with_identity( dest )
+      if dest == typecode
+        self
+      else
+        to_type_without_identity dest
+      end
+    end
+
+    alias_method_chain :to_type, :identity
+
+    # Get array with same elements but different shape
+    #
+    # The method returns an array with the same elements but with a different shape.
+    # The desired shape must have the same number of elements.
+    #
+    # @param [Array<Integer>] ret_shape Desired shape of return value
+    #
+    # @return [Node] Array with desired shape.
+    def reshape( *ret_shape )
+      target = Hornetseye::MultiArray( typecode, *ret_shape )
+      if target.size != size
+        raise "#{target.size} is of size #{target.size} but should be of size " +
+          "#{size}"
+      end
+      target.new memorise.memory
+    end
+
     # Element-wise conditional selection of values
     #
     # @param [Node] a First array of values.

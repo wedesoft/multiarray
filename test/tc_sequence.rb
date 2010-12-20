@@ -867,6 +867,14 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S( C, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_intrgb
   end
 
+  def test_reshape
+    [ O, I ].each do |t|
+      assert_equal S( t, 3 )[ 1, 2, 3 ], S( t, 3 )[ 1, 2, 3 ].reshape( 3 )
+      assert_raise( RuntimeError ) { S( t, 3 )[ 1, 2, 3 ].reshape 2 }
+      assert_raise( RuntimeError ) { S( t, 3 )[ 1, 2, 3 ].reshape 4 }
+    end
+  end
+
   def test_integral
     assert_equal S( O, 3 )[ 1, 3, 6 ], S( O, 3 )[ 1, 2, 3 ].integral
     assert_equal S( I, 3 )[ 1, 3, 6 ], S( I, 3 )[ 1, 2, 3 ].integral

@@ -674,6 +674,18 @@ class TC_MultiArray < Test::Unit::TestCase
                  M( I, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].to_intrgb
   end
 
+  def test_reshape
+    [ O, I ].each do |t|
+      assert_equal M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
+                   S( t, 6 )[ 1, 2, 3, 4, 5, 6 ].reshape( 3, 2 )
+      assert_equal S( t, 6 )[ 1, 2, 3, 4, 5, 6 ],
+                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].reshape( 6 )
+      assert_equal M( t, 2, 3 )[ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ] ],
+                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].reshape( 2, 3 )
+      assert_raise( RuntimeError ) { M( t, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].reshape 3 }
+    end
+  end
+
   def test_integral
     assert_equal M( O, 3, 2 )[ [ 1, 3, 6 ], [ 5, 12, 21 ] ],
                  M( O, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].integral
