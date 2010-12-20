@@ -33,7 +33,7 @@ module Hornetseye
         count = options[ :count ] || 1
         if shape.empty?
           memory = options[ :memory ] ||
-                   typecode.memory.new( typecode.storage_size * count )
+                   typecode.memory_type.new( typecode.storage_size * count )
           Hornetseye::Pointer( typecode ).new memory
         else
           size = shape.pop

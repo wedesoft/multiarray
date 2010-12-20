@@ -152,12 +152,12 @@ module Hornetseye
         0
       end
 
-      # Get corresponding contiguous datatype
+      # Get this data type
       #
       # @return [Class] Returns +self+.
       #
       # @private
-      def contiguous
+      def identity
         self
       end
 
@@ -421,7 +421,25 @@ module Hornetseye
     # Get memory object
     #
     # @return [Malloc,List,NilClass] This method will return +nil+.
-    def memory
+    def memory_type
+      nil
+    end
+
+    # Get strides of array
+    #
+    # @return [Array<Integer>,NilClass] Array strides of this type.
+    #
+    # @private
+    def strides
+      nil
+    end
+
+    # Get stride for specific index
+    #
+    # @return [Integer,NilClass] Array stride of this index.
+    #
+    # @private
+    def stride( index )
       nil
     end
 

@@ -28,7 +28,7 @@ module Hornetseye
     # @return [Proc] The new method.
     #
     # @private
-    def define_unary_op( op, conversion = :contiguous )
+    def define_unary_op( op, conversion = :identity )
       define_method( op ) do
         if dimension == 0 and variables.empty?
           target = typecode.send conversion

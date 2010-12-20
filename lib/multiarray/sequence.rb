@@ -253,12 +253,12 @@ module Hornetseye
         element_type.rgb?
       end
 
-      # Get corresponding contiguous type
+      # Get this type
       #
       # @return [Class] Returns +self+.
       #
       # @private
-      def contiguous
+      def identity
         self
       end
 

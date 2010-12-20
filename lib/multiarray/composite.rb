@@ -34,11 +34,11 @@ module Hornetseye
 
       # Memory type required to store elements of this type
       #
-      # @return [Class] Returns +element_type.memory+.
+      # @return [Class] Returns +element_type.memory_type+.
       #
       # @private
-      def memory
-        element_type.memory
+      def memory_type
+        element_type.memory_type
       end
 
       # Get storage size to store an element of this type

@@ -58,7 +58,7 @@ module Hornetseye
       # @return [Class] Returns +Malloc+.
       #
       # @private
-      def memory
+      def memory_type
         Malloc
       end
 

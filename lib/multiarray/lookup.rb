@@ -32,11 +32,26 @@ module Hornetseye
     # Get storage object if there is any
     #
     # @return [Malloc,List,NilClass] Object storing the data.
-    def memory
-      #if array_type.storage_size != @stride.get * typecode.storage_size
-      #  raise 'Memory is not contiguous'
-      #end
-      @p.memory
+    def memory_type
+      @p.memory_type
+    end
+
+    # Get strides of array
+    #
+    # @return [Array<Integer>,NilClass] Array strides of this type.
+    #
+    # @private
+    def strides
+      @p.strides
+    end
+
+    # Get stride for specific index
+    #
+    # @return [Integer,NilClass] Array stride of this index.
+    #
+    # @private
+    def stride( index )
+      @index == index ? @stride.get : @p.stride( index )
     end
 
     # Get unique descriptor of this object

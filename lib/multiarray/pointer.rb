@@ -60,7 +60,7 @@ module Hornetseye
       #
       # @return [Memory,List] Memory for storing one object of type +target+.
       def default
-        target.memory.new target.storage_size
+        target.memory_type.new target.storage_size
       end
 
       # Test equality of classes
@@ -146,8 +146,17 @@ module Hornetseye
     # Get access to storage object
     #
     # @return [Malloc,List] The object used to store the data.
-    def memory
+    def memory_type
       @value
+    end
+
+    # Get strides of array
+    #
+    # @return [Array<Integer>,NilClass] Array strides of this type.
+    #
+    # @private
+    def strides
+      []
     end
 
     # Strip of all values

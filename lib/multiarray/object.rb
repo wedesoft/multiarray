@@ -47,7 +47,7 @@ module Hornetseye
       # @see List
       #
       # @private
-      def memory
+      def memory_type
         List
       end
 

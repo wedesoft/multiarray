@@ -55,7 +55,7 @@ module Hornetseye
     # @return [Proc] The new method.
     #
     # @private
-    def define_unary_method( mod, op, conversion = :contiguous )
+    def define_unary_method( mod, op, conversion = :identity )
       mod.module_eval do
         define_method( "#{op}_with_hornetseye" ) do |a|
           if a.is_a? Node

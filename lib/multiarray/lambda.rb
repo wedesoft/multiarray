@@ -34,8 +34,27 @@ module Hornetseye
     # Get storage object if there is any
     #
     # @return [Malloc,List,NilClass] Object storing the data.
-    def memory
-      @term.memory
+    def memory_type
+      @term.memory_type
+    end
+
+    # Get strides of array
+    #
+    # @return [Array<Integer>,NilClass] Array strides of this type.
+    #
+    # @private
+    def strides
+      other = @term.strides
+      other ? other + [ stride( @index ) ] : nil
+    end
+
+    # Get stride for specific index
+    #
+    # @return [Integer,NilClass] Array stride of this index.
+    #
+    # @private
+    def stride( index )
+      @term.stride index
     end
 
     # Get unique descriptor of this object
