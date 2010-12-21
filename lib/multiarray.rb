@@ -418,6 +418,38 @@ class Fixnum
 
   end
 
+  # Generate random number
+  #
+  # Generate a random number greater or equal to zero and lower than this number.
+  #
+  # @return [Integer] A random number.
+  def lrand
+    Kernel.rand self
+  end
+
+  # Generate random number
+  #
+  # Generate a random number greater or equal to zero and lower than this number.
+  #
+  # @return [Float] A random number.
+  def drand
+    self * Kernel.rand
+  end
+
+end
+
+# +Float+ is extend with a few methods
+class Float
+
+  # Generate random number
+  #
+  # Generate a random number greater or equal to zero and lower than this number.
+  #
+  # @return [Float] A random number.
+  def drand
+    self * Kernel.rand
+  end
+
 end
 
 # +Range+ is extended with a few methods

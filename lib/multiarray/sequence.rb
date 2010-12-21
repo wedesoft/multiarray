@@ -118,7 +118,7 @@ module Hornetseye
       end
 
       def random( n = 1 )
-        n = Node.match( n, typecode ).new n unless n.is_a? Node
+        n = typecode.new n unless n.is_a? Node
         Random.new( new, n ).demand
       end
 
