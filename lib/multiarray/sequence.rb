@@ -118,7 +118,7 @@ module Hornetseye
       end
 
       def random( n = 1 )
-        n = typecode.new n unless n.is_a? Node
+        n = typecode.maxint.new n unless n.is_a? Node
         retval = new
         unless compilable? and dimension > 0
           Random.new( retval, n ).demand
