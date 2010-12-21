@@ -117,6 +117,11 @@ module Hornetseye
         end
       end
 
+      def random( n = 1 )
+        n = Node.match( n, typecode ).new n unless n.is_a? Node
+        Random.new( new, n ).demand
+      end
+
       # Construct native array from Ruby array
       #
       # @param [Array<Object>] args Array with Ruby values.

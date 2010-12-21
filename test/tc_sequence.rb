@@ -26,6 +26,7 @@ class TC_Sequence < Test::Unit::TestCase
   O = Hornetseye::OBJECT
   B = Hornetseye::BOOL
   I = Hornetseye::INT
+  F = Hornetseye::DFLOAT
   S = Hornetseye::Sequence
   C = Hornetseye::INTRGB
   X = Hornetseye::DCOMPLEX
@@ -74,6 +75,18 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S( I, 3 )[ 1, 3, 5 ], S( I, 3 ).indgen( 1, 2 )
     assert_equal S( C, 2 )[ C( 1, 2, 3 ), C( 3, 5, 7 ) ],
                  S( C, 2 ).indgen( C( 1, 2, 3 ), C( 2, 3, 4 ) )
+  end
+
+  def test_sequence_random
+    r = S( O, 100 ).random( 10 ).range
+    assert r.begin >= 0
+    assert r.end < 10
+    r = S( I, 100 ).random( 10 ).range
+    assert r.begin >= 0
+    assert r.end < 10
+    r = S( F, 100 ).random( 10.0 ).range
+    assert r.begin >= 0
+    assert r.end < 10
   end
 
   def test_sequence_at
