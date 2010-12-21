@@ -582,7 +582,7 @@ module Hornetseye
           Hornetseye::lazy( *shape ) { |*args| args[i] }
         end
       end
-      warp *field, :safe => false
+      warp *( field + [ :safe => false ] )
     end
 
     def shift( *offset )
@@ -638,7 +638,7 @@ module Hornetseye
       field = ( 0 ... dimension ).collect do |i|
         Hornetseye::lazy( *ret_shape ) { |*args| args[i] * rate[i] + offset[i] }
       end
-      warp *field, :safe => false
+      warp *( field + [ :safe => false ] )
     end
 
     #def scale( *ret_shape )
