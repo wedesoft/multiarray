@@ -119,7 +119,13 @@ module Hornetseye
 
       def random( n = 1 )
         n = typecode.new n unless n.is_a? Node
-        Random.new( new, n ).demand
+        retval = new
+        unless compilable? and dimension > 0
+          Random.new( retval, n ).demand
+        else
+          GCCFunction.run Random.new( retval, n )
+        end
+        retval
       end
 
       # Construct native array from Ruby array

@@ -207,6 +207,38 @@ inline void *mallocToPtr( VALUE rbMalloc )
   return retVal;
 }
 
+static unsigned long make_mask( unsigned long x )
+{
+  x = x | x >> 1;
+  x = x | x >> 2;
+  x = x | x >> 4;
+  x = x | x >> 8;
+  x = x | x >> 16;
+#if 4 < SIZEOF_LONG
+  x = x | x >> 32;
+#endif
+  return x;
+}
+
+static unsigned long limited_rand( unsigned long limit )
+{
+  int i;
+  unsigned long mask, val;
+  if ( limit < 2 ) return 0;
+  mask = make_mask( limit - 1 );
+  retry:
+  val = 0;
+  for ( i = SIZEOF_LONG / 4 - 1; 0 <= i; i-- ) {
+    if ( ( mask >> ( i * 32 ) ) & 0xffffffff ) {
+      val |= (unsigned long)rb_genrand_int32() << ( i * 32 );
+      val &= mask;
+      if ( limit <= val )
+        goto retry;
+    };
+  };
+  return val;
+}
+
 #{@instructions}
 
 #{@wrappers}

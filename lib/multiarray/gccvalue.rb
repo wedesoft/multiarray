@@ -434,6 +434,24 @@ module Hornetseye
       end
     end
 
+    # Generate floating point random number
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
+    def drand
+      GCCValue.new @function, "( rb_genrand_real() * ( #{self} ) )"
+    end
+
+    # Generate integer random number
+    #
+    # @return [GCCValue] C value refering to the result.
+    #
+    # @private
+    def lrand
+      GCCValue.new @function, "limited_rand( #{self} )"
+    end
+
     # Generate code for selecting larger value
     #
     # @param [Object,GCCValue] other Second operand for binary operation.
