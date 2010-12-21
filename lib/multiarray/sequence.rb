@@ -117,6 +117,13 @@ module Hornetseye
         end
       end
 
+      # Generate random number array
+      #
+      # Generate integer or floating point random numbers in the range 0 ... n.
+      #
+      # @param [Integer,Float] n Upper boundary for random numbers
+      #
+      # @return [Node] Array with random numbers.
       def random( n = 1 )
         n = typecode.maxint.new n unless n.is_a? Node
         retval = new
