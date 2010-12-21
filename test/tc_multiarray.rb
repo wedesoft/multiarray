@@ -479,6 +479,18 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_raise( RuntimeError ) { [ S[ 0, 1 ], S[ 0, 1 ] ].lut S[ 1, 2 ] }
   end
 
+  def test_warp
+    [ O, I ].each do |t1|
+      [ O, I ].each do |t2|
+        z = t1.default
+        assert_equal M( t1, 3, 3 )[ [ 1, 2, z ], [ 3, 4, z ], [ z, z, z ] ],
+                     M( t1, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].
+                     warp( M( t2, 3, 3 )[ [ 0, 1, 2 ], [ 0, 1, 2 ], [ 0, 1, 2 ] ],
+                           M( t2, 3, 3 )[ [ 0, 0, 0 ], [ 1, 1, 1 ], [ 2, 2, 2 ] ] )
+      end
+    end
+  end
+
   def test_flip
     [ O, I ].each do |t|
       assert_equal M( t, 3, 2 )[ [ 3, 2, 1 ], [ 6, 5, 4 ] ],

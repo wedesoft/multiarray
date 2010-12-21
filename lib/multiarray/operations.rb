@@ -203,7 +203,9 @@ module Hornetseye
         a.dimension == 0 and a.variables.empty? and
         b.dimension == 0 and b.variables.empty?
         target = array_type.cond a.array_type, b.array_type
-        target.new simplify.get.conditional( a.simplify.get, b.simplify.get )
+        #target.new simplify.get.conditional( a.simplify.get, b.simplify.get )
+        target.new simplify.get.conditional( proc { a.simplify.get },
+                                             proc { b.simplify.get } )
       else
         Hornetseye::ElementWise( lambda { |x,y,z| x.conditional y, z }, :conditional,
                                  lambda { |t,u,v| t.cond u, v } ).

@@ -371,14 +371,14 @@ class TC_Sequence < Test::Unit::TestCase
     assert_raise( RuntimeError ) { S[ 1, 2 ].lut S[ 0, 1 ] }
   end
 
-  #def test_warp
-  #  [ O, I ].each do |t1|
-  #    [ O, I ].each do |t2|
-  #      assert_equal S( t1, 3 )[ 1, 2, t1.default ],
-  #                   S( t1, 2 )[ 1, 2 ].warp( S( t2, 3 )[ 0, 1, 2 ] )
-  #    end
-  #  end
-  #end
+  def test_warp
+    [ O, I ].each do |t1|
+      [ O, I ].each do |t2|
+        assert_equal S( t1, 3 )[ 1, 2, t1.default ],
+                     S( t1, 2 )[ 1, 2 ].warp( S( t2, 3 )[ 0, 1, 2 ] )
+      end
+    end
+  end
 
   def test_flip
     [ O, I ].each do |t|

@@ -173,7 +173,7 @@ class Object
   # @see FalseClass#conditional
   # @see NilClass#conditional
   def conditional( a, b )
-    a
+    a.is_a?( Proc ) ? a.call : a
   end
 
 end
@@ -232,7 +232,7 @@ class NilClass
   # @see Object#conditional
   # @see FalseClass#conditional
   def conditional( a, b )
-    b
+    b.is_a?( Proc ) ? b.call : b
   end
 
   # Check whether this term is compilable
@@ -302,7 +302,7 @@ class FalseClass
   # @see Object#conditional
   # @see NilClass#conditional
   def conditional( a, b )
-    b
+    b.is_a?( Proc ) ? b.call : b
   end
 
 end

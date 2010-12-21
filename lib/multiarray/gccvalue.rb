@@ -288,7 +288,11 @@ module Hornetseye
     #
     # @private
     def conditional( a, b )
-      GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
+      if a.is_a?( Proc ) and b.is_a?( Proc )
+        conditional a.call, b.call
+      else
+        GCCValue.new @function, "( #{self} ) ? ( #{a} ) : ( #{b} )"
+      end
     end
 
     # Create code for conditional selection of RGB value
