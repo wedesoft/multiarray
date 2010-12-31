@@ -331,6 +331,15 @@ module Hornetseye
       end
     end
 
+    def if( &action )
+      @function << "#{@function.indent}if ( #{self} ) {\n"
+      @function.indent_offset +1
+      action.call
+      @function.indent_offset -1
+      @function << "#{@function.indent}}\n"
+      self
+    end
+
     alias_method_chain :conditional, :complex
 
     define_unary_op :not, '!'

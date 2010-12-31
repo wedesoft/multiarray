@@ -176,6 +176,15 @@ class Object
     a.is_a?( Proc ) ? a.call : a
   end
 
+  # Conditional operation
+  #
+  # @param [Proc] action Action to perform if condition is +true+.
+  #
+  # @return [Object] The return value should be ignored.
+  def if( &action )
+    action.call
+  end
+
 end
 
 # +NilClass+ is extended with a few methods
@@ -233,6 +242,14 @@ class NilClass
   # @see FalseClass#conditional
   def conditional( a, b )
     b.is_a?( Proc ) ? b.call : b
+  end
+
+  # Conditional operation
+  #
+  # @param [Proc] action Action to perform if condition is +true+.
+  #
+  # @return [Object] The return value should be ignored.
+  def if( &action )
   end
 
   # Check whether this term is compilable
@@ -303,6 +320,14 @@ class FalseClass
   # @see NilClass#conditional
   def conditional( a, b )
     b.is_a?( Proc ) ? b.call : b
+  end
+
+  # Conditional operation
+  #
+  # @param [Proc] action Action to perform if condition is +true+.
+  #
+  # @return [Object] The return value should be ignored.
+  def if( &action )
   end
 
 end
@@ -603,6 +628,7 @@ require 'multiarray/diagonal'
 require 'multiarray/histogram'
 require 'multiarray/lut'
 require 'multiarray/integral'
+require 'multiarray/mask'
 require 'multiarray/operations'
 require 'multiarray/methods'
 require 'multiarray/rgb'

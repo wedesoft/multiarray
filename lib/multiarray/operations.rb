@@ -569,6 +569,24 @@ module Hornetseye
       left
     end
 
+    # Compute histogram of this array
+    #
+    # @return [Node] The masked array.
+    def mask( m )
+      check_shape m
+      left = MultiArray.new typecode, *( shape.first( dimension - m.dimension ) +
+                                         [ m.size ] )
+      index = Hornetseye::Pointer( INT ).new
+      index.store INT.new( 0 )
+      block = Mask.new left, self, m, index
+      if block.compilable?
+        GCCFunction.run block
+      else
+        block.demand
+      end
+      left[ 0 ... index[] ].roll
+    end
+
     # Mirror the array
     #
     # @param [Array<Integer>] dimensions The dimensions which should be flipped.

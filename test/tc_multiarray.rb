@@ -705,4 +705,18 @@ class TC_MultiArray < Test::Unit::TestCase
                  M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].integral
   end
 
+  def test_mask
+    [ O, I ].each do |t|
+      assert_equal M( O, 2, 2 )[ [ 1, 2 ], [ 5, 7 ] ],
+                   M( O, 2, 3 )[ [ 1, 2 ], [ 3, 4 ], [ 5, 7 ] ].
+                   mask( S[ true, false, true ] )
+      assert_equal S( O, 3 )[ 2, 5, 7 ], M( O, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 7 ] ].
+                   mask( M[ [ false, true, false ], [ false, true, true ] ] )
+      assert_raise( RuntimeError ) do
+        M( O, 2, 3 )[ [ 1, 2 ], [ 3, 4 ], [ 5, 7 ] ].mask S[ false, true ]
+      end
+    end
+  end
+
 end
+
