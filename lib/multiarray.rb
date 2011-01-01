@@ -185,6 +185,16 @@ class Object
     action.call
   end
 
+  # Conditional operation
+  #
+  # @param [Proc] action1 Action to perform if condition is +true+.
+  # @param [Proc] action2 Action to perform if condition is +false+.
+  #
+  # @return [Object] The return value should be ignored.
+  def if_else( action1, action2 )
+    action1.call
+  end
+
 end
 
 # +NilClass+ is extended with a few methods
@@ -250,6 +260,16 @@ class NilClass
   #
   # @return [Object] The return value should be ignored.
   def if( &action )
+  end
+
+  # Conditional operation
+  #
+  # @param [Proc] action1 Action to perform if condition is +true+.
+  # @param [Proc] action2 Action to perform if condition is +false+.
+  #
+  # @return [Object] The return value should be ignored.
+  def if_else( action1, action2 )
+    action2.call
   end
 
   # Check whether this term is compilable
@@ -328,6 +348,16 @@ class FalseClass
   #
   # @return [Object] The return value should be ignored.
   def if( &action )
+  end
+
+  # Conditional operation
+  #
+  # @param [Proc] action1 Action to perform if condition is +true+.
+  # @param [Proc] action2 Action to perform if condition is +false+.
+  #
+  # @return [Object] The return value should be ignored.
+  def if_else( action1, action2 )
+    action2.call
   end
 
 end
@@ -629,6 +659,7 @@ require 'multiarray/histogram'
 require 'multiarray/lut'
 require 'multiarray/integral'
 require 'multiarray/mask'
+require 'multiarray/unmask'
 require 'multiarray/operations'
 require 'multiarray/methods'
 require 'multiarray/rgb'

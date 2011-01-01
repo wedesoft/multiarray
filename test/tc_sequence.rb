@@ -901,4 +901,12 @@ class TC_Sequence < Test::Unit::TestCase
     assert_raise( RuntimeError ) { S[ 1, 2 ].mask S[ true ] }
   end
 
+  def test_unmask
+    assert_equal S( O, 3 )[ 2, 3, 5 ],
+                 S( O, 2 )[ 2, 5 ].unmask( S[ true, false, true ], 3 )
+    assert_equal S( I, 3 )[ 2, 3, 5 ],
+                 S( I, 2 )[ 2, 5 ].unmask( S[ true, false, true ], 3 )
+  end
+
 end
+

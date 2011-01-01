@@ -1,5 +1,5 @@
 # multiarray - Lazy multi-dimensional arrays for Ruby
-# Copyright (C) 2010 Jan Wedekind
+# Copyright (C) 2010, 2011 Jan Wedekind
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -571,6 +571,8 @@ module Hornetseye
 
     # Compute histogram of this array
     #
+    # @param [Node] m Mask to apply to this array.
+    #
     # @return [Node] The masked array.
     def mask( m )
       check_shape m
@@ -585,6 +587,22 @@ module Hornetseye
         block.demand
       end
       left[ 0 ... index[] ].roll
+    end
+
+    def unmask( m, default = typecode.default )
+      default = typecode.new default unless default.is_a? Node
+      left = Hornetseye::MultiArray( array_type.element_type.
+                                     coercion( default.array_type ),
+                                     *m.shape ).new
+      index = Hornetseye::Pointer( INT ).new
+      index.store INT.new( 0 )
+      block = Unmask.new left, self, m, index, default
+      if block.compilable?
+        GCCFunction.run block
+      else
+        block.demand
+      end
+      left
     end
 
     # Mirror the array

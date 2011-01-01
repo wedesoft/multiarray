@@ -331,16 +331,45 @@ module Hornetseye
       end
     end
 
+    alias_method_chain :conditional, :complex
+
+    # Generate code for conditional statement
+    #
+    # @param [Proc] action Block of conditional.
+    #
+    # @return [Object] Returns +self+.
+    #
+    # @private
     def if( &action )
       @function << "#{@function.indent}if ( #{self} ) {\n"
       @function.indent_offset +1
       action.call
       @function.indent_offset -1
-      @function << "#{@function.indent}}\n"
+      @function << "#{@function.indent}};\n"
       self
     end
 
-    alias_method_chain :conditional, :complex
+    # Generate code for conditional statement
+    #
+    # @param [Proc] action1 Block to run when condition is fullfilled.
+    # @param [Proc] action2 Block to run otherwise.
+    #
+    # @return [Object] Returns +self+.
+    #
+    # @private
+    def if_else( action1, action2 )
+      @function << "#{@function.indent}if ( #{self} ) {\n"
+      @function.indent_offset +1
+      action1.call
+      @function.indent_offset -1
+      @function << "#{@function.indent}} else {\n"
+      @function.indent_offset +1
+      action2.call
+      @function.indent_offset -1
+      @function << "#{@function.indent}};\n"
+      self
+    end
+
 
     define_unary_op :not, '!'
     define_unary_op :~

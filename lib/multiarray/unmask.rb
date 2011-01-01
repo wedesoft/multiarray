@@ -1,5 +1,5 @@
 # multiarray - Lazy multi-dimensional arrays for Ruby
-# Copyright (C) 2010 Jan Wedekind
+# Copyright (C) 2011 Jan Wedekind
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  # Class for representing masking operations
-  class Mask < Node
+  # Class for representing inverse masking operations
+  class Unmask < Node
 
     class << self
 
@@ -38,11 +38,11 @@ module Hornetseye
     # @param [Node] dest Target array to write histogram to.
     # @param [Node] source Source array with values to apply mask to.
     # @param [Node] m Boolean array with values of mask.
-    # @param [Node] index Counter for maintaining size of result.
+    # @param [Node] default Default value for unaffected elements.
     #
     # @private
-    def initialize( dest, source, m, index )
-      @dest, @source, @m, @index = dest, source, m, index
+    def initialize( dest, source, m, index, default )
+      @dest, @source, @m, @index, @default = dest, source, m, index, default
     end
 
     # Get unique descriptor of this object
@@ -53,8 +53,9 @@ module Hornetseye
     #
     # @private
     def descriptor( hash )
-      "Mask(#{@dest.descriptor( hash )},#{@source.descriptor( hash )}," +
-        "#{@m.descriptor( hash )},#{@index.descriptor( hash )})"
+      "Unmask(#{@dest.descriptor( hash )},#{@source.descriptor( hash )}," +
+        "#{@m.descriptor( hash )},#{@index.descriptor( hash )}," +
+        "#{@default.descriptor( hash )})"
     end
 
     # Get type of result of delayed operation
@@ -77,14 +78,16 @@ module Hornetseye
         if @m.dimension > 0
           @m.shape.last.times do |i|
             m = @m.element INT.new( i )
-            source = @source.element INT.new( i )
-            Mask.new( @dest, source, m, index ).demand
+            dest = @dest.element INT.new( i )
+            Unmask.new( dest, @source, m, index, @default ).demand
           end  
         else
-          @m.simplify.get.if do
-            Store.new( @dest.element( index ), @source ).demand
+          @m.simplify.get.if_else( proc do
+            Store.new( @dest, @source.element( index ) ).demand
             index.store index + 1
-          end
+          end, proc do
+            Store.new( @dest, @default ).demand
+          end )
         end
         @index.store index
         @dest
@@ -104,7 +107,7 @@ module Hornetseye
     # @private
     def subst( hash )
       self.class.new @dest.subst( hash ), @source.subst( hash ), @m.subst( hash ),
-                     @index.subst( hash )
+                     @index.subst( hash ), @default.subst( hash )
     end
 
     # Get variables contained in this term
@@ -113,7 +116,8 @@ module Hornetseye
     #
     # @private
     def variables
-      @dest.variables + @source.variables + @m.variables + @index.variables
+      @dest.variables + @source.variables + @m.variables + @index.variables +
+        @default.variables
     end
 
     # Strip of all values
@@ -126,7 +130,8 @@ module Hornetseye
     #
     # @private
     def strip
-      stripped = [ @dest, @source, @m, @index ].collect { |value| value.strip }
+      stripped = [ @dest, @source, @m, @index, @default ].
+        collect { |value| value.strip }
       return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
            stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
            self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
@@ -138,7 +143,7 @@ module Hornetseye
     #
     # @private
     def compilable?
-      [ @dest, @source, @m, @index ].all? { |value| value.compilable? }
+      [ @dest, @source, @m, @index, @default ].all? { |value| value.compilable? }
     end
 
   end
