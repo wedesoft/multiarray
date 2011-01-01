@@ -79,7 +79,9 @@ module Hornetseye
           @m.shape.last.times do |i|
             m = @m.element INT.new( i )
             dest = @dest.element INT.new( i )
-            Unmask.new( dest, @source, m, index, @default ).demand
+            default = @default.dimension > 0 ?
+                      @default.element( INT.new( i ) ) : @default
+            Unmask.new( dest, @source, m, index, default ).demand
           end  
         else
           @m.simplify.get.if_else( proc do

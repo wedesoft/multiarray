@@ -591,9 +591,9 @@ module Hornetseye
 
     def unmask( m, default = typecode.default )
       default = typecode.new default unless default.is_a? Node
-      left = Hornetseye::MultiArray( array_type.element_type.
-                                     coercion( default.array_type ),
-                                     *m.shape ).new
+      m.check_shape default
+      left = Hornetseye::MultiArray( array_type.element_type, *m.shape ).
+             coercion( default.array_type ).new
       index = Hornetseye::Pointer( INT ).new
       index.store INT.new( 0 )
       block = Unmask.new left, self, m, index, default

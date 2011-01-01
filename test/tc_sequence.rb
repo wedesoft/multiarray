@@ -902,10 +902,13 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_unmask
-    assert_equal S( O, 3 )[ 2, 3, 5 ],
-                 S( O, 2 )[ 2, 5 ].unmask( S[ true, false, true ], 3 )
-    assert_equal S( I, 3 )[ 2, 3, 5 ],
-                 S( I, 2 )[ 2, 5 ].unmask( S[ true, false, true ], 3 )
+    [ O, I ].each do |t|
+      assert_equal S( t, 3 )[ 2, 3, 5 ],
+                   S( t, 2 )[ 2, 5 ].unmask( S[ true, false, true ], 3 )
+      assert_equal S( t, 3 )[ 2, 3, 5 ],
+                   S( t, 2 )[ 2, 5 ].unmask( S[ true, false, true ], S[ 2, 3, 4 ] )
+      assert_raise( RuntimeError ) { S( t, 1 )[ 1 ].unmask S[ true ], S[ 1, 2 ] }
+    end
   end
 
 end
