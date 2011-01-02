@@ -360,12 +360,12 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_histogram
     [ O, I ].each do |t|
-      assert_equal S( t, 5 )[ 0, 1, 2, 1, 1 ],
-                   S( t, 5 )[ 1, 2, 2, 3, 4 ].histogram( 5, :weight => t.new( 1 ) )
+      assert_equal [ 0, 1, 2, 1, 1 ],
+                   S( t, 5 )[ 1, 2, 2, 3, 4 ].histogram( 5, :weight => 1 ).to_a
       assert_equal S( t, 5 )[ 0, 1, 2, 3, 0 ],
                    S( t, 3 )[ 1, 3, 2 ].histogram( 5, :weight => S( t, 3 )[ 1, 3, 2 ] )
-      assert_equal S( t, 4 )[ 0, 1, 1, 0 ],
-                   S( t, 2 )[ 1.0, 2.0 ].histogram( 4, :weight => t.new( 1 ) )
+      assert_equal [ 0, 1, 1, 0 ],
+                   S( t, 2 )[ 1.0, 2.0 ].histogram( 4, :weight => 1 ).to_a
     end
     assert_raise( RuntimeError ) { S[ -1, 0, 1 ].histogram 3 }
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 3 }

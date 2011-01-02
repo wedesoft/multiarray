@@ -504,7 +504,11 @@ module Hornetseye
     # @return [Node] The histogram.
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
-      options = { :weight => UINT.new( 1 ), :safe => true }.merge options
+      options = { :weight => UINT. new( 1 ), :safe => true }.merge options
+      unless options[ :weight ].is_a? Node
+        options[ :weight ] =
+          Node.match( options[ :weight ] ).maxint.new options[ :weight ]
+      end
       if shape.first != 1 and ret_shape.size == 1
         [ self ].histogram *( ret_shape + [ options ] )
       else
@@ -728,7 +732,11 @@ class Array
   # @return [Node] The histogram.
   def histogram( *ret_shape )
     options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
-    options = { :weight => Hornetseye::UINT.new( 1 ), :safe => true }.merge options
+    options = { :weight => Hornetseye::UINT. new( 1 ), :safe => true }.merge options
+    unless options[ :weight ].is_a? Hornetseye::Node
+      options[ :weight ] =
+        Hornetseye::Node.match( options[ :weight ] ).maxint.new options[ :weight ]
+    end
     weight = options[ :weight ]
     if options[ :safe ]
       if size != ret_shape.size
