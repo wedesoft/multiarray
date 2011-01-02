@@ -24,12 +24,12 @@ module Hornetseye
 
       # Allocate new uniform array
       #
-      # @param [Class] typecode Type of array elements.
+      # @param [Class] element_type Type of array elements.
       # @param [Integer] size Number of elements.
       #
       # @return [Node] Returns uninitialised native array.
-      def new( typecode, size )
-        MultiArray.new typecode, size
+      def new( element_type, size )
+        MultiArray.new element_type, size
       end
 
       # Import array from string

@@ -569,7 +569,7 @@ module Hornetseye
       left
     end
 
-    # Compute histogram of this array
+    # Select values from array using a mask
     #
     # @param [Node] m Mask to apply to this array.
     #
@@ -589,9 +589,26 @@ module Hornetseye
       left[ 0 ... index[] ].roll
     end
 
-    def unmask( m, default = typecode.default )
+    # Distribute values in a new array using a mask
+    #
+    # @param [Node] m Mask for inverse masking operation.
+    # @option options [Object] :default (typecode.default) Default value for elements
+    #         where mask is +false+.
+    # @option options [Boolean] :safe (true) Ensure that the size of this size is
+    #         sufficient.
+    #
+    # @return [Node] The result of the inverse masking operation.
+    def unmask( m, options = {} )
+      options = { :safe => true, :default => typecode.default }.merge options
+      default = options[ :default ]
       default = typecode.new default unless default.is_a? Node
       m.check_shape default
+      if options[ :safe ]
+        if m.to_ubyte.sum > shape.last
+          raise "#{m.to_ubyte.sum} value(s) of the mask are true but the last " +
+            "dimension of the array for unmasking only has #{shape.last} value(s)"
+        end
+      end
       left = Hornetseye::MultiArray( array_type.element_type, *m.shape ).
              coercion( default.array_type ).new
       index = Hornetseye::Pointer( INT ).new

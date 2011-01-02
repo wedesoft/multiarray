@@ -720,12 +720,14 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_unmask
     [ O, I ].each do |t|
-      assert_equal M( O, 2, 3 )[ [ 1, 2 ], [ 4, 4 ], [ 5, 7 ] ],
-                   M( O, 2, 2 )[ [ 1, 2 ], [ 5, 7 ] ].
-                   unmask( S[ true, false, true ], S[ 3, 4, 5 ] )
-      assert_equal M( O, 3, 2 )[ [ 0, 2, 0 ], [ 0, 5, 7 ] ],
-                   S( O, 3 )[ 2, 5, 7 ].
-                   unmask( M[ [ false, true, false ], [ false, true, true ] ], 0 )
+      assert_equal M( t, 2, 3 )[ [ 1, 2 ], [ 4, 4 ], [ 5, 7 ] ],
+                   M( t, 2, 2 )[ [ 1, 2 ], [ 5, 7 ] ].
+                   unmask( S[ true, false, true ], :default => S[ 3, 4, 5 ] )
+      assert_equal M( t, 3, 2 )[ [ 0, 2, 0 ], [ 0, 5, 7 ] ],
+                   S( t, 3 )[ 2, 5, 7 ].
+                   unmask( M[ [ false, true, false ], [ false, true, true ] ],
+                           :default => 0 )
+      assert_raise( RuntimeError ) { S( t, 1 )[ 1 ].unmask M[ [ true, true ] ] }
     end
   end
 

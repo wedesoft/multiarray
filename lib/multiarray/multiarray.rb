@@ -24,11 +24,13 @@ module Hornetseye
 
       # Create new multi-dimensional array
       #
-      # @param [Class] typecode The type of elements
-      # @param [Array<Integer>] *shape The shape of the multi-dimensional array.
+      # @param [Class] element_type The type of the elements.
+      # @param [Array<Integer>] *array_shape The shape of the multi-dimensional array.
       #
       # @return [Node] Returns uninitialised native array.
-      def new( typecode, *shape )
+      def new( element_type, *array_shape )
+        typecode = element_type.typecode
+        shape = element_type.shape + array_shape
         options = shape.last.is_a?( Hash ) ? shape.pop : {}
         count = options[ :count ] || 1
         if shape.empty?
