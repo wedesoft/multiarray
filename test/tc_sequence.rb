@@ -289,6 +289,8 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal C( 4, 6, 9 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].
                                inject( 1 ) { |a,b| a + b }
     assert_equal X( -5, 10 ), S( X, 2 )[ X( 1, 2 ), X( 3, 4 ) ].inject { |a,b| a * b }
+    assert_raise( RuntimeError ) { S[].inject { |a,b| a + b } }
+    assert_equal 0, S[].inject( 0 ) { |a,b| a + b }
   end
 
   def test_collect
@@ -312,15 +314,17 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_min
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
-      assert_equal 2, t[ 4, 2, 3 ].min
+    [ O, I ].each do |t|
+      assert_equal 2, S( t, 3 )[ 4, 2, 3 ].min
+      assert_raise( RuntimeError ) { S( t, 0 )[].min }
     end
     assert_equal C( 1, 2, 1 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].min
   end
 
   def test_max
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
-      assert_equal 4, t[ 4, 2, 3 ].max
+    [ O, I ].each do |t|
+      assert_equal 4, S( t, 3 )[ 4, 2, 3 ].max
+      assert_raise( RuntimeError ) { S( t, 0 )[].max }
     end
     assert_equal C( 3, 2, 3 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].max
   end

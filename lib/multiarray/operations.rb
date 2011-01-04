@@ -322,6 +322,9 @@ module Hornetseye
         value = element( index ).inject nil, :block => block,
                                         :var1 => var1, :var2 => var2
         value = typecode.new value unless value.is_a? Node
+        if initial.nil? and index.size.get == 0
+          raise "Array was empty and no initial value for injection was given"
+        end
         Inject.new( value, index, initial, block, var1, var2 ).force
       end
     end
