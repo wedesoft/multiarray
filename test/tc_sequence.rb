@@ -316,7 +316,6 @@ class TC_Sequence < Test::Unit::TestCase
   def test_min
     [ O, I ].each do |t|
       assert_equal 2, S( t, 3 )[ 4, 2, 3 ].min
-      assert_raise( RuntimeError ) { S( t, 0 )[].min }
     end
     assert_equal C( 1, 2, 1 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].min
   end
@@ -324,7 +323,6 @@ class TC_Sequence < Test::Unit::TestCase
   def test_max
     [ O, I ].each do |t|
       assert_equal 4, S( t, 3 )[ 4, 2, 3 ].max
-      assert_raise( RuntimeError ) { S( t, 0 )[].max }
     end
     assert_equal C( 3, 2, 3 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].max
   end

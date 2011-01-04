@@ -361,8 +361,6 @@ class TC_MultiArray < Test::Unit::TestCase
   def test_inject
     assert_equal 21, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject { |a,b| a + b }
     assert_equal 28, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject( 7 ) { |a,b| a + b }
-    assert_raise( RuntimeError ) { M( I, 2, 0 ).new.inject { |a,b| a + b } }
-    assert_equal 0, M( I, 2, 0 ).new.inject( 0 ) { |a,b| a + b }
   end
 
   def test_collect
