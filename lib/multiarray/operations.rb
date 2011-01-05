@@ -352,16 +352,20 @@ module Hornetseye
 
     # Find minimum value of array
     #
+    # @param [Object] initial Only consider values less than this value.
+    #
     # @return [Object] Minimum value of array.
-    def min
-      inject { |a,b| a.minor b }
+    def min( initial = nil )
+      inject( initial ) { |a,b| a.minor b }
     end
 
     # Find maximum value of array
     #
+    # @param [Object] initial Only consider values greater than this value.
+    #
     # @return [Object] Maximum value of array.
-    def max
-      inject { |a,b| a.major b }
+    def max( initial = nil )
+      inject( initial ) { |a,b| a.major b }
     end
 
     # Compute sum of array
@@ -374,8 +378,8 @@ module Hornetseye
     # Find range of values of array
     #
     # @return [Object] Range of values of array.
-    def range
-      min .. max
+    def range( initial = nil )
+      min( initial ? initial.min : nil ) .. max( initial ? initial.max : nil )
     end
 
     # Normalise values of array
@@ -751,7 +755,7 @@ class Array
       source_type.check_shape *array_types
       source_type.check_shape options[ :weight ]
       for i in 0 ... size
-        range = self[ i ].range
+        range = self[ i ].range 0 ... ret_shape[ i ]
         if range.begin < 0
           raise "#{i+1}th dimension of index must be in 0 ... #{ret_shape[i]} " +
                 "(but was #{range.begin})"
