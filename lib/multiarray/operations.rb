@@ -795,12 +795,12 @@ class Array
       source_type = array_types.inject { |a,b| a.coercion b }
       source_type.check_shape *array_types
       for i in 0 ... size
-        range = self[ i ].range
+        offset = table.dimension - size
+        range = self[ i ].range 0 ... table.shape[ i + offset ]
         if range.begin < 0
           raise "#{i+1}th index must be in 0 ... #{table.shape[i]} " +
                 "(but was #{range.begin})"
         end
-        offset = table.dimension - size
         if range.end >= table.shape[ i + offset ]
           raise "#{i+1}th index must be in 0 ... " +
                 "#{table.shape[ i + offset ]} (but was #{range.end})"
