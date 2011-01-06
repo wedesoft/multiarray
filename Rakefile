@@ -55,7 +55,6 @@ begin
   # For development just run it with "yard server --reload".
   require 'yard'
   YARD::Rake::YardocTask.new :yard do |y|
-    y.options << '--no-private'
     y.files << RB_FILES
   end
 rescue LoadError
