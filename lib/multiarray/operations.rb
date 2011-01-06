@@ -649,6 +649,11 @@ module Hornetseye
       warp *( field + [ :safe => false ] )
     end
 
+    # Create array with shifted elements
+    #
+    # @param [Array<Integer>] offset Array with amount of shift for each dimension.
+    #
+    # @return [Node] The result of the shifting operation.
     def shift( *offset )
       if offset.size != dimension
         raise "#{offset.size} offset(s) were given but array has " +
@@ -684,6 +689,13 @@ module Hornetseye
       retval
     end
 
+    # Downsampling of arrays
+    #
+    # @overload downsample( *rate, options = {} )
+    #   @param [Array<Integer>] rate The sampling rates for each dimension.
+    #   @option options [Array<Integer>] :offset Sampling offsets for each dimension.
+    #
+    # @return [Node] The downsampled data.
     def downsample( *rate )
       options = rate.last.is_a?( Hash ) ? rate.pop : {}
       options = { :offset => rate.collect { |r| r - 1 } }.merge options

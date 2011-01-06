@@ -617,7 +617,18 @@ module Hornetseye
       end
     end
 
-    # Histograms
+    # Compute colour histogram of this array
+    #
+    # The array is decomposed to its colour channels and a histogram is computed.
+    #
+    # @overload histogram( *ret_shape, options = {} )
+    #   @param [Array<Integer>] ret_shape Dimensions of resulting histogram.
+    #   @option options [Node] :weight (Hornetseye::UINT(1)) Weights for computing the
+    #           histogram.
+    #   @option options [Boolean] :safe (true) Do a boundary check before creating the
+    #           histogram.
+    #
+    # @return [Node] The histogram.
     def histogram_with_rgb( *ret_shape )
       if typecode < RGB_
         [ r, g, b ].histogram *ret_shape
@@ -628,6 +639,13 @@ module Hornetseye
 
     alias_method_chain :histogram, :rgb
 
+    # Perform element-wise lookup with colour values
+    #
+    # @param [Node] table The lookup table (LUT).
+    # @option options [Boolean] :safe (true) Do a boundary check before creating the
+    #         element-wise lookup.
+    #
+    # @return [Node] The result of the lookup operation.
     def lut_with_rgb( table, options = {} )
       if typecode < RGB_
         [ r, g, b ].lut table, options
