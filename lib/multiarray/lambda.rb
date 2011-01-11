@@ -166,7 +166,7 @@ module Hornetseye
         end
         i = INT.new i
       end
-      i.size = @index.size if @index.size.get and i.is_a? Variable
+      i.size = @index.size if i.is_a?( Variable ) and @index.size.get
       @term.subst @index => i
     end
 
