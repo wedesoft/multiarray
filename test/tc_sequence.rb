@@ -240,6 +240,7 @@ class TC_Sequence < Test::Unit::TestCase
       assert_equal [ 1, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].collect { |x| x.r }.to_a
       assert_equal [ 2, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].collect { |x| x.g }.to_a
       assert_equal [ 3, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].collect { |x| x.b }.to_a
+      assert_equal t[ C( 3, 2, 1 ), 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].swap_rgb
       s = t[ 0, 0, 0 ]
       assert_equal 1, s.r = 1
       assert_equal S[ 1, 2, 3 ], s.g = S[ 1, 2, 3 ]
@@ -552,7 +553,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_conj
-    assert_equal S[ 1.5, 2.5 ], S[ 1.5, 2.5 ].conj
+    assert_equal S( O, 2 )[ 1.5, 2.5 ], S( O, 2 )[ 1.5, 2.5 ].conj
+    assert_equal S( F, 2 )[ 1.5, 2.5 ], S( F, 2 )[ 1.5, 2.5 ].conj
     assert_equal S[ X( 1.5, -2.5 ) ], S[ X( 1.5, 2.5 ) ].conj
   end
 

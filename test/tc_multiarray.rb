@@ -341,6 +341,8 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ 1, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].r
     assert_equal M[ [ 2, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].g
     assert_equal M[ [ 3, 4 ], [ 5, 6 ] ], M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].b
+    assert_equal M[ [ C( 3, 2, 1 ), 4 ], [ 5, 6 ] ],
+                 M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].swap_rgb
     assert_equal M[ [ 1, 4 ], [ 5, 6 ] ],
                  M[ [ C( 1, 2, 3 ), 4 ], [ 5, 6 ] ].collect { |x| x.r }
     assert_equal M[ [ 2, 4 ], [ 5, 6 ] ],

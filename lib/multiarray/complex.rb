@@ -673,6 +673,18 @@ module Math
 
 end
 
+# The +Numeric+ class is extended with a few methods
+class Numeric
+
+  # Compute complex conjugate
+  #
+  # @return [Numeric] Returns +self+.
+  def conj
+    self
+  end
+
+end
+
 module Hornetseye
 
   # Class for representing native complex values

@@ -552,34 +552,6 @@ end
 # The +Numeric+ class is extended with a few methods
 class Numeric
 
-  # Compute complex conjugate
-  #
-  # @return [Numeric] Returns +self+.
-  def conj
-    self
-  end
-
-  # Get red component
-  #
-  # @return [Numeric] Returns +self+.
-  def r
-    self
-  end
-
-  # Get green component
-  #
-  # @return [Numeric] Returns +self+.
-  def g
-    self
-  end
-
-  # Get blue component
-  #
-  # @return [Numeric] Returns +self+.
-  def b
-    self
-  end
-
   # Get larger number of two numbers
   #
   # @param [Numeric] other The other number.

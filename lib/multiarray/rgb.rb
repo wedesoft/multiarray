@@ -146,9 +146,7 @@ module Hornetseye
 
     # This operation has no effect
     #
-    # @return [InternalComplex] Returns +self+.
-    #
-    # @private
+    # @return [RGB] Returns +self+.
     def +@
       self
     end
@@ -175,8 +173,6 @@ module Hornetseye
     # Check whether value is equal to zero
     #
     # @return [Boolean,GCCValue] The result.
-    #
-    # @private
     def zero?
       @r.zero?.and( @g.zero? ).and( @b.zero? )
     end
@@ -184,10 +180,15 @@ module Hornetseye
     # Check whether value is not equal to zero
     #
     # @return [Boolean,GCCValue] The result.
-    #
-    # @private
     def nonzero?
       @r.nonzero?.or( @g.nonzero? ).or( @b.nonzero? )
+    end
+
+    # Swap colour channels
+    #
+    # @return [RGB] The result.
+    def swap_rgb
+      RGB.new @b, @g, @r
     end
 
     # Test on equality
@@ -196,8 +197,6 @@ module Hornetseye
     #
     # @return [Boolean] Returns boolean indicating whether objects are
     #         equal or not.
-    #
-    # @private
     def ==( other )
       if other.is_a? RGB
         @r.eq( other.r ).and( @g.eq( other.g ) ).and( @b.eq( other.b ) )
@@ -213,6 +212,8 @@ module Hornetseye
     # This method decomposes the RGB value into an array.
     #
     # @return [Node] An array with the three channel values as elements.
+    #
+    # @private
     def decompose( i )
       [ @r, @g, @b ][ i ]
     end
@@ -520,6 +521,7 @@ module Hornetseye
     define_unary_op :r, :scalar
     define_unary_op :g, :scalar
     define_unary_op :b, :scalar
+    define_unary_op :swap_rgb
 
     # Fast extraction for red channel of RGB array
     #
@@ -616,6 +618,19 @@ module Hornetseye
         raise "Cannot assign blue channel to object of type #{array_type.inspect}"
       end
     end
+
+    # Swapping colour channels for scalar values
+    #
+    # @return [Node] Array with swapped colour channels.
+    def swap_rgb_with_scalar
+      if typecode == OBJECT or typecode < RGB_
+        swap_rgb_without_scalar
+      else
+        self
+      end
+    end
+
+    alias_method_chain :swap_rgb, :scalar
 
     # Compute colour histogram of this array
     #
@@ -859,6 +874,39 @@ module Hornetseye
   module_function :ULONGRGB
   module_function :SFLOATRGB
   module_function :DFLOATRGB
+
+end
+
+# The +Numeric+ class is extended with a few methods
+class Numeric
+
+  # Get red component
+  #
+  # @return [Numeric] Returns +self+.
+  def r
+    self
+  end
+
+  # Get green component
+  #
+  # @return [Numeric] Returns +self+.
+  def g
+    self
+  end
+
+  # Get blue component
+  #
+  # @return [Numeric] Returns +self+.
+  def b
+    self
+  end
+
+  # Swap colour channels
+  #
+  # @return [Numeric] Returns +self+.
+  def swap_rgb
+    self
+  end
 
 end
 
