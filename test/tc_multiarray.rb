@@ -432,6 +432,14 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].convolve f }
   end
 
+  def test_sobel
+    m = M[ [ 0, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 0, 0 ] ]
+    assert_equal [ [ -1, 0, 1, 0 ], [ -2, 0, 2, 0 ], [ -1, 0, 1, 0 ] ],
+                 m.sobel( 0 ).to_a
+    assert_equal [ [ -1, -2, -1, 0 ], [ 0, 0, 0, 0 ], [ 1, 2, 1, 0 ] ],
+                 m.sobel( 1 ).to_a
+  end
+
   def test_histogram
     assert_equal [ 0, 1, 1, 2, 0 ],
                  M[ [ 1, 2 ], [ 3, 3 ] ].histogram( 5, :weight => 1 ).to_a

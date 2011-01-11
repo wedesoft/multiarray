@@ -361,6 +361,10 @@ class TC_Sequence < Test::Unit::TestCase
                  convolve( S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ) ] )
   end
 
+  def test_sobel
+    assert_equal [ 0, -1, 0, 1, 0 ], S[ 0, 0, 1, 0, 0 ].sobel( 0 ).to_a
+  end
+
   def test_histogram
     [ O, I ].each do |t|
       assert_equal [ 0, 1, 2, 1, 1 ],

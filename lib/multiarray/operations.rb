@@ -478,15 +478,11 @@ module Hornetseye
         raise "Filter has #{filter.dimension} dimension(s) but should " +
               "not have more than #{dimension}"
       end
-      array = self
-      while filter.dimension < dimension
-        filter = Hornetseye::lazy( 1 ) { filter }
-        array = array.unroll
-      end
+      filter = Hornetseye::lazy( 1 ) { filter } while filter.dimension < dimension
       if filter.dimension == 0
-        array * filter
+        self * filter
       else
-        Hornetseye::lazy { |i,j| array[j].product filter[i] }
+        Hornetseye::lazy { |i,j| self[j].product filter[i] }
       end
     end
 
@@ -497,7 +493,22 @@ module Hornetseye
     # @return [Node] Result of convolution.
     def convolve( filter )
       filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
-      product( filter ).diagonal { |s,x| s + x }
+      array = self
+      ( dimension - filter.dimension ).times { array = array.roll }
+      array.product( filter ).diagonal { |s,x| s + x }
+    end
+
+    # Sobel operator
+    #
+    # @param [Integer] direction Orientation of Sobel filter.
+    #
+    # @return [Node] Result of Sobel operator.
+    def sobel( direction )
+      ( dimension - 1 ).downto( 0 ).inject self do |retval,i|
+        filter = i == direction ? Hornetseye::Sequence( SINT, 3 )[ -1, 0, 1 ] :
+                                  Hornetseye::Sequence( SINT, 3 )[ 1, 2, 1 ]
+        Hornetseye::lazy { retval.convolve filter }
+      end.force
     end
 
     # Compute histogram of this array
