@@ -408,6 +408,19 @@ module Hornetseye
       end
     end
 
+    # Clip values to specified range
+    #
+    # @param [Range] range Allowed range of values.
+    #
+    # @return [Node] Array with clipped values.
+    def clip( range = 0 .. 0xFF )
+      if range.exclude_end?
+        raise "Clipping does not support ranges with end value " +
+              "excluded (such as #{range})"
+      end
+      major( range.begin ).minor range.end
+    end
+
     # Fill array with a value
     #
     # @param [Object] value Value to fill array with.
