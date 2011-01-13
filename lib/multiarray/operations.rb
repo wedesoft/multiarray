@@ -402,7 +402,7 @@ module Hornetseye
       if current.last != current.first
         factor =
           ( range.last - range.first ).to_f / ( current.last - current.first )
-        self * factor + ( range.first - current.first * factor )
+        collect { |x| x * factor + ( range.first - current.first * factor ) }
       else
         self + ( range.first - current.first )
       end
@@ -418,7 +418,7 @@ module Hornetseye
         raise "Clipping does not support ranges with end value " +
               "excluded (such as #{range})"
       end
-      major( range.begin ).minor range.end
+      collect { |x| x.major( range.begin ).minor range.end }
     end
 
     # Fill array with a value
