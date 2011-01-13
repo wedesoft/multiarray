@@ -585,6 +585,72 @@ end
 # The +Array+ class is extended with a few methods
 class Array
 
+  class << self
+
+    # Compute Gauss blur filter
+    #
+    # Compute a filter for approximating a Gaussian blur. The size of the
+    # filter is determined by the given error bound.
+    #
+    # @param [Float] sigma Spread of blur filter.
+    # @param [Float] max_error Upper bound for filter error.
+    # 
+    # @return [Array] An array with the filter elements.
+    def gauss_blur_filter( sigma, max_error = 1.0 / 0x100 )
+      def erf( x, sigma )
+        0.5 * Math.erf( x / ( Math.sqrt( 2.0 ) * sigma.abs ) )
+      end
+      raise 'Sigma must be greater than zero.' if sigma <= 0
+      # Integral of Gauss-bell from -0.5 to +0.5.
+      integral = erf( +0.5, sigma ) - erf( -0.5, sigma )
+      retVal = [ integral ]
+      while 1.0 - integral > max_error
+        # Integral of Gauss-bell from -size2 to +size2.
+        size2 = 0.5 * ( retVal.size + 2 )
+        nIntegral = erf( +size2, sigma ) - erf( -size2, sigma )
+        value = 0.5 * ( nIntegral - integral )
+        retVal.unshift( value )
+        retVal.push( value )
+        integral = nIntegral
+      end
+      # Normalise result.
+      retVal.collect { |element| element / integral }
+    end
+
+    # Compute Gauss gradient filter
+    #
+    # Compute a filter for approximating a Gaussian gradient. The size of the
+    # filter is determined by the given error bound.
+    #
+    # @param [Float] sigma Spread of blur filter.
+    # @param [Float] max_error Upper bound for filter error.
+    # 
+    # @return [Array] An array with the filter elements.
+    def gauss_gradient_filter( sigma, max_error = 1.0 / 0x100 )
+      def gauss( x, sigma )
+        1.0 / ( Math.sqrt( 2.0 * Math::PI ) * sigma.abs ) *
+          Math.exp( -x**2 / ( 2.0 * sigma**2 ) )
+      end
+      raise 'Sigma must be greater than zero.' if sigma <= 0
+      # Integral of Gauss-gradient from -0.5 to +0.5.
+      retVal = [ gauss( +0.5, sigma ) - gauss( -0.5, sigma ) ]
+      # Absolute integral of Gauss-gradient from 0.5 to infinity.
+      integral = gauss( 0.5, sigma )
+      sumX = 0
+      while 2.0 * integral > max_error
+        size2 = 0.5 * ( retVal.size + 2 )
+        nIntegral = gauss( size2, sigma )
+        value = integral - nIntegral
+        retVal.unshift( -value )
+        retVal.push( +value )
+        sumX += value * ( retVal.size - 1 )
+        integral = nIntegral
+      end
+      retVal.collect { |element| element / sumX }
+    end
+
+  end
+
   # Element-wise operation based on element and its index
   #
   # Same as +Array#collect+ but with index.
