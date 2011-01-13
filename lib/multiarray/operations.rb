@@ -524,6 +524,20 @@ module Hornetseye
       end.force
     end
 
+    # Gaussian blur
+    #
+    # @param [Float] sigma Spread of Gauss bell.
+    # @param [Float] max_error Error of approximated filter.
+    #
+    # @return [Node] Result of filter operation.
+    def gauss_blur( sigma, max_error = 1.0 / 0x100 )
+      filter = Sequence[ *Array.gauss_blur_filter( sigma, max_error / dimension ) ].
+        to_type DFLOAT.align( typecode )
+      ( dimension - 1 ).downto( 0 ).inject self do |retval,i|
+        retval.convolve filter
+      end
+    end
+
     # Compute histogram of this array
     #
     # @overload histogram( *ret_shape, options = {} )
