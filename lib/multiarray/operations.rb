@@ -531,11 +531,33 @@ module Hornetseye
     #
     # @return [Node] Result of filter operation.
     def gauss_blur( sigma, max_error = 1.0 / 0x100 )
+      filter_type = DFLOAT.align typecode
       filter = Sequence[ *Array.gauss_blur_filter( sigma, max_error / dimension ) ].
-        to_type DFLOAT.align( typecode )
+        to_type filter_type
       ( dimension - 1 ).downto( 0 ).inject self do |retval,i|
         retval.convolve filter
       end
+    end
+
+    # Gauss gradient
+    #
+    # @param [Float] sigma Spread of Gauss gradient.
+    # @param [Integer] direction Orientation of Gauss gradient.
+    # @param [Float] max_error Error of approximated filter.
+    #
+    # @return [Node] Result of filter operation.
+    def gauss_gradient( sigma, direction, max_error = 1.0 / 0x100 )
+      filter_type = DFLOAT.align typecode
+      gradient =
+        Sequence[ *Array.gauss_gradient_filter( sigma, max_error / dimension ) ].
+        to_type filter_type
+      blur =
+        Sequence[ *Array.gauss_blur_filter( sigma, max_error / dimension ) ].
+        to_type filter_type
+      ( dimension - 1 ).downto( 0 ).inject self do |retval,i|
+        filter = i == direction ? gradient : blur
+        retval.convolve filter
+      end.force
     end
 
     # Compute histogram of this array
