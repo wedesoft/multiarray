@@ -371,6 +371,12 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ 6 ] ], M[ [ C( 1, 2, 3 ) ] ].collect { |x| x.r + x.g + x.b }
   end
 
+  def test_each
+    a = []
+    M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].each { |x| a << x }
+    assert_equal [ 1, 2, 3, 4, 5, 6 ], a
+  end
+
   def test_sum
     m = M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
     assert_equal 21, sum { |i,j| m[ i, j ] }

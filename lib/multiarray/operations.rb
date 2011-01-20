@@ -329,6 +329,14 @@ module Hornetseye
       end
     end
 
+    def each( &action )
+      if dimension > 0
+        shape.last.times { |i| element( INT.new( i ) ).each &action }
+      else
+        action.call demand.get
+      end
+    end
+
     # Equality operator
     #
     # @return [Boolean] Returns result of comparison.

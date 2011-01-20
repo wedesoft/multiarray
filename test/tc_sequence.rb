@@ -300,6 +300,12 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S[ 6 ], S[ C( 1, 2, 3 ) ].collect { |x| x.r + x.g + x.b }
   end
 
+  def test_each
+    a = []
+    S[ 1, 2, 3 ].each { |x| a << x }
+    assert_equal [ 1, 2, 3 ], a
+  end
+
   def test_sum
     [ S( O, 3 ), S( I, 3 ) ].each do |t|
       assert_equal 6, t[ 1, 2, 3 ].sum
