@@ -630,7 +630,7 @@ module Hornetseye
             inject { |a,b| a.and b }
         end.conditional Lut.new( *( field + [ self ] ) ), options[ :default ]
       else
-        field.lut self
+        field.lut self, :safe => false
       end
     end
 
