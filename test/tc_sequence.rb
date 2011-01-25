@@ -372,6 +372,22 @@ class TC_Sequence < Test::Unit::TestCase
                  convolve( S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ) ] )
   end
 
+  def test_erode
+    [ O, I ].each do |t|
+      assert_equal [ 1, 1, 1, 2, 2, 2 ], S( t, 6 )[ 1, 1, 2, 3, 2, 2 ].erode.to_a
+    end
+    assert_equal S[ false, false, true, false, false ],
+                 S[ false, true, true, true, false ].erode
+  end
+
+  def test_dilate
+    [ O, I ].each do |t|
+      assert_equal [ 1, 2, 3, 3, 3, 2 ], S( t, 6 )[ 1, 1, 2, 3, 2, 2 ].dilate.to_a
+    end
+    assert_equal S[ false, true, true, true, false ],
+                 S[ false, false, true, false, false ].dilate
+  end
+
   def test_sobel
     assert_equal [ 0, -1, 0, 1, 0 ], S[ 0, 0, 1, 0, 0 ].sobel( 0 ).to_a
   end

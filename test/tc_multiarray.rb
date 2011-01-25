@@ -438,6 +438,16 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_raise( RuntimeError ) { S[ 1, 2, 3 ].convolve f }
   end
 
+  def test_erode
+    assert_equal [ [ 0, 0, 0 ], [ 0, -1, -1 ], [ 0, -1, -1 ] ],
+                 M[ [ 1, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, -1 ] ].erode.to_a
+  end
+
+  def test_dilate
+    assert_equal [ [ 1, 1, 0 ], [ 1, 1, 0 ], [ 0, 0, 0 ] ],
+                 M[ [ 1, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, -1 ] ].dilate.to_a
+  end
+
   def test_sobel
     m = M[ [ 0, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 0, 0 ] ]
     assert_equal [ [ -1, 0, 1, 0 ], [ -2, 0, 2, 0 ], [ -1, 0, 1, 0 ] ],

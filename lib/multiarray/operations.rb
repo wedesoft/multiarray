@@ -519,6 +519,48 @@ module Hornetseye
       array.product( filter ).diagonal { |s,x| s + x }
     end
 
+    # Create spread array similar to product array
+    #
+    # Used internally to implement erosion and dilation.
+    #
+    # @param [Integer] n Size of spread.
+    #
+    # @return [Node] Result of operation.
+    #
+    # @see #erode
+    # @see #dilate
+    #
+    # @private
+    def spread( n = 3 )
+      if dimension > 0
+        Hornetseye::lazy( n, shape.last ) { |i,j| self[j].spread n }
+      else
+        self
+      end
+    end
+
+    # Erosion
+    #
+    # The erosion operation works on boolean as well as scalar values.
+    #
+    # @param [Integer] n Size of erosion operator.
+    #
+    # @return [Node] Result of operation.
+    def erode( n = 3 )
+      spread( n ).diagonal { |m,x| m.minor x }
+    end
+
+    # Dilation
+    #
+    # The dilation operation works on boolean as well as scalar values.
+    #
+    # @param [Integer] n Size of dilation operator.
+    #
+    # @return [Node] Result of operation.
+    def dilate( n = 3 )
+      spread( n ).diagonal { |m,x| m.major x }
+    end
+
     # Sobel operator
     #
     # @param [Integer] direction Orientation of Sobel filter.
