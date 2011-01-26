@@ -113,5 +113,50 @@ module Hornetseye
 
   Node.class_eval { include MultiArrayConversion }
 
+  # Module with meta-programming methods for creating shortcut methods for reading images
+  module ReaderConversion
+
+    # Meta-programming method for creating shortcut methods for reading images
+    #
+    # @param [Class] target Element-type to create read method for.
+    #
+    # @return [Proc] The new method.
+    #
+    # @private
+    def read_shortuct( target )
+      define_method( "read_#{target.to_s.downcase}" ) do
+        read.to_type target
+      end
+    end
+
+    module_function :read_shortcut
+
+    read_shortcut OBJECT
+    read_shortcut BOOL
+    read_shortcut BYTE
+    read_shortcut UBYTE
+    read_shortcut SINT
+    read_shortcut USINT
+    read_shortcut INT
+    read_shortcut UINT
+    read_shortcut LONG
+    read_shortcut ULONG
+    read_shortcut SFLOAT
+    read_shortcut DFLOAT
+    read_shortcut SCOMPLEX
+    read_shortcut DCOMPLEX
+    read_shortcut BYTERGB
+    read_shortcut UBYTERGB
+    read_shortcut SINTRGB
+    read_shortcut USINTRGB
+    read_shortcut INTRGB
+    read_shortcut UINTRGB
+    read_shortcut LONGRGB
+    read_shortcut ULONGRGB
+    read_shortcut SFLOATRGB
+    read_shortcut DFLOATRGB
+
+  end
+
 end
 
