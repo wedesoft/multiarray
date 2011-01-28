@@ -123,7 +123,7 @@ module Hornetseye
     # @return [Proc] The new method.
     #
     # @private
-    def read_shortuct( target )
+    def read_shortcut( target )
       define_method( "read_#{target.to_s.downcase}" ) do
         read.to_type target
       end

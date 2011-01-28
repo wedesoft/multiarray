@@ -935,3 +935,19 @@ class Fixnum
 
 end
 
+module Math
+
+  def sqrt_with_rgb( c )
+    if c.is_a? Hornetseye::RGB
+      Hornetseye::RGB.new sqrt( c.r ), sqrt( c.g ), sqrt( c.b )
+    else
+      sqrt_without_rgb c
+    end
+  end
+
+  alias_method_chain :sqrt, :rgb
+  module_function :sqrt_without_rgb
+  module_function :sqrt
+
+end
+

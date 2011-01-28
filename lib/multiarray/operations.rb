@@ -390,6 +390,13 @@ module Hornetseye
       min( initial ? initial.min : nil ) .. max( initial ? initial.max : nil )
     end
 
+    # Check values against boundaries
+    #
+    # @return [Node] Boolean array with result.
+    def between?( a, b )
+      Hornetseye::lazy { ( self >= a ).and self <= b }.force
+    end
+
     # Normalise values of array
     #
     # @param [Range] range Target range of normalisation.

@@ -334,6 +334,10 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal C( 3, 2, 3 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].max
   end
 
+  def test_between
+    assert_equal S[ false, true, true, false ], S[ 1, 2, 3, 4 ].between?( 2, 3 )
+  end
+
   def test_normalise
     assert_equal [ 0.0, 85.0, 255.0 ], S[ 1, 2, 4 ].normalise.to_a
     assert_equal [ C( 0.0, 85.0, 255.0 ) ], S[ C( 1, 2, 4 ) ].normalise.to_a
@@ -712,6 +716,12 @@ class TC_Sequence < Test::Unit::TestCase
       zip( Math.sqrt( S[ X( 1, 2 ), X( 2, -1 ) ] ).to_a ).each do |x,y|
       assert_in_delta x.real, y.real, 1.0e-5
       assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+    [ Math.sqrt( C( 1, 2, 3 ) ), Math.sqrt( C( 2, 4, 6 ) ) ].
+      zip( Math.sqrt( S[ C( 1, 2, 3 ), C( 2, 4, 6 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.r, y.r, 1.0e-5
+      assert_in_delta x.g, y.g, 1.0e-5
+      assert_in_delta x.b, y.b, 1.0e-5
     end
   end
 
