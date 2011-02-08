@@ -109,7 +109,7 @@ module Hornetseye
     #
     # @private
     def element( i )
-      Inject.new @value.element( i ), @index, @initial, @block, @var1, @var2
+      self.class.new @value.element( i ), @index, @initial, @block, @var1, @var2
     end
 
     # Get variables contained in this term
@@ -142,7 +142,7 @@ module Hornetseye
       vars3, values3, term3 = @block.strip
       return vars1 + vars2 + vars3 + meta_vars,
         values1 + values2 + values3 + meta_values,
-        Inject.new( term1, var, term2, term3, @var1, @var2 )
+        self.class.new( term1, var, term2, term3, @var1, @var2 )
     end
  
     # Substitute variables
@@ -159,7 +159,7 @@ module Hornetseye
       value = @value.subst( @index => subst_var ).subst hash
       initial = @initial ? @initial.subst( hash ) : nil
       block = @block.subst hash
-      Inject.new value, subst_var, initial, block, @var1, @var2
+      self.class.new value, subst_var, initial, block, @var1, @var2
     end
 
     # Check whether this term is compilable

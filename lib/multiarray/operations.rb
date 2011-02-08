@@ -213,6 +213,25 @@ module Hornetseye
       end
     end
 
+    # Conditional operation
+    #
+    # @param [Proc] action Action to perform if condition is +true+.
+    #
+    # @return [Object] The return value should be ignored.
+    def if( &action )
+      simplify.get.if &action
+    end
+
+    # Conditional operation
+    #
+    # @param [Proc] action1 Action to perform if condition is +true+.
+    # @param [Proc] action2 Action to perform if condition is +false+.
+    #
+    # @return [Object] The return value should be ignored.
+    def if_else( action1, action2 )
+      simplify.get.if_else action1, action2
+    end
+
     # Element-wise comparison of values
     #
     # @param [Node] other Array with values to compare with.
@@ -628,7 +647,7 @@ module Hornetseye
     # @return [Node] The histogram.
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
-      options = { :weight => UINT. new( 1 ), :safe => true }.merge options
+      options = { :weight => UINT.new( 1 ), :safe => true }.merge options
       unless options[ :weight ].is_a? Node
         options[ :weight ] =
           Node.match( options[ :weight ] ).maxint.new options[ :weight ]

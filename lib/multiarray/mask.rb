@@ -81,7 +81,7 @@ module Hornetseye
             Mask.new( @dest, source, m, index ).demand
           end  
         else
-          @m.simplify.get.if do
+          @m.if do
             Store.new( @dest.element( index ), @source ).demand
             index.store index + 1
           end

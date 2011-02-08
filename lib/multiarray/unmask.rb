@@ -84,7 +84,7 @@ module Hornetseye
             Unmask.new( dest, @source, m, index, default ).demand
           end  
         else
-          @m.simplify.get.if_else( proc do
+          @m.if_else( proc do
             Store.new( @dest, @source.element( index ) ).demand
             index.store index + 1
           end, proc do
