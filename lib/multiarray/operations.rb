@@ -213,6 +213,15 @@ module Hornetseye
       end
     end
 
+    # Generate code for memory allocation
+    #
+    # @return [GCCValue] C value referring to result.
+    #
+    # @private
+    def malloc
+      get.malloc 
+    end
+
     # Conditional operation
     #
     # @param [Proc] action Action to perform if condition is +true+.

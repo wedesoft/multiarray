@@ -370,7 +370,6 @@ module Hornetseye
       self
     end
 
-
     define_unary_op :not, '!'
     define_unary_op :~
     define_unary_op :-@, :-
@@ -427,6 +426,15 @@ module Hornetseye
     # @private
     def nonzero?
       GCCValue.new @function, "( #{self} ) != 0"
+    end
+
+    # Generate code for memory allocation
+    #
+    # @return [GCCValue] C value referring to result.
+    #
+    # @private
+    def malloc
+      GCCValue.new @function, "(unsigned char *)malloc( #{self} )"
     end
 
     # Generate code for computing largest integer value not greater than this value

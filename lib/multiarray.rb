@@ -580,6 +580,15 @@ class Numeric
     end
   end
 
+  # Generate code for memory allocation
+  #
+  # @return [GCCValue] C value referring to result.
+  #
+  # @private
+  def malloc
+    Hornetseye::Malloc.new self
+  end
+
 end
 
 # The +Array+ class is extended with a few methods
