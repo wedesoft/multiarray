@@ -125,7 +125,7 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def store( value )
+    def assign( value )
       @r, @g, @b = value.r, value.g, value.b
     end
 
@@ -407,9 +407,9 @@ module Hornetseye
         r = Thread.current[ :function ].variable self.class.element_type, 'v'
         g = Thread.current[ :function ].variable self.class.element_type, 'v'
         b = Thread.current[ :function ].variable self.class.element_type, 'v'
-        r.store @value.r
-        g.store @value.g
-        b.store @value.b
+        r.assign @value.r
+        g.assign @value.g
+        b.assign @value.b
         self.class.new RGB.new( r, g, b )
       else
         self.class.new get
@@ -423,20 +423,20 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def store( value )
+    def assign( value )
       value = value.simplify
-      if @value.r.respond_to? :store
-        @value.r.store value.get.r
+      if @value.r.respond_to? :assign
+        @value.r.assign value.get.r
       else
         @value.r = value.get.r
       end
-      if @value.g.respond_to? :store
-        @value.g.store value.get.g
+      if @value.g.respond_to? :assign
+        @value.g.assign value.get.g
       else
         @value.g = value.get.g
       end
-      if @value.b.respond_to? :store
-        @value.b.store value.get.b
+      if @value.b.respond_to? :assign
+        @value.b.assign value.get.b
       else
         @value.b = value.get.b
       end

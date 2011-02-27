@@ -93,7 +93,7 @@ module Hornetseye
     def dup
       if Thread.current[ :function ]
         value = Thread.current[ :function ].variable self.class, 'v'
-        value.store get
+        value.assign get
         self.class.new value
       else
         self.class.new get
@@ -155,9 +155,9 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def store( value )
-      if @value.respond_to? :store
-        @value.store value.simplify.get
+    def assign( value )
+      if @value.respond_to? :assign
+        @value.assign value.simplify.get
       else
         @value = value.simplify.get
       end

@@ -184,6 +184,22 @@ module Hornetseye
       "#{self.class.to_s}(#{@value.to_s})"
     end
 
+    # Store a value in this native element
+    #
+    # @param [Object] value New value for native element.
+    #
+    # @return [Object] Returns +value+.
+    #
+    # @private
+    def assign( value )
+      if @value.respond_to? :assign
+        @value.assign value.simplify.get
+      else
+        @value = value.simplify.get
+      end
+      value
+    end
+
     # Store new value in this pointer
     #
     # @param [Object] value New value for this pointer object.

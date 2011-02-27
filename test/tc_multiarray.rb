@@ -731,6 +731,11 @@ class TC_MultiArray < Test::Unit::TestCase
                  M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].integral
   end
 
+  def test_components
+    assert_equal [ [ 1, 0, 2 ], [ 0, 0, 2 ], [ 2, 2, 2 ] ],
+                 M[ [ 1, 0, 1 ], [ 0, 0, 1 ], [ 1, 1, 1 ] ].components.to_a
+  end
+
   def test_mask
     [ O, I ].each do |t|
       assert_equal M( O, 2, 2 )[ [ 1, 2 ], [ 5, 7 ] ],

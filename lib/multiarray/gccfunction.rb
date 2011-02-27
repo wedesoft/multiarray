@@ -196,3 +196,32 @@ module Hornetseye
   end
   
 end
+
+class Proc
+
+  # Overloaded while loop for handling compilation
+  #
+  # @param [Proc] action The loop body
+  #
+  # @return [NilClass] Returns +nil+.
+  #
+  # @private
+  def while_with_gcc( &action )
+    function = Thread.current[ :function ]
+    if function
+      function << "#{function.indent}while ( 1 ) {\n"
+      function.indent_offset +1
+      function << "#{function.indent}if ( !( #{call.get}) ) break;\n"
+      action.call
+      function.indent_offset -1
+      function << "#{function.indent}}\n"
+      nil
+    else
+      while_without_gcc &action
+    end
+  end
+
+  alias_method_chain :while, :gcc
+
+end
+

@@ -83,10 +83,14 @@ module Hornetseye
         else
           @m.if do
             Store.new( @dest.element( index ), @source ).demand
-            index.store index + 1
+            index.assign index + 1
           end
         end
-        @index.store index
+        if @index.is_a? Pointer_
+          @index.store index
+        else
+          @index.assign index
+        end
         @dest
       else
         super

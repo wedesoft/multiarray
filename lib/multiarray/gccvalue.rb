@@ -163,7 +163,7 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def store( value )
+    def assign( value )
       @function << "#{@function.indent}#{self} = #{value};\n"
       value
     end
@@ -426,15 +426,6 @@ module Hornetseye
     # @private
     def nonzero?
       GCCValue.new @function, "( #{self} ) != 0"
-    end
-
-    # Generate code for memory allocation
-    #
-    # @return [GCCValue] C value referring to result.
-    #
-    # @private
-    def malloc
-      GCCValue.new @function, "(unsigned char *)malloc( #{self} )"
     end
 
     # Generate code for computing largest integer value not greater than this value

@@ -938,6 +938,11 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal S( I, 3 )[ 1, 3, 6 ], S( I, 3 )[ 1, 2, 3 ].integral
   end
 
+  def test_components
+    assert_equal [ 0, 1, 1, 0, 2 ], S[ 0, 1, 1, 0, 1 ].components.to_a
+    assert_equal [ 0, 1, 1, 0, 2 ], S[ nil, 1, 1, nil, 1 ].components.to_a
+  end
+
   def test_mask
     assert_equal S( O, 2 )[ 2, 5 ], S( O, 3 )[ 2, 3, 5 ].
                  mask( S[ true, false, true ] )

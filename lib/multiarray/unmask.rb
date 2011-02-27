@@ -86,12 +86,16 @@ module Hornetseye
         else
           @m.if_else( proc do
             Store.new( @dest, @source.element( index ) ).demand
-            index.store index + 1
+            index.assign index + 1
           end, proc do
             Store.new( @dest, @default ).demand
           end )
         end
-        @index.store index
+        if @index.is_a? Pointer_
+          @index.store index
+        else
+          @index.assign index
+        end
         @dest
       else
         super

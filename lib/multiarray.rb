@@ -66,6 +66,18 @@ class Proc
 
   end
 
+  # An overloadable while loop
+  #
+  # @param [Proc] action The loop body
+  #
+  # @return [NilClass] Returns +nil+.
+  #
+  # @private
+  def while( &action )
+    action.call while call.get
+    nil
+  end
+
 end
 
 # +Object+ is extended with a few methods
@@ -580,15 +592,6 @@ class Numeric
     end
   end
 
-  # Generate code for memory allocation
-  #
-  # @return [GCCValue] C value referring to result.
-  #
-  # @private
-  def malloc
-    Hornetseye::Malloc.new self
-  end
-
 end
 
 # The +Array+ class is extended with a few methods
@@ -707,6 +710,7 @@ require 'multiarray/lut'
 require 'multiarray/integral'
 require 'multiarray/mask'
 require 'multiarray/unmask'
+require 'multiarray/components'
 require 'multiarray/operations'
 require 'multiarray/methods'
 require 'multiarray/rgb'
@@ -802,3 +806,4 @@ module Hornetseye
   module_function :sum
 
 end
+

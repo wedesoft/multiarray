@@ -661,7 +661,7 @@ module Hornetseye
         options[ :weight ] =
           Node.match( options[ :weight ] ).maxint.new options[ :weight ]
       end
-      if shape.first != 1 and ret_shape.size == 1
+      if ( shape.first != 1 or dimension == 1 ) and ret_shape.size == 1
         [ self ].histogram *( ret_shape + [ options ] )
       else
         ( 0 ... shape.first ).collect { |i| unroll[i] }.
@@ -677,7 +677,7 @@ module Hornetseye
     #
     # @return [Node] The result of the lookup operation.
     def lut( table, options = {} )
-      if shape.first != 1 and table.dimension == 1
+      if ( shape.first != 1 or dimension == 1 ) and table.dimension == 1
         [ self ].lut table, options
       else
         ( 0 ... shape.first ).collect { |i| unroll[i] }.lut table, options
@@ -723,6 +723,35 @@ module Hornetseye
         block.demand
       end
       left
+    end
+
+    # Perform connected component labelling
+    #
+    # @option options [Object] :default (typecode.default) Value of background elements.
+    # @option options [Class] :target (UINT) Typecode of labels.
+    #
+    # @return [Node] Array with labels of connected components.
+    def components( options = {} )
+      if shape.any? { |x| x <= 1 }
+        raise "Every dimension must be greater than 1 (shape was #{shape})"
+      end
+      options = { :target => UINT, :default => typecode.default }.merge options
+      target = options[ :target ]
+      default = options[ :default ]
+      default = typecode.new default unless default.is_a? Node
+      left = Hornetseye::MultiArray( target, *shape ).new
+      labels = Sequence.new target, size; labels[0] = 0
+      rank = Sequence.uint size; rank[0] = 0
+      n = Hornetseye::Pointer( INT ).new; n.store INT.new( 0 )
+      block = Components.new left, self, default, target.new( 0 ), labels, rank, n
+      if block.compilable?
+        Hornetseye::GCCFunction.run block
+      else
+        block.demand
+      end
+      labels = labels[ 0 .. n.demand.get ]
+      left.lut labels.lut( labels.histogram( labels.size, :weight => target.new( 1 ) ).
+                           minor( 1 ).integral - 1 )
     end
 
     # Select values from array using a mask

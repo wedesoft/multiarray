@@ -98,7 +98,7 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def store( value )
+    def assign( value )
       @real, @imag = value.real, value.imag
     end
 
@@ -862,8 +862,8 @@ module Hornetseye
       if Thread.current[ :function ]
         real = Thread.current[ :function ].variable self.class.element_type, 'v'
         imag = Thread.current[ :function ].variable self.class.element_type, 'v'
-        real.store @value.real
-        imag.store @value.imag
+        real.assign @value.real
+        imag.assign @value.imag
         self.class.new InternalComplex.new( real, imag )
       else
         self.class.new get
@@ -877,15 +877,15 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def store( value )
+    def assign( value )
       value = value.simplify
-      if @value.real.respond_to? :store
-        @value.real.store value.get.real
+      if @value.real.respond_to? :assign
+        @value.real.assign value.get.real
       else
         @value.real = value.get.real
       end
-      if @value.imag.respond_to? :store
-        @value.imag.store value.get.imag
+      if @value.imag.respond_to? :assign
+        @value.imag.assign value.get.imag
       else
         @value.imag = value.get.imag
       end

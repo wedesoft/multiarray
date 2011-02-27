@@ -65,8 +65,10 @@ module Hornetseye
                                               @source.element( INT.new( i ) )
             Store.new( dest, source ).demand
           end  
-        else
+        elsif @dest.class < Pointer_
           @dest.store @source.demand
+        else
+          @dest.assign @source.demand
         end
         @dest
       else
