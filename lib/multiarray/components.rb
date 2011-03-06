@@ -84,7 +84,7 @@ module Hornetseye
       @dest
     end
 
-    # Recursive function to perform connected component labelling
+    # Recursive function to perform connected component labeling
     #
     # @param [Array<Proc>] args Array with functions for locating neighbouring elements.
     # @param [Array<Proc>] comp Array with functions for locating neighbouring labels.

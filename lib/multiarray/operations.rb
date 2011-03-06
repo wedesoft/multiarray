@@ -517,18 +517,19 @@ module Hornetseye
       end
     end
 
-    # Compute product table from two arrays
+    # Compute table from two arrays
     #
-    # Used internally to implement convolutions.
+    # Used internally to implement convolutions and other operations.
     #
-    # @param [Node] filter Filter to form product table with.
+    # @param [Node] filter Filter to form table with.
+    # @param [Proc] action Operation to make table for.
     #
     # @return [Node] Result of operation.
     #
     # @see #convolve
     #
     # @private
-    def product( filter )
+    def table( filter, &action )
       filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
       if filter.dimension > dimension
         raise "Filter has #{filter.dimension} dimension(s) but should " +
@@ -536,9 +537,9 @@ module Hornetseye
       end
       filter = Hornetseye::lazy( 1 ) { filter } while filter.dimension < dimension
       if filter.dimension == 0
-        self * filter
+        action.call self, filter
       else
-        Hornetseye::lazy { |i,j| self[j].product filter[i] }
+        Hornetseye::lazy { |i,j| self[j].table filter[i], &action }
       end
     end
 
@@ -551,27 +552,7 @@ module Hornetseye
       filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
       array = self
       ( dimension - filter.dimension ).times { array = array.roll }
-      array.product( filter ).diagonal { |s,x| s + x }
-    end
-
-    # Create spread array similar to product array
-    #
-    # Used internally to implement erosion and dilation.
-    #
-    # @param [Integer] n Size of spread.
-    #
-    # @return [Node] Result of operation.
-    #
-    # @see #erode
-    # @see #dilate
-    #
-    # @private
-    def spread( n = 3 )
-      if dimension > 0
-        Hornetseye::lazy( n, shape.last ) { |i,j| self[j].spread n }
-      else
-        self
-      end
+      array.table( filter ) { |a,b| a* b }.diagonal { |s,x| s + x }
     end
 
     # Erosion
@@ -582,7 +563,8 @@ module Hornetseye
     #
     # @return [Node] Result of operation.
     def erode( n = 3 )
-      spread( n ).diagonal { |m,x| m.minor x }
+      filter = Hornetseye::lazy( *( [ n ] * dimension ) ) { 0 }
+      table( filter ) { |a,b| a }.diagonal { |m,x| m.minor x }
     end
 
     # Dilation
@@ -593,7 +575,8 @@ module Hornetseye
     #
     # @return [Node] Result of operation.
     def dilate( n = 3 )
-      spread( n ).diagonal { |m,x| m.major x }
+      filter = Hornetseye::lazy( *( [ n ] * dimension ) ) { 0 }
+      table( filter ) { |a,b| a }.diagonal { |m,x| m.major x }
     end
 
     # Sobel operator
@@ -725,7 +708,7 @@ module Hornetseye
       left
     end
 
-    # Perform connected component labelling
+    # Perform connected component labeling
     #
     # @option options [Object] :default (typecode.default) Value of background elements.
     # @option options [Class] :target (UINT) Typecode of labels.
