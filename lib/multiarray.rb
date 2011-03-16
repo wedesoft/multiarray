@@ -621,8 +621,8 @@ class Array
         size2 = 0.5 * ( retVal.size + 2 )
         nIntegral = erf( +size2, sigma ) - erf( -size2, sigma )
         value = 0.5 * ( nIntegral - integral )
-        retVal.unshift( value )
-        retVal.push( value )
+        retVal.unshift value
+        retVal.push value
         integral = nIntegral
       end
       # Normalise result.
@@ -653,8 +653,8 @@ class Array
         size2 = 0.5 * ( retVal.size + 2 )
         nIntegral = gauss( size2, sigma )
         value = integral - nIntegral
-        retVal.unshift( +value )
-        retVal.push( -value )
+        retVal.unshift +value
+        retVal.push -value
         sumX += value * ( retVal.size - 1 )
         integral = nIntegral
       end
