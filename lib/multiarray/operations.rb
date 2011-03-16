@@ -586,7 +586,7 @@ module Hornetseye
     # @return [Node] Result of Sobel operator.
     def sobel( direction )
       ( dimension - 1 ).downto( 0 ).inject self do |retval,i|
-        filter = i == direction ? Hornetseye::Sequence( SINT, 3 )[ -1, 0, 1 ] :
+        filter = i == direction ? Hornetseye::Sequence( SINT, 3 )[ 1, 0, -1 ] :
                                   Hornetseye::Sequence( SINT, 3 )[ 1, 2, 1 ]
         Hornetseye::lazy { retval.convolve filter }
       end.force
