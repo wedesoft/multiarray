@@ -87,6 +87,7 @@ module Hornetseye
     define_binary_op :**, :coercion_maxint
     define_binary_op :/
     define_binary_op :%
+    define_binary_op :fmod
     define_binary_op :and, :coercion_bool
     define_binary_op :or, :coercion_bool
     define_binary_op :&
@@ -112,6 +113,25 @@ module Hornetseye
     def +@
       self
     end
+
+    # Modulo operation for floating point numbers
+    #
+    # This operation takes account of the problem that '%' does not work with
+    # floating-point numbers in C.
+    #
+    # @return [Node] Array with result of operation.
+    def fmod_with_float( other )
+      unless other.is_a? Node
+        other = Node.match( other, typecode ).new other
+      end
+      if typecode < FLOAT_ or other.typecode < FLOAT_
+        fmod other
+      else
+        fmod_without_float other
+      end
+    end
+
+    alias_method_chain :%, :float, :fmod
 
     # Convert array elements to different element type
     #

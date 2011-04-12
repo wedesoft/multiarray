@@ -279,6 +279,15 @@ module Hornetseye
       0
     end
 
+    def fmod( other )
+      if GCCValue.generic? other
+        GCCValue.new @function, "fmod( #{self}, #{other} )"
+      else
+        x, y = other.coerce self
+        x.send op, y
+      end
+    end
+
     # Create code for conditional selection of value
     #
     # @param [GCCValue,Object] a First value.

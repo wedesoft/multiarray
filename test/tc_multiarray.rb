@@ -450,9 +450,9 @@ class TC_MultiArray < Test::Unit::TestCase
 
   def test_sobel
     m = M[ [ 0, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 0, 0 ] ]
-    assert_equal [ [ -1, 0, 1, 0 ], [ -2, 0, 2, 0 ], [ -1, 0, 1, 0 ] ],
+    assert_equal [ [ 1, 0, -1, 0 ], [ 2, 0, -2, 0 ], [ 1, 0, -1, 0 ] ],
                  m.sobel( 0 ).to_a
-    assert_equal [ [ -1, -2, -1, 0 ], [ 0, 0, 0, 0 ], [ 1, 2, 1, 0 ] ],
+    assert_equal [ [ 1, 2, 1, 0 ], [ 0, 0, 0, 0 ], [ -1, -2, -1, 0 ] ],
                  m.sobel( 1 ).to_a
   end
 

@@ -393,7 +393,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sobel
-    assert_equal [ 0, -1, 0, 1, 0 ], S[ 0, 0, 1, 0, 0 ].sobel( 0 ).to_a
+    assert_equal [ 0, 1, 0, -1, 0 ], S[ 0, 0, 1, 0, 0 ].sobel( 0 ).to_a
   end
 
   def test_histogram
@@ -621,6 +621,9 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_mod
     assert_equal S[ 2, 0, 1 ], S[ 2, 3, 4 ] % 3
+    assert_equal S[ 1, 0, 3 ], 3 % S[ 2, 3, 4 ]
+    assert_equal S[ 2, 0.5, 1.5 ], S[ 2, 3, 4 ] % 2.5
+    assert_equal S[ 0.5, 2.5, 2.5 ], 2.5 % S[ 2, 3, 4 ]
   end
 
   def test_pow
