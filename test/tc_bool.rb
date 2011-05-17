@@ -55,14 +55,6 @@ class TC_Bool < Test::Unit::TestCase
     assert_equal 0, B.dimension
   end
 
-  def test_bool_shape
-    assert_equal [], B.shape
-  end
-
-  def test_bool_size
-    assert_equal 1, B.size
-  end
-
   def test_inspect
     assert_equal 'BOOL(true)', B( true ).inspect
   end

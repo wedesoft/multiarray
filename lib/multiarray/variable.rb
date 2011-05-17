@@ -90,8 +90,12 @@ module Hornetseye
     # @return [Class] Type of result.
     #
     # @private
-    def array_type
-      @meta.array_type
+    def typecode
+      @meta.typecode
+    end
+
+    def shape
+      @meta.shape
     end
 
     # Strip of all values

@@ -46,13 +46,12 @@ module Hornetseye
         "INDEX(#{size.descriptor( hash )})"
       end
 
-      # Get type of result of delayed operation
-      #
-      # @return [Class] Type of result.
-      #
-      # @private
-      def array_type
+      def typecode
         INT
+      end
+
+      def shape
+        []
       end
 
       # Strip of all values

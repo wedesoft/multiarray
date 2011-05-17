@@ -22,30 +22,8 @@ module Hornetseye
 
     class << self
 
-      # Create new multi-dimensional array
-      #
-      # @param [Class] element_type The type of the elements.
-      # @param [Array<Integer>] *array_shape The shape of the multi-dimensional array.
-      #
-      # @return [Node] Returns uninitialised native array.
-      def new( element_type, *array_shape )
-        typecode = element_type.typecode
-        shape = element_type.shape + array_shape
-        options = shape.last.is_a?( Hash ) ? shape.pop : {}
-        count = options[ :count ] || 1
-        if shape.empty?
-          memory = options[ :memory ] ||
-                   typecode.memory_type.new( typecode.storage_size * count )
-          Hornetseye::Pointer( typecode ).new memory
-        else
-          size = shape.pop
-          stride = shape.inject( 1 ) { |a,b| a * b }
-          Hornetseye::lazy( size ) do |index|
-            pointer = new typecode, *( shape + [ :count => count * size,
-                                                 :memory => options[ :memory ] ] )
-            Lookup.new pointer, index, INT.new( stride )
-          end
-        end
+      def new(typecode, *shape)
+        Hornetseye::MultiArray(typecode, shape.size).new *shape
       end
 
       # Import array from string
@@ -53,19 +31,19 @@ module Hornetseye
       # Create an array from raw data provided as a string.
       #
       # @param [Class] typecode Type of the elements in the string.
-      # @param [String] string String with raw data.
+      # @param [String,Malloc] data String or memory object with raw data.
       # @param [Array<Integer>] shape Array with dimensions of array.
       #
       # @return [Node] Multi-dimensional array with imported data.
-      def import( typecode, string, *shape )
-        t = Hornetseye::MultiArray typecode, *shape
-        if string.is_a? Malloc
-          memory = string
+      def import( typecode, data, *shape )
+        t = Hornetseye::MultiArray typecode, shape.size
+        if data.is_a? Malloc
+          memory = data
         else
-          memory = Malloc.new t.storage_size
-          memory.write string
+          memory = Malloc.new t.storage_size(*shape)
+          memory.write data
         end
-        t.new memory
+        t.new *shape, :memory => memory
       end
 
       # Convert Ruby array to uniform multi-dimensional array
@@ -117,22 +95,5 @@ module Hornetseye
     end
 
   end
-
-  # Create multi-dimensional array type
-  #
-  # @param [Class] element_type Type of elements.
-  # @param [Array<Integer>] *shape Shape of array type.
-  #
-  # @return [Class] The array type.
-  def MultiArray( element_type, *shape )
-    if shape.empty?
-      element_type
-    else
-      Hornetseye::Sequence MultiArray( element_type, *shape[ 0 ... -1 ] ),
-                           shape.last
-    end
-  end
-
-  module_function :MultiArray
 
 end

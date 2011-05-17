@@ -63,69 +63,43 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_multiarray_inspect
-    assert_equal 'MultiArray(OBJECT,3,2)', M( O, 3, 2 ).inspect
-    assert_equal 'MultiArray(OBJECT,3,2)', S( S( O, 3 ), 2 ).inspect
+    assert_equal 'MultiArray(OBJECT,2)', M(O,2).inspect
+    assert_equal 'MultiArray(OBJECT,2)', S(S(O)).inspect
   end
 
   def test_multiarray_to_s
-    assert_equal 'MultiArray(OBJECT,3,2)', M( O, 3, 2 ).to_s
-    assert_equal 'MultiArray(OBJECT,3,2)', S( S( O, 3 ), 2 ).to_s
-  end
-
-  def test_multiarray_default
-    assert_equal [ [ nil ] * 3 ] * 2, M( O, 3, 2 ).default.to_a
-    assert_equal [ [ 0 ] * 3 ] * 2, M( I, 3, 2 ).default.to_a
-    assert_equal [ [ C( 0, 0, 0 ) ] * 3 ] * 2, M( C, 3, 2 ).default.to_a
+    assert_equal 'MultiArray(OBJECT,2)', M(O,2).to_s
+    assert_equal 'MultiArray(OBJECT,2)', S(S(O)).to_s
   end
 
   def test_multiarray_at
     assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
                  M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].to_a
     assert_equal [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
-                 M( O, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].to_a
+                 M(O, 2)[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].to_a
     assert_equal O, M[ [ :a ] ].typecode
     assert_equal B, M[ [ false ], [ true ] ].typecode
     assert_equal I, M[ [ -2 ** 31, 2 ** 31 - 1 ] ].typecode
   end
 
   def test_multiarray_indgen
-    assert_equal M( I, 3, 2 )[ [ 0, 1, 2 ], [ 3, 4, 5 ] ],
-                 M( I, 3, 2 ).indgen
-    assert_equal M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
-                 M( I, 3, 2 ).indgen( 1 )
-    assert_equal M( I, 3, 2 )[ [ 0, 2, 4 ], [ 6, 8, 10 ] ],
-                 M( I, 3, 2 ).indgen( 0, 2 )
-    assert_equal M( I, 3, 2 )[ [ 1, 3, 5 ], [ 7, 9, 11 ] ],
-                 M( I, 3, 2 ).indgen( 1, 2 )
-    assert_equal M( C, 2, 2 )[ [ C( 1, 2, 3 ), C( 2, 2, 2 ) ],
-                               [ C( 3, 2, 1 ), C( 4, 2, 0 ) ] ],
-                 M( C, 2, 2 ).indgen( C( 1, 2, 3 ), C( 1, 0, -1 ) )
-  end
-
-  def test_multiarray_typecode
-    assert_equal O, M( O, 3, 2 ).typecode
-    assert_equal I, M( I, 3, 2 ).typecode
-    assert_equal C, M( C, 3, 2 ).typecode
-  end
-
-  def test_multiarray_dimension
-    assert_equal 2, M( O, 3, 2 ).dimension
-  end
-
-  def test_multiarray_shape
-    assert_equal [ 3, 2 ], M( O, 3, 2 ).shape
-  end
-
-  def test_multiarray_size
-    assert_equal 6, M( O, 3, 2 ).size
-    assert_equal 6, M( I, 3, 2 ).size
-    assert_equal 6, M( C, 3, 2 ).size
+    assert_equal M(I, 2)[ [ 0, 1, 2 ], [ 3, 4, 5 ] ],
+                 M(I, 2).indgen(3, 2)
+    assert_equal M(I, 2)[ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
+                 M(I, 2).indgen(3, 2, 1)
+    assert_equal M(I, 2)[ [ 0, 2, 4 ], [ 6, 8, 10 ] ],
+                 M(I, 2).indgen(3, 2, 0, 2)
+    assert_equal M(I, 2)[ [ 1, 3, 5 ], [ 7, 9, 11 ] ],
+                 M(I, 2).indgen(3, 2, 1, 2)
+    assert_equal M(C, 2)[ [ C( 1, 2, 3 ), C( 2, 2, 2 ) ],
+                          [ C( 3, 2, 1 ), C( 4, 2, 0 ) ] ],
+                 M(C, 2).indgen(2, 2, C( 1, 2, 3 ), C( 1, 0, -1 ))
   end
 
   def test_inspect
-    assert_equal "MultiArray(OBJECT,3,2):\n[ [ :a, 2, 3 ],\n  [ 4, 5, 6 ] ]",
+    assert_equal "MultiArray(OBJECT,2):\n[ [ :a, 2, 3 ],\n  [ 4, 5, 6 ] ]",
                  M[ [ :a, 2, 3 ], [ 4, 5, 6 ] ].inspect
-    assert_equal "MultiArray(UBYTE,4,3,2):\n" +
+    assert_equal "MultiArray(UBYTE,3):\n" +
                  "[ [ [ 0, 1, 2, 3 ],\n" +
                  "    [ 4, 5, 6, 7 ],\n" +
                  "    [ 8, 9, 10, 11 ] ],\n" +
@@ -148,23 +122,23 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_typecode
-    assert_equal O, M( O, 3, 2 ).new.typecode
-    assert_equal I, M( I, 3, 2 ).new.typecode
-    assert_equal C, M( C, 3, 2 ).new.typecode
+    assert_equal O, M(O, 2).new(3, 2).typecode
+    assert_equal I, M(I, 2).new(3, 2).typecode
+    assert_equal C, M(C, 2).new(3, 2).typecode
   end
 
   def test_dimension
-    assert_equal 2, M( O, 3, 2 ).new.dimension
-    assert_equal 2, M( I, 3, 2 ).new.dimension
-    assert_equal 2, M( C, 3, 2 ).new.dimension
+    assert_equal 2, M(O, 2).new(3, 2).dimension
+    assert_equal 2, M(I, 2).new(3, 2).dimension
+    assert_equal 2, M(C, 2).new(3, 2).dimension
   end
 
   def test_shape
-    assert_equal [ 3, 2 ], M( O, 3, 2 ).new.shape
+    assert_equal [ 3, 2 ], M(O, 2).new(3, 2).shape
   end
 
   def test_size
-    assert_equal 6, M( O, 3, 2 ).new.size
+    assert_equal 6, M(O, 2).new(3, 2).size
   end
 
   def test_import
@@ -177,8 +151,8 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_at_assign
-    [ M( O, 3, 2 ), M( I, 3, 2 ) ].each do |t|
-      m = t.new
+    [ M(O, 2), M(I, 2) ].each do |t|
+      m = t.new 3, 2
       for j in 0 ... 2
         for i in 0 ... 3
           assert_equal j * 3 + i + 1, m[ j ][ i ] = j * 3 + i + 1
@@ -216,8 +190,8 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_slice
-    [ M( O, 5, 4 ), M( I, 5, 4 ) ].each do |t|
-      m = t.indgen[]
+    [ M(O, 2), M(I, 2) ].each do |t|
+      m = t.indgen(5, 4)[]
       assert_equal [ [ 5, 10 ], [ 6, 11 ], [ 7, 12 ], [ 8, 13 ], [ 9, 14 ] ],
                    m[ 1 .. 2 ].to_a
       assert_equal [ [ 6, 7, 8 ], [ 11, 12, 13 ] ],
@@ -305,27 +279,27 @@ class TC_MultiArray < Test::Unit::TestCase
     end
   end
 
-  def test_view
-    [ M( O, 3, 2 ), M( I, 3, 2 ) ].each do |t|
-      m = t[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
-      v = m[ 1, 0 ... 2 ]
+   def test_view
+    [ M(O, 2), M(I, 2) ].each do |t|
+      m = t[[1, 2, 3], [4, 5, 6]]
+      v = m[1, 0 ... 2]
       v[] = 0
-      assert_equal [ [ 1, 0, 3 ], [ 4, 0, 6 ] ], m.to_a
+      assert_equal [[1, 0, 3], [4, 0, 6]], m.to_a
     end
    end
 
    def test_transpose
     assert_equal [ [ 1, 4 ], [ 2, 5 ], [ 3, 6 ] ],
-                 M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].transpose( 1, 0 ).to_a
+                 M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].transpose(1, 0).to_a
     assert_equal [ [ [ 0, 3 ], [ 1, 4 ], [ 2, 5 ] ] ],
-                 M( I, 3, 2, 1 ).indgen.transpose( 1, 0, 2 ).to_a
-  end
+                 M(I, 3).indgen(3, 2, 1).transpose(1, 0, 2).to_a
+   end
 
   def test_roll_unroll
     assert_equal [ [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 3 ], [ 4 ], [ 5 ] ] ],
-                 M( I, 3, 2, 1 ).indgen.unroll.to_a
+                 M(I, 3).indgen(3, 2, 1).unroll.to_a
     assert_equal [ [ [ 0, 3 ] ], [ [ 1, 4 ] ], [ [ 2, 5 ] ] ],
-                 M( I, 3, 2, 1 ).indgen.roll.to_a
+                 M(I, 3).indgen(3, 2, 1).roll.to_a
   end
 
   def test_equal
@@ -361,8 +335,8 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_inject
-    assert_equal 21, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject { |a,b| a + b }
-    assert_equal 28, M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].inject( 7 ) { |a,b| a + b }
+    assert_equal 21, M[[1, 2, 3], [4, 5, 6]].inject { |a,b| a + b }
+    assert_equal 28, M[[1, 2, 3], [4, 5, 6]].inject(7) { |a,b| a + b }
   end
 
   def test_collect
@@ -415,12 +389,12 @@ class TC_MultiArray < Test::Unit::TestCase
                     [ 'b1', 'b2', 'b3' ],
                     [ 'c1', 'c2', 'c3' ],
                     [ 'd1', 'd2', 'd3' ] ].diagonal( 'x' ) { |a,b| a + b }
-    assert_equal S( I, 4 )[ 4, 12, 21, 18 ],
-                 M( I, 3, 4 ).indgen.diagonal { |a,b| a + b }
-    assert_equal S( I, 3 )[ 4, 12, 12 ],
-                 M( I, 3, 3 ).indgen.diagonal { |a,b| a + b }
-    assert_equal S( I, 2 )[ 4, 6 ],
-                 M( I, 3, 2 ).indgen.diagonal { |a,b| a + b }
+    assert_equal S(I)[ 4, 12, 21, 18 ],
+                 M(I, 2).indgen(3, 4).diagonal { |a,b| a + b }
+    assert_equal S(I)[ 4, 12, 12 ],
+                 M(I, 2).indgen(3, 3).diagonal { |a,b| a + b }
+    assert_equal S(I)[ 4, 6 ],
+                 M(I, 2).indgen(3, 2).diagonal { |a,b| a + b }
   end
 
   def test_convolve
@@ -506,41 +480,41 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_warp
-    [ O, I ].each do |t1|
-      [ O, I ].each do |t2|
+    [O, I].each do |t1|
+      [O, I].each do |t2|
         z = t1.default
-        assert_equal M( t1, 3, 3 )[ [ 1, 2, z ], [ 3, 4, z ], [ z, z, z ] ],
-                     M( t1, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].
-                     warp( M( t2, 3, 3 )[ [ 0, 1, 2 ], [ 0, 1, 2 ], [ 0, 1, 2 ] ],
-                           M( t2, 3, 3 )[ [ 0, 0, 0 ], [ 1, 1, 1 ], [ 2, 2, 2 ] ] )
+        assert_equal M(t1, 2)[ [ 1, 2, z ], [ 3, 4, z ], [ z, z, z ] ],
+                     M(t1, 2)[ [ 1, 2 ], [ 3, 4 ] ].
+                     warp( M(t2, 2)[ [ 0, 1, 2 ], [ 0, 1, 2 ], [ 0, 1, 2 ] ],
+                           M(t2, 2)[ [ 0, 0, 0 ], [ 1, 1, 1 ], [ 2, 2, 2 ] ] )
       end
     end
   end
 
   def test_flip
     [ O, I ].each do |t|
-      assert_equal M( t, 3, 2 )[ [ 3, 2, 1 ], [ 6, 5, 4 ] ],
-                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 0 )
-      assert_equal M( t, 3, 2 )[ [ 4, 5, 6 ], [ 1, 2, 3 ] ],
-                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 1 )
-      assert_equal M( t, 3, 2 )[ [ 6, 5, 4 ], [ 3, 2, 1 ] ],
-                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 0, 1 )
+      assert_equal M(t, 2)[ [ 3, 2, 1 ], [ 6, 5, 4 ] ],
+                   M(t, 2)[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 0 )
+      assert_equal M(t, 2)[ [ 4, 5, 6 ], [ 1, 2, 3 ] ],
+                   M(t, 2)[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 1 )
+      assert_equal M(t, 2)[ [ 6, 5, 4 ], [ 3, 2, 1 ] ],
+                   M(t, 2)[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].flip( 0, 1 )
     end
   end
 
   def test_shift
     [ O, I ].each do |t|
-      assert_equal M( t, 2, 2 )[ [ 4, 3 ], [ 2, 1 ] ],
-                   M( t, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].shift( 1, 1 )
+      assert_equal M(t, 2)[ [ 4, 3 ], [ 2, 1 ] ],
+                   M(t, 2)[ [ 1, 2 ], [ 3, 4 ] ].shift( 1, 1 )
     end
   end
 
   def test_downsample
     [ O, I ].each do |t|
-      assert_equal M( t, 1, 2 )[ [ 2 ], [ 6 ] ],
-                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 5, 6, 7 ] ].downsample( 2, 1 )
-      assert_equal M( t, 2, 2 )[ [ 1, 3 ], [ 5, 7 ] ],
-                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 5, 6, 7 ] ].
+      assert_equal M(t, 2)[ [ 2 ], [ 6 ] ],
+                   M(t, 2)[ [ 1, 2, 3 ], [ 5, 6, 7 ] ].downsample( 2, 1 )
+      assert_equal M(t, 2)[ [ 1, 3 ], [ 5, 7 ] ],
+                   M(t, 2)[ [ 1, 2, 3 ], [ 5, 6, 7 ] ].
                    downsample( 2, 1, :offset => [ 0, 0 ] )
     end
   end
@@ -702,33 +676,33 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_fill
-    m = M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
-    assert_equal M( I, 3, 2 )[ [ 1, 1, 1 ], [ 1, 1, 1 ] ], m.fill!( 1 )
-    assert_equal M( I, 3, 2 )[ [ 1, 1, 1 ], [ 1, 1, 1 ] ], m
+    m = M(I, 2)[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+    assert_equal M(I, 2)[ [ 1, 1, 1 ], [ 1, 1, 1 ] ], m.fill!( 1 )
+    assert_equal M(I, 2)[ [ 1, 1, 1 ], [ 1, 1, 1 ] ], m
   end
 
   def test_to_type
-    assert_equal M( C, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ],
-                 M( I, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].to_intrgb
+    assert_equal M(C, 2)[ [ 1, 2 ], [ 3, 4 ] ],
+                 M(I, 2)[ [ 1, 2 ], [ 3, 4 ] ].to_intrgb
   end
 
   def test_reshape
-    [ O, I ].each do |t|
-      assert_equal M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
-                   S( t, 6 )[ 1, 2, 3, 4, 5, 6 ].reshape( 3, 2 )
-      assert_equal S( t, 6 )[ 1, 2, 3, 4, 5, 6 ],
-                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].reshape( 6 )
-      assert_equal M( t, 2, 3 )[ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ] ],
-                   M( t, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].reshape( 2, 3 )
-      assert_raise( RuntimeError ) { M( t, 2, 2 )[ [ 1, 2 ], [ 3, 4 ] ].reshape 3 }
+    [O, I].each do |t|
+      assert_equal M(t, 2)[[1, 2, 3], [4, 5, 6]],
+                   S(t)[1, 2, 3, 4, 5, 6].reshape(3, 2)
+      assert_equal S(t)[1, 2, 3, 4, 5, 6],
+                   M(t, 2)[[1, 2, 3], [4, 5, 6]].reshape(6)
+      assert_equal M(t, 2)[[1, 2], [3, 4], [5, 6]],
+                   M(t, 2)[[1, 2, 3], [4, 5, 6]].reshape(2, 3)
+      assert_raise( RuntimeError ) { M(t, 2)[[1, 2], [3, 4]].reshape 3 }
     end
   end
 
   def test_integral
-    assert_equal M( O, 3, 2 )[ [ 1, 3, 6 ], [ 5, 12, 21 ] ],
-                 M( O, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].integral
-    assert_equal M( I, 3, 2 )[ [ 1, 3, 6 ], [ 5, 12, 21 ] ],
-                 M( I, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].integral
+    assert_equal M(O, 2)[[1, 3, 6], [5, 12, 21]],
+                 M(O, 2)[[1, 2, 3], [4, 5, 6]].integral
+    assert_equal M(I, 2)[[1, 3, 6], [5, 12, 21]],
+                 M(I, 2)[[1, 2, 3], [4, 5, 6]].integral
   end
 
   def test_components
@@ -737,28 +711,28 @@ class TC_MultiArray < Test::Unit::TestCase
   end
 
   def test_mask
-    [ O, I ].each do |t|
-      assert_equal M( O, 2, 2 )[ [ 1, 2 ], [ 5, 7 ] ],
-                   M( O, 2, 3 )[ [ 1, 2 ], [ 3, 4 ], [ 5, 7 ] ].
-                   mask( S[ true, false, true ] )
-      assert_equal S( O, 3 )[ 2, 5, 7 ], M( O, 3, 2 )[ [ 1, 2, 3 ], [ 4, 5, 7 ] ].
-                   mask( M[ [ false, true, false ], [ false, true, true ] ] )
+    [O, I].each do |t|
+      assert_equal M(t, 2)[[1, 2], [5, 7]],
+                   M(t, 2)[[1, 2], [3, 4], [5, 7]].
+                   mask(S[true, false, true])
+      assert_equal S(t)[2, 5, 7], M(t, 2)[[1, 2, 3], [4, 5, 7]].
+                   mask( M[[false, true, false], [false, true, true]])
       assert_raise( RuntimeError ) do
-        M( O, 2, 3 )[ [ 1, 2 ], [ 3, 4 ], [ 5, 7 ] ].mask S[ false, true ]
+        M(t, 2)[[1, 2], [3, 4], [5, 7]].mask S[false, true]
       end
     end
   end
 
   def test_unmask
     [ O, I ].each do |t|
-      assert_equal M( t, 2, 3 )[ [ 1, 2 ], [ 4, 4 ], [ 5, 7 ] ],
-                   M( t, 2, 2 )[ [ 1, 2 ], [ 5, 7 ] ].
-                   unmask( S[ true, false, true ], :default => S[ 3, 4, 5 ] )
-      assert_equal M( t, 3, 2 )[ [ 0, 2, 0 ], [ 0, 5, 7 ] ],
-                   S( t, 3 )[ 2, 5, 7 ].
-                   unmask( M[ [ false, true, false ], [ false, true, true ] ],
+      assert_equal M(t, 2)[[1, 2], [4, 4], [5, 7]],
+                   M(t, 2)[[1, 2], [5, 7]].
+                   unmask( S[true, false, true], :default => S[3, 4, 5] )
+      assert_equal M(t, 2)[[0, 2, 0], [0, 5, 7]],
+                   S(t)[2, 5, 7].
+                   unmask( M[[false, true, false], [false, true, true]],
                            :default => 0 )
-      assert_raise( RuntimeError ) { S( t, 1 )[ 1 ].unmask M[ [ true, true ] ] }
+      assert_raise( RuntimeError ) { S(t)[1].unmask M[[true, true]] }
     end
   end
 

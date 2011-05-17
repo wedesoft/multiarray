@@ -56,21 +56,14 @@ module Hornetseye
         "#{@table.descriptor( hash )})"
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      source_type = @sources.collect { |source| source.array_type }.
-        inject { |a,b| a.coercion b }
-      shape = @table.shape.first( @table.dimension - @sources.size ) +
-        source_type.shape
-      retval = Hornetseye::MultiArray @table.typecode, *shape
-      ( class << self; self; end ).instance_eval do
-        define_method( :array_type ) { retval }
-      end
-      retval
+    def typecode
+      @table.typecode
+    end
+
+    def shape
+      source_shape = @sources.collect { |source| source.shape }.
+        inject { |a,b| a.size > b.size ? a : b }
+      @table.shape.first(@table.dimension - @sources.size) + source_shape
     end
 
     # Reevaluate computation

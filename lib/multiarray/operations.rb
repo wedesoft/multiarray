@@ -28,15 +28,15 @@ module Hornetseye
     # @return [Proc] The new method.
     #
     # @private
-    def define_unary_op( op, conversion = :identity )
-      define_method( op ) do
+    def define_unary_op(op, conversion = :identity)
+      define_method(op) do
         if dimension == 0 and variables.empty?
           target = typecode.send conversion
-          target.new simplify.get.send( op )
+          target.new simplify.get.send(op)
         else
-          Hornetseye::ElementWise( lambda { |x| x.send op }, op,
-                                   lambda { |t| t.send conversion } ).
-            new( self ).force
+          Hornetseye::ElementWise(lambda { |x| x.send op }, op,
+                                  lambda { |t| t.send conversion }).
+            new(self).force
         end
       end
     end
@@ -51,19 +51,17 @@ module Hornetseye
     # @return [Proc] The new method.
     #
     # @private
-    def define_binary_op( op, coercion = :coercion )
-      define_method( op ) do |other|
-        unless other.is_a? Node
-          other = Node.match( other, typecode ).new other
-        end
+    def define_binary_op(op, coercion = :coercion)
+      define_method(op) do |other|
+        other = Node.match(other, typecode).new other unless other.is_a? Node
         if dimension == 0 and variables.empty? and
             other.dimension == 0 and other.variables.empty?
-          target = array_type.send coercion, other.array_type
-          target.new simplify.get.send( op, other.simplify.get )
+          target = typecode.send coercion, other.typecode
+          target.new simplify.get.send(op, other.simplify.get)
         else
-          Hornetseye::ElementWise( lambda { |x,y| x.send op, y }, op,
-                                   lambda { |t,u| t.send coercion, u } ).
-            new( self, other ).force
+          Hornetseye::ElementWise(lambda { |x,y| x.send op, y }, op,
+                                  lambda { |t,u| t.send coercion, u } ).
+            new(self, other).force
         end
       end
     end
@@ -197,13 +195,12 @@ module Hornetseye
     # @param [Array<Integer>] ret_shape Desired shape of return value
     #
     # @return [Node] Array with desired shape.
-    def reshape( *ret_shape )
-      target = Hornetseye::MultiArray( typecode, *ret_shape )
-      if target.size != size
-        raise "#{target.size} is of size #{target.size} but should be of size " +
-          "#{size}"
+    def reshape(*ret_shape)
+      target_size = ret_shape.inject { |a,b| a * b }
+      if target_size != size
+        raise "Target is of size #{target_size} but should be of size #{size}"
       end
-      target.new memorise.memory
+      Hornetseye::MultiArray(typecode, ret_shape.size).new *(ret_shape + [:memory => memorise.memory])
     end
 
     # Element-wise conditional selection of values
@@ -214,22 +211,21 @@ module Hornetseye
     # @return [Node] Array with selected values.
     def conditional( a, b )
       unless a.is_a? Node
-        a = Node.match( a, b.is_a?( Node ) ? b : nil ).new a
+        a = Node.match(a, b.is_a?(Node) ? b : nil).new a
       end
       unless b.is_a? Node
-        b = Node.match( b, a.is_a?( Node ) ? a : nil ).new b
+        b = Node.match(b, a.is_a?(Node) ? a : nil).new b
       end
       if dimension == 0 and variables.empty? and
         a.dimension == 0 and a.variables.empty? and
         b.dimension == 0 and b.variables.empty?
-        target = array_type.cond a.array_type, b.array_type
-        #target.new simplify.get.conditional( a.simplify.get, b.simplify.get )
-        target.new simplify.get.conditional( proc { a.simplify.get },
-                                             proc { b.simplify.get } )
+        target = typecode.cond a.typecode, b.typecode
+        target.new simplify.get.conditional(proc { a.simplify.get },
+                                            proc { b.simplify.get })
       else
-        Hornetseye::ElementWise( lambda { |x,y,z| x.conditional y, z }, :conditional,
-                                 lambda { |t,u,v| t.cond u, v } ).
-          new( self, a, b ).force
+        Hornetseye::ElementWise(lambda { |x,y,z| x.conditional y, z }, :conditional,
+                                lambda { |t,u,v| t.cond u, v }).
+          new(self, a, b).force
       end
     end
 
@@ -329,7 +325,7 @@ module Hornetseye
     def collect( &action )
       var = Variable.new typecode
       block = action.call var
-      conversion = lambda { |t| t.to_type action.call( Variable.new( t.typecode ) ) }
+      conversion = lambda { |t| t.to_type action.call(Variable.new(t.typecode)).typecode }
       Hornetseye::ElementWise( action, block.to_s, conversion ).new( self ).force
     end
 
@@ -391,7 +387,7 @@ module Hornetseye
     def eq_with_multiarray( other )
       if other.is_a? Node
         if variables.empty?
-          if other.array_type == array_type
+          if other.typecode == typecode and other.shape == shape
             Hornetseye::finalise { eq( other ).inject( true ) { |a,b| a.and b } }
           else
             false
@@ -606,8 +602,8 @@ module Hornetseye
     # @return [Node] Result of Sobel operator.
     def sobel( direction )
       ( dimension - 1 ).downto( 0 ).inject self do |retval,i|
-        filter = i == direction ? Hornetseye::Sequence( SINT, 3 )[ 1, 0, -1 ] :
-                                  Hornetseye::Sequence( SINT, 3 )[ 1, 2, 1 ]
+        filter = i == direction ? Hornetseye::Sequence(SINT)[1, 0, -1] :
+                                  Hornetseye::Sequence(SINT)[1, 2,  1]
         Hornetseye::lazy { retval.convolve filter }
       end.force
     end
@@ -718,7 +714,7 @@ module Hornetseye
     #
     # @return [Node] The integral image of this array.
     def integral
-      left = pointer_type.new
+      left = allocate
       block = Integral.new left, self
       if block.compilable?
         GCCFunction.run block
@@ -742,7 +738,7 @@ module Hornetseye
       target = options[ :target ]
       default = options[ :default ]
       default = typecode.new default unless default.is_a? Node
-      left = Hornetseye::MultiArray( target, *shape ).new
+      left = Hornetseye::MultiArray(target, dimension).new *shape
       labels = Sequence.new target, size; labels[0] = 0
       rank = Sequence.uint size; rank[0] = 0
       n = Hornetseye::Pointer( INT ).new; n.store INT.new( 0 )
@@ -797,10 +793,10 @@ module Hornetseye
             "dimension of the array for unmasking only has #{shape.last} value(s)"
         end
       end
-      left = Hornetseye::MultiArray( array_type.element_type, *m.shape ).
-             coercion( default.array_type ).new
-      index = Hornetseye::Pointer( INT ).new
-      index.store INT.new( 0 )
+      left = Hornetseye::MultiArray(typecode, dimension - 1 + m.dimension).
+        coercion(default.typecode).new *(shape[1 .. -1] + m.shape)
+      index = Hornetseye::Pointer(INT).new
+      index.store INT.new(0)
       block = Unmask.new left, self, m, index, default
       if block.compilable?
         GCCFunction.run block
@@ -836,7 +832,7 @@ module Hornetseye
         raise "#{offset.size} offset(s) were given but array has " +
               "#{dimension} dimension(s)"
       end
-      retval = array_type.new
+      retval = Hornetseye::MultiArray(typecode, dimension).new *shape
       target, source, open, close = [], [], [], []
       ( shape.size - 1 ).step( 0, -1 ) do |i|
         callcc do |pass|
@@ -939,9 +935,8 @@ class Array
         raise "Number of arrays for histogram (#{size}) differs from number of " +
               "dimensions of histogram (#{ret_shape.size})"
       end
-      array_types = collect { |source| source.array_type }
-      source_type = array_types.inject { |a,b| a.coercion b }
-      source_type.check_shape *array_types
+      source_type = inject { |a,b| a.dimension > b.dimension ? a : b }
+      source_type.check_shape *self
       source_type.check_shape options[ :weight ]
       for i in 0 ... size
         range = self[ i ].range 0 ... ret_shape[ i ]
@@ -955,7 +950,7 @@ class Array
         end
       end
     end
-    left = Hornetseye::MultiArray.new weight.typecode, *ret_shape
+    left = Hornetseye::MultiArray(weight.typecode, ret_shape.size).new *ret_shape
     left[] = 0
     block = Hornetseye::Histogram.new left, weight, *self
     if block.compilable?
@@ -980,9 +975,8 @@ class Array
         raise "Number of arrays for lookup (#{size}) is greater than the " +
               "number of dimensions of LUT (#{table.dimension})"
       end
-      array_types = collect { |source| source.array_type }
-      source_type = array_types.inject { |a,b| a.coercion b }
-      source_type.check_shape *array_types
+      source_type = inject { |a,b| a.dimension > b.dimension ? a : b }
+      source_type.check_shape *self
       for i in 0 ... size
         offset = table.dimension - size
         range = self[ i ].range 0 ... table.shape[ i + offset ]

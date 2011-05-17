@@ -77,7 +77,7 @@ module Hornetseye
       #
       # @private
       def coercion( other )
-        if other < Sequence_
+        if other < Field_
           other.coercion self
         else
           self

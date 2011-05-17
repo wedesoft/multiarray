@@ -73,14 +73,6 @@ class TC_Float < Test::Unit::TestCase
   def test_float_dimension
     assert_equal 0, F.dimension
   end
-!
-  def test_float_shape
-    assert_equal [], F.shape
-  end
-
-  def test_float_size
-    assert_equal 1, F.size
-  end
 
   def test_inspect
     assert_equal 'DFLOAT(42.0)', D( 42.0 ).inspect

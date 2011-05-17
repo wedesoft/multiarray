@@ -40,13 +40,12 @@ module Hornetseye
       "Random(#{@dest.descriptor( hash )},#{@n.descriptor( hash )})"
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      @dest.array_type
+    def typecode
+      @dest.typecode
+    end
+
+    def shape
+      @dest.shape
     end
 
     # Reevaluate computation

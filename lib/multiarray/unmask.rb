@@ -58,13 +58,12 @@ module Hornetseye
         "#{@default.descriptor( hash )})"
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      @dest.array_type
+    def typecode
+      @dest.typecode
+    end
+
+    def shape
+      @dest.shape
     end
 
     # Perform masking operation

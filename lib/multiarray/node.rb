@@ -84,20 +84,8 @@ module Hornetseye
         [ self ]
       end
 
-      # Get type of result of delayed operation
-      #
-      # @return [Class] Type of result.
-      #
-      # @private
-      def array_type
-        self
-      end
-
-      # Convert to pointer type
-      #
-      # @return [Class] Corresponding pointer type.
-      def pointer_type
-        Hornetseye::Pointer( self )
+      def shape
+        []
       end
 
       # Generate index array of this type
@@ -108,41 +96,6 @@ module Hornetseye
       # @return [Object] Returns +offset+.
       def indgen( offset = 0, increment = 1 )
         offset
-      end
-
-      # Get shape of this term
-      #
-      # @return [Array<Integer>] Returns +[]+.
-      def shape
-        []
-      end
-
-      # Get width of two-dimensional array
-      #
-      # @return [Integer] Width of array.
-      def width
-        shape[0]
-      end
-
-      # Get height of two-dimensional array
-      #
-      # @return [Integer] Height of array.
-      def height
-        shape[1]
-      end
-
-      # Get size (number of elements) of this value
-      #
-      # @return [Integer] Returns +1+.
-      def size
-        1
-      end
-
-      # Check whether the type is an empty array
-      #
-      # @return [Boolean] Returns whether this type represents an empty array.
-      def empty?
-        size == 0
       end
 
       # Get dimension of this term
@@ -252,9 +205,8 @@ module Hornetseye
       # @param [Class] a The third type.
       #
       # @return [Class] Returns type based on bytes.
-      def cond( a, b )
-        t = a.coercion b
-        Hornetseye::MultiArray( t.typecode, *shape ).coercion t
+      def cond(a, b)
+        a.coercion b
       end
 
       # Convert to different element type
@@ -308,31 +260,6 @@ module Hornetseye
         hash[ self ] || self
       end
 
-      # Check arguments for compatible shape
-      #
-      # The method will throw an exception if one of the arguments has an incompatible
-      # shape.
-      #
-      # @param [Array<Class>] args Arguments to check for compatibility.
-      #
-      # @return [Object] The return value should be ignored.
-      def check_shape( *args )
-        _shape = shape
-        args.each do |arg|
-          _arg_shape = arg.shape
-          if _shape.size < _arg_shape.size
-            raise "#{arg.inspect} has #{arg.dimension} dimension(s) " +
-                  "but should not have more than #{dimension}"
-          end
-          if ( _shape + _arg_shape ).all? { |s| s.is_a? Integer }
-            if _shape.last( _arg_shape.size ) != _arg_shape
-              raise "#{arg.inspect} has shape #{arg.shape.inspect} " +
-                    "(does not match last value(s) of #{shape.inspect})"
-            end
-          end
-        end
-      end
-
       # Check whether this term is compilable
       #
       # @return [Boolean] Returns +true+.
@@ -353,62 +280,43 @@ module Hornetseye
 
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      self.class.array_type
-    end
-
-    # Convert to pointer type
-    #
-    # @return [Class] Corresponding pointer type.
-    def pointer_type
-      array_type.pointer_type
+    def allocate
+      Hornetseye::MultiArray(typecode, dimension).new *shape
     end
 
     # Element-type of this term
     #
     # @return [Class] Element-type of this datatype.
     def typecode
-      array_type.typecode
+      self.class.typecode
     end
 
     # Base-type of this term
     #
     # @return [Class] Base-type of this datatype.
     def basetype
-      array_type.basetype
-    end
-
-    # Get shape of this term
-    #
-    # @return [Array<Integer>] Returns +array_type.shape+.
-    def shape
-      array_type.shape
+      self.class.basetype
     end
 
     # Get width of two-dimensional array
     #
     # @return [Integer] Width of array.
     def width
-      array_type.width
+      shape[0]
     end
 
     # Get height of two-dimensional array
     #
     # @return [Integer] Height of array.
     def height
-      array_type.height
+      shape[1]
     end
 
     # Get size (number of elements) of this value
     #
     # @return [Integer] Returns +array_type.size+.
     def size
-      array_type.size
+      shape.inject(1) { |a,b| a * b }
     end
 
     # Get memory size of object
@@ -423,8 +331,8 @@ module Hornetseye
     # @return [Node] Duplicate of array or +self+.
     def memorise
       if memory
-        contiguous_strides = ( 0 ... dimension ).collect do |i|
-          shape[ 0 ... i ].inject( 1 ) { |a,b| a * b }
+        contiguous_strides = (0 ... dimension).collect do |i|
+          shape[0 ... i].inject(1) { |a,b| a * b }
         end
         if strides == contiguous_strides
           self
@@ -465,14 +373,21 @@ module Hornetseye
     #
     # @return [Boolean] Returns whether this object is an empty array.
     def empty?
-      array_type.empty?
+      size == 0
+    end
+
+    # Get shape of this term
+    #
+    # @return [Array<Integer>] Returns +[]+.
+    def shape
+      self.class.shape
     end
 
     # Get dimension of this term
     #
     # @return [Array<Integer>] Returns +array_type.dimension+.
     def dimension
-      array_type.dimension
+      shape.size
     end
 
     # Check whether this object is an RGB value
@@ -512,12 +427,12 @@ module Hornetseye
     def inspect( indent = nil, lines = nil )
       if variables.empty?
         if dimension == 0 and not indent
-          "#{array_type.inspect}(#{force.inspect})" # !!!
+          "#{typecode.inspect}(#{force.inspect})"
         else
           if indent
             prepend = ''
           else
-            prepend = "#{array_type.inspect}:\n"
+            prepend = "#{Hornetseye::MultiArray(typecode, dimension).inspect}:\n"
             indent = 0
             lines = 0
           end
@@ -525,7 +440,7 @@ module Hornetseye
             retval = '[]'
           else
             retval = '[ '
-            for i in 0 ... array_type.num_elements
+            for i in 0 ... shape.last
               x = element i
               if x.dimension > 0
                 if i > 0
@@ -546,7 +461,7 @@ module Hornetseye
                 end
               else
                 retval += ', ' if i > 0
-                str = x.force.inspect # !!!
+                str = x.force.inspect
                 if retval.size + str.size >= 74 - '...'.size -
                     '[  ]'.size * indent.succ
                   retval += '...'
@@ -593,7 +508,7 @@ module Hornetseye
     #
     # @return [Node] Duplicate of +self+.
     def dup
-      retval = array_type.new
+      retval = Hornetseye::MultiArray(typecode, dimension).new *shape
       retval[] = self
       retval
     end
@@ -652,13 +567,25 @@ module Hornetseye
     # The method will throw an exception if one of the arguments has an incompatible
     # shape.
     #
-    # @param [Array<Node>] args Arguments to check for compatibility.
+    # @param [Array<Class>] args Arguments to check for compatibility.
     #
     # @return [Object] The return value should be ignored.
-    def check_shape( *args )
-      array_type.check_shape *args.collect { |arg| arg.array_type }
+    def check_shape(*args)
+      _shape = shape
+      args.each do |arg|
+        _arg_shape = arg.shape
+        if _shape.size < _arg_shape.size
+          raise "#{arg.inspect} has #{arg.dimension} dimension(s) " +
+                "but should not have more than #{dimension}"
+        end
+        if ( _shape + _arg_shape ).all? { |s| s.is_a? Integer }
+          if _shape.last( _arg_shape.size ) != _arg_shape
+            raise "#{arg.inspect} has shape #{arg.shape.inspect} " +
+                  "(does not match last value(s) of #{shape.inspect})"
+          end
+        end
+      end
     end
-
 
     # Assign value to array element(s)
     # 
@@ -732,14 +659,16 @@ module Hornetseye
     def force
       if finalised?
         get
-      elsif ( dimension > 0 and Thread.current[ :lazy ] ) or not variables.empty?
+      elsif (dimension > 0 and Thread.current[:lazy]) or not variables.empty?
         self
       elsif compilable?
-        retval = pointer_type.new
-        GCCFunction.run Store.new( retval, self )
+        retval = allocate
+        GCCFunction.run Store.new(retval, self)
         retval.demand.get
       else
-        Store.new( array_type.new, self ).demand.get
+        retval = allocate
+        Store.new(retval, self).demand
+        retval.demand.get
       end
     end
 

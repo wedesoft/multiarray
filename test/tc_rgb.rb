@@ -88,22 +88,6 @@ class TC_RGB < Test::Unit::TestCase
     assert_equal RGB( 1, 2, 3 ), INTRGB.indgen( RGB( 1, 2, 3 ), 1 )
   end
 
-  def test_rgb_typecode
-    assert_equal BYTERGB, BYTERGB.typecode
-  end
-
-  def test_rgb_dimension
-    assert_equal 0, SFLOATRGB.dimension
-  end
-
-  def test_rgb_shape
-    assert_equal [], SFLOATRGB.shape
-  end
-
-  def test_rgb_size
-    assert_equal 1, SINTRGB.size
-  end
-
   def test_inspect
     assert_equal 'RGB(1,2,3)', RGB( 1, 2, 3 ).inspect
   end

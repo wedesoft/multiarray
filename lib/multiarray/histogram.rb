@@ -57,17 +57,12 @@ module Hornetseye
         "#{@sources.collect { |source| source.descriptor( hash ) }.join ','})"
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      retval = @dest.array_type
-      ( class << self; self; end ).instance_eval do
-        define_method( :array_type ) { retval }
-      end
-      retval
+    def typecode
+      @dest.typecode
+    end
+
+    def shape
+      @dest.shape
     end
 
     # Reevaluate computation
@@ -80,19 +75,18 @@ module Hornetseye
     def demand
       if variables.empty?
         if @sources.any? { |source| source.dimension > 0 }
-          source_type = @sources.
-            collect { |source| source.array_type }.inject { |a,b| a.coercion b }
+          source_type = @sources.inject { |a,b| a.dimension > b.dimension ? a : b }
           source_type.shape.last.times do |i|
             sources = @sources.collect do |source|
-              source.dimension > 0 ? source.element( INT.new( i ) ) : source
+              source.dimension > 0 ? source.element(INT.new(i)) : source
             end
-            weight = @weight.dimension > 0 ? @weight.element( INT.new( i ) ) : @weight
-            Histogram.new( @dest, weight, *sources ).demand
+            weight = @weight.dimension > 0 ? @weight.element(INT.new(i)) : @weight
+            Histogram.new(@dest, weight, *sources).demand
           end
         else
           dest = @dest
-          ( @dest.dimension - 1 ).downto( 0 ) do |i|
-            dest = dest.element @sources[ i ].demand
+          (@dest.dimension - 1).downto(0) do |i|
+            dest = dest.element @sources[i].demand
           end
           dest.store dest + @weight
         end

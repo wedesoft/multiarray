@@ -53,22 +53,6 @@ class TC_Object < Test::Unit::TestCase
     assert_equal 1, O.indgen( 1, 2 )
   end
 
-  def test_object_typecode
-    assert_equal O, O.typecode
-  end
-
-  def test_object_dimension
-    assert_equal 0, O.dimension
-  end
-
-  def test_object_shape
-    assert_equal [], O.shape
-  end
-
-  def test_object_size
-    assert_equal 1, O.size
-  end
-
   def test_inspect
     assert_equal 'OBJECT(42)', O( 42 ).inspect
   end

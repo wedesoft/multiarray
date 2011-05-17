@@ -86,18 +86,14 @@ module Hornetseye
         "(#{@values.collect { |value| value.descriptor( hash ) }.join ','})"
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      array_types = @values.collect { |value| value.array_type }
-      retval = self.class.conversion.call *array_types
-      ( class << self; self; end ).instance_eval do
-        define_method( :array_type ) { retval }
-      end
-      retval
+    def typecode
+      typecodes = @values.collect { |value| value.typecode }
+      self.class.conversion.call *typecodes
+    end
+
+    def shape
+      shapes = @values.collect { |value| value.shape }
+      shapes.inject { |a,b| a.size > b.size ? a : b }
     end
 
     # Reevaluate computation
@@ -208,7 +204,7 @@ module Hornetseye
     #
     # @private
     def compilable?
-      array_type.compilable? and @values.all? { |value| value.compilable? }
+      typecode.compilable? and @values.all? { |value| value.compilable? }
     end
 
   end

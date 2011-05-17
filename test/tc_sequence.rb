@@ -55,47 +55,41 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sequence_inspect
-    assert_equal 'Sequence(OBJECT,3)', S( O, 3 ).inspect
+    assert_equal 'Sequence(OBJECT)', S(O).inspect
   end
   
   def test_sequence_to_s
-    assert_equal 'Sequence(OBJECT,3)', S( O, 3 ).to_s
-  end
-
-  def test_sequence_default
-    assert_equal [ nil ] * 3, S( O, 3 ).default.to_a
-    assert_equal [ 0 ] * 3, S( I, 3 ).default.to_a
-    assert_equal [ C( 0, 0, 0 ) ] * 3, S( C, 3 ).default.to_a
+    assert_equal 'Sequence(OBJECT)', S(O).to_s
   end
 
   def test_sequence_indgen
-    assert_equal S( I, 3 )[ 0, 1, 2 ], S( I, 3 ).indgen
-    assert_equal S( I, 3 )[ 1, 2, 3 ], S( I, 3 ).indgen( 1 )
-    assert_equal S( I, 3 )[ 0, 2, 4 ], S( I, 3 ).indgen( 0, 2 )
-    assert_equal S( I, 3 )[ 1, 3, 5 ], S( I, 3 ).indgen( 1, 2 )
-    assert_equal S( C, 2 )[ C( 1, 2, 3 ), C( 3, 5, 7 ) ],
-                 S( C, 2 ).indgen( C( 1, 2, 3 ), C( 2, 3, 4 ) )
+    assert_equal S(I)[0, 1, 2], S(I).indgen(3)
+    assert_equal S(I)[1, 2, 3], S(I).indgen(3, 1)
+    assert_equal S(I)[0, 2, 4], S(I).indgen(3, 0, 2)
+    assert_equal S(I)[1, 3, 5], S(I).indgen(3, 1, 2)
+    assert_equal S(C)[C( 1, 2, 3 ), C( 3, 5, 7 )],
+                 S(C).indgen(2, C(1, 2, 3), C(2, 3, 4))
   end
 
   def test_sequence_random
-    r = S( O, 100 ).random( 10 ).range
+    r = S(O).random(100, 10).range
     assert r.begin >= 0
     assert r.end < 10
-    r = S( I, 100 ).random( 10 ).range
+    r = S(I).random(100, 10).range
     assert r.begin >= 0
     assert r.end < 10
-    r = S( F, 100 ).random( 10.0 ).range
+    r = S(F).random(100, 10.0).range
     assert r.begin >= 0
     assert r.end < 10
   end
 
   def test_sequence_at
-    assert_equal "Sequence(INT,3):\n[ 1, 2, 3 ]",
-                 S( I, 3 )[ 1, 2, 3 ].inspect
-    assert_equal "Sequence(OBJECT,3):\n[ 1, 2, 3 ]",
-                 S( O, 3 )[ 1, 2, 3 ].inspect
-    assert_equal "Sequence(INTRGB,2):\n[ RGB(1,2,3), RGB(4,5,6) ]",
-                 S( C, 2 )[ C( 1, 2, 3 ), C( 4, 5, 6 ) ].inspect
+    assert_equal "Sequence(INT):\n[ 1, 2, 3 ]",
+                 S(I)[ 1, 2, 3 ].inspect
+    assert_equal "Sequence(OBJECT):\n[ 1, 2, 3 ]",
+                 S(O)[ 1, 2, 3 ].inspect
+    assert_equal "Sequence(INTRGB):\n[ RGB(1,2,3), RGB(4,5,6) ]",
+                 S(C)[ C( 1, 2, 3 ), C( 4, 5, 6 ) ].inspect
   end
 
   def test_sequence_match
@@ -108,29 +102,20 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sequence_typecode
-    assert_equal O, S( O, 3 ).typecode
-    assert_equal B, S( B, 3 ).typecode
-    assert_equal I, S( I, 3 ).typecode
-    assert_equal C, S( C, 3 ).typecode
-    assert_equal X, S( X, 3 ).typecode
+    assert_equal O, S(O).typecode
+    assert_equal B, S(B).typecode
+    assert_equal I, S(I).typecode
+    assert_equal C, S(C).typecode
+    assert_equal X, S(X).typecode
   end
 
   def test_sequence_dimension
-    assert_equal 1, S( O, 3 ).dimension
-  end
-
-  def test_sequence_shape
-    assert_equal [ 3 ], S( O, 3 ).shape
-  end
-
-  def test_sequence_size
-    assert_equal 3, S( O, 3 ).size
-    assert_equal 3, S( C, 3 ).size
+    assert_equal 1, S(O).dimension
   end
 
   def test_inspect
-    assert_equal "Sequence(OBJECT,0):\n[]", S[].inspect
-    assert_equal "Sequence(OBJECT,3):\n[ :a, 2, 3 ]", S[ :a, 2, 3 ].inspect
+    assert_equal "Sequence(OBJECT):\n[]", S[].inspect
+    assert_equal "Sequence(OBJECT):\n[ :a, 2, 3 ]", S[ :a, 2, 3 ].inspect
   end
 
   def test_dup
@@ -141,8 +126,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_typecode
-    assert_equal O, S.object( 3 ).typecode
-    assert_equal I, S.int( 3 ).typecode
+    assert_equal O, S.object(3).typecode
+    assert_equal I, S.int(3).typecode
   end
 
   def test_dimension
@@ -168,8 +153,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_at_assign
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
-      s = t.new
+    [ S(O), S(I) ].each do |t|
+      s = t.new 3
       for i in 0 ... 3
         assert_equal i + 1, s[ i ] = i + 1
       end
@@ -185,8 +170,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_slice
-    [ S( O, 4 ), S( I, 4 ) ].each do |t|
-      s = t.indgen( 1 )[]
+    [ S(O), S(I) ].each do |t|
+      s = t.indgen(4, 1)[]
       assert_equal [ 2, 3 ], s[ 1 .. 2 ].to_a
       assert_equal [ 2, 3 ], s[ 1 ... 3 ].to_a
       s[ 1 .. 2 ] = 0
@@ -214,7 +199,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_view
-    [ S( O, 4 ), S( I, 4 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       s = t[ 1, 2, 3, 4 ]
       v = s[ 1 .. 2 ]
       v[] = 0
@@ -233,7 +218,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_r_g_b
-    [ S( O, 3 ), S( C, 3 ) ].each do |t|
+    [ S(O), S(C) ].each do |t|
       assert_equal [ 1, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].r.to_a
       assert_equal [ 2, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].g.to_a
       assert_equal [ 3, 4, 5 ], t[ C( 1, 2, 3 ), 4, 5 ].b.to_a
@@ -244,7 +229,7 @@ class TC_Sequence < Test::Unit::TestCase
       s = t[ 0, 0, 0 ]
       assert_equal 1, s.r = 1
       assert_equal S[ 1, 2, 3 ], s.g = S[ 1, 2, 3 ]
-      assert_equal S( O, 3 )[ 4, 5, 6 ], s.b = S( O, 3 )[ 4, 5, 6 ]
+      assert_equal S(O)[ 4, 5, 6 ], s.b = S(O)[ 4, 5, 6 ]
       assert_equal t[ C( 1, 1, 4 ), C( 1, 2, 5 ), C( 1, 3, 6 ) ], s
       assert_raise( RuntimeError ) { s.r = S[ 1, 2 ] }
       assert_raise( RuntimeError ) { s.g = S[ 1, 2 ] }
@@ -257,7 +242,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_real_imag
-    [ S( O, 2 ), S( X, 2 ) ].each do |t|
+    [ S(O), S(X) ].each do |t|
       assert_equal [ 1, 3 ], t[ X( 1, 2 ), 3 ].real.to_a
       assert_equal [ 2, 0 ], t[ X( 1, 2 ), 3 ].imag.to_a
       assert_equal [ 1, 3 ], t[ X( 1, 2 ), 3 ].collect { |x| x.real }.to_a
@@ -289,7 +274,7 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal C( 7, 8, 9 ), S[ 1, 2, 3 ].inject( C( 1, 2, 3 ) ) { |a,b| a + b }
     assert_equal C( 4, 6, 9 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].
                                inject( 1 ) { |a,b| a + b }
-    assert_equal X( -5, 10 ), S( X, 2 )[ X( 1, 2 ), X( 3, 4 ) ].inject { |a,b| a * b }
+    assert_equal X( -5, 10 ), S(X)[ X( 1, 2 ), X( 3, 4 ) ].inject { |a,b| a * b }
     assert_raise( RuntimeError ) { S[].inject { |a,b| a + b } }
     assert_equal 0, S[].inject( 0 ) { |a,b| a + b }
   end
@@ -307,7 +292,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sum
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal 6, t[ 1, 2, 3 ].sum
       assert_equal 6, sum { |i| t[ 1, 2, 3 ][ i ] }
       assert_equal [ 1, 2, 3 ], sum { || t[ 1, 2, 3 ] }.to_a
@@ -321,17 +306,17 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_min
-    [ O, I ].each do |t|
-      assert_equal 2, S( t, 3 )[ 4, 2, 3 ].min
+    [O, I].each do |t|
+      assert_equal 2, S(t)[4, 2, 3].min
     end
-    assert_equal C( 1, 2, 1 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].min
+    assert_equal C(1, 2, 1), S[C(1, 2, 3), C(3, 2, 1)].min
   end
 
   def test_max
-    [ O, I ].each do |t|
-      assert_equal 4, S( t, 3 )[ 4, 2, 3 ].max
+    [O, I].each do |t|
+      assert_equal 4, S(t)[4, 2, 3].max
     end
-    assert_equal C( 3, 2, 3 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].max
+    assert_equal C(3, 2, 3), S[C(1, 2, 3), C(3, 2, 1)].max
   end
 
   def test_between
@@ -349,26 +334,26 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sum
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal 9, t[ 4, 2, 3 ].sum
     end
     assert_equal C( 4, 4, 4 ), S[ C( 1, 2, 3 ), C( 3, 2, 1 ) ].sum
   end
 
   def test_convolve
-    [ O, I ].each do |t|
-      assert_equal S( t, 5 )[ 2, 3, 0, 0, 0 ],
-                   S( t, 5 )[ 1, 0, 0, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
-      assert_equal S( t, 5 )[ 1, 2, 3, 0, 0 ],
-                   S( t, 5 )[ 0, 1, 0, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
-      assert_equal S( t, 5 )[ 0, 1, 2, 3, 0 ],
-                   S( t, 5 )[ 0, 0, 1, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
-      assert_equal S( t, 5 )[ 0, 0, 1, 2, 3 ],
-                   S( t, 5 )[ 0, 0, 0, 1, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
-      assert_equal S( t, 5 )[ 0, 0, 0, 1, 2 ],
-                   S( t, 5 )[ 0, 0, 0, 0, 1 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
-      assert_equal S( t, 4 )[ 1, 2, 3, 0 ],
-                   S( t, 4 )[ 0, 1, 0, 0 ].convolve( S( t, 3 )[ 1, 2, 3 ] )
+    [O, I].each do |t|
+      assert_equal S(t)[2, 3, 0, 0, 0],
+                   S(t)[1, 0, 0, 0, 0].convolve( S(t)[ 1, 2, 3 ] )
+      assert_equal S(t)[1, 2, 3, 0, 0],
+                   S(t)[0, 1, 0, 0, 0].convolve( S(t)[ 1, 2, 3 ] )
+      assert_equal S(t)[0, 1, 2, 3, 0],
+                   S(t)[0, 0, 1, 0, 0].convolve( S(t)[ 1, 2, 3 ] )
+      assert_equal S(t)[0, 0, 1, 2, 3],
+                   S(t)[0, 0, 0, 1, 0].convolve( S(t)[ 1, 2, 3 ] )
+      assert_equal S(t)[0, 0, 0, 1, 2],
+                   S(t)[0, 0, 0, 0, 1].convolve( S(t)[ 1, 2, 3 ] )
+      assert_equal S(t)[1, 2, 3, 0],
+                   S(t)[0, 1, 0, 0].convolve( S(t)[ 1, 2, 3 ] )
     end
     assert_equal S[ C( 1, 0, 0 ), C( 2, 1, 0 ), C( 3, 2, 1 ), C( 0, 3, 2 ),
                     C( 0, 0, 3 ) ],
@@ -377,19 +362,19 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_erode
-    [ O, I ].each do |t|
-      assert_equal [ 1, 1, 1, 2, 2, 2 ], S( t, 6 )[ 1, 1, 2, 3, 2, 2 ].erode.to_a
+    [O, I].each do |t|
+      assert_equal [1, 1, 1, 2, 2, 2], S(t)[1, 1, 2, 3, 2, 2].erode.to_a
     end
-    assert_equal S[ false, false, true, false, false ],
-                 S[ false, true, true, true, false ].erode
+    assert_equal S[false, false, true, false, false],
+                 S[false, true, true, true, false].erode
   end
 
   def test_dilate
-    [ O, I ].each do |t|
-      assert_equal [ 1, 2, 3, 3, 3, 2 ], S( t, 6 )[ 1, 1, 2, 3, 2, 2 ].dilate.to_a
+    [O, I].each do |t|
+      assert_equal [1, 2, 3, 3, 3, 2], S(t)[1, 1, 2, 3, 2, 2].dilate.to_a
     end
-    assert_equal S[ false, true, true, true, false ],
-                 S[ false, false, true, false, false ].dilate
+    assert_equal S[false, true, true, true, false],
+                 S[false, false, true, false, false].dilate
   end
 
   def test_sobel
@@ -397,76 +382,75 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_histogram
-    [ O, I ].each do |t|
-      assert_equal [ 0, 1, 2, 1, 1 ],
-                   S( t, 5 )[ 1, 2, 2, 3, 4 ].histogram( 5, :weight => 1 ).to_a
-      assert_equal S( t, 5 )[ 0, 1, 2, 3, 0 ],
-                   S( t, 3 )[ 1, 3, 2 ].histogram( 5, :weight => S( t, 3 )[ 1, 3, 2 ] )
-      assert_equal [ 0, 1, 1, 0 ],
-                   S( t, 2 )[ 1.0, 2.0 ].histogram( 4, :weight => 1 ).to_a
+    [O, I].each do |t|
+      assert_equal [0, 1, 2, 1, 1],
+                   S(t)[1, 2, 2, 3, 4].histogram(5, :weight => 1).to_a
+      assert_equal S(t)[0, 1, 2, 3, 0],
+                   S(t)[1, 3, 2 ].histogram(5, :weight => S(t)[1, 3, 2] )
+      assert_equal [0, 1, 1, 0],
+                   S(t)[1.0, 2.0].histogram(4, :weight => 1).to_a
     end
-    assert_raise( RuntimeError ) { S[ -1, 0, 1 ].histogram 3 }
-    assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 3 }
-    assert_raise( RuntimeError ) { S[ 0, 0, 0 ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { S[ 0, 1 ].histogram 3, :weight => S[ 0 ] }
+    assert_raise(RuntimeError) { S[-1, 0, 1].histogram 3 }
+    assert_raise(RuntimeError) { S[1, 2, 3].histogram 3 }
+    assert_raise(RuntimeError) { S[0, 0, 0].histogram 3, 2 }
+    assert_raise(RuntimeError) { S[0, 1].histogram 3, :weight => S[0] }
   end
 
   def test_lut
-    [ O, I ].each do |t|
-      assert_equal S( t, 4 )[ 3, 1, 2, 1 ],
-                   S( t, 4 )[ 0, 2, 1, 2 ].lut( S( t, 3 )[ 3, 2, 1 ] )
-      assert_equal S( t, 2 )[ 2, 1 ],
-                   S( t, 2 )[ 1.0, 2.0 ].lut( S( t, 3 )[ 3, 2, 1 ] )
+    [O, I].each do |t|
+      assert_equal S(t)[3, 1, 2, 1],
+                   S(t)[0, 2, 1, 2].lut(S(t)[3, 2, 1])
+      assert_equal S(t)[2, 1],
+                   S(t)[1.0, 2.0].lut(S(t)[3, 2, 1])
     end
-    assert_raise( RuntimeError ) { S[ -1, 0 ].lut S[ 0, 1 ] }
-    assert_raise( RuntimeError ) { S[ 1, 2 ].lut S[ 0, 1 ] }
+    assert_raise( RuntimeError ) { S[-1, 0].lut S[0, 1] }
+    assert_raise( RuntimeError ) { S[1, 2].lut S[0, 1] }
   end
 
   def test_warp
     [ O, I ].each do |t1|
       [ O, I ].each do |t2|
-        assert_equal S( t1, 3 )[ 1, 2, t1.default ],
-                     S( t1, 2 )[ 1, 2 ].warp( S( t2, 3 )[ 0, 1, 2 ] )
+        assert_equal S(t1)[1, 2, t1.default], S(t1)[1, 2].warp(S(t2)[0, 1, 2])
       end
     end
   end
 
   def test_flip
     [ O, I ].each do |t|
-      assert_equal S( t, 3 )[ 3, 2, 1 ], S( t, 3 )[ 1, 2, 3 ].flip( 0 )
+      assert_equal S(t)[3, 2, 1], S(t)[1, 2, 3].flip( 0 )
     end
   end
 
   def test_shift
     [ O, I ].each do |t|
-      assert_equal S( t, 3 )[ 1, 2, 3 ], S( t, 3 )[ 1, 2, 3 ].shift( 0 )
-      assert_equal S( t, 3 )[ 3, 1, 2 ], S( t, 3 )[ 1, 2, 3 ].shift( 1 )
-      assert_equal S( t, 3 )[ 2, 3, 1 ], S( t, 3 )[ 1, 2, 3 ].shift( 2 )
+      assert_equal S(t)[1, 2, 3], S(t)[1, 2, 3].shift(0)
+      assert_equal S(t)[3, 1, 2], S(t)[1, 2, 3].shift(1)
+      assert_equal S(t)[2, 3, 1], S(t)[1, 2, 3].shift(2)
     end
   end
 
   def test_downsample
     [ O, I ].each do |t|
-      assert_equal S( t, 2 )[ 2, 4 ],
-                   S( t, 4 )[ 1, 2, 3, 4 ].downsample( 2 )
-      assert_equal S( t, 2 )[ 1, 3 ],
-                   S( t, 4 )[ 1, 2, 3, 4 ].downsample( 2, :offset => [ 0 ] )
+      assert_equal S(t)[2, 4],
+                   S(t)[1, 2, 3, 4].downsample(2)
+      assert_equal S(t)[1, 3],
+                   S(t)[1, 2, 3, 4].downsample(2, :offset => [0])
     end
   end
 
   def test_zero
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
-      assert_equal [ false, true, false ], t[ -1, 0, 1 ].zero?.to_a
+    [S(O), S(I)].each do |t|
+      assert_equal [false, true, false], t[-1, 0, 1].zero?.to_a
     end
-    assert_equal S[ false, false, false, true ],
-                 S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].zero?
-    assert_equal S[ true, false, false ],
-                 S[ X( 0, 0 ), X( 1, 0 ), X( 0, 1 ) ].zero?
+    assert_equal S[false, false, false, true],
+                 S[C(1, 0, 0 ), C(0, 1, 0), C(0, 0, 1), C(0, 0, 0)].zero?
+    assert_equal S[true, false, false],
+                 S[X(0, 0), X(1, 0), X(0, 1)].zero?
   end
 
   def test_nonzero
-    assert_equal S[ true, false, true ], S( I, 3 )[ -1, 0, 1 ].nonzero?
-    assert_equal S[ -1, nil, 1 ], S( O, 3 )[ -1, 0, 1 ].nonzero?
+    assert_equal S[ true, false, true ], S(I)[ -1, 0, 1 ].nonzero?
+    assert_equal S[ -1, nil, 1 ], S(O)[ -1, 0, 1 ].nonzero?
     assert_equal S[ true, true, true, false ],
                  S[ C( 1, 0, 0 ), C( 0, 1, 0 ), C( 0, 0, 1 ), C( 0, 0, 0 ) ].nonzero?
     assert_equal S[ false, true, true ],
@@ -474,8 +458,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_not
-    assert_equal [ true, false ], S( O, 2 )[ false, true ].not.to_a
-    assert_equal [ true, false ], S( B, 2 )[ false, true ].not.to_a
+    assert_equal [ true, false ], S(O)[ false, true ].not.to_a
+    assert_equal [ true, false ], S(B)[ false, true ].not.to_a
     assert_equal [ true, false, false ], S[ 0, 1, 2 ].not.to_a
   end
 
@@ -498,48 +482,48 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_bitwise_not
-    [ S( O, 4 ), S( I, 4 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal [ 0, -1, -2, -3 ], ( ~t[ -1, 0, 1, 2 ] ).to_a
     end
     assert_equal [ C( -2, -3, -4 ), C( -5, -6, -7 ) ],
-                 ( ~S( C, 2 )[ C( 1, 2, 3 ), C( 4, 5, 6 ) ] ).to_a
+                 ( ~S(C)[ C( 1, 2, 3 ), C( 4, 5, 6 ) ] ).to_a
   end
 
   def test_bitwise_and
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal [ 0, 1, 0 ], ( t[ 0, 1, 2 ] & 1 ).to_a
       assert_equal [ 0, 1, 0 ], ( 1 & t[ 0, 1, 2 ] ).to_a
       assert_equal [ 0, 1, 2 ], ( t[ 0, 1, 3 ] & t[ 4, 3, 2 ] ).to_a
     end
-    assert_equal [ C( 0, 2, 2 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] & 2 ).to_a
-    assert_equal [ C( 1, 0, 1 ) ], ( 1 & S( C, 1 )[ C( 1, 2, 3 ) ] ).to_a
-    assert_equal [ C( 1, 2, 1 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] & C( 3, 2, 1 ) ).to_a
+    assert_equal [ C( 0, 2, 2 ) ], ( S(C)[ C( 1, 2, 3 ) ] & 2 ).to_a
+    assert_equal [ C( 1, 0, 1 ) ], ( 1 & S(C)[ C( 1, 2, 3 ) ] ).to_a
+    assert_equal [ C( 1, 2, 1 ) ], ( S(C)[ C( 1, 2, 3 ) ] & C( 3, 2, 1 ) ).to_a
   end
 
   def test_bitwise_or
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal [ 1, 1, 3 ], ( t[ 0, 1, 2 ] | 1 ).to_a
       assert_equal [ 1, 1, 3 ], ( 1 | t[ 0, 1, 2 ] ).to_a
       assert_equal [ 4, 3, 3 ], ( t[ 0, 1, 2 ] | t[ 4, 3, 1 ] ).to_a
     end
-    assert_equal [ C( 3, 2, 3 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] | 2 ).to_a
-    assert_equal [ C( 1, 3, 3 ) ], ( 1 | S( C, 1 )[ C( 1, 2, 3 ) ] ).to_a
-    assert_equal [ C( 3, 2, 3 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] | C( 3, 2, 1 ) ).to_a
+    assert_equal [ C( 3, 2, 3 ) ], ( S(C)[ C( 1, 2, 3 ) ] | 2 ).to_a
+    assert_equal [ C( 1, 3, 3 ) ], ( 1 | S(C)[ C( 1, 2, 3 ) ] ).to_a
+    assert_equal [ C( 3, 2, 3 ) ], ( S(C)[ C( 1, 2, 3 ) ] | C( 3, 2, 1 ) ).to_a
   end
 
   def test_bitwise_xor
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal [ 1, 0, 3 ], ( t[ 0, 1, 2 ] ^ 1 ).to_a
       assert_equal [ 1, 0, 3 ], ( 1 ^ t[ 0, 1, 2 ] ).to_a
       assert_equal [ 4, 2, 3 ], ( t[ 0, 1, 2 ] ^ t[ 4, 3, 1 ] ).to_a
     end
-    assert_equal [ C( 3, 0, 1 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] ^ 2 ).to_a
-    assert_equal [ C( 0, 3, 2 ) ], ( 1 ^ S( C, 1 )[ C( 1, 2, 3 ) ] ).to_a
-    assert_equal [ C( 2, 0, 2 ) ], ( S( C, 1 )[ C( 1, 2, 3 ) ] ^ C( 3, 2, 1 ) ).to_a
+    assert_equal [ C( 3, 0, 1 ) ], ( S(C)[ C( 1, 2, 3 ) ] ^ 2 ).to_a
+    assert_equal [ C( 0, 3, 2 ) ], ( 1 ^ S(C)[ C( 1, 2, 3 ) ] ).to_a
+    assert_equal [ C( 2, 0, 2 ) ], ( S(C)[ C( 1, 2, 3 ) ] ^ C( 3, 2, 1 ) ).to_a
   end
 
   def test_shl
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal [ 2, 4, 6 ], ( t[ 1, 2, 3 ] << 1 ).to_a
       assert_equal [ 6, 12, 24 ], ( 3 << t[ 1, 2, 3 ] ).to_a
       assert_equal [ 8, 8, 6 ], ( t[ 1, 2, 3 ] << t[ 3, 2, 1 ] ).to_a
@@ -547,7 +531,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_shr
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal [ 1, 2, 3 ], ( t[ 2, 4, 6 ] >> 1 ).to_a
       assert_equal [ 12, 6, 3 ], ( 24 >> t[ 1, 2, 3 ] ).to_a
       assert_equal [ 2, 1, 3 ], ( t[ 16, 4, 6 ] >> t[ 3, 2, 1 ] ).to_a
@@ -555,11 +539,11 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_negate
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       assert_equal t[ -1, 2, -3 ], -t[ 1, -2, 3 ]
     end
-    assert_equal S( C, 2 )[ C( -1, -2, -3 ), C( -2, -1, 0 ) ],
-                 -S( C, 2 )[ C( 1, 2, 3 ), C( 2, 1, 0 ) ]
+    assert_equal S(C)[ C( -1, -2, -3 ), C( -2, -1, 0 ) ],
+                 -S(C)[ C( 1, 2, 3 ), C( 2, 1, 0 ) ]
   end
 
   def test_plus
@@ -588,8 +572,8 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_conj
-    assert_equal S( O, 2 )[ 1.5, 2.5 ], S( O, 2 )[ 1.5, 2.5 ].conj
-    assert_equal S( F, 2 )[ 1.5, 2.5 ], S( F, 2 )[ 1.5, 2.5 ].conj
+    assert_equal S(O)[ 1.5, 2.5 ], S(O)[ 1.5, 2.5 ].conj
+    assert_equal S(F)[ 1.5, 2.5 ], S(F)[ 1.5, 2.5 ].conj
     assert_equal S[ X( 1.5, -2.5 ) ], S[ X( 1.5, 2.5 ) ].conj
   end
 
@@ -629,9 +613,9 @@ class TC_Sequence < Test::Unit::TestCase
   def test_pow
     assert_equal [ 1, 4, 9 ], ( S[ 1, 2, 3 ] ** 2 ).to_a
     assert_equal [ C( 2, 4, 8 ) ], ( 2 ** S[ C( 1, 2, 3 ) ] ).to_a
-    assert_in_delta 0.0, ( ( S( X, 1 )[ X( 1, 2 ) ] ** 2 )[ 0 ] - X( -3, 4 ) ).abs,
+    assert_in_delta 0.0, ( ( S(X)[ X( 1, 2 ) ] ** 2 )[ 0 ] - X( -3, 4 ) ).abs,
                     1.0e-5
-    assert_in_delta 0.0, ( Math::E ** S( X, 1 )[ X( 0, Math::PI ) ][ 0 ] + 1 ).abs,
+    assert_in_delta 0.0, ( Math::E ** S(X)[ X( 0, Math::PI ) ][ 0 ] + 1 ).abs,
                     1.0e-5
   end
 
@@ -713,7 +697,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_sqrt
-    assert_equal S( O, 3 )[ 1, 2, 3 ], Math.sqrt( S( O, 3 )[ 1, 4, 9 ] )
+    assert_equal S(O)[ 1, 2, 3 ], Math.sqrt( S(O)[ 1, 4, 9 ] )
     assert_equal S[ 1.0, 2.0, 3.0 ], Math.sqrt( S[ 1.0, 4.0, 9.0 ] )
     [ Math.sqrt( X( 1, 2 ) ), Math.sqrt( X( 2, -1 ) ) ].
       zip( Math.sqrt( S[ X( 1, 2 ), X( 2, -1 ) ] ).to_a ).each do |x,y|
@@ -915,7 +899,7 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_fill
-    [ S( O, 3 ), S( I, 3 ) ].each do |t|
+    [ S(O), S(I) ].each do |t|
       s = t[ 1, 2, 3 ]
       assert_equal t[ 1, 1, 1 ], s.fill!( 1 )
       assert_equal t[ 1, 1, 1 ], s
@@ -923,22 +907,22 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_to_type
-    assert_equal S( O, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_object
-    assert_equal S( I, 3 )[ 1, 2, 3 ], S( O, 3 )[ 1, 2, 3 ].to_int
-    assert_equal S( C, 3 )[ 1, 2, 3 ], S( I, 3 )[ 1, 2, 3 ].to_intrgb
+    assert_equal S(O)[ 1, 2, 3 ], S(I)[ 1, 2, 3 ].to_object
+    assert_equal S(I)[ 1, 2, 3 ], S(O)[ 1, 2, 3 ].to_int
+    assert_equal S(C)[ 1, 2, 3 ], S(I)[ 1, 2, 3 ].to_intrgb
   end
 
   def test_reshape
     [ O, I ].each do |t|
-      assert_equal S( t, 3 )[ 1, 2, 3 ], S( t, 3 )[ 1, 2, 3 ].reshape( 3 )
-      assert_raise( RuntimeError ) { S( t, 3 )[ 1, 2, 3 ].reshape 2 }
-      assert_raise( RuntimeError ) { S( t, 3 )[ 1, 2, 3 ].reshape 4 }
+      assert_equal S(t)[ 1, 2, 3 ], S(t)[ 1, 2, 3 ].reshape(3)
+      assert_raise( RuntimeError ) { S(t)[ 1, 2, 3 ].reshape 2 }
+      assert_raise( RuntimeError ) { S(t)[ 1, 2, 3 ].reshape 4 }
     end
   end
 
   def test_integral
-    assert_equal S( O, 3 )[ 1, 3, 6 ], S( O, 3 )[ 1, 2, 3 ].integral
-    assert_equal S( I, 3 )[ 1, 3, 6 ], S( I, 3 )[ 1, 2, 3 ].integral
+    assert_equal S(O)[ 1, 3, 6 ], S(O)[ 1, 2, 3 ].integral
+    assert_equal S(I)[ 1, 3, 6 ], S(I)[ 1, 2, 3 ].integral
   end
 
   def test_components
@@ -947,24 +931,22 @@ class TC_Sequence < Test::Unit::TestCase
   end
 
   def test_mask
-    assert_equal S( O, 2 )[ 2, 5 ], S( O, 3 )[ 2, 3, 5 ].
-                 mask( S[ true, false, true ] )
-    assert_equal S( I, 2 )[ 2, 5 ], S( I, 3 )[ 2, 3, 5 ].
-                 mask( S[ true, false, true ] )
-    assert_raise( RuntimeError ) { S[ 1, 2 ].mask S[ true ] }
+    assert_equal S(O)[2, 5], S(O)[2, 3, 5].mask( S[true, false, true])
+    assert_equal S(I)[2, 5], S(I)[2, 3, 5].mask( S[true, false, true])
+    assert_raise( RuntimeError ) { S[1, 2].mask S[ true ] }
   end
 
   def test_unmask
-    [ O, I ].each do |t|
-      assert_equal S( t, 3 )[ 2, 3, 5 ],
-                   S( t, 2 )[ 2, 5 ].unmask( S[ true, false, true ], :default => 3 )
-      assert_equal S( t, 3 )[ 2, 3, 5 ],
-                   S( t, 2 )[ 2, 5 ].unmask( S[ true, false, true ],
-                                             :default => S[ 2, 3, 4 ] )
-      assert_raise( RuntimeError ) do
-        S( t, 1 )[ 1 ].unmask S[ true ], :default => S[ 1, 2 ]
+    [O, I].each do |t|
+      assert_equal S(t)[2, 3, 5],
+                   S(t)[2, 5].unmask( S[true, false, true], :default => 3)
+      assert_equal S(t)[2, 3, 5],
+                   S(t)[2, 5].unmask( S[true, false, true],
+                                      :default => S[2, 3, 4] )
+      assert_raise(RuntimeError) do
+        S(t)[1].unmask S[true], :default => S[1, 2]
       end
-      assert_raise( RuntimeError ) { S( t, 1 )[ 1 ].unmask S[ true, true ] }
+      assert_raise(RuntimeError) { S(t)[1].unmask S[true, true] }
     end
   end
 

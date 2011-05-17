@@ -61,15 +61,12 @@ module Hornetseye
         "#{@n.descriptor( hash )})"
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    def array_type
-      retval = @dest.array_type
-      ( class << self; self; end ).instance_eval do
-        define_method( :array_type ) { retval }
-      end
-      retval
+    def typecode
+      @dest.typecode
+    end
+
+    def shape
+      @dest.shape
     end
 
     # Reevaluate computation

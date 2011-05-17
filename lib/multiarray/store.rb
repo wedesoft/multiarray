@@ -40,13 +40,12 @@ module Hornetseye
       "Store(#{@dest.descriptor( hash )},#{@source.descriptor( hash )})"
     end
 
-    # Get type of result of delayed operation
-    #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      @dest.array_type
+    def typecode
+      @dest.typecode
+    end
+
+    def shape
+      @dest.shape
     end
 
     # Reevaluate computation
@@ -60,10 +59,10 @@ module Hornetseye
       if variables.empty?
         if dimension > 0
           shape.last.times do |i|
-            dest = @dest.element INT.new( i )
+            dest = @dest.element INT.new(i)
             source = @source.dimension == 0 ? @source :
-                                              @source.element( INT.new( i ) )
-            Store.new( dest, source ).demand
+                                              @source.element(INT.new(i))
+            Store.new(dest, source).demand
           end  
         elsif @dest.class < Pointer_
           @dest.store @source.demand

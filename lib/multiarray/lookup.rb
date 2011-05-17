@@ -36,6 +36,13 @@ module Hornetseye
       @p.memory
     end
 
+    # Get shape of this term
+    #
+    # @return [Array<Integer>] Returns shape of array.
+    def shape
+      @p.shape
+    end
+    
     # Get strides of array
     #
     # @return [Array<Integer>,NilClass] Array strides of this type.
@@ -66,17 +73,11 @@ module Hornetseye
         "#{@stride.descriptor( hash )})"
     end
 
-    # Get type of result of delayed operation
+    # Element-type of this term
     #
-    # @return [Class] Type of result.
-    #
-    # @private
-    def array_type
-      retval = @p.array_type
-      ( class << self; self; end ).instance_eval do
-        define_method( :array_type ) { retval }
-      end
-      retval
+    # @return [Class] Element-type of this datatype.
+    def typecode
+      @p.typecode
     end
 
     # Substitute variables

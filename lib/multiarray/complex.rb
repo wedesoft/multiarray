@@ -747,11 +747,7 @@ module Hornetseye
       #         "SCOMPLEX").
       def inspect
         unless element_type.nil?
-          retval = IDENTIFIER[ element_type ] || "COMPLEX(#{element_type.inspect})"
-          ( class << self; self; end ).instance_eval do
-            define_method( :inspect ) { retval }
-          end
-          retval
+          IDENTIFIER[ element_type ] || "COMPLEX(#{element_type.inspect})"
         else
           super
         end
@@ -1034,7 +1030,7 @@ module Hornetseye
           real + value * Complex::I
         end
       else
-        raise "Cannot assign imaginary values to object of type #{array_type.inspect}"
+        raise "Cannot assign imaginary values to elements of type #{typecode.inspect}"
       end
     end
 

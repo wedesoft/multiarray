@@ -115,12 +115,12 @@ class TC_Lazy < Test::Unit::TestCase
 
   def test_indgen_diagonal
     assert_equal [ 15, 18, 17 ],
-                 M( I, 4, 3 ).indgen.diagonal { |a,b| a + b }.to_a
+                 M(I, 2).indgen(4, 3).diagonal { |a,b| a + b }.to_a
   end
 
   def test_lut
-    assert_equal S( I, 4 )[ 4, 2, 3, 2 ],
-                 finalise { S( I, 4 )[ 0, 2, 1, 2 ].lut( S( I, 3 )[ 3, 2, 1 ] ) + 1 }
+    assert_equal S( I )[ 4, 2, 3, 2 ],
+                 finalise { S( I )[ 0, 2, 1, 2 ].lut( S( I )[ 3, 2, 1 ] ) + 1 }
   end
 
 end

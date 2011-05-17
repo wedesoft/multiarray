@@ -26,7 +26,7 @@ module Hornetseye
     # @param [Node] term The term based on that variable.
     #
     # @return [Lambda] Lambda object.
-    def initialize( index, term )
+    def initialize(index, term)
       @index = index
       @term = term
     end
@@ -69,17 +69,18 @@ module Hornetseye
       "Lambda(#{@index.descriptor( hash )},#{@term.descriptor( hash )})"
     end
 
-    # Get type of result of delayed operation
+    # Element-type of this term
     #
-    # @return [Class] Type of result.
+    # @return [Class] Element-type of this datatype.
+    def typecode
+      @term.typecode
+    end
+
+    # Get shape of this term
     #
-    # @private
-    def array_type
-      retval = Hornetseye::Sequence @term.array_type, @index.size.get
-      ( class << self; self; end ).instance_eval do
-        define_method( :array_type ) { retval }
-      end
-      retval
+    # @return [Array<Integer>] Returns shape of array.
+    def shape
+      @term.shape + [@index.size.get]
     end
 
     # Get variables contained in this term

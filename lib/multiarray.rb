@@ -609,7 +609,13 @@ class Array
     # 
     # @return [Array] An array with the filter elements.
     def gauss_blur_filter( sigma, max_error = 1.0 / 0x100 )
-      def erf( x, sigma )
+      # Error function
+      #
+      # @param [Float] x Function argument
+      # @param [Float] sigma Function parameter
+      #
+      # @private
+      def erf(x, sigma)
         0.5 * Math.erf( x / ( Math.sqrt( 2.0 ) * sigma.abs ) )
       end
       raise 'Sigma must be greater than zero.' if sigma <= 0
@@ -639,7 +645,13 @@ class Array
     # 
     # @return [Array] An array with the filter elements.
     def gauss_gradient_filter( sigma, max_error = 1.0 / 0x100 )
-      def gauss( x, sigma )
+      # Gaussian function
+      #
+      # @param [Float] x Function argument
+      # @param [Float] sigma Function parameter
+      #
+      # @private
+      def gauss(x, sigma)
         1.0 / ( Math.sqrt( 2.0 * Math::PI ) * sigma.abs ) *
           Math.exp( -x**2 / ( 2.0 * sigma**2 ) )
       end
@@ -715,6 +727,7 @@ require 'multiarray/operations'
 require 'multiarray/methods'
 require 'multiarray/rgb'
 require 'multiarray/complex'
+require 'multiarray/field'
 require 'multiarray/sequence'
 require 'multiarray/multiarray'
 require 'multiarray/shortcuts'

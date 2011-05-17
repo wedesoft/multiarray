@@ -551,7 +551,7 @@ module Hornetseye
           value * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
         end
       else
-        raise "Cannot assign red channel to object of type #{array_type.inspect}"
+        raise "Cannot assign red channel to elements of type #{typecode.inspect}"
       end
     end
 
@@ -583,7 +583,7 @@ module Hornetseye
           r * RGB.new( 1, 0, 0 ) + value * RGB.new( 0, 1, 0 ) + b * RGB.new( 0, 0, 1 )
         end
       else
-        raise "Cannot assign green channel to object of type #{array_type.inspect}"
+        raise "Cannot assign green channel to elements of type #{typecode.inspect}"
       end
     end
 
@@ -615,7 +615,7 @@ module Hornetseye
           r * RGB.new( 1, 0, 0 ) + g * RGB.new( 0, 1, 0 ) + value * RGB.new( 0, 0, 1 )
         end
       else
-        raise "Cannot assign blue channel to object of type #{array_type.inspect}"
+        raise "Cannot assign blue channel to elements of type #{typecode.inspect}"
       end
     end
 

@@ -112,11 +112,7 @@ module Hornetseye
       #
       # @return [String] Returns a string (e.g. "SFLOAT").
       def inspect
-        retval = "#{ double ? 'D' : 'S' }FLOAT"
-        ( class << self; self; end ).instance_eval do
-          define_method( :inspect ) { retval }
-        end
-        retval
+        "#{ double ? 'D' : 'S' }FLOAT"
       end
 
       # Get unique descriptor of this class
