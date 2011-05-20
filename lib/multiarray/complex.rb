@@ -14,6 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+class Complex
+
+  def decompose(i)
+    [@real, @image][i]
+  end
+
+end
+
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
@@ -323,8 +331,8 @@ module Hornetseye
     # @return [Numeric,GCCValue] Returns the requested component.
     #
     # @private
-    def decompose( i )
-      [ @real, @imag ][ i ]
+    def decompose(i)
+      [@real, @imag][i]
     end
 
   end

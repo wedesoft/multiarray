@@ -37,6 +37,14 @@ class TC_Lazy < Test::Unit::TestCase
     Hornetseye::MultiArray *args
   end
 
+  def C( *args )
+    Hornetseye::RGB *args
+  end
+
+  def X( *args )
+    Complex *args
+  end
+
   def lazy( *args, &action )
     Hornetseye::lazy *args, &action
   end
@@ -121,6 +129,17 @@ class TC_Lazy < Test::Unit::TestCase
   def test_lut
     assert_equal S( I )[ 4, 2, 3, 2 ],
                  finalise { S( I )[ 0, 2, 1, 2 ].lut( S( I )[ 3, 2, 1 ] ) + 1 }
+  end
+
+  def test_complex
+    assert_equal [1, 1], lazy(2) { X 1, 2 }.real.to_a
+    assert_equal [2, 2], lazy(2) { X 1, 2 }.imag.to_a
+  end
+
+  def test_rgb
+    assert_equal [1, 1], lazy(2) { C 1, 2, 3 }.r.to_a
+    assert_equal [2, 2], lazy(2) { C 1, 2, 3 }.g.to_a
+    assert_equal [3, 3], lazy(2) { C 1, 2, 3 }.b.to_a
   end
 
 end

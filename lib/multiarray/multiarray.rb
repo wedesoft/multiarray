@@ -43,7 +43,7 @@ module Hornetseye
           memory = Malloc.new t.storage_size(*shape)
           memory.write data
         end
-        t.new *shape, :memory => memory
+        t.new *(shape + [:memory => memory])
       end
 
       # Convert Ruby array to uniform multi-dimensional array
