@@ -687,6 +687,8 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 2, 2, 3 ], 2.major( S[ 1, 2, 3 ] ).to_a
     assert_equal [ 3, 2, 3 ], S[ 1, 2, 3 ].major( S[ 3, 2, 1 ] ).to_a
     assert_equal [ C( 2, 2, 3 ) ], S[ C( 1, 2, 3 ) ].major( 2 ).to_a
+    assert_equal [C(1, 2, 3), C(2, 2, 3), C(3, 3, 3)], S[1, 2, 3].major(C(1, 2, 3)).to_a
+    assert_equal [C(1, 2, 3), C(2, 2, 3), C(3, 3, 3)], C(1, 2, 3).major(S[1, 2, 3]).to_a
   end
 
   def test_minor
@@ -694,6 +696,8 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ 1, 2, 2 ], 2.minor( S[ 1, 2, 3 ] ).to_a
     assert_equal [ 1, 2, 1 ], S[ 1, 2, 3 ].minor( S[ 3, 2, 1 ] ).to_a
     assert_equal [ C( 1, 2, 2 ) ], S[ C( 1, 2, 3 ) ].minor( 2 ).to_a
+    assert_equal [C(1, 1, 1), C(1, 2, 2), C(1, 2, 3)], S[1, 2, 3].minor(C(1, 2, 3)).to_a
+    assert_equal [C(1, 1, 1), C(1, 2, 2), C(1, 2, 3)], C(1, 2, 3).minor(S[1, 2, 3]).to_a
   end
 
   def test_sqrt

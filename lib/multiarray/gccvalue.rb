@@ -304,44 +304,6 @@ module Hornetseye
       end
     end
 
-    # Create code for conditional selection of RGB value
-    #
-    # @param [GCCValue,Object] a First value.
-    # @param [GCCValue,Object] b Second value.
-    #
-    # @return [GCCValue] C value referring to result.
-    #
-    # @private
-    def conditional_with_rgb( a, b )
-      if a.is_a?( RGB ) or b.is_a?( RGB )
-        Hornetseye::RGB( conditional( a.r, b.r ), conditional( a.g, b.g ),
-                         conditional( a.b, b.b ) )
-      else
-        conditional_without_rgb a, b
-      end
-    end
-
-    alias_method_chain :conditional, :rgb
-
-    # Create code for conditional selection of complex value
-    #
-    # @param [GCCValue,Object] a First value.
-    # @param [GCCValue,Object] b Second value.
-    #
-    # @return [GCCValue] C value referring to result.
-    #
-    # @private
-    def conditional_with_complex( a, b )
-      if a.is_a?( InternalComplex ) or b.is_a?( InternalComplex )
-        InternalComplex.new conditional( a.real, b.real ),
-                            conditional( a.imag, b.imag )
-      else
-        conditional_without_complex a, b
-      end
-    end
-
-    alias_method_chain :conditional, :complex
-
     # Generate code for conditional statement
     #
     # @param [Proc] action Block of conditional.
@@ -399,6 +361,7 @@ module Hornetseye
     define_binary_op :<
     define_binary_op :<=
     define_binary_op :>
+    define_binary_op :>=
     define_binary_op :>=
     define_unary_method Math, :sqrt
     define_unary_method Math, :log
@@ -521,6 +484,63 @@ module Hornetseye
       GCCValue.new @function,
         "( ( #{self} ) <= ( #{other} ) ) ? ( #{self} ) : ( #{other} )"
     end
+
+    # Create code for conditional selection of RGB value
+    #
+    # @param [GCCValue,Object] a First value.
+    # @param [GCCValue,Object] b Second value.
+    #
+    # @return [GCCValue] C value referring to result.
+    #
+    # @private
+    def conditional_with_rgb( a, b )
+      if a.is_a?(RGB) or b.is_a?(RGB)
+        Hornetseye::RGB conditional(a.r, b.r), conditional(a.g, b.g), conditional(a.b, b.b)
+      else
+        conditional_without_rgb a, b
+      end
+    end
+
+    alias_method_chain :conditional, :rgb
+
+    # Create code for conditional selection of complex value
+    #
+    # @param [GCCValue,Object] a First value.
+    # @param [GCCValue,Object] b Second value.
+    #
+    # @return [GCCValue] C value referring to result.
+    #
+    # @private
+    def conditional_with_complex( a, b )
+      if a.is_a?( InternalComplex ) or b.is_a?( InternalComplex )
+        InternalComplex.new conditional( a.real, b.real ),
+                            conditional( a.imag, b.imag )
+      else
+        conditional_without_complex a, b
+      end
+    end
+
+    alias_method_chain :conditional, :complex
+
+    def major_with_rgb(other)
+      if other.is_a?(RGB)
+        Hornetseye::RGB r.major(other.r), g.major(other.g), b.major(other.b)
+      else
+        major_without_rgb other
+      end
+    end
+
+    alias_method_chain :major, :rgb
+
+    def minor_with_rgb(other)
+      if other.is_a?(RGB)
+        Hornetseye::RGB r.minor(other.r), g.minor(other.g), b.minor(other.b)
+      else
+        minor_without_rgb other
+      end
+    end
+
+    alias_method_chain :minor, :rgb
 
     # Generate a +for+ loop in C
     #
