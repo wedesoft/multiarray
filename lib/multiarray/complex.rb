@@ -17,7 +17,7 @@
 class Complex
 
   def decompose(i)
-    [@real, @image][i]
+    [real, imag][i]
   end
 
 end
