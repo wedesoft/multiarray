@@ -96,4 +96,14 @@ module Hornetseye
 
   end
 
+  def MultiArray(typecode, dimension)
+    if dimension > 0
+      Field_.inherit typecode.typecode, typecode.dimension + dimension
+    else
+      Hornetseye::Pointer typecode
+    end
+  end
+
+  module_function :MultiArray
+
 end

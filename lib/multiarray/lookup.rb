@@ -155,8 +155,8 @@ module Hornetseye
     # @return [Node,Object] Element of lookup term.
     #
     # @private
-    def element( i )
-      Lookup.new @p.element( i ), @index, @stride
+    def element(i)
+      Lookup.new @p.element(i), @index, @stride
     end
 
     # Extract array view with part of array

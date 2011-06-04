@@ -58,7 +58,7 @@ module Hornetseye
     def define_unary_method( mod, op, conversion = :identity )
       mod.module_eval do
         define_method( "#{op}_with_hornetseye" ) do |a|
-          if a.is_a? Node
+          if a.is_a?(Node) or a.is_a?(Field_)
             if a.dimension == 0 and a.variables.empty?
               target = a.typecode.send conversion
               target.new mod.send( op, a.simplify.get )
@@ -66,7 +66,7 @@ module Hornetseye
               Hornetseye::ElementWise( lambda { |x| mod.send op, x },
                                        "#{mod}.#{op}",
                                        lambda { |x| x.send conversion } ).
-                new( a ).force
+                new(a.sexp).force
             end
           else
             send "#{op}_without_hornetseye", a
@@ -91,18 +91,19 @@ module Hornetseye
     def define_binary_method( mod, op, coercion = :coercion )
       mod.module_eval do
         define_method( "#{op}_with_hornetseye" ) do |a,b|
-          if a.is_a? Node or b.is_a? Node
-            a = Node.match( a, b ).new a unless a.is_a? Node
-            b = Node.match( b, a ).new b unless b.is_a? Node
+          if a.is_a?(Node) or a.is_a?(Field_) or
+             b.is_a?(Node) or b.is_a?(Field_)
+            a = Node.match(a, b).new a unless a.is_a?(Node) or a.is_a?(Field_)
+            b = Node.match(b, a).new b unless b.is_a?(Node) or b.is_a?(Field_)
             if a.dimension == 0 and a.variables.empty? and
                b.dimension == 0 and b.variables.empty?
               target = a.typecode.send coercion, b.typecode
-              target.new mod.send( op, a.simplify.get, b.simplify.get )
+              target.new mod.send(op, a.simplify.get, b.simplify.get)
             else
               Hornetseye::ElementWise( lambda { |x,y| mod.send op, x, y },
                                        "#{mod}.#{op}",
                                        lambda { |t,u| t.send coercion, u } ).
-                new( a, b ).force
+                new(a.sexp, b.sexp).force
             end
           else
             send "#{op}_without_hornetseye", a, b

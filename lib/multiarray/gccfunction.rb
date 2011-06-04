@@ -44,8 +44,7 @@ module Hornetseye
       #
       # @param [String] method_name Unique method name of function.
       # @param [Node] term Stripped expression to compile.
-      # @param [Array<Variable>] keys Variables for performing substitutions on
-      #        +term+.
+      # @param [Array<Variable>] keys Variables for performing substitutions on +term+.
       #
       # @return [Object] The return value should be ignored.
       #
@@ -57,9 +56,7 @@ module Hornetseye
                                        *keys.collect { |var| var.meta }
             Thread.current[ :function ] = function
             term_subst = Hash[ *keys.zip( function.params ).flatten ]
-            Hornetseye::lazy do
-              term.subst( term_subst ).demand
-            end
+            Hornetseye::lazy { term.subst( term_subst ).demand }
             Thread.current[ :function ] = nil
             function.insn_return
             function.compile

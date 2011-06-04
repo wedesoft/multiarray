@@ -53,7 +53,9 @@ module Hornetseye
     # @private
     def define_binary_op(op, coercion = :coercion)
       define_method(op) do |other|
-        other = Node.match(other, typecode).new other unless other.is_a? Node
+        unless other.is_a?(Node) or other.is_a?(Field_)
+          other = Node.match(other, typecode).new other
+        end
         if dimension == 0 and variables.empty? and
             other.dimension == 0 and other.variables.empty?
           target = typecode.send coercion, other.typecode
@@ -61,7 +63,7 @@ module Hornetseye
         else
           Hornetseye::ElementWise(lambda { |x,y| x.send op, y }, op,
                                   lambda { |t,u| t.send coercion, u } ).
-            new(self, other).force
+            new(self, other.sexp).force
         end
       end
     end
@@ -119,7 +121,7 @@ module Hornetseye
     #
     # @return [Node] Array with result of operation.
     def fmod_with_float( other )
-      unless other.is_a? Node
+      unless other.is_a?(Node) or other.is_a?(Field_)
         other = Node.match( other, typecode ).new other
       end
       if typecode < FLOAT_ or other.typecode < FLOAT_
@@ -143,7 +145,7 @@ module Hornetseye
       else
         key = "to_#{dest.to_s.downcase}"
         Hornetseye::ElementWise( lambda { |x| x.to_type dest }, key,
-                                 lambda { |t| t.to_type dest } ).new( self ).force
+                                 lambda { |t| t.to_type dest } ).new(self).force
       end
     end
 
@@ -210,10 +212,10 @@ module Hornetseye
     #
     # @return [Node] Array with selected values.
     def conditional( a, b )
-      unless a.is_a? Node
+      unless a.is_a?(Node) or a.is_a?(Field_)
         a = Node.match(a, b.is_a?(Node) ? b : nil).new a
       end
-      unless b.is_a? Node
+      unless b.is_a?(Node) or b.is_a?(Field_)
         b = Node.match(b, a.is_a?(Node) ? a : nil).new b
       end
       if dimension == 0 and variables.empty? and
@@ -225,7 +227,7 @@ module Hornetseye
       else
         Hornetseye::ElementWise(lambda { |x,y,z| x.conditional y, z }, :conditional,
                                 lambda { |t,u,v| t.cond u, v }).
-          new(self, a, b).force
+          new(self, a.sexp, b.sexp).force
       end
     end
 
@@ -347,7 +349,9 @@ module Hornetseye
     # @return [Object] Result of injection.
     def inject( initial = nil, options = {} )
       unless initial.nil?
-        initial = Node.match( initial ).new initial unless initial.is_a? Node
+        unless initial.is_a?(Node) or initial.is_a?(Field_)
+          initial = Node.match( initial ).new initial 
+        end
         initial_typecode = initial.typecode
       else
         initial_typecode = typecode
@@ -365,7 +369,9 @@ module Hornetseye
         index = Variable.new Hornetseye::INDEX( nil )
         value = element( index ).inject nil, :block => block,
                                         :var1 => var1, :var2 => var2
-        value = typecode.new value unless value.is_a? Node
+        unless value.is_a?(Node) or value.is_a?(Field_)
+          value = typecode.new value
+        end
         if initial.nil? and index.size.get == 0
           raise "Array was empty and no initial value for injection was given"
         end
@@ -384,11 +390,11 @@ module Hornetseye
     # Equality operator
     #
     # @return [Boolean] Returns result of comparison.
-    def eq_with_multiarray( other )
-      if other.is_a? Node
+    def eq_with_multiarray(other)
+      if other.is_a?(Node) or other.is_a?(Field_)
         if variables.empty?
           if other.typecode == typecode and other.shape == shape
-            Hornetseye::finalise { eq( other ).inject( true ) { |a,b| a.and b } }
+            Hornetseye::finalise { eq(other).inject( true ) { |a,b| a.and b } }
           else
             false
           end
@@ -511,7 +517,7 @@ module Hornetseye
         demand
       else
         if initial
-          unless initial.is_a? Node
+          unless initial.is_a?(Node) or initial.is_a?(Field_)
             initial = Node.match( initial ).new initial
           end
           initial_typecode = initial.typecode
@@ -546,7 +552,9 @@ module Hornetseye
     #
     # @private
     def table( filter, &action )
-      filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
+      unless filter.is_a?(Node) or filter.is_a?(Field_)
+        filter = Node.match( filter, typecode ).new filter 
+      end
       if filter.dimension > dimension
         raise "Filter has #{filter.dimension} dimension(s) but should " +
               "not have more than #{dimension}"
@@ -565,10 +573,12 @@ module Hornetseye
     #
     # @return [Node] Result of convolution.
     def convolve( filter )
-      filter = Node.match( filter, typecode ).new filter unless filter.is_a? Node
+      unless filter.is_a?(Node) or filter.is_a?(Field_)
+        filter = Node.match( filter, typecode ).new filter 
+      end
       array = self
-      ( dimension - filter.dimension ).times { array = array.roll }
-      array.table( filter ) { |a,b| a* b }.diagonal { |s,x| s + x }
+      (dimension - filter.dimension).times { array = array.roll }
+      array.table(filter.sexp) { |a,b| a * b }.diagonal { |s,x| s + x }
     end
 
     # Erosion
@@ -656,7 +666,7 @@ module Hornetseye
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
       options = { :weight => UINT.new( 1 ), :safe => true }.merge options
-      unless options[ :weight ].is_a? Node
+      unless options[:weight].is_a?(Node) or options[:weight].is_a?(Field_)
         options[ :weight ] =
           Node.match( options[ :weight ] ).maxint.new options[ :weight ]
       end
@@ -715,7 +725,7 @@ module Hornetseye
     # @return [Node] The integral image of this array.
     def integral
       left = allocate
-      block = Integral.new left, self
+      block = Integral.new left.sexp, self
       if block.compilable?
         GCCFunction.run block
       else
@@ -737,20 +747,23 @@ module Hornetseye
       options = { :target => UINT, :default => typecode.default }.merge options
       target = options[ :target ]
       default = options[ :default ]
-      default = typecode.new default unless default.is_a? Node
+      unless default.is_a?(Node) or default.is_a?(Field_)
+        default = typecode.new default 
+      end
       left = Hornetseye::MultiArray(target, dimension).new *shape
       labels = Sequence.new target, size; labels[0] = 0
       rank = Sequence.uint size; rank[0] = 0
       n = Hornetseye::Pointer( INT ).new; n.store INT.new( 0 )
-      block = Components.new left, self, default, target.new( 0 ), labels, rank, n
+      block = Components.new left.sexp, self, default.sexp, target.new(0),
+                             labels.sexp, rank.sexp, n
       if block.compilable?
         Hornetseye::GCCFunction.run block
       else
         block.demand
       end
-      labels = labels[ 0 .. n.demand.get ]
-      left.lut labels.lut( labels.histogram( labels.size, :weight => target.new( 1 ) ).
-                           minor( 1 ).integral - 1 )
+      labels = labels[0 .. n.demand.get]
+      left.lut labels.lut(labels.histogram(labels.size, :weight => target.new(1)).
+                          minor(1).integral - 1)
     end
 
     # Select values from array using a mask
@@ -764,13 +777,13 @@ module Hornetseye
                                          [ m.size ] )
       index = Hornetseye::Pointer( INT ).new
       index.store INT.new( 0 )
-      block = Mask.new left, self, m, index
+      block = Mask.new left.sexp, self, m.sexp, index
       if block.compilable?
         GCCFunction.run block
       else
         block.demand
       end
-      left[ 0 ... index[] ].roll
+      left[0 ... index[]].roll
     end
 
     # Distribute values in a new array using a mask
@@ -784,8 +797,10 @@ module Hornetseye
     # @return [Node] The result of the inverse masking operation.
     def unmask( m, options = {} )
       options = { :safe => true, :default => typecode.default }.merge options
-      default = options[ :default ]
-      default = typecode.new default unless default.is_a? Node
+      default = options[:default]
+      unless default.is_a?(Node) or default.is_a?(Field_)
+        default = typecode.new default
+      end
       m.check_shape default
       if options[ :safe ]
         if m.to_ubyte.sum > shape.last
@@ -797,7 +812,7 @@ module Hornetseye
         coercion(default.typecode).new *(shape[1 .. -1] + m.shape)
       index = Hornetseye::Pointer(INT).new
       index.store INT.new(0)
-      block = Unmask.new left, self, m, index, default
+      block = Unmask.new left.sexp, self, m.sexp, index, default.sexp
       if block.compilable?
         GCCFunction.run block
       else
@@ -925,8 +940,9 @@ class Array
   def histogram( *ret_shape )
     options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
     options = { :weight => Hornetseye::UINT. new( 1 ), :safe => true }.merge options
-    unless options[ :weight ].is_a? Hornetseye::Node
-      options[ :weight ] =
+    unless options[:weight].is_a?(Hornetseye::Node) or
+      options[:weight].is_a?(Hornetseye::Field_)
+      options[:weight] =
         Hornetseye::Node.match( options[ :weight ] ).maxint.new options[ :weight ]
     end
     weight = options[ :weight ]
@@ -952,7 +968,7 @@ class Array
     end
     left = Hornetseye::MultiArray(weight.typecode, ret_shape.size).new *ret_shape
     left[] = 0
-    block = Hornetseye::Histogram.new left, weight, *self
+    block = Hornetseye::Histogram.new left.sexp, weight.sexp, *self
     if block.compilable?
       Hornetseye::GCCFunction.run block
     else

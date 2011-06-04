@@ -597,13 +597,13 @@ module Hornetseye
     # @return [Object,Node] Returns the value.
     def []=( *indices )
       value = indices.pop
-      value = typecode.new value unless value.is_a? Node
+      value = typecode.new value unless value.is_a?(Node) or value.is_a?(Field_)
       if indices.empty?
         check_shape value
         unless compilable? and value.compilable? and dimension > 0
-          Store.new( self, value ).demand
+          Store.new(self, value.sexp).demand
         else
-          GCCFunction.run Store.new( self, value )
+          GCCFunction.run Store.new(self, value.sexp)
         end
         value
       else
@@ -612,7 +612,7 @@ module Hornetseye
         else
           view = element indices.last
         end
-        view[ *indices[ 0 ... -1 ] ] = value
+        view[*indices[0 ... -1]] = value
       end
     end
 
@@ -662,11 +662,11 @@ module Hornetseye
       elsif (dimension > 0 and Thread.current[:lazy]) or not variables.empty?
         self
       elsif compilable?
-        retval = allocate
+        retval = allocate.sexp
         GCCFunction.run Store.new(retval, self)
         retval.demand.get
       else
-        retval = allocate
+        retval = allocate.sexp
         Store.new(retval, self).demand
         retval.demand.get
       end
@@ -690,8 +690,8 @@ module Hornetseye
     # @return [Array<Node>] Result of coercion.
     #
     # @private
-    def coerce( other )
-      if other.is_a? Node
+    def coerce(other)
+      if other.is_a?(Node) or other.is_a?(Field_)
         return other, self
       else
         return Node.match( other, self ).new( other ), self

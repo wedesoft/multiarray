@@ -98,6 +98,10 @@ class Object
 
   end
 
+  def sexp
+    self
+  end
+
   # Boolean negation
   #
   # @return [FalseClass] Returns +false+.
@@ -116,7 +120,7 @@ class Object
   # @see FalseClass#and
   # @see NilClass#and
   def and( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       other
     else
       x, y = other.coerce self
@@ -132,7 +136,7 @@ class Object
   # @see FalseClass#or
   # @see NilClass#or
   def or( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       self
     else
       x, y = other.coerce self
@@ -150,7 +154,7 @@ class Object
   # @see Hornetseye::Node
   # @see Hornetseye::Binary_
   def eq( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       self == other
     else
       x, y = other.coerce self
@@ -168,7 +172,7 @@ class Object
   # @see Hornetseye::Node
   # @see Hornetseye::Binary_
   def ne( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       ( self == other ).not
     else
       x, y = other.coerce self
@@ -230,7 +234,7 @@ class NilClass
   # @see Object#and
   # @see FalseClass#and
   def and( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       self
     else
       x, y = other.coerce self
@@ -246,7 +250,7 @@ class NilClass
   # @see Object#or
   # @see FalseClass#or
   def or( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       other
     else
       x, y = other.coerce self
@@ -318,7 +322,7 @@ class FalseClass
   # @see Object#and
   # @see NilClass#and
   def and( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       self
     else
       x, y = other.coerce self
@@ -334,7 +338,7 @@ class FalseClass
   # @see Object#or
   # @see NilClass#or
   def or( other )
-    unless other.is_a? Hornetseye::Node
+    unless other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
       other
     else
       x, y = other.coerce self
@@ -473,7 +477,7 @@ class Fixnum
     #
     # @private
     def power_with_hornetseye( other )
-      if other.is_a? Hornetseye::Node
+      if other.is_a?(Hornetseye::Node) or other.is_a?(Hornetseye::Field_)
         x, y = other.coerce self
         x ** y
       else
@@ -761,8 +765,10 @@ module Hornetseye
         term = lazy *( shape + [ :arity => arity - 1 ] ) do |*args|
           action.call *( args + [ index ] )
         end
-        term = Node.match( term ).new term unless term.is_a? Node
-        Lambda.new index, term
+        unless term.is_a?(Node) or term.is_a?(Field_)
+          term = Node.match(term).new term
+        end
+        Lambda.new index, term.sexp
       end
     ensure
       Thread.current[ :lazy ] = previous
@@ -783,7 +789,7 @@ module Hornetseye
     Thread.current[ :lazy ] = false
     begin
       retval = lazy *shape, &action
-      retval.is_a?( Node ) ? retval.force : retval
+      retval.is_a?(Node) ? retval.force : retval
     ensure
       Thread.current[ :lazy ] = previous
     end
@@ -803,7 +809,7 @@ module Hornetseye
     arity = options[ :arity ] || [ action.arity, shape.size ].max
     if arity <= 0
       term = action.call
-      term.is_a?( Node ) ? term.to_type( term.typecode.maxint ) : term
+      term.is_a?(Node) ? term.to_type(term.typecode.maxint) : term
     else
       index = Variable.new shape.empty? ? Hornetseye::INDEX( nil ) :
                            Hornetseye::INDEX( shape.pop )

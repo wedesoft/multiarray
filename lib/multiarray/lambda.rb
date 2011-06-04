@@ -160,14 +160,14 @@ module Hornetseye
     # @return [Node,Object] Result of inserting +i+ for lambda argument.
     #
     # @private
-    def element( i )
+    def element(i)
       unless i.is_a? Node
-        unless ( 0 ... shape.last ).member? i
+        unless (0 ... shape.last).member? i
           raise "Index must be in 0 ... #{shape.last} (was #{i})"
         end
         i = INT.new i
       end
-      i.size = @index.size if i.is_a?( Variable ) and @index.size.get
+      i.size = @index.size if i.is_a?(Variable) and @index.size.get
       @term.subst @index => i
     end
 

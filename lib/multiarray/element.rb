@@ -39,7 +39,7 @@ module Hornetseye
       # @return [Element] New object of this type.
       #
       # @private
-      def construct( *args )
+      def construct(*args)
         new *args
       end
 
