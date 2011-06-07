@@ -54,10 +54,10 @@ module Hornetseye
           GCCContext.build do |context|
             function = GCCFunction.new context, method_name,
                                        *keys.collect { |var| var.meta }
-            Thread.current[ :function ] = function
-            term_subst = Hash[ *keys.zip( function.params ).flatten ]
-            Hornetseye::lazy { term.subst( term_subst ).demand }
-            Thread.current[ :function ] = nil
+            Thread.current[:function] = function
+            term_subst = Hash[ *keys.zip(function.params).flatten ]
+            Hornetseye::lazy { term.subst(term_subst).demand }
+            Thread.current[:function] = nil
             function.insn_return
             function.compile
           end

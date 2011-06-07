@@ -17,59 +17,89 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  # Module providing the operations to manipulate array expressions
-  module Operations
+  # Base class for representing native datatypes and operations (terms)
+  class Node
 
-    # Meta-programming method to define a unary operation
-    #
-    # @param [Symbol,String] op Name of unary operation.
-    # @param [Symbol,String] conversion Name of method for type conversion.
-    #
-    # @return [Proc] The new method.
-    #
-    # @private
-    def define_unary_op(op, conversion = :identity)
-      define_method(op) do
-        if dimension == 0 and variables.empty?
-          target = typecode.send conversion
-          target.new simplify.get.send(op)
-        else
-          Hornetseye::ElementWise(lambda { |x| x.send op }, op,
-                                  lambda { |t| t.send conversion }).
-            new(self).force
+    class << self
+
+      # Meta-programming method to define a unary operation
+      #
+      # @param [Symbol,String] op Name of unary operation.
+      # @param [Symbol,String] conversion Name of method for type conversion.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
+      def define_unary_op(op, conversion = :identity)
+        Node.class_eval do
+          define_method(op) do
+            if dimension == 0 and variables.empty?
+              target = typecode.send conversion
+              target.new simplify.get.send(op)
+            else
+              Hornetseye::ElementWise(lambda { |x| x.send op }, op,
+                                      lambda { |t| t.send conversion }).
+                new(self).force
+            end
+          end
+        end
+        Field_.class_eval do
+          define_method(op) do
+            if Thread.current[:lazy] or not compilable?
+              sexp.send op
+            else
+              expr = Hornetseye::lazy { sexp.send op }
+              retval = expr.allocate.sexp
+              keys, values, term = Store.new(retval, expr).strip
+              labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
+              method_name = ('_' + term.descriptor( labels )).
+                              tr('(),+\-*/%.@?~&|^<=>', '0123\456789ABCDEFGH')
+              GCCFunction.compile method_name, term, *keys
+              eval <<EOS
+Hornetseye::MultiArray(Hornetseye::#{typecode}, #{dimension}).class_eval do
+  def #{op}
+    retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode},
+                                    #{retval.dimension}).new *(#{retval.shape})
+    GCCCache.#{method_name} *(retval.values + values)
+    retval
+  end
+end
+EOS
+              args = values.collect { |arg| arg.values }.flatten
+              GCCCache.send method_name, *args
+              retval.demand.get
+            end
+          end
         end
       end
-    end
 
-    module_function :define_unary_op
-
-    # Meta-programming method to define a binary operation
-    #
-    # @param [Symbol,String] op Name of binary operation.
-    # @param [Symbol,String] conversion Name of method for type conversion.
-    #
-    # @return [Proc] The new method.
-    #
-    # @private
-    def define_binary_op(op, coercion = :coercion)
-      define_method(op) do |other|
-        unless other.is_a?(Node) or other.is_a?(Field_)
-          other = Node.match(other, typecode).new other
-        end
-        if dimension == 0 and variables.empty? and
-            other.dimension == 0 and other.variables.empty?
-          target = typecode.send coercion, other.typecode
-          target.new simplify.get.send(op, other.simplify.get)
-        else
-          Hornetseye::ElementWise(lambda { |x,y| x.send op, y }, op,
-                                  lambda { |t,u| t.send coercion, u } ).
-            new(self, other.sexp).force
+      # Meta-programming method to define a binary operation
+      #
+      # @param [Symbol,String] op Name of binary operation.
+      # @param [Symbol,String] conversion Name of method for type conversion.
+      #
+      # @return [Proc] The new method.
+      #
+      # @private
+      def define_binary_op(op, coercion = :coercion)
+        define_method(op) do |other|
+          unless other.is_a?(Node) or other.is_a?(Field_)
+            other = Node.match(other, typecode).new other
+          end
+          if dimension == 0 and variables.empty? and
+              other.dimension == 0 and other.variables.empty?
+            target = typecode.send coercion, other.typecode
+            target.new simplify.get.send(op, other.simplify.get)
+          else
+            Hornetseye::ElementWise(lambda { |x,y| x.send op, y }, op,
+                                    lambda { |t,u| t.send coercion, u } ).
+              new(self, other.sexp).force
+          end
         end
       end
+  
     end
-
-    module_function :define_binary_op
-
+  
     define_unary_op :zero?, :bool
     define_unary_op :nonzero?, :bool
     define_unary_op :not, :bool
@@ -913,12 +943,6 @@ module Hornetseye
     #  end
     #  Hornetseye::lazy { to_type typecode.float }.integral
     #end
-
-  end
-
-  class Node
-
-    include Operations
 
   end
 

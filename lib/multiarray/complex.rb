@@ -973,7 +973,7 @@ module Hornetseye
   end
 
   # Module providing the operations to manipulate array expressions
-  module Operations
+  class Node
 
     define_unary_op :real, :scalar
     define_unary_op :imag, :scalar

@@ -516,7 +516,7 @@ module Hornetseye
 
   end
 
-  module Operations
+  class Node
 
     define_unary_op :r, :scalar
     define_unary_op :g, :scalar
