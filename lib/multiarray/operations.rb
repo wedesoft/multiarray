@@ -51,9 +51,7 @@ module Hornetseye
             else
               retval = expr.allocate.sexp
               keys, values, term = Store.new(retval, expr).strip
-              labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
-              method_name = ('_' + term.descriptor( labels )).method_name
-              GCCFunction.compile method_name, term, *keys
+              method_name = GCCFunction.compile term, *keys
               self.class.class_eval <<EOS
 def #{op}
   if Thread.current[:lazy]
@@ -108,9 +106,7 @@ EOS
             else
               retval = expr.allocate.sexp
               keys, values, term = Store.new(retval, expr).strip
-              labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
-              method_name = ('_' + term.descriptor( labels )).method_name
-              GCCFunction.compile method_name, term, *keys
+              method_name = GCCFunction.compile term, *keys
               self.class.class_eval <<EOS
 def #{op}(other)
   unless other.is_a?(Node) or other.is_a?(Field_)
@@ -126,9 +122,7 @@ def #{op}(other)
       expr = Hornetseye::lazy { sexp.#{op} other.sexp }
       retval = expr.allocate.sexp
       keys, values, term = Store.new(retval, expr).strip
-      labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
-      method_name = ('_' + term.descriptor( labels )).method_name
-      GCCFunction.compile method_name, term, *keys
+      method_name = GCCFunction.compile term, *keys
       other.class.class_eval <<EOS2
 def _#{op.to_s.method_name}_#{typecode.to_s.downcase.method_name}_#{dimension}(other)
   retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode},

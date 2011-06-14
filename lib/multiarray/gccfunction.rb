@@ -31,23 +31,20 @@ module Hornetseye
       # @private
       def run( block )
         keys, values, term = block.strip
-        labels = Hash[ *keys.zip( ( 0 ... keys.size ).to_a ).flatten ]
-        method_name = ( '_' + term.descriptor( labels ) ).method_name
-        compile method_name, term, *keys
-        args = values.collect { |arg| arg.values }.flatten
-        GCCCache.send method_name, *args
+        GCCCache.send compile(term, *keys), *values.collect { |arg| arg.values }.flatten
       end
 
       # Compile a block of Ruby code if not compiled already
       #
-      # @param [String] method_name Unique method name of function.
       # @param [Node] term Stripped expression to compile.
       # @param [Array<Variable>] keys Variables for performing substitutions on +term+.
       #
-      # @return [Object] The return value should be ignored.
+      # @return [String] Unique method name of compiled function.
       #
       # @private
-      def compile( method_name, term, *keys )
+      def compile(term, *keys)
+        labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
+        method_name = ('_' + term.descriptor(labels)).method_name
         unless GCCCache.respond_to? method_name
           GCCContext.build do |context|
             function = GCCFunction.new context, method_name,
@@ -60,6 +57,7 @@ module Hornetseye
             function.compile
           end
         end
+        method_name
       end
 
     end
