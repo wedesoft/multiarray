@@ -50,7 +50,7 @@ module Hornetseye
       # @return [String] String with description of this type.
       def inspect
         if typecode and dimension
-          if dimension > 1
+          if dimension != 1
             "MultiArray(#{typecode.inspect},#{dimension})"
           else
             "Sequence(#{typecode.inspect})"
@@ -318,7 +318,7 @@ module Hornetseye
       @shape = shape
       @strides = options[:strides] ||
                  (0 ... dimension).collect { |i| shape[0 ... i].inject 1, :* }
-      size = shape.inject :*
+      size = shape.inject 1, :*
       @memory = options[:memory] || typecode.memory_type.new(typecode.storage_size * size)
     end
 
@@ -339,15 +339,15 @@ module Hornetseye
     end
 
     def sexp
-      Hornetseye::lazy(@shape.last) do |index|
-        if dimension > 1
-          pointer = Hornetseye::MultiArray(typecode, dimension - 1).
+      if dimension > 0
+        Hornetseye::lazy(@shape.last) do |index|
+          pointer = self.class.inherit(typecode, dimension - 1).
             new(*(@shape[0 ... dimension - 1] +
-                 [:strides => @strides[0 ... @strides.size - 1], :memory => @memory])).sexp
-        else
-          pointer = Hornetseye::Pointer(typecode).new @memory
+                [:strides => @strides[0 ... @strides.size - 1], :memory => @memory])).sexp
+          Lookup.new pointer, index, INT.new(@strides.last)
         end
-        Lookup.new pointer, index, INT.new(@strides.last)
+      else
+        Hornetseye::Pointer(typecode).new @memory
       end
     end
 

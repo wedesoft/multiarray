@@ -694,7 +694,7 @@ module Hornetseye
       if other.is_a?(Node) or other.is_a?(Field_)
         return other, self
       else
-        return Node.match( other, self ).new( other ), self
+        return Node.match(other, self).new(other), self
       end
     end
 
