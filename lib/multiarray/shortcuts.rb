@@ -28,7 +28,7 @@ module Hornetseye
     #
     # @private
     def constructor_shortcut( target )
-      define_method( target.to_s.downcase ) do |*args|
+      define_method target.to_s.downcase do |*args|
         new target, *args
       end
     end
@@ -77,7 +77,7 @@ module Hornetseye
     #
     # @private
     def to_type_shortcut( target )
-      define_method( "to_#{target.to_s.downcase}" ) do
+      define_method "to_#{target.to_s.downcase}" do
         to_type target
       end
     end
@@ -124,7 +124,7 @@ module Hornetseye
     #
     # @private
     def read_shortcut( target )
-      define_method( "read_#{target.to_s.downcase}" ) do
+      define_method "read_#{target.to_s.downcase}" do
         read.to_type target
       end
     end

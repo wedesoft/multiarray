@@ -32,9 +32,7 @@ module Hornetseye
       def run( block )
         keys, values, term = block.strip
         labels = Hash[ *keys.zip( ( 0 ... keys.size ).to_a ).flatten ]
-        method_name = ( '_' + term.descriptor( labels ) ).
-                            tr( '(),+\-*/%.@?~&|^<=>',
-                                '0123\456789ABCDEFGH' )
+        method_name = ( '_' + term.descriptor( labels ) ).method_name
         compile method_name, term, *keys
         args = values.collect { |arg| arg.values }.flatten
         GCCCache.send method_name, *args

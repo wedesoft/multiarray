@@ -29,6 +29,18 @@ module Hornetseye
       # @private
       attr_accessor :double
 
+      @@subclasses = {}
+
+      def inherit(double)
+        if @@subclasses.has_key? double
+          @@subclasses[double]
+        else
+          retval = Class.new self
+          retval.double = double
+          @@subclasses[double] = retval
+        end
+      end
+
       # Memory type required to store elements of this type
       #
       # @return [Class] Returns +Malloc+.
@@ -233,10 +245,8 @@ module Hornetseye
   #
   # @see FLOAT_
   # @see FLOAT_.double
-  def FLOAT( double )
-    retval = Class.new FLOAT_
-    retval.double = double
-    retval
+  def FLOAT(double)
+    FLOAT_.inherit double
   end
 
   module_function :FLOAT

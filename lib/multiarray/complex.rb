@@ -713,6 +713,18 @@ module Hornetseye
         subclass.num_elements = 2
       end
 
+      @@subclasses = {}
+
+      def inherit(element_type)
+        if @@subclasses.has_key? element_type
+          @@subclasses[element_type]
+        else
+          retval = Class.new self
+          retval.element_type = element_type
+          @@subclasses[element_type] = retval
+        end
+      end
+
       # Construct new object from arguments
       #
       # @param [Object] real Real component of complex number.
@@ -1056,9 +1068,7 @@ module Hornetseye
   # @see COMPLEX_
   # @see COMPLEX_.element_type
   def COMPLEX( element_type )
-    retval = Class.new COMPLEX_
-    retval.element_type = element_type
-    retval
+    COMPLEX_.inherit element_type
   end
 
   module_function :COMPLEX

@@ -47,7 +47,7 @@ module Hornetseye
       #
       # @private
       def define_unary_op( op )
-        define_method( op ) do
+        define_method op do
           RGB.new r.send( op ), g.send( op ), b.send( op )
         end
       end
@@ -62,7 +62,7 @@ module Hornetseye
       #
       # @private
       def define_binary_op( op )
-        define_method( op ) do |other|
+        define_method op do |other|
           if other.is_a? RGB
             RGB.new r.send( op, other.r ), g.send( op, other.g ),
                     b.send( op, other.b )
@@ -242,6 +242,18 @@ module Hornetseye
         subclass.num_elements = 3
       end
 
+      @@subclasses = {}
+
+      def inherit(element_type)
+        if @@subclasses.has_key? element_type
+          @@subclasses[element_type]
+        else
+          retval = Class.new self
+          retval.element_type = element_type
+          @@subclasses[element_type] = retval
+        end
+      end
+
       # Construct new object from arguments
       #
       # @param [Object] r Value for red channel.
@@ -283,11 +295,7 @@ module Hornetseye
       # @return [String] Text with information about this class (e.g. "DFLOATRGB").
       def inspect
         unless element_type.nil?
-          retval = IDENTIFIER[ element_type ] || "RGB(#{element_type.inspect})"
-          ( class << self; self; end ).instance_eval do
-            define_method( :inspect ) { retval }
-          end
-          retval
+          IDENTIFIER[ element_type ] || "RGB(#{element_type.inspect})"
         else
           super
         end
@@ -694,9 +702,7 @@ module Hornetseye
   # @see RGB_.element_type
   def RGB( arg, g = nil, b = nil )
     if g.nil? and b.nil?
-      retval = Class.new RGB_
-      retval.element_type = arg
-      retval
+      RGB_.inherit arg
     else
       RGB.new arg, g, b
     end

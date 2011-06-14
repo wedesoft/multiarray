@@ -32,7 +32,7 @@ module Hornetseye
       # @private
       def define_unary_op(op, conversion = :identity)
         Node.class_eval do
-          define_method(op) do
+          define_method op do
             if dimension == 0 and variables.empty?
               target = typecode.send conversion
               target.new simplify.get.send(op)
@@ -44,20 +44,21 @@ module Hornetseye
           end
         end
         Field_.class_eval do
-          define_method(op) do
+          define_method op do
+            expr = Hornetseye::lazy { sexp.send op }
             if Thread.current[:lazy] or not compilable?
-              sexp.send op
+              expr.force
             else
-              expr = Hornetseye::lazy { sexp.send op }
               retval = expr.allocate.sexp
               keys, values, term = Store.new(retval, expr).strip
               labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
-              method_name = ('_' + term.descriptor( labels )).
-                              tr('(),+\-*/%.@?~&|^<=>', '0123\456789ABCDEFGH')
+              method_name = ('_' + term.descriptor( labels )).method_name
               GCCFunction.compile method_name, term, *keys
-              eval <<EOS
-Hornetseye::MultiArray(Hornetseye::#{typecode}, #{dimension}).class_eval do
-  def #{op}
+              self.class.class_eval <<EOS
+def #{op}
+  if Thread.current[:lazy]
+    sexp.#{op}
+  else
     retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode},
                                     #{retval.dimension}).new *(#{retval.shape})
     GCCCache.#{method_name} *(retval.values + values)
@@ -82,7 +83,7 @@ EOS
       #
       # @private
       def define_binary_op(op, coercion = :coercion)
-        define_method(op) do |other|
+        define_method op do |other|
           unless other.is_a?(Node) or other.is_a?(Field_)
             other = Node.match(other, typecode).new other
           end
@@ -93,7 +94,68 @@ EOS
           else
             Hornetseye::ElementWise(lambda { |x,y| x.send op, y }, op,
                                     lambda { |t,u| t.send coercion, u } ).
-              new(self, other.sexp).force
+              new(sexp, other.sexp).force
+          end
+        end
+        Field_.class_eval do
+          define_method op do |other|
+            unless other.is_a?(Node) or other.is_a?(Field_)
+              other = Node.match(other, typecode).new other
+            end
+            expr = Hornetseye::lazy { sexp.send op, other.sexp }
+            if Thread.current[:lazy] or not expr.compilable?
+              expr.force
+            else
+              retval = expr.allocate.sexp
+              keys, values, term = Store.new(retval, expr).strip
+              labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
+              method_name = ('_' + term.descriptor( labels )).method_name
+              GCCFunction.compile method_name, term, *keys
+              self.class.class_eval <<EOS
+def #{op}(other)
+  unless other.is_a?(Node) or other.is_a?(Field_)
+    other = Node.match(other, typecode).new other
+  end
+  if Thread.current[:lazy]
+    sexp.#{op} other.sexp
+  else
+    check_shape other
+    begin
+      other._#{op.to_s.method_name}_#{typecode.to_s.downcase.method_name}_#{dimension} self
+    rescue NameError
+      expr = Hornetseye::lazy { sexp.#{op} other.sexp }
+      retval = expr.allocate.sexp
+      keys, values, term = Store.new(retval, expr).strip
+      labels = Hash[*keys.zip((0 ... keys.size).to_a).flatten]
+      method_name = ('_' + term.descriptor( labels )).method_name
+      GCCFunction.compile method_name, term, *keys
+      other.class.class_eval <<EOS2
+def _#{op.to_s.method_name}_#{typecode.to_s.downcase.method_name}_#{dimension}(other)
+  retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode},
+    \#{retval.dimension}).new *\#{other.dimension > dimension ? "shape" : "other.shape"}
+  GCCCache.\#{method_name} *(retval.values + other.values + values)
+  retval
+end
+EOS2
+      args = values.collect { |arg| arg.values }.flatten
+      GCCCache.send method_name, *args
+      retval.demand.get
+    end
+  end
+end
+EOS
+              other.class.class_eval <<EOS
+def _#{op.to_s.method_name}_#{typecode.to_s.downcase.method_name}_#{dimension}(other)
+  retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode},
+    #{retval.dimension}).new *#{other.dimension > dimension ? "shape" : "other.shape"}
+  GCCCache.#{method_name} *(retval.values + other.values + values)
+  retval
+end
+EOS
+              args = values.collect { |arg| arg.values }.flatten
+              GCCCache.send method_name, *args
+              retval.demand.get
+            end
           end
         end
       end

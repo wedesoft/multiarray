@@ -33,6 +33,19 @@ module Hornetseye
       # signed integer or not.
       attr_accessor :signed
 
+      @@subclasses = {}
+
+      def inherit(bits, signed)
+        if @@subclasses.has_key? [bits, signed]
+          @@subclasses[[bits, signed]]
+        else
+          retval = Class.new self
+          retval.bits = bits
+          retval.signed = signed
+          @@subclasses[[bits, signed]] = retval
+        end
+      end
+
       # Memory type required to store elements of this type
       #
       # @return [Class] Returns +Malloc+.
@@ -138,12 +151,8 @@ module Hornetseye
       #         "BYTE").
       def inspect
         unless bits.nil? or signed.nil?
-          retval = IDENTIFIER[ [ bits, signed ] ] ||
-                   "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
-          ( class << self; self; end ).instance_eval do
-            define_method( :inspect ) { retval }
-          end
-          retval
+          IDENTIFIER[ [ bits, signed ] ] ||
+            "INT(#{bits.inspect},#{ signed ? 'SIGNED' : 'UNSIGNED' })"
         else
           super
         end
@@ -305,10 +314,7 @@ module Hornetseye
     if signed.nil?
       INT.new arg
     else
-      retval = Class.new INT_
-      retval.bits = arg
-      retval.signed = signed
-      retval
+      INT_.inherit arg, signed
     end
   end
 
@@ -439,3 +445,4 @@ module Hornetseye
 
 
 end
+

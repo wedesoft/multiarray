@@ -57,7 +57,7 @@ module Hornetseye
     # @private
     def define_unary_method( mod, op, conversion = :identity )
       mod.module_eval do
-        define_method( "#{op}_with_hornetseye" ) do |a|
+        define_method "#{op}_with_hornetseye" do |a|
           if a.is_a?(Node) or a.is_a?(Field_)
             if a.dimension == 0 and a.variables.empty?
               target = a.typecode.send conversion
@@ -90,7 +90,7 @@ module Hornetseye
     # @private
     def define_binary_method( mod, op, coercion = :coercion )
       mod.module_eval do
-        define_method( "#{op}_with_hornetseye" ) do |a,b|
+        define_method "#{op}_with_hornetseye" do |a,b|
           if a.is_a?(Node) or a.is_a?(Field_) or
              b.is_a?(Node) or b.is_a?(Field_)
             a = Node.match(a, b).new a unless a.is_a?(Node) or a.is_a?(Field_)

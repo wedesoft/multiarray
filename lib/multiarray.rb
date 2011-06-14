@@ -692,6 +692,12 @@ class Array
 
 end
 
+class String
+  def method_name
+    tr '(),+\-*/%.@?~&|^<=>', '0123\456789ABCDEFGH'
+  end
+end
+
 begin
   require 'continuation'
 rescue Exception

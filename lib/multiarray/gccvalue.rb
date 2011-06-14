@@ -47,7 +47,7 @@ module Hornetseye
       #
       # @private
       def define_unary_op( op, opcode = op )
-        define_method( op ) do
+        define_method op do
           GCCValue.new @function, "#{opcode}( #{self} )"
         end
       end
@@ -62,7 +62,7 @@ module Hornetseye
       # @private
       def define_unary_method( mod, op, opcode = op )
         mod.module_eval do
-          define_method( "#{op}_with_gcc" ) do |a|
+          define_method "#{op}_with_gcc" do |a|
             if a.is_a? GCCValue
               GCCValue.new a.function, "#{opcode}( #{a} )"
             else
@@ -84,7 +84,7 @@ module Hornetseye
       #
       # @private
       def define_binary_op( op, opcode = op )
-        define_method( op ) do |other|
+        define_method op do |other|
           if GCCValue.generic? other
             GCCValue.new @function, "( #{self} ) #{opcode} ( #{other} )"
           else
@@ -104,7 +104,7 @@ module Hornetseye
       # @private
       def define_binary_method( mod, op, opcode = op )
         mod.module_eval do
-          define_method( "#{op}_with_gcc" ) do |a,b|
+          define_method "#{op}_with_gcc" do |a,b|
             if a.is_a? GCCValue or b.is_a? GCCValue
               function = a.is_a?( GCCValue ) ? a.function : b.function
               GCCValue.new function, "#{opcode}( #{a}, #{b} )"

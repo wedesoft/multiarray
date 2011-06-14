@@ -22,3 +22,5 @@ require 'tc_rgb'
 require 'tc_sequence'
 require 'tc_multiarray'
 require 'tc_lazy'
+require 'tc_compile'
+
