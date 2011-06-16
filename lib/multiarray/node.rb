@@ -1,5 +1,5 @@
 # multiarray - Lazy multi-dimensional arrays for Ruby
-# Copyright (C) 2010 Jan Wedekind
+# Copyright (C) 2010, 2011 Jan Wedekind
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -685,14 +685,14 @@ module Hornetseye
 
     # Coerce with other object
     #
-    # @param [Node,Object] other Other object.
+    # @param [Object] other Other object.
     #
     # @return [Array<Node>] Result of coercion.
     #
     # @private
     def coerce(other)
       if other.is_a?(Node) or other.is_a?(Field_)
-        return other, self
+        return other.sexp, self
       else
         return Node.match(other, self).new(other), self
       end

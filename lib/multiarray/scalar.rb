@@ -17,10 +17,17 @@
 # Namespace of Hornetseye computer vision library
 module Hornetseye
 
-  # Class for holding methods compiled during runtime
-  # 
-  # @private  
-  class GCCCache
+  class Scalar
+
+    def initialize(value)
+      @value = value
+    end
+
+    def inspect
+      "Scalar(#{@value.inspect})"
+    end
+
   end
 
 end
+

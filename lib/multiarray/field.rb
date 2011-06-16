@@ -1,5 +1,5 @@
 # multiarray - Lazy multi-dimensional arrays for Ruby
-# Copyright (C) 2010 Jan Wedekind
+# Copyright (C) 2010, 2011 Jan Wedekind
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -425,6 +425,23 @@ module Hornetseye
       sexp.conditional a.sexp, b.sexp
     end
   
+    # Coerce with other object
+    #
+    # @param [Object] other Other object.
+    #
+    # @return [Array<Object>] Result of coercion.
+    #
+    # @private
+    def coerce(other)
+      if other.is_a? Node
+        return other, sexp
+      elsif other.is_a? Field_
+        return other, self
+      else
+        return Scalar.new(other), self
+      end
+    end
+
     # Namespace containing method for matching elements of type Field_
     #
     # @see Field_

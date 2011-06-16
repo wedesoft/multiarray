@@ -1,5 +1,5 @@
 # multiarray - Lazy multi-dimensional arrays for Ruby
-# Copyright (C) 2010 Jan Wedekind
+# Copyright (C) 2010, 2011 Jan Wedekind
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
