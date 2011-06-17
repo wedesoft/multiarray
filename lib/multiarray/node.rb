@@ -314,16 +314,9 @@ module Hornetseye
 
     # Get size (number of elements) of this value
     #
-    # @return [Integer] Returns +array_type.size+.
+    # @return [Integer] Returns number of elements of this value.
     def size
       shape.inject(1) { |a,b| a * b }
-    end
-
-    # Get memory size of object
-    #
-    # @return [Integer] Returns required storage size of this array.
-    def storage_size
-      array_type.storage_size
     end
 
     # Duplicate array expression if it is not in row-major format
@@ -385,7 +378,7 @@ module Hornetseye
 
     # Get dimension of this term
     #
-    # @return [Array<Integer>] Returns +array_type.dimension+.
+    # @return [Array<Integer>] Returns number of dimensions of this term.
     def dimension
       shape.size
     end
