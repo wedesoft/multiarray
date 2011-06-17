@@ -394,7 +394,7 @@ module Hornetseye
     #
     # @return [Boolean] Returns +false+.
     def rgb?
-      array_type.rgb?
+      typecode.rgb?
     end
 
     # Extract native value if this is an element
