@@ -367,36 +367,12 @@ module Hornetseye
     end
 
     # temporary!!!
-    def method_missing(method, *args)
-      sexp.send method, *args.collect { |arg| arg.sexp }
-    end
-
-    def eq(other)
-      sexp.eq other.sexp
-    end
-
-    def ne(other)
-      sexp.ne other.sexp
-    end
-
-    def not
-      sexp.not
-    end
-
-    def and(other)
-      sexp.and other.sexp
-    end
-
-    def or(other)
-      sexp.or other.sexp
+    def method_missing(method, *args, &block)
+      sexp.send method, *args.collect { |arg| arg.sexp }, &block
     end
 
     def ==(other)
       sexp == other.sexp
-    end
-
-    def <=>(other)
-      sexp <=> other.sexp
     end
 
     def to_a
@@ -415,10 +391,6 @@ module Hornetseye
 
     def each(&action)
       sexp.each &action
-    end
-
-    def diagonal(initial = nil, options = {}, &action)
-      sexp.diagonal initial, options, &action
     end
 
     def conditional(a, b)
