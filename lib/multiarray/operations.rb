@@ -256,7 +256,7 @@ EOS
     # @param [Class] dest Element type to convert to.
     #
     # @return [Node] Array based on the different element type.
-    def to_type( dest )
+    def to_type(dest)
       if dimension == 0 and variables.empty?
         target = typecode.to_type dest
         target.new( simplify.get ).simplify
@@ -274,7 +274,7 @@ EOS
     # @param [Class] dest Element type to convert to.
     #
     # @return [Node] Array based on the different element type.
-    def to_type_with_rgb( dest )
+    def to_type_with_rgb(dest)
       if typecode < RGB_
         if dest < FLOAT_
           lazy { r * 0.299 + g * 0.587 + b * 0.114 }.to_type dest
@@ -329,7 +329,7 @@ EOS
     # @param [Node] b Second array of values.
     #
     # @return [Node] Array with selected values.
-    def conditional( a, b )
+    def conditional(a, b)
       unless a.is_a?(Node) or a.is_a?(Field_)
         a = Node.match(a, b.is_a?(Node) ? b : nil).new a
       end
@@ -384,7 +384,7 @@ EOS
     # @return [Node] Array with results.
     def <=>( other )
       Hornetseye::finalise do
-        ( self < other ).conditional -1, ( self > other ).conditional( 1, 0 )
+        (self < other).conditional -1, (self > other).conditional(1, 0)
       end
     end
 
