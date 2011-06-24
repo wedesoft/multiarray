@@ -102,6 +102,10 @@ class Object
     self
   end
 
+  def matched?
+    false
+  end
+
   # Boolean negation
   #
   # @return [FalseClass] Returns +false+.
@@ -109,7 +113,7 @@ class Object
   # @see NilClass#not
   # @see FalseClass#not
   def not
-     false
+    false
   end
 
   # Boolean 'and' operation

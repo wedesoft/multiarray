@@ -90,9 +90,7 @@ EOS
       # @private
       def define_binary_op(op, coercion = :coercion)
         define_method op do |other|
-          unless other.is_a?(Node) or other.is_a?(Field_)
-            other = Node.match(other, typecode).new other
-          end
+          other = Node.match(other, typecode).new other unless other.matched?
           if dimension == 0 and variables.empty? and
               other.dimension == 0 and other.variables.empty?
             target = typecode.send coercion, other.typecode
@@ -105,9 +103,7 @@ EOS
         end
         Field_.class_eval <<EOS
 def #{op}(other)
-  unless other.is_a?(Node) or other.is_a?(Field_)
-    other = Node.match(other, typecode).new other
-  end
+  other = Node.match(other, typecode).new other unless other.matched?
   if Thread.current[:lazy]
     sexp.#{op} other
   else
@@ -239,9 +235,7 @@ EOS
     #
     # @return [Node] Array with result of operation.
     def fmod_with_float( other )
-      unless other.is_a?(Node) or other.is_a?(Field_)
-        other = Node.match( other, typecode ).new other
-      end
+      other = Node.match( other, typecode ).new other unless other.matched?
       if typecode < FLOAT_ or other.typecode < FLOAT_
         fmod other
       else
@@ -330,12 +324,8 @@ EOS
     #
     # @return [Node] Array with selected values.
     def conditional(a, b)
-      unless a.is_a?(Node) or a.is_a?(Field_)
-        a = Node.match(a, b.is_a?(Node) ? b : nil).new a
-      end
-      unless b.is_a?(Node) or b.is_a?(Field_)
-        b = Node.match(b, a.is_a?(Node) ? a : nil).new b
-      end
+      a = Node.match(a, b.matched? ? b : nil).new a unless a.matched?
+      b = Node.match(b, a.matched? ? a : nil).new b unless b.matched?
       if dimension == 0 and variables.empty? and
         a.dimension == 0 and a.variables.empty? and
         b.dimension == 0 and b.variables.empty?
@@ -467,9 +457,7 @@ EOS
     # @return [Object] Result of injection.
     def inject( initial = nil, options = {} )
       unless initial.nil?
-        unless initial.is_a?(Node) or initial.is_a?(Field_)
-          initial = Node.match( initial ).new initial 
-        end
+        initial = Node.match( initial ).new initial unless initial.matched?
         initial_typecode = initial.typecode
       else
         initial_typecode = typecode
@@ -487,9 +475,7 @@ EOS
         index = Variable.new Hornetseye::INDEX( nil )
         value = element( index ).inject nil, :block => block,
                                         :var1 => var1, :var2 => var2
-        unless value.is_a?(Node) or value.is_a?(Field_)
-          value = typecode.new value
-        end
+        value = typecode.new value unless value.matched?
         if initial.nil? and index.size.get == 0
           raise "Array was empty and no initial value for injection was given"
         end
@@ -509,7 +495,7 @@ EOS
     #
     # @return [Boolean] Returns result of comparison.
     def eq_with_multiarray(other)
-      if other.is_a?(Node) or other.is_a?(Field_)
+      if other.matched?
         if variables.empty?
           if other.typecode == typecode and other.shape == shape
             Hornetseye::finalise { eq(other).inject( true ) { |a,b| a.and b } }
@@ -635,9 +621,7 @@ EOS
         demand
       else
         if initial
-          unless initial.is_a?(Node) or initial.is_a?(Field_)
-            initial = Node.match( initial ).new initial
-          end
+          initial = Node.match( initial ).new initial unless initial.matched?
           initial_typecode = initial.typecode
         else
           initial_typecode = typecode
@@ -670,9 +654,7 @@ EOS
     #
     # @private
     def table( filter, &action )
-      unless filter.is_a?(Node) or filter.is_a?(Field_)
-        filter = Node.match( filter, typecode ).new filter 
-      end
+      filter = Node.match( filter, typecode ).new filter unless filter.matched?
       if filter.dimension > dimension
         raise "Filter has #{filter.dimension} dimension(s) but should " +
               "not have more than #{dimension}"
@@ -691,9 +673,7 @@ EOS
     #
     # @return [Node] Result of convolution.
     def convolve( filter )
-      unless filter.is_a?(Node) or filter.is_a?(Field_)
-        filter = Node.match( filter, typecode ).new filter 
-      end
+      filter = Node.match( filter, typecode ).new filter unless filter.matched?
       array = self
       (dimension - filter.dimension).times { array = array.roll }
       array.table(filter.sexp) { |a,b| a * b }.diagonal { |s,x| s + x }
@@ -784,9 +764,8 @@ EOS
     def histogram( *ret_shape )
       options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
       options = { :weight => UINT.new( 1 ), :safe => true }.merge options
-      unless options[:weight].is_a?(Node) or options[:weight].is_a?(Field_)
-        options[ :weight ] =
-          Node.match( options[ :weight ] ).maxint.new options[ :weight ]
+      unless options[:weight].matched?
+        options[:weight] = Node.match(options[:weight]).maxint.new options[:weight]
       end
       if ( shape.first != 1 or dimension == 1 ) and ret_shape.size == 1
         [ self ].histogram *( ret_shape + [ options ] )
@@ -865,9 +844,7 @@ EOS
       options = { :target => UINT, :default => typecode.default }.merge options
       target = options[ :target ]
       default = options[ :default ]
-      unless default.is_a?(Node) or default.is_a?(Field_)
-        default = typecode.new default 
-      end
+      default = typecode.new default unless default.matched?
       left = Hornetseye::MultiArray(target, dimension).new *shape
       labels = Sequence.new target, size; labels[0] = 0
       rank = Sequence.uint size; rank[0] = 0
@@ -916,9 +893,7 @@ EOS
     def unmask( m, options = {} )
       options = { :safe => true, :default => typecode.default }.merge options
       default = options[:default]
-      unless default.is_a?(Node) or default.is_a?(Field_)
-        default = typecode.new default
-      end
+      default = typecode.new default unless default.matched?
       m.check_shape default
       if options[ :safe ]
         if m.to_ubyte.sum > shape.last
@@ -1052,8 +1027,7 @@ class Array
   def histogram( *ret_shape )
     options = ret_shape.last.is_a?( Hash ) ? ret_shape.pop : {}
     options = { :weight => Hornetseye::UINT. new( 1 ), :safe => true }.merge options
-    unless options[:weight].is_a?(Hornetseye::Node) or
-      options[:weight].is_a?(Hornetseye::Field_)
+    unless options[:weight].matched?
       options[:weight] =
         Hornetseye::Node.match( options[ :weight ] ).maxint.new options[ :weight ]
     end

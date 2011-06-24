@@ -114,7 +114,7 @@ module Hornetseye
   # @return [Class] Returns a class deriving from +INDEX_+.
   def INDEX( size )
     retval = Class.new INDEX_
-    size = INT.new(size) unless size.is_a? Node
+    size = INT.new(size) unless size.matched?
     retval.size = size
     retval
   end

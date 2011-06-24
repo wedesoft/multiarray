@@ -135,7 +135,7 @@ module Hornetseye
         end
         shape = args[0 ... dimension]
         n = args.size > dimension ? args[dimension] : 1
-        n = typecode.maxint.new n unless n.is_a? Node
+        n = typecode.maxint.new n unless n.matched?
         retval = new *shape
         unless compilable? and dimension > 0
           Random.new(retval.sexp, n).demand
@@ -324,6 +324,10 @@ module Hornetseye
 
     def inspect
       sexp.inspect
+    end
+
+    def matched?
+      true
     end
 
     def typecode

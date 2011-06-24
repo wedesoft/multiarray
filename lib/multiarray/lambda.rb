@@ -161,7 +161,7 @@ module Hornetseye
     #
     # @private
     def element(i)
-      unless i.is_a? Node
+      unless i.matched?
         unless (0 ... shape.last).member? i
           raise "Index must be in 0 ... #{shape.last} (was #{i})"
         end
@@ -180,14 +180,14 @@ module Hornetseye
     #
     # @private
     def slice( start, length )
-      unless start.is_a?( Node ) or length.is_a?( Node )
+      unless start.matched? or length.matched?
         if start < 0 or start + length > shape.last
           raise "Range must be in 0 ... #{shape.last} " +
                 "(was #{start} ... #{start + length})"
         end
       end
-      start = INT.new start unless start.is_a? Node
-      length = INT.new length unless length.is_a? Node
+      start = INT.new start unless start.matched?
+      length = INT.new length unless length.matched?
       index = Variable.new Hornetseye::INDEX( length )
       Lambda.new( index, @term.subst( @index => index ).
                          skip( index, start ) ).unroll

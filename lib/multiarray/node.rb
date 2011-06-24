@@ -280,6 +280,10 @@ module Hornetseye
 
     end
 
+    def matched?
+      true
+    end
+
     def allocate
       Hornetseye::MultiArray(typecode, dimension).new *shape
     end
@@ -590,7 +594,7 @@ module Hornetseye
     # @return [Object,Node] Returns the value.
     def []=( *indices )
       value = indices.pop
-      value = typecode.new value unless value.is_a?(Node) or value.is_a?(Field_)
+      value = typecode.new value unless value.matched?
       if indices.empty?
         check_shape value
         unless compilable? and value.compilable? and dimension > 0
@@ -684,7 +688,7 @@ module Hornetseye
     #
     # @private
     def coerce(other)
-      if other.is_a?(Node) or other.is_a?(Field_)
+      if other.matched?
         return other.sexp, self
       else
         return Node.match(other, self).new(other), self
