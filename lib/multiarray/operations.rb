@@ -117,11 +117,11 @@ def #{op}(other)
         method_name = GCCFunction.compile term, *keys
         self.class.class_eval <<EOS2
 def _#{op.to_s.method_name}(other)
-  other._#{op.to_s.method_name}_\#{typecode.to_s.downcase.method_name}_\#{dimension} self
+  other._#{op.to_s.method_name}_\#{self.class.to_s.method_name} self
 end
 EOS2
         other.class.class_eval <<EOS2
-def _#{op.to_s.method_name}_\#{typecode.to_s.downcase.method_name}_\#{dimension}(other)
+def _#{op.to_s.method_name}_\#{self.class.to_s.method_name}(other)
   retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode},
     \#{retval.dimension}).new *\#{other.dimension > dimension ? "shape" : "other.shape"}
   retval.check_shape other, self
