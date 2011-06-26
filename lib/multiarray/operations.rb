@@ -636,7 +636,7 @@ EOS
           diagonal initial, :block => block, :var1 => var1, :var2 => var2
         term = Diagonal.new( value, index0, index1, index2, initial,
                              block, var1, var2 )
-        index0.size[] ||= index1.size[]
+        index0.size = index1.size
         Lambda.new( index0, term ).force
       end
     end
