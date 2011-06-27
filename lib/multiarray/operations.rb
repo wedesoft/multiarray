@@ -53,16 +53,15 @@ def #{op}
     rescue NameError
       expr = Hornetseye::lazy { sexp.#{op} }
       if expr.compilable?
-        retval = expr.allocate.sexp
-        keys, values, term = Store.new(retval, expr).strip
+        retval = expr.allocate
+        keys, values, term = Store.new(retval.sexp, expr).strip
         method_name = GCCFunction.compile term, *keys
         self.class.class_eval <<EOS2
 def _#{op.to_s.method_name}
   if Thread.current[:lazy]
     sexp.#{op}
   else
-    retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode},
-                                    \#{retval.dimension}).new *(\#{retval.shape})
+    retval = Hornetseye::\#{retval.class}.new *(\#{retval.shape})
     GCCCache.\#{method_name} *(retval.values + values)
     retval
   end
@@ -112,8 +111,8 @@ def #{op}(other)
     rescue NameError
       expr = Hornetseye::lazy { sexp.#{op} other.sexp }
       if expr.compilable?
-        retval = expr.allocate.sexp
-        keys, values, term = Store.new(retval, expr).strip
+        retval = expr.allocate
+        keys, values, term = Store.new(retval.sexp, expr).strip
         method_name = GCCFunction.compile term, *keys
         self.class.class_eval <<EOS2
 def _#{op.to_s.method_name}(other)
@@ -122,8 +121,8 @@ end
 EOS2
         other.class.class_eval <<EOS2
 def _#{op.to_s.method_name}_\#{self.class.to_s.method_name}(other)
-  retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode},
-    \#{retval.dimension}).new *\#{other.dimension > dimension ? "shape" : "other.shape"}
+  retval = Hornetseye::\#{retval.class}.
+    new *\#{other.dimension > dimension ? "shape" : "other.shape"}
   retval.check_shape other, self
   GCCCache.\#{method_name} *(retval.values + other.values + values)
   retval
@@ -150,22 +149,21 @@ def #{op}(other)
     rescue NameError
       expr = Hornetseye::lazy { value.#{op} other.sexp }
       if expr.compilable?
-        retval = expr.allocate.sexp
-        keys, values, term = Store.new(retval, expr).strip
+        retval = expr.allocate
+        keys, values, term = Store.new(retval.sexp, expr).strip
         method_name = GCCFunction.compile term, *keys
         value.class.class_eval <<EOS2
 def _#{op.to_s.method_name}(other)
   if Thread.current[:lazy]
     self.#{op} other.sexp
   else
-    other._#{op.to_s.method_name}_\#{value.typecode.to_s.downcase.method_name}_\#{value.dimension} self
+    other._#{op.to_s.method_name}_\#{value.class.to_s.method_name} self
   end
 end
 EOS2
         other.class.class_eval <<EOS2
-def _#{op.to_s.method_name}_\#{value.typecode.to_s.downcase.method_name}_\#{value.dimension}(other)
-  retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode},
-    \#{retval.dimension}).new *shape
+def _#{op.to_s.method_name}_\#{value.class.to_s.method_name}(other)
+  retval = Hornetseye::\#{retval.class}.new *shape
   GCCCache.\#{method_name} *(retval.values + other.values + values)
   retval
 end
@@ -253,13 +251,49 @@ EOS
     def to_type(dest)
       if dimension == 0 and variables.empty?
         target = typecode.to_type dest
-        target.new( simplify.get ).simplify
+        target.new(simplify.get).simplify
       else
         key = "to_#{dest.to_s.downcase}"
         Hornetseye::ElementWise( lambda { |x| x.to_type dest }, key,
                                  lambda { |t| t.to_type dest } ).new(self).force
       end
     end
+
+    Field_.class_eval <<EOS
+def to_type(dest)
+  if Thread.current[:lazy]
+    sexp.to_type dest
+  else
+    begin
+      _to_type dest
+    rescue NameError
+      expr = Hornetseye::lazy { sexp.to_type dest }
+      if expr.compilable?
+        retval = expr.allocate
+        keys, values, term = Store.new(retval.sexp, expr).strip
+        method_name = GCCFunction.compile term, *keys
+        self.class.class_eval <<EOS2
+def _to_type(dest)
+  dest._to_type_\#{self.class.to_s.method_name} self
+end
+EOS2
+        dest.instance_eval <<EOS2
+def _to_type_\#{self.class.to_s.method_name}(other)
+  retval = Hornetseye::\#{retval.class}.new *other.shape
+  GCCCache.\#{method_name} *(retval.values + other.values)
+  retval
+end
+EOS2
+        args = values.collect { |arg| arg.values }.flatten
+        GCCCache.send method_name, *args
+        retval.demand.get
+      else
+        expr.force
+      end
+    end
+  end
+end
+EOS
 
     # Convert RGB array to scalar array
     #

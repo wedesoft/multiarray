@@ -112,6 +112,7 @@ module Hornetseye
   end
 
   Node.class_eval { include MultiArrayConversion }
+  Field_.class_eval { include MultiArrayConversion }
 
   # Module with meta-programming methods for creating shortcut methods for reading images
   module ReaderConversion
