@@ -326,6 +326,10 @@ module Hornetseye
       sexp.inspect
     end
 
+    def to_s
+      "#{self.class.to_s}(#{@memory.inspect},#{@shape.inspect},#{@strides.inspect})"
+    end
+
     def matched?
       true
     end

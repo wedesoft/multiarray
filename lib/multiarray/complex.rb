@@ -43,8 +43,8 @@ module Hornetseye
       #         coercion.
       #
       # @private
-      def generic?( value )
-        value.is_a?( Numeric ) or value.is_a?( GCCValue )
+      def generic?(value)
+        value.is_a?(Numeric) or value.is_a?(GCCValue)
       end
 
       # Construct complex number using polar coordinates
@@ -56,7 +56,7 @@ module Hornetseye
       #
       # @private
       def polar( r, theta )
-        new r * Math.cos( theta ), r * Math.sin( theta )
+        new r * Math.cos(theta), r * Math.sin(theta)
       end
 
     end
@@ -106,7 +106,7 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def assign( value )
+    def assign(value)
       @real, @imag = value.real, value.imag
     end
 
@@ -117,7 +117,7 @@ module Hornetseye
     # @return [Array<InternalComplex>] Result of coercion.
     #
     # @private
-    def coerce( other )
+    def coerce(other)
       if other.is_a? InternalComplex
         return other, self
       elsif other.is_a? Complex
@@ -188,8 +188,8 @@ module Hornetseye
     # @return [InternalComplex] The result
     #
     # @private
-    def +( other )
-      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+    def +(other)
+      if other.is_a?(InternalComplex) or other.is_a?(Complex)
         InternalComplex.new @real + other.real, @imag + other.imag
       elsif InternalComplex.generic? other
         InternalComplex.new @real + other, @imag
@@ -206,8 +206,8 @@ module Hornetseye
     # @return [InternalComplex] The result
     #
     # @private
-    def -( other )
-      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+    def -(other)
+      if other.is_a?(InternalComplex) or other.is_a?(Complex)
         InternalComplex.new @real - other.real, @imag - other.imag
       elsif InternalComplex.generic? other
         InternalComplex.new @real - other, @imag
@@ -224,8 +224,8 @@ module Hornetseye
     # @return [InternalComplex] The result
     #
     # @private
-    def *( other )
-      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+    def *(other)
+      if other.is_a?(InternalComplex) or other.is_a?(Complex)
         InternalComplex.new @real * other.real - @imag * other.imag,
                     @real * other.imag + @imag * other.real
       elsif InternalComplex.generic? other
@@ -243,8 +243,8 @@ module Hornetseye
     # @return [InternalComplex] The result
     #
     # @private
-    def /( other )
-      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+    def /(other)
+      if other.is_a?(InternalComplex) or other.is_a?(Complex)
         self * other.conj / other.abs2
       elsif InternalComplex.generic? other
         InternalComplex.new @real / other, @imag / other
@@ -262,13 +262,13 @@ module Hornetseye
     # @return [InternalComplex] The result
     #
     # @private
-    def **( other )
-      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+    def **(other)
+      if other.is_a?(InternalComplex) or other.is_a?(Complex)
         r, theta = polar
         ore = other.real
         oim = other.imag
-        nr = Math.exp ore * Math.log( r ) - oim * theta
-        ntheta = theta * ore + oim * Math.log( r )
+        nr = Math.exp ore * Math.log(r) - oim * theta
+        ntheta = theta * ore + oim * Math.log(r)
         InternalComplex.polar nr, ntheta
       elsif InternalComplex.generic? other
         r, theta = polar
@@ -314,11 +314,11 @@ module Hornetseye
     #         equal or not.
     #
     # @private
-    def ==( other )
-      if other.is_a?( InternalComplex ) or other.is_a?( Complex )
+    def ==(other)
+      if other.is_a?(InternalComplex) or other.is_a?(Complex)
         @real.eq( other.real ).and( @imag.eq( other.imag ) )
       elsif InternalComplex.generic? other
-        @real.eq( other ).and( @imag.eq( 0 ) )
+        @real.eq(other).and( @imag.eq( 0 ) )
       else
         false
       end
@@ -349,7 +349,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def sqrt_with_internalcomplex( z )
+  def sqrt_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       real = sqrt( ( z.abs + z.real ) / 2 )
       imag = ( z.imag < 0 ).conditional -sqrt( ( z.abs - z.real ) / 2 ),
@@ -371,7 +371,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def exp_with_internalcomplex( z )
+  def exp_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       real = exp( z.real ) * cos( z.imag )
       imag = exp( z.real ) * sin( z.imag )
@@ -392,7 +392,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def cos_with_internalcomplex( z )
+  def cos_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       real = cos( z.real ) * cosh( z.imag )
       imag = -sin( z.real ) * sinh( z.imag )
@@ -413,7 +413,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def sin_with_internalcomplex( z )
+  def sin_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       real = sin( z.real ) * cosh( z.imag )
       imag = cos( z.real ) * sinh( z.imag )
@@ -434,9 +434,9 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def tan_with_internalcomplex( z )
+  def tan_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
-      sin( z ) / cos( z )
+      sin(z) / cos(z)
     else
       tan_without_internalcomplex z
     end
@@ -453,7 +453,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def cosh_with_internalcomplex( z )
+  def cosh_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       real = cosh( z.real ) * cos( z.imag )
       imag = sinh( z.real ) * sin( z.imag )
@@ -474,7 +474,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def sinh_with_internalcomplex( z )
+  def sinh_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       real = sinh( z.real ) * cos( z.imag )
       imag = cosh( z.real ) * sin( z.imag )
@@ -495,9 +495,9 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def tanh_with_internalcomplex( z )
+  def tanh_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
-      sinh( z ) / cosh( z )
+      sinh(z) / cosh(z)
     else
       tanh_without_internalcomplex z
     end
@@ -514,7 +514,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def log_with_internalcomplex( z )
+  def log_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       r, theta = z.polar
       Hornetseye::InternalComplex.new log( r.abs ), theta
@@ -534,9 +534,9 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def log10_with_internalcomplex( z )
+  def log10_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
-      log( z ) / log( 10 )
+      log(z) / log( 10 )
     else
       log10_without_internalcomplex z
     end
@@ -553,7 +553,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def acos_with_internalcomplex( z )
+  def acos_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       -1.0.im * log( z + 1.0.im * sqrt( 1.0 - z * z ) )
     else
@@ -572,7 +572,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def asin_with_internalcomplex( z )
+  def asin_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       -1.0.im * log( 1.0.im * z + sqrt( 1.0 - z * z ) )
     else
@@ -591,7 +591,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def atan_with_internalcomplex( z )
+  def atan_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       1.0.im * log( ( 1.0.im + z ) / ( 1.0.im - z ) ) / 2.0
     else
@@ -610,7 +610,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def acosh_with_internalcomplex( z )
+  def acosh_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       log( z + sqrt( z * z - 1.0 ) )
     else
@@ -629,7 +629,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def asinh_with_internalcomplex( z )
+  def asinh_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       log( z + sqrt( 1.0 + z * z ) )
     else
@@ -648,7 +648,7 @@ module Math
   # @return [Object,Hornetseye::InternalComplex] Result of method call.
   #
   # @private
-  def atanh_with_internalcomplex( z )
+  def atanh_with_internalcomplex(z)
     if z.is_a? Hornetseye::InternalComplex
       log( ( 1.0 + z ) / ( 1.0 - z ) ) / 2.0
     else
@@ -709,7 +709,7 @@ module Hornetseye
       # @return The return value should be ignored.
       #
       # @private
-      def inherited( subclass )
+      def inherited(subclass)
         subclass.num_elements = 2
       end
 
@@ -798,11 +798,11 @@ module Hornetseye
       # @return [Class] Result of coercion.
       #
       # @private
-      def coercion( other )
+      def coercion(other)
         if other < COMPLEX_
           Hornetseye::COMPLEX element_type.coercion( other.element_type )
         elsif other < INT_ or other < FLOAT_
-          Hornetseye::COMPLEX element_type.coercion( other )
+          Hornetseye::COMPLEX element_type.coercion(other)
         else
           super other
         end
@@ -815,11 +815,11 @@ module Hornetseye
       # @return [Array<Class>] Result of coercion.
       #
       # @private
-      def coerce( other )
+      def coerce(other)
         if other < COMPLEX_
           return other, self
         elsif other < INT_ or other < FLOAT_
-          return Hornetseye::COMPLEX( other ), self
+          return Hornetseye::COMPLEX(other), self
         else
           super other
         end        
@@ -830,7 +830,7 @@ module Hornetseye
       # @param [Object] other Object to compare with.
       #
       # @return [Boolean] Boolean indicating whether classes are equal.
-      def ==( other )
+      def ==(other)
         other.is_a? Class and other < COMPLEX_ and
           element_type == other.element_type
       end
@@ -851,7 +851,7 @@ module Hornetseye
       # @return [Boolean] Returns +true+ if objects are equal.
       #
       # @private
-      def eql?( other )
+      def eql?(other)
         self == other
       end
 
@@ -893,7 +893,7 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def assign( value )
+    def assign(value)
       value = value.simplify
       if @value.real.respond_to? :assign
         @value.real.assign value.get.real
@@ -970,9 +970,9 @@ module Hornetseye
       # @return [Class] Result of type alignment.
       #
       # @private
-      def align( context )
+      def align(context)
         if self < COMPLEX_
-          Hornetseye::COMPLEX element_type.align( context )
+          Hornetseye::COMPLEX element_type.align(context)
         else
           super context
         end
@@ -994,7 +994,7 @@ module Hornetseye
     #
     # @return [Node] Array with real values.
     def real_with_decompose
-      if typecode == OBJECT or is_a?( Variable )
+      if typecode == OBJECT or is_a?(Variable) or Thread.current[:lazy]
         real_without_decompose
       elsif typecode < COMPLEX_
         decompose 0
@@ -1010,7 +1010,7 @@ module Hornetseye
     # @param [Object] Value or array of values to assign to real components.
     #
     # @return [Object] Returns +value+.
-    def real=( value )
+    def real=(value)
       if typecode < COMPLEX_
         decompose( 0 )[] = value
       elsif typecode == OBJECT
@@ -1026,7 +1026,7 @@ module Hornetseye
     #
     # @return [Node] Array with imaginary values.
     def imag_with_decompose
-      if typecode == OBJECT or is_a?( Variable )
+      if typecode == OBJECT or is_a?(Variable) or Thread.current[:lazy]
         imag_without_decompose
       elsif typecode < COMPLEX_
         decompose 1
@@ -1042,7 +1042,7 @@ module Hornetseye
     # @param [Object] Value or array of values to assign to imaginary components.
     #
     # @return [Object] Returns +value+.
-    def imag=( value )
+    def imag=(value)
       if typecode < COMPLEX_
         decompose( 1 )[] = value
       elsif typecode == OBJECT
@@ -1088,7 +1088,7 @@ module Hornetseye
   # @return [SCOMPLEX] The wrapped Complex value.
   #
   # @private
-  def SCOMPLEX( value )
+  def SCOMPLEX(value)
     SCOMPLEX.new value
   end
 
@@ -1101,7 +1101,7 @@ module Hornetseye
   # @return [DCOMPLEX] The wrapped Complex value.
   #
   # @private
-  def DCOMPLEX( value )
+  def DCOMPLEX(value)
     DCOMPLEX.new value
   end
 

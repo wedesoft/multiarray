@@ -694,6 +694,12 @@ class Array
     zip( ( 0 ... size ).to_a ).collect &action
   end
 
+  def strip
+    collect { |arg| arg.strip }.inject [[], [], []] do |retval,s|
+      [retval[0] + s[0], retval[1] + s[1], retval[2] + [s[2]]]
+    end
+  end
+
 end
 
 class String

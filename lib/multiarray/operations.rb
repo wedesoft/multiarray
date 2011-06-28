@@ -266,12 +266,20 @@ def to_type(dest)
   else
     begin
       _to_type dest
-    rescue NameError
-      expr = Hornetseye::lazy { sexp.to_type dest }
+    rescue NameError => e
+      keys, values, term = sexp.strip
+      subst = Hash[*keys.zip(values).flatten]
+      expr = Hornetseye::lazy { term.to_type dest }
       if expr.compilable?
-        retval = expr.allocate
-        keys, values, term = Store.new(retval.sexp, expr).strip
-        method_name = GCCFunction.compile term, *keys
+        retval = expr.subst(subst).allocate
+        retval_keys, retval_values, retval_term = retval.sexp.strip
+        store = Store.new retval_term, expr
+        data_keys, data_values, data_term = store.strip
+        keys = retval_keys + keys + data_keys
+        values = retval_values + values + data_values
+        method_name = GCCFunction.compile data_term, *keys
+        GCCCache.const_set "DATA\#{method_name}",
+                           data_values.collect { |arg| arg.values }.flatten
         self.class.class_eval <<EOS2
 def _to_type(dest)
   dest._to_type_\#{self.class.to_s.method_name} self
@@ -280,7 +288,7 @@ EOS2
         dest.instance_eval <<EOS2
 def _to_type_\#{self.class.to_s.method_name}(other)
   retval = Hornetseye::\#{retval.class}.new *other.shape
-  GCCCache.\#{method_name} *(retval.values + other.values)
+  GCCCache.\#{method_name} *(retval.values + other.values + GCCCache::DATA\#{method_name})
   retval
 end
 EOS2
@@ -288,7 +296,7 @@ EOS2
         GCCCache.send method_name, *args
         retval.demand.get
       else
-        expr.force
+        expr.subst(subst).force
       end
     end
   end
@@ -307,7 +315,7 @@ EOS
         if dest < FLOAT_
           lazy { r * 0.299 + g * 0.587 + b * 0.114 }.to_type dest
         elsif dest < INT_
-          lazy { ( r * 0.299 + g * 0.587 + b * 0.114 ).round }.to_type dest
+          lazy { (r * 0.299 + g * 0.587 + b * 0.114).round }.to_type dest
         else
           to_type_without_rgb dest
         end

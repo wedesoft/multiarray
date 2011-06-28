@@ -33,8 +33,8 @@ module Hornetseye
       #         coercion.
       #
       # @private
-      def generic?( value )
-        value.is_a?( Numeric ) or value.is_a?( GCCValue )
+      def generic?(value)
+        value.is_a?(Numeric) or value.is_a?(GCCValue)
       end
 
       # Defines a unary operation
@@ -46,9 +46,9 @@ module Hornetseye
       # @return [Proc] The new method.
       #
       # @private
-      def define_unary_op( op )
+      def define_unary_op(op)
         define_method op do
-          RGB.new r.send( op ), g.send( op ), b.send( op )
+          RGB.new r.send(op), g.send(op), b.send(op)
         end
       end
 
@@ -61,7 +61,7 @@ module Hornetseye
       # @return [Proc] The new method.
       #
       # @private
-      def define_binary_op( op )
+      def define_binary_op(op)
         define_method op do |other|
           if other.is_a? RGB
             RGB.new r.send( op, other.r ), g.send( op, other.g ),
@@ -125,7 +125,7 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def assign( value )
+    def assign(value)
       @r, @g, @b = value.r, value.g, value.b
     end
 
@@ -136,7 +136,7 @@ module Hornetseye
     # @return [Array<RGB>] Result of coercion.
     #
     # @private
-    def coerce( other )
+    def coerce(other)
       if other.is_a? RGB
         return other, self
       else
@@ -197,11 +197,11 @@ module Hornetseye
     #
     # @return [Boolean] Returns boolean indicating whether objects are
     #         equal or not.
-    def ==( other )
+    def ==(other)
       if other.is_a? RGB
         @r.eq( other.r ).and( @g.eq( other.g ) ).and( @b.eq( other.b ) )
       elsif RGB.generic? other
-        @r.eq( other ).and( @g.eq( other ) ).and( @b.eq( other ) )
+        @r.eq(other).and( @g.eq(other) ).and( @b.eq(other) )
       else
         false
       end
@@ -214,7 +214,7 @@ module Hornetseye
     # @return [Node] An array with the three channel values as elements.
     #
     # @private
-    def decompose( i )
+    def decompose(i)
       [ @r, @g, @b ][ i ]
     end
 
@@ -238,7 +238,7 @@ module Hornetseye
       # @return The return value should be ignored.
       #
       # @private
-      def inherited( subclass )
+      def inherited(subclass)
         subclass.num_elements = 3
       end
 
@@ -326,11 +326,11 @@ module Hornetseye
       # @return [Class] Result of coercion.
       #
       # @private
-      def coercion( other )
+      def coercion(other)
         if other < RGB_
           Hornetseye::RGB element_type.coercion( other.element_type )
         elsif other < INT_ or other < FLOAT_
-          Hornetseye::RGB element_type.coercion( other )
+          Hornetseye::RGB element_type.coercion(other)
         else
           super other
         end
@@ -343,11 +343,11 @@ module Hornetseye
       # @return [Array<Class>] Result of coercion.
       #
       # @private
-      def coerce( other )
+      def coerce(other)
         if other < RGB_
           return other, self
         elsif other < INT_ or other < FLOAT_
-          return Hornetseye::RGB( other ), self
+          return Hornetseye::RGB(other), self
         else
           super other
         end
@@ -358,7 +358,7 @@ module Hornetseye
       # @param [Object] other Object to compare with.
       #
       # @return [Boolean] Boolean indicating whether classes are equal.
-      def ==( other )
+      def ==(other)
         other.is_a? Class and other < RGB_ and
           element_type == other.element_type
       end
@@ -379,7 +379,7 @@ module Hornetseye
       # @return [Boolean] Returns +true+ if objects are equal.
       #
       # @private
-      def eql?( other )
+      def eql?(other)
         self == other
       end
 
@@ -431,7 +431,7 @@ module Hornetseye
     # @return [Object] Returns +value+.
     #
     # @private
-    def assign( value )
+    def assign(value)
       value = value.simplify
       if @value.r.respond_to? :assign
         @value.r.assign value.get.r
@@ -510,9 +510,9 @@ module Hornetseye
       # @param [Class] context Other type to align with.
       #
       # @private
-      def align( context )
+      def align(context)
         if self < RGB_
-          Hornetseye::RGB element_type.align( context )
+          Hornetseye::RGB element_type.align(context)
         else
           super context
         end
@@ -535,7 +535,7 @@ module Hornetseye
     #
     # @return [Node] Array with red channel.
     def r_with_decompose
-      if typecode == OBJECT or is_a?( Variable )
+      if typecode == OBJECT or is_a?(Variable) or Thread.current[:lazy]
         r_without_decompose
       elsif typecode < RGB_
         decompose 0
@@ -551,7 +551,7 @@ module Hornetseye
     # @param [Object] Value or array of values to assign to red channel.
     #
     # @return [Object] Returns +value+.
-    def r=( value )
+    def r=(value)
       if typecode < RGB_
         decompose( 0 )[] = value
       elsif typecode == OBJECT
@@ -567,7 +567,7 @@ module Hornetseye
     #
     # @return [Node] Array with green channel.
     def g_with_decompose
-      if typecode == OBJECT or is_a?( Variable )
+      if typecode == OBJECT or is_a?(Variable) or Thread.current[:lazy]
         g_without_decompose
       elsif typecode < RGB_
         decompose 1
@@ -583,7 +583,7 @@ module Hornetseye
     # @param [Object] Value or array of values to assign to green channel.
     #
     # @return [Object] Returns +value+.
-    def g=( value )
+    def g=(value)
       if typecode < RGB_
         decompose( 1 )[] = value
       elsif typecode == OBJECT
@@ -599,7 +599,7 @@ module Hornetseye
     #
     # @return [Node] Array with blue channel.
     def b_with_decompose
-      if typecode == OBJECT or is_a?( Variable )
+      if typecode == OBJECT or is_a?(Variable) or Thread.current[:lazy]
         b_without_decompose
       elsif typecode < RGB_
         decompose 2
@@ -615,7 +615,7 @@ module Hornetseye
     # @param [Object] Value or array of values to assign to blue channel.
     #
     # @return [Object] Returns +value+.
-    def b=( value )
+    def b=(value)
       if typecode < RGB_
         decompose( 2 )[] = value
       elsif typecode == OBJECT
@@ -749,7 +749,7 @@ module Hornetseye
   # @return [BYTERGB] The wrapped RGB value.
   #
   # @private
-  def BYTERGB( value )
+  def BYTERGB(value)
     BYTERGB.new value
   end
 
@@ -762,7 +762,7 @@ module Hornetseye
   # @return [UBYTERGB] The wrapped RGB value.
   #
   # @private
-  def UBYTERGB( value )
+  def UBYTERGB(value)
     UBYTERGB.new value
   end
 
@@ -775,7 +775,7 @@ module Hornetseye
   # @return [SINTRGB] The wrapped RGB value.
   #
   # @private
-  def SINTRGB( value )
+  def SINTRGB(value)
     SINTRGB.new value
   end
 
@@ -788,7 +788,7 @@ module Hornetseye
   # @return [USINTRGB] The wrapped RGB value.
   #
   # @private
-  def USINTRGB( value )
+  def USINTRGB(value)
     USINTRGB.new value
   end
 
@@ -801,7 +801,7 @@ module Hornetseye
   # @return [INTRGB] The wrapped RGB value.
   #
   # @private
-  def INTRGB( value )
+  def INTRGB(value)
     INTRGB.new value
   end
 
@@ -814,7 +814,7 @@ module Hornetseye
   # @return [UINTRGB] The wrapped RGB value.
   #
   # @private
-  def UINTRGB( value )
+  def UINTRGB(value)
     UINTRGB.new value
   end
 
@@ -827,7 +827,7 @@ module Hornetseye
   # @return [LONGRGB] The wrapped RGB value.
   #
   # @private
-  def LONGRGB( value )
+  def LONGRGB(value)
     LONGRGB.new value
   end
 
@@ -840,7 +840,7 @@ module Hornetseye
   # @return [ULONGRGB] The wrapped RGB value.
   #
   # @private
-  def ULONGRGB( value )
+  def ULONGRGB(value)
     ULONGRGB.new value
   end
 
@@ -853,7 +853,7 @@ module Hornetseye
   # @return [SFLOATRGB] The wrapped RGB value.
   #
   # @private
-  def SFLOATRGB( value )
+  def SFLOATRGB(value)
     SFLOATRGB.new value
   end
 
@@ -866,7 +866,7 @@ module Hornetseye
   # @return [DFLOATRGB] The wrapped RGB value.
   #
   # @private
-  def DFLOATRGB( value )
+  def DFLOATRGB(value)
     DFLOATRGB.new value
   end
 
@@ -926,7 +926,7 @@ class Fixnum
     # @return [Object] Result of binary operation.
     #
     # @private
-    def power_with_rgb( other )
+    def power_with_rgb(other)
       if other.is_a? Hornetseye::RGB
         x, y = other.coerce self
         x ** y
@@ -943,7 +943,7 @@ end
 
 module Math
 
-  def sqrt_with_rgb( c )
+  def sqrt_with_rgb(c)
     if c.is_a? Hornetseye::RGB
       Hornetseye::RGB.new sqrt( c.r ), sqrt( c.g ), sqrt( c.b )
     else
