@@ -38,6 +38,7 @@ module Hornetseye
         if @@subclasses.has_key? [typecode, dimension]
           @@subclasses[[typecode, dimension]]
         else
+raise 'wtf' unless self == Field_
           retval = Class.new self
           retval.typecode = typecode
           retval.dimension = dimension
@@ -353,7 +354,7 @@ module Hornetseye
     def sexp
       if dimension > 0
         Hornetseye::lazy(@shape.last) do |index|
-          pointer = self.class.inherit(typecode, dimension - 1).
+          pointer = Field_.inherit(typecode, dimension - 1).
             new(*(@shape[0 ... dimension - 1] +
                 [:strides => @strides[0 ... @strides.size - 1], :memory => @memory])).sexp
           Lookup.new pointer, index, INT.new(@strides.last)

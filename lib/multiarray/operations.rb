@@ -121,11 +121,11 @@ def _#{op.to_s.method_name}(other)
 end
 EOS2
         other.class.class_eval <<EOS2
-def _#{op.to_s.method_name}_\#{self.class.to_s.method_name}(other)
+def _#{op.to_s.method_name}_\#{self.class.to_s.method_name}(_self)
   retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
-    new *\#{other.dimension > dimension ? 'shape' : 'other.shape'}
-  retval.check_shape other, self
-  GCCCache.\#{method_name} *(retval.values + other.values + values)
+    new *\#{other.dimension > dimension ? 'shape' : '_self.shape'}
+  retval.check_shape _self, self
+  GCCCache.\#{method_name} *(retval.values + _self.values + values)
   retval
 end
 EOS2
@@ -163,10 +163,10 @@ def _#{op.to_s.method_name}(other)
 end
 EOS2
         other.class.class_eval <<EOS2
-def _#{op.to_s.method_name}_\#{value.class.to_s.method_name}(other)
+def _#{op.to_s.method_name}_\#{value.class.to_s.method_name}(_self)
   retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
     new *shape
-  GCCCache.\#{method_name} *(retval.values + other.values + values)
+  GCCCache.\#{method_name} *(retval.values + _self.values + values)
   retval
 end
 EOS2
