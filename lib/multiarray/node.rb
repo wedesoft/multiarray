@@ -659,12 +659,12 @@ module Hornetseye
       elsif (dimension > 0 and Thread.current[:lazy]) or not variables.empty?
         self
       elsif compilable?
-        retval = allocate.sexp
-        GCCFunction.run Store.new(retval, self)
+        retval = allocate
+        GCCFunction.run Store.new(retval.sexp, self)
         retval.demand.get
       else
-        retval = allocate.sexp
-        Store.new(retval, self).demand
+        retval = allocate
+        Store.new(retval.sexp, self).demand
         retval.demand.get
       end
     end

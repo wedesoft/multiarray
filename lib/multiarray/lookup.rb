@@ -29,6 +29,10 @@ module Hornetseye
       @p, @index, @stride = p, index, stride
     end
 
+    def sexp?
+      true
+    end
+
     # Get storage object if there is any
     #
     # @return [Malloc,List,NilClass] Object storing the data.

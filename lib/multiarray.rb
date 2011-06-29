@@ -102,6 +102,10 @@ class Object
     self
   end
 
+  def sexp?
+    false
+  end
+
   def matched?
     false
   end

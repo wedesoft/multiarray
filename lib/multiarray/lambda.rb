@@ -31,6 +31,10 @@ module Hornetseye
       @term = term
     end
 
+    def sexp?
+      true
+    end
+
     # Get storage object if there is any
     #
     # @return [Malloc,List,NilClass] Object storing the data.

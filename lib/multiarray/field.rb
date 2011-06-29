@@ -87,7 +87,7 @@ module Hornetseye
         def recursion(element, args)
           if element.dimension > 0
             args.each_with_index do |arg,i|
-              recursion element.element(i), arg
+              recursion element.element(INT.new(i)), arg
             end
           else
             element[] = args
@@ -322,6 +322,10 @@ module Hornetseye
       @memory = options[:memory] || typecode.memory_type.new(typecode.storage_size * size)
     end
 
+    def sexp?
+      true
+    end
+
     def inspect
       sexp.inspect
     end
@@ -360,7 +364,7 @@ module Hornetseye
     end
 
     def element(i)
-      memory = @memory + typecode.storage_size * i * @strides.last
+      memory = @memory + typecode.storage_size * i.get * @strides.last
       if dimension > 1
         Hornetseye::MultiArray(typecode, dimension - 1).
           new *(shape[0 ... dimension - 1] +
@@ -387,6 +391,143 @@ module Hornetseye
       sexp.to_a
     end
 
+    def to_type(dest)
+      if dest == typecode
+        self
+      else
+        if Thread.current[:lazy]
+          sexp.to_type dest
+        else
+          begin
+            _to_type dest
+          rescue NameError
+            keys, values, term = sexp.strip
+            subst = Hash[*keys.zip(values).flatten]
+            expr = Hornetseye::lazy { term.to_type dest }
+            if expr.compilable?
+              retval = expr.subst(subst).allocate
+              retval_keys, retval_values, retval_term = retval.sexp.strip
+              store = Store.new retval_term, expr
+              data_keys, data_values, data_term = store.strip
+              keys = retval_keys + keys + data_keys
+              method_name = GCCFunction.compile data_term, *keys
+              GCCCache.const_set "DATA#{method_name}",
+                                 data_values.collect { |arg| arg.values }.flatten
+              self.class.class_eval <<EOS
+def _to_type(dest)
+  dest._to_type_#{self.class.to_s.method_name} self
+end
+EOS
+              dest.instance_eval <<EOS
+def _to_type_#{self.class.to_s.method_name}(_self)
+  retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode}, #{retval.dimension}).
+    new *_self.shape
+  GCCCache.#{method_name} *(retval.values + _self.values + GCCCache::DATA#{method_name})
+  retval
+end
+EOS
+              _to_type dest
+            else
+              expr.subst(subst).force
+            end
+          end
+        end
+      end
+    end
+
+    def conditional(a, b)
+      a = Node.match(a, b.matched? ? b : nil).new a unless a.matched?
+      b = Node.match(b, a.matched? ? a : nil).new b unless b.matched?
+      if Thread.current[:lazy] or a.sexp? or b.sexp?
+        sexp.conditional a.sexp, b.sexp
+      else
+        begin
+          _conditional a, b
+        rescue NameError
+          keys, values, expr = Hornetseye::lazy { conditional a, b }.strip
+          subst = Hash[*keys.zip(values).flatten]
+          if expr.compilable?
+            retval = expr.subst(subst).allocate
+            retval_keys, retval_values, retval_term = retval.sexp.strip
+            store = Store.new retval_term, expr
+            keys = retval_keys + keys
+            method_name = GCCFunction.compile store, *keys
+            self.class.class_eval <<EOS
+def _conditional(a, b)
+  a._conditional_#{self.class.to_s.method_name} self, b
+end
+EOS
+            a.class.class_eval <<EOS
+def _conditional_#{self.class.to_s.method_name}(_self, b)
+  b._conditional_#{self.class.to_s.method_name}_#{a.class.to_s.method_name} _self, self
+end
+EOS
+            dimensions = [dimension, a.dimension, b.dimension]
+            b.class.class_eval <<EOS
+def _conditional_#{self.class.to_s.method_name}_#{a.class.to_s.method_name}(_self, a)
+  retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode}, #{retval.dimension}).
+    new *#{['_self.shape', 'a.shape', 'shape'][dimensions.index(dimensions.max)]}
+  GCCCache.#{method_name} *(retval.values + _self.values + a.values + values)
+  retval
+end
+EOS
+            _conditional a, b
+          else
+            expr.subst(subst).force
+          end
+        end
+      end
+    end
+
+    def <=>(other)
+      other = Node.match(other).new other unless other.matched?
+      if Thread.current[:lazy] or other.sexp?
+        sexp <=> other.sexp
+      else
+        begin
+          _cmp other
+        rescue NameError
+          keys, values, term = sexp.strip
+          other_keys, other_values, other_term = other.sexp.strip
+          subst = Hash[*(keys + other_keys).zip(values + other_values).flatten]
+          expr = Hornetseye::lazy { term <=> other_term }
+          if expr.compilable?
+            retval = expr.subst(subst).allocate
+            retval_keys, retval_values, retval_term = retval.sexp.strip
+            store = Store.new retval_term, expr
+            data_keys, data_values, data_term = store.strip
+            keys = retval_keys + keys + other_keys + data_keys
+            method_name = GCCFunction.compile data_term, *keys
+            GCCCache.const_set "DATA#{method_name}",
+                               data_values.collect { |arg| arg.values }.flatten
+            self.class.class_eval <<EOS
+def _cmp(other)
+  other._cmp_#{self.class.to_s.method_name} self
+end
+EOS
+            other.class.class_eval <<EOS
+def _cmp_#{self.class.to_s.method_name}(_self)
+  retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode}, #{retval.dimension}).
+    new *#{other.dimension > dimension ? 'shape' : '_self.shape'}
+  GCCCache.#{method_name} *(retval.values + _self.values + values +
+                            GCCCache::DATA#{method_name})
+  retval
+end
+EOS
+            _cmp other
+          else
+            expr.subst(subst).force
+          end
+        end
+      end
+    end
+
+    Scalar.class_eval do
+      def <=>(other)
+        @value <=> other.sexp
+      end
+    end
+
     def inject(initial = nil, options = {}, &action)
       sexp.inject initial, options, &action
     end
@@ -401,10 +542,14 @@ module Hornetseye
       sexp.each &action
     end
 
-    def conditional(a, b)
-      sexp.conditional a.sexp, b.sexp
+    def demand
+      self
     end
-  
+
+    def get
+      self
+    end
+
     # Coerce with other object
     #
     # @param [Object] other Other object.

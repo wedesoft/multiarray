@@ -61,7 +61,8 @@ def _#{op.to_s.method_name}
   if Thread.current[:lazy]
     sexp.#{op}
   else
-    retval = Hornetseye::\#{retval.class}.new *(\#{retval.shape})
+    retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
+      new *(\#{retval.shape})
     GCCCache.\#{method_name} *(retval.values + values)
     retval
   end
@@ -121,8 +122,8 @@ end
 EOS2
         other.class.class_eval <<EOS2
 def _#{op.to_s.method_name}_\#{self.class.to_s.method_name}(other)
-  retval = Hornetseye::\#{retval.class}.
-    new *\#{other.dimension > dimension ? "shape" : "other.shape"}
+  retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
+    new *\#{other.dimension > dimension ? 'shape' : 'other.shape'}
   retval.check_shape other, self
   GCCCache.\#{method_name} *(retval.values + other.values + values)
   retval
@@ -163,7 +164,8 @@ end
 EOS2
         other.class.class_eval <<EOS2
 def _#{op.to_s.method_name}_\#{value.class.to_s.method_name}(other)
-  retval = Hornetseye::\#{retval.class}.new *shape
+  retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
+    new *shape
   GCCCache.\#{method_name} *(retval.values + other.values + values)
   retval
 end
@@ -213,7 +215,6 @@ EOS
     define_binary_op :<, :coercion_bool
     define_binary_op :>=, :coercion_bool
     define_binary_op :>, :coercion_bool
-    define_binary_op :<=>, :coercion_byte
     define_binary_op :minor
     define_binary_op :major
 
@@ -258,50 +259,6 @@ EOS
                                  lambda { |t| t.to_type dest } ).new(self).force
       end
     end
-
-    Field_.class_eval <<EOS
-def to_type(dest)
-  if Thread.current[:lazy]
-    sexp.to_type dest
-  else
-    begin
-      _to_type dest
-    rescue NameError => e
-      keys, values, term = sexp.strip
-      subst = Hash[*keys.zip(values).flatten]
-      expr = Hornetseye::lazy { term.to_type dest }
-      if expr.compilable?
-        retval = expr.subst(subst).allocate
-        retval_keys, retval_values, retval_term = retval.sexp.strip
-        store = Store.new retval_term, expr
-        data_keys, data_values, data_term = store.strip
-        keys = retval_keys + keys + data_keys
-        values = retval_values + values + data_values
-        method_name = GCCFunction.compile data_term, *keys
-        GCCCache.const_set "DATA\#{method_name}",
-                           data_values.collect { |arg| arg.values }.flatten
-        self.class.class_eval <<EOS2
-def _to_type(dest)
-  dest._to_type_\#{self.class.to_s.method_name} self
-end
-EOS2
-        dest.instance_eval <<EOS2
-def _to_type_\#{self.class.to_s.method_name}(other)
-  retval = Hornetseye::\#{retval.class}.new *other.shape
-  GCCCache.\#{method_name} *(retval.values + other.values + GCCCache::DATA\#{method_name})
-  retval
-end
-EOS2
-        args = values.collect { |arg| arg.values }.flatten
-        GCCCache.send method_name, *args
-        retval.demand.get
-      else
-        expr.subst(subst).force
-      end
-    end
-  end
-end
-EOS
 
     # Convert RGB array to scalar array
     #
@@ -414,10 +371,10 @@ EOS
     # @param [Node] other Array with values to compare with.
     #
     # @return [Node] Array with results.
-    def <=>( other )
-      Hornetseye::finalise do
+    def <=>(other)
+      Hornetseye::lazy do
         (self < other).conditional -1, (self > other).conditional(1, 0)
-      end
+      end.force
     end
 
     # Lazy transpose of array

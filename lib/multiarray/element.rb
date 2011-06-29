@@ -29,7 +29,7 @@ module Hornetseye
       # @see Malloc#load
       # @see List#load
       def fetch( ptr )
-        construct *ptr.load( self )
+        construct *ptr.load(self)
       end
 
       # Construct new object from arguments

@@ -44,6 +44,10 @@ module Hornetseye
       @dest, @weight, @sources = dest, weight, sources
     end
 
+    def sexp?
+      true
+    end
+
     # Get unique descriptor of this object
     #
     # @param [Hash] hash Labels for any variables.
