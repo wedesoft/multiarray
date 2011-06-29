@@ -104,7 +104,7 @@ EOS
         Field_.class_eval <<EOS
 def #{op}(other)
   other = Node.match(other, typecode).new other unless other.matched?
-  if Thread.current[:lazy]
+  if Thread.current[:lazy] or other.sexp?
     sexp.#{op} other
   else
     begin
@@ -141,7 +141,7 @@ end
 EOS
         Scalar.class_eval <<EOS
 def #{op}(other)
-  if Thread.current[:lazy]
+  if Thread.current[:lazy] or other.sexp?
     @value.#{op} other.sexp
   else
     begin

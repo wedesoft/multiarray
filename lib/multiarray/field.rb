@@ -322,10 +322,6 @@ module Hornetseye
       @memory = options[:memory] || typecode.memory_type.new(typecode.storage_size * size)
     end
 
-    def sexp?
-      true
-    end
-
     def inspect
       sexp.inspect
     end
@@ -375,7 +371,7 @@ module Hornetseye
     end
 
     def values
-      [@memory] + @strides + @shape
+      [@memory] + @strides.zip(@shape).flatten
     end
 
     # temporary!!!
@@ -566,6 +562,74 @@ EOS2
             else
               expr.force
             end
+          end
+        end
+      end
+    end
+
+    def transpose(*order)
+      shape = order.collect { |i| @shape[i] }
+      strides = order.collect { |i| @strides[i] }
+      self.class.new *(shape +[:strides => strides, :memory => @memory])
+    end
+
+    def roll( n = 1 )
+      if n < 0
+        unroll -n
+      else
+        order = ( 0 ... dimension ).to_a
+        n.times { order = order[ 1 .. -1 ] + [ order.first ] }
+        transpose *order
+      end
+    end
+
+    def unroll( n = 1 )
+      if n < 0
+        roll -n
+      else
+        order = ( 0 ... dimension ).to_a
+        n.times { order = [ order.last ] + order[ 0 ... -1 ] }
+        transpose *order
+      end
+    end
+
+    def convolve(other)
+      other = Node.match(other).new other unless other.matched?
+      if Thread.current[:lazy] or other.sexp?
+        sexp.convolve other.sexp
+      else
+        begin
+          _convolve other
+        rescue NameError => e
+          keys, values, term = strip
+          other_keys, other_values, other_term = other.sexp.strip
+          subst = Hash[*(keys + other_keys).zip(values + other_values).flatten]
+          expr = Hornetseye::lazy { term.convolve other_term }
+          if expr.compilable?
+            offset = dimension - other.dimension
+            retval = Hornetseye::MultiArray(expr.typecode, dimension).
+              new *(shape[offset .. -1] + shape[0 ... offset])
+            retval_keys, retval_values, retval_term = retval.sexp.strip
+            store = Store.new retval_term, expr
+            keys = retval_keys + keys + other_keys
+            method_name = GCCFunction.compile store, *keys
+            self.class.class_eval <<EOS
+def _convolve(other)
+  other._convolve_#{self.class.to_s.method_name} self
+end
+EOS
+            other.class.class_eval <<EOS
+def _convolve_#{self.class.to_s.method_name}(_self)
+  retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode}, #{retval.dimension}).
+    new *(_self.shape[#{dimension - other.dimension} .. -1] +
+          _self.shape[0 ... #{dimension - other.dimension}])
+  GCCCache.#{method_name} *(retval.values + _self.values + values)
+  retval
+end
+EOS
+            _convolve other
+          else
+            expr.subst(subst).force
           end
         end
       end
