@@ -38,7 +38,6 @@ module Hornetseye
         if @@subclasses.has_key? [typecode, dimension]
           @@subclasses[[typecode, dimension]]
         else
-raise 'wtf' unless self == Field_
           retval = Class.new self
           retval.typecode = typecode
           retval.dimension = dimension
