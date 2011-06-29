@@ -524,10 +524,53 @@ EOS
 
     Scalar.class_eval do
       def <=>(other)
-        @value <=> other.sexp
+        if Thread.current[:lazy]
+          @value <=> other.sexp
+        else
+          begin
+            value = Node.match(@value, other.typecode).new @value
+            value._cmp other
+          rescue NameError
+            keys, values, term = value.strip
+            other_keys, other_values, other_term = other.sexp.strip
+            subst = Hash[*(keys + other_keys).zip(values + other_values).flatten]
+            expr = Hornetseye::lazy { term <=> other_term }
+            if expr.compilable?
+              retval = expr.subst(subst).allocate
+              retval_keys, retval_values, retval_term = retval.sexp.strip
+              store = Store.new retval_term, expr
+              data_keys, data_values, data_term = store.strip
+              keys = retval_keys + keys + other_keys + data_keys
+              method_name = GCCFunction.compile data_term, *keys
+              GCCCache.const_set "DATA#{method_name}",
+                                 data_values.collect { |arg| arg.values }.flatten
+              value.class.class_eval <<EOS2
+def _cmp(other)
+  if Thread.current[:lazy]
+    self <=> other.sexp
+  else
+    other._cmp_#{value.class.to_s.method_name} self
+  end
+end
+EOS2
+              other.class.class_eval <<EOS2
+def _cmp_#{value.class.to_s.method_name}(_self)
+  retval = Hornetseye::MultiArray(Hornetseye::#{retval.typecode}, #{retval.dimension}).
+    new *shape
+  GCCCache.#{method_name} *(retval.values + _self.values + values +
+                            GCCCache::DATA#{method_name})
+  retval
+end
+EOS2
+              @value <=> other
+            else
+              expr.force
+            end
+          end
+        end
       end
     end
-
+ 
     def inject(initial = nil, options = {}, &action)
       sexp.inject initial, options, &action
     end
