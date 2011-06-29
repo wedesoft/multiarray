@@ -215,9 +215,9 @@ module Hornetseye
     def strip
       stripped = [ @dest, @source, @default, @zero, @labels, @rank, @n ].
         collect { |value| value.strip }
-      return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
-        stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
-        self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
+      return stripped.inject([]) { |vars,elem| vars + elem[0] },
+        stripped.inject([]) { |values,elem| values + elem[1] },
+        self.class.new(*stripped.collect { |elem| elem[2] })
     end
 
     # Get variables contained in this term

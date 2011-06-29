@@ -37,8 +37,8 @@ module Hornetseye
               target = typecode.send conversion
               target.new simplify.get.send(op)
             else
-              Hornetseye::ElementWise(lambda { |x| x.send op }, op,
-                                      lambda { |t| t.send conversion }).
+              Hornetseye::ElementWise(proc { |x| x.send op }, op,
+                                      proc { |t| t.send conversion }).
                 new(self).force
             end
           end
@@ -61,8 +61,8 @@ module Hornetseye
             target = typecode.send coercion, other.typecode
             target.new simplify.get.send(op, other.simplify.get)
           else
-            Hornetseye::ElementWise(lambda { |x,y| x.send op, y }, op,
-                                    lambda { |t,u| t.send coercion, u } ).
+            Hornetseye::ElementWise(proc { |x,y| x.send op, y }, op,
+                                    proc { |t,u| t.send coercion, u } ).
               new(sexp, other.sexp).force
           end
         end
@@ -141,8 +141,8 @@ module Hornetseye
         target.new(simplify.get).simplify
       else
         key = "to_#{dest.to_s.downcase}"
-        Hornetseye::ElementWise( lambda { |x| x.to_type dest }, key,
-                                 lambda { |t| t.to_type dest } ).new(self).force
+        Hornetseye::ElementWise( proc { |x| x.to_type dest }, key,
+                                 proc { |t| t.to_type dest } ).new(self).force
       end
     end
 
@@ -195,7 +195,7 @@ module Hornetseye
     #
     # @return [Node] Array with desired shape.
     def reshape(*ret_shape)
-      target_size = ret_shape.inject { |a,b| a * b }
+      target_size = ret_shape.inject 1, :*
       if target_size != size
         raise "Target is of size #{target_size} but should be of size #{size}"
       end
@@ -219,8 +219,8 @@ module Hornetseye
         target.new simplify.get.conditional(proc { a.simplify.get },
                                             proc { b.simplify.get })
       else
-        Hornetseye::ElementWise(lambda { |x,y,z| x.conditional y, z }, :conditional,
-                                lambda { |t,u,v| t.cond u, v }).
+        Hornetseye::ElementWise(proc { |x,y,z| x.conditional y, z }, :conditional,
+                                proc { |t,u,v| t.cond u, v }).
           new(self, a.sexp, b.sexp).force
       end
     end
@@ -280,7 +280,7 @@ module Hornetseye
         var
       end.reverse
       order.collect { |o| variables[o] }.
-        inject( term ) { |retval,var| Lambda.new var, retval }
+        inject(term) { |retval,var| Lambda.new var, retval }
     end
 
     # Cycle indices of array
@@ -318,10 +318,10 @@ module Hornetseye
     # @param [Proc] action Operation(s) to perform on elements.
     #
     # @return [Node] The resulting array.
-    def collect( &action )
+    def collect(&action)
       var = Variable.new typecode
       block = action.call var
-      conversion = lambda { |t| t.to_type action.call(Variable.new(t.typecode)).typecode }
+      conversion = proc { |t| t.to_type action.call(Variable.new(t.typecode)).typecode }
       Hornetseye::ElementWise( action, block.to_s, conversion ).new( self ).force
     end
 
@@ -334,14 +334,29 @@ module Hornetseye
 
     # Perform cummulative operation on array
     #
-    # @param [Object] initial Initial value for cummulative operation.
-    # @option options [Variable] :var1 First variable defining operation.
-    # @option options [Variable] :var1 Second variable defining operation.
-    # @option options [Variable] :block (yield( var1, var2 )) The operation to
-    #         apply.
+    # @overload inject(initial = nil, options = {}, &action)
+    #   @param [Object] initial Initial value for cummulative operation.
+    #   @option options [Variable] :var1 First variable defining operation.
+    #   @option options [Variable] :var1 Second variable defining operation.
+    #   @option options [Variable] :block (action.call(var1, var2)) The operation to apply.
+    #
+    # @overload inject(initial = nil, symbol)
+    #   @param [Object] initial Initial value for cummulative operation.
+    #   @param [Symbol,String] symbol The operation to apply.
     #
     # @return [Object] Result of injection.
-    def inject( initial = nil, options = {} )
+    def inject(*args, &action)
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      unless action or options[:block]
+        unless [1, 2].member? args.size
+          raise "Inject expected 1 or 2 arguments but got #{args.size}" 
+        end
+        initial, symbol = args[-2], args[-1]
+        action = proc { |a,b| a.send symbol, b }
+      else
+        raise "Inject expected 0 or 1 arguments but got #{args.size}" if args.size > 1
+        initial = args.empty? ? nil : args.first
+      end
       unless initial.nil?
         initial = Node.match( initial ).new initial unless initial.matched?
         initial_typecode = initial.typecode
@@ -350,7 +365,7 @@ module Hornetseye
       end
       var1 = options[ :var1 ] || Variable.new( initial_typecode )
       var2 = options[ :var2 ] || Variable.new( typecode )
-      block = options[ :block ] || yield( var1, var2 )
+      block = options[ :block ] || action.call( var1, var2 )
       if dimension == 0
         if initial
           block.subst( var1 => initial, var2 => self ).simplify
@@ -384,7 +399,7 @@ module Hornetseye
       if other.matched?
         if variables.empty?
           if other.typecode == typecode and other.shape == shape
-            Hornetseye::finalise { eq(other).inject( true ) { |a,b| a.and b } }
+            Hornetseye::finalise { eq(other).inject true, :and }
           else
             false
           end
@@ -404,7 +419,7 @@ module Hornetseye
     #
     # @return [Object] Minimum value of array.
     def min( initial = nil )
-      inject( initial ) { |a,b| a.minor b }
+      inject initial, :minor
     end
 
     # Find maximum value of array
@@ -413,14 +428,14 @@ module Hornetseye
     #
     # @return [Object] Maximum value of array.
     def max( initial = nil )
-      inject( initial ) { |a,b| a.major b }
+      inject initial, :major
     end
 
     # Compute sum of array
     #
     # @return [Object] Sum of array.
     def sum
-      Hornetseye::lazy { to_type typecode.maxint }.inject { |a,b| a + b }
+      Hornetseye::lazy { to_type typecode.maxint }.inject :+
     end
 
     # Find range of values of array
@@ -696,7 +711,7 @@ module Hornetseye
         Hornetseye::lazy do
           ( 0 ... field.size ).
             collect { |i| ( field[i] >= 0 ).and( field[i] < shape[i] ) }.
-            inject { |a,b| a.and b }
+            inject :and
         end.conditional Lut.new( *( field + [ self ] ) ), options[ :default ]
       else
         field.lut self, :safe => false

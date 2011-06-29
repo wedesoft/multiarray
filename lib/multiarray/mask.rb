@@ -134,9 +134,9 @@ module Hornetseye
     # @private
     def strip
       stripped = [ @dest, @source, @m, @index ].collect { |value| value.strip }
-      return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
-           stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
-           self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
+      return stripped.inject([]) { |vars,elem| vars + elem[0] },
+           stripped.inject([]) { |values,elem| values + elem[1] },
+           self.class.new( *stripped.collect { |elem| elem[2] } )
     end
 
     # Check whether this term is compilable

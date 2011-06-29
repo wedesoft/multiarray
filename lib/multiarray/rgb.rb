@@ -475,7 +475,7 @@ module Hornetseye
         if values.all? { |value| value.is_a? RGB or value.is_a? Float or
                                  value.is_a? Integer }
           if values.any? { |value| value.is_a? RGB }
-            elements = values.inject( [] ) do |arr,value|
+            elements = values.inject([]) do |arr,value|
               if value.is_a? RGB
                 arr + [ value.r, value.g, value.b ]
               else

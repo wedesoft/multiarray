@@ -265,7 +265,9 @@ class TC_Sequence < Test::Unit::TestCase
 
   def test_inject
     assert_equal 6, S[ 1, 2, 3 ].inject { |a,b| a + b }
-    assert_equal 10, S[ 1, 2, 3 ].inject( 4 ) { |a,b| a + b }
+    assert_equal 6, S[ 1, 2, 3 ].inject(:+)
+    assert_equal 10, S[ 1, 2, 3 ].inject(4) { |a,b| a + b }
+    assert_equal 10, S[ 1, 2, 3 ].inject(4, :+)
     assert_equal 'abc', S[ 'a', 'b', 'c' ].inject { |a,b| a + b }
     assert_equal 'abcd', S[ 'b', 'c', 'd' ].inject( 'a' ) { |a,b| a + b }
     assert_equal C( 3, 5, 8 ), S[ C( 1, 2, 3 ), C( 2, 3, 5 ) ].inject { |a,b| a + b }

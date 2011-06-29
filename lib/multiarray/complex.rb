@@ -933,7 +933,7 @@ module Hornetseye
         if values.all? { |value| value.is_a? InternalComplex or value.is_a? Complex or
                                  value.is_a? Float or value.is_a? Integer }
           if values.any? { |value| value.is_a? InternalComplex or value.is_a? Complex }
-            elements = values.inject( [] ) do |arr,value|
+            elements = values.inject([]) do |arr,value|
               if value.is_a? InternalComplex or value.is_a? Complex
                 arr + [ value.real, value.imag ]
               else

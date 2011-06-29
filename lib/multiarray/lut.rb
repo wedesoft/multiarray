@@ -101,7 +101,7 @@ module Hornetseye
     #
     # @private
     def variables
-      @sources.inject( @table.variables ) { |a,b| a + b.variables }
+      @sources.inject(@table.variables) { |a,b| a + b.variables }
     end
 
     # Strip of all values
@@ -115,9 +115,9 @@ module Hornetseye
     # @private
     def strip
       stripped = ( @sources + [ @table ] ).collect { |source| source.strip }
-      return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
-           stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
-           self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
+      return stripped.inject([]) { |vars,elem| vars + elem[0] },
+           stripped.inject([]) { |values,elem| values + elem[1] },
+           self.class.new( *stripped.collect { |elem| elem[2] } )
     end
 
     # Skip elements of an array

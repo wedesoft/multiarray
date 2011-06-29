@@ -320,7 +320,7 @@ module Hornetseye
     #
     # @return [Integer] Returns number of elements of this value.
     def size
-      shape.inject(1) { |a,b| a * b }
+      shape.inject 1, :*
     end
 
     # Duplicate array expression if it is not in row-major format
@@ -329,7 +329,7 @@ module Hornetseye
     def memorise
       if memory
         contiguous_strides = (0 ... dimension).collect do |i|
-          shape[0 ... i].inject(1) { |a,b| a * b }
+          shape[0 ... i].inject 1, :*
         end
         if strides == contiguous_strides
           self

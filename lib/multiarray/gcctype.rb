@@ -93,14 +93,14 @@ module Hornetseye
     def r2c
       case @typecode
       when BOOL
-        [ lambda { |expr| "( #{expr} ) != Qfalse" } ]
+        [ proc { |expr| "( #{expr} ) != Qfalse" } ]
       when BYTE, UBYTE, SINT, USINT, INT, UINT
-        [ lambda { |expr| "NUM2INT( #{expr} )" } ]
+        [ proc { |expr| "NUM2INT( #{expr} )" } ]
       when SFLOAT, DFLOAT
-        [ lambda { |expr| "NUM2DBL( #{expr} )" } ]
+        [ proc { |expr| "NUM2DBL( #{expr} )" } ]
       else
         if @typecode < Pointer_
-          [ lambda { |expr| "(#{identifier})mallocToPtr( #{expr} )" } ]
+          [ proc { |expr| "(#{identifier})mallocToPtr( #{expr} )" } ]
         elsif @typecode < Composite
           GCCType.new( @typecode.element_type ).r2c * @typecode.num_elements
         else

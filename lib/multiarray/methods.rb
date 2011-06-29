@@ -63,9 +63,9 @@ module Hornetseye
               target = a.typecode.send conversion
               target.new mod.send( op, a.simplify.get )
             else
-              Hornetseye::ElementWise( lambda { |x| mod.send op, x },
+              Hornetseye::ElementWise( proc { |x| mod.send op, x },
                                        "#{mod}.#{op}",
-                                       lambda { |x| x.send conversion } ).
+                                       proc { |x| x.send conversion } ).
                 new(a.sexp).force
             end
           else
@@ -99,9 +99,9 @@ module Hornetseye
               target = a.typecode.send coercion, b.typecode
               target.new mod.send(op, a.simplify.get, b.simplify.get)
             else
-              Hornetseye::ElementWise( lambda { |x,y| mod.send op, x, y },
+              Hornetseye::ElementWise( proc { |x,y| mod.send op, x, y },
                                        "#{mod}.#{op}",
-                                       lambda { |t,u| t.send coercion, u } ).
+                                       proc { |t,u| t.send coercion, u } ).
                 new(a.sexp, b.sexp).force
             end
           else

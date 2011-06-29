@@ -130,7 +130,7 @@ module Hornetseye
     #
     # @private
     def variables
-      @values.inject( Set[] ) { |vars,value| vars + value.variables }
+      @values.inject(Set[]) { |vars,value| vars + value.variables }
     end
 
     # Strip of all values
@@ -144,9 +144,9 @@ module Hornetseye
     # @private
     def strip
       stripped = @values.collect { |value| value.strip }
-      return stripped.inject( [] ) { |vars,elem| vars + elem[ 0 ] },
-           stripped.inject( [] ) { |values,elem| values + elem[ 1 ] },
-           self.class.new( *stripped.collect { |elem| elem[ 2 ] } )
+      return stripped.inject([]) { |vars,elem| vars + elem[0] },
+           stripped.inject([]) { |values,elem| values + elem[1] },
+           self.class.new(*stripped.collect { |elem| elem[2] })
     end
 
     # Skip elements of an array
@@ -227,7 +227,7 @@ module Hornetseye
   # @see ElementWise_.conversion
   #
   # @private
-  def ElementWise( operation, key, conversion = lambda { |t| t.send :identity } )
+  def ElementWise( operation, key, conversion = proc { |t| t.send :identity } )
     retval = Class.new ElementWise_
     retval.operation = operation
     retval.key = key
