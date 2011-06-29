@@ -33,17 +33,11 @@ module Hornetseye
       # signed integer or not.
       attr_accessor :signed
 
-      @@subclasses = {}
-
       def inherit(bits, signed)
-        if @@subclasses.has_key? [bits, signed]
-          @@subclasses[[bits, signed]]
-        else
-          retval = Class.new self
-          retval.bits = bits
-          retval.signed = signed
-          @@subclasses[[bits, signed]] = retval
-        end
+        retval = Class.new self
+        retval.bits = bits
+        retval.signed = signed
+        retval
       end
 
       # Memory type required to store elements of this type

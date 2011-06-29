@@ -43,41 +43,6 @@ module Hornetseye
             end
           end
         end
-        Field_.class_eval <<EOS
-def #{op}
-  if Thread.current[:lazy]
-    sexp.#{op}
-  else
-    begin
-      _#{op.to_s.method_name}
-    rescue NameError
-      expr = Hornetseye::lazy { sexp.#{op} }
-      if expr.compilable?
-        retval = expr.allocate
-        keys, values, term = Store.new(retval.sexp, expr).strip
-        method_name = GCCFunction.compile term, *keys
-        self.class.class_eval <<EOS2
-def _#{op.to_s.method_name}
-  if Thread.current[:lazy]
-    sexp.#{op}
-  else
-    retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
-      new *shape
-    GCCCache.\#{method_name} *(retval.values + values)
-    retval
-  end
-end
-EOS2
-        args = values.collect { |arg| arg.values }.flatten
-        GCCCache.send method_name, *args
-        retval.demand.get
-      else
-        expr.force
-      end
-    end
-  end
-end
-EOS
       end
 
       # Meta-programming method to define a binary operation
@@ -101,87 +66,8 @@ EOS
               new(sexp, other.sexp).force
           end
         end
-        Field_.class_eval <<EOS
-def #{op}(other)
-  other = Node.match(other, typecode).new other unless other.matched?
-  if Thread.current[:lazy] or other.sexp?
-    sexp.#{op} other
-  else
-    begin
-      _#{op.to_s.method_name} other
-    rescue NameError
-      expr = Hornetseye::lazy { sexp.#{op} other.sexp }
-      if expr.compilable?
-        retval = expr.allocate
-        keys, values, term = Store.new(retval.sexp, expr).strip
-        method_name = GCCFunction.compile term, *keys
-        self.class.class_eval <<EOS2
-def _#{op.to_s.method_name}(other)
-  other._#{op.to_s.method_name}_\#{self.class.to_s.method_name} self
-end
-EOS2
-        other.class.class_eval <<EOS2
-def _#{op.to_s.method_name}_\#{self.class.to_s.method_name}(_self)
-  retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
-    new *\#{other.dimension > dimension ? 'shape' : '_self.shape'}
-  retval.check_shape _self, self
-  GCCCache.\#{method_name} *(retval.values + _self.values + values)
-  retval
-end
-EOS2
-        args = values.collect { |arg| arg.values }.flatten
-        GCCCache.send method_name, *args
-        retval.demand.get
-      else
-        expr.force
       end
-    end
-  end
-end
-EOS
-        Scalar.class_eval <<EOS
-def #{op}(other)
-  if Thread.current[:lazy] or other.sexp?
-    @value.#{op} other.sexp
-  else
-    begin
-      value = Node.match(@value, other.typecode).new @value
-      value._#{op.to_s.method_name} other
-    rescue NameError
-      expr = Hornetseye::lazy { value.#{op} other.sexp }
-      if expr.compilable?
-        retval = expr.allocate
-        keys, values, term = Store.new(retval.sexp, expr).strip
-        method_name = GCCFunction.compile term, *keys
-        value.class.class_eval <<EOS2
-def _#{op.to_s.method_name}(other)
-  if Thread.current[:lazy]
-    self.#{op} other.sexp
-  else
-    other._#{op.to_s.method_name}_\#{value.class.to_s.method_name} self
-  end
-end
-EOS2
-        other.class.class_eval <<EOS2
-def _#{op.to_s.method_name}_\#{value.class.to_s.method_name}(_self)
-  retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
-    new *shape
-  GCCCache.\#{method_name} *(retval.values + _self.values + values)
-  retval
-end
-EOS2
-        args = values.collect { |arg| arg.values }.flatten
-        GCCCache.send method_name, *args
-        retval.demand.get
-      else
-        expr.force
-      end
-    end
-  end
-end
-EOS
-      end
-  
+
     end
   
     define_unary_op :zero?, :bool
@@ -313,7 +199,8 @@ EOS
       if target_size != size
         raise "Target is of size #{target_size} but should be of size #{size}"
       end
-      Hornetseye::MultiArray(typecode, ret_shape.size).new *(ret_shape + [:memory => memorise.memory])
+      Hornetseye::MultiArray(typecode, ret_shape.size).
+        new *(ret_shape + [:memory => memorise.memory])
     end
 
     # Element-wise conditional selection of values

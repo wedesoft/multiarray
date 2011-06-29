@@ -77,11 +77,7 @@ module Hornetseye
       #
       # @private
       def coercion( other )
-        if other < Field_
-          other.coercion self
-        else
-          self
-        end
+        self
       end
 
       # Type coercion for native elements

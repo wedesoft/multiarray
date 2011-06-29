@@ -242,16 +242,10 @@ module Hornetseye
         subclass.num_elements = 3
       end
 
-      @@subclasses = {}
-
       def inherit(element_type)
-        if @@subclasses.has_key? element_type
-          @@subclasses[element_type]
-        else
-          retval = Class.new self
-          retval.element_type = element_type
-          @@subclasses[element_type] = retval
-        end
+        retval = Class.new self
+        retval.element_type = element_type
+        retval
       end
 
       # Construct new object from arguments
