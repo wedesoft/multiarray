@@ -62,7 +62,7 @@ def _#{op.to_s.method_name}
     sexp.#{op}
   else
     retval = Hornetseye::MultiArray(Hornetseye::\#{retval.typecode}, \#{retval.dimension}).
-      new *(\#{retval.shape})
+      new *shape
     GCCCache.\#{method_name} *(retval.values + values)
     retval
   end
