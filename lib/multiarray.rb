@@ -733,6 +733,7 @@ require 'multiarray/lookup'
 require 'multiarray/elementwise'
 require 'multiarray/inject'
 require 'multiarray/diagonal'
+require 'multiarray/argument'
 require 'multiarray/histogram'
 require 'multiarray/lut'
 require 'multiarray/integral'
@@ -834,5 +835,51 @@ module Hornetseye
 
   module_function :sum
 
-end
+  def argument(block, options = {}, &action)
+    arity = options[:arity] || action.arity
+    if arity > 0
+      indices = options[:indices] ||
+                (0 ... arity).collect { Variable.new Hornetseye::INDEX(nil) }
+      term = options[:term] || action.call(*indices)
+      slices = indices[0 ... -1].inject(term) { |t,index| Lambda.new index, t }
+      var1 = options[:var1] || Variable.new(term.typecode)
+      var2 = options[:var2] || Variable.new(term.typecode)
+      block = options[:block] || block.call( var1, var2 )
+      lut = Argument.new(slices, indices.last, block, var1, var2, INT.new(0)).force
+      arr = options[:arr] || Lambda.new(indices.last, slices)
+      id = (0 ... arr.dimension - 1).collect { |j| lazy(*arr.shape[0 ... -1]) { |*i| i[j] } }
+      lut = INT.new(lut) unless lut.matched?
+      sub_arr = Lut.new(*(id + [lut] + [arr])).force
+      indices = (0 ... arity - 1).collect { Variable.new Hornetseye::INDEX(nil) }
+      term = indices.reverse.inject(sub_arr) { |t,index| t.element index }
+      sub_arg = argument nil, :arity => arity - 1, :indices => indices, :term => term,
+                         :arr => sub_arr, :block => block, :var1 => var1, :var2 => var2
+      if sub_arg.empty?
+        [lut[]]
+      elsif sub_arg.first.is_a? Integer
+        sub_arg + [lut[*sub_arg]]
+      else
+        id = lazy(*sub_arg.first.shape) { |*i| i.last }
+        sub_arg + [lut.warp(*(sub_arg + [id]))]
+      end
+    else
+      []
+    end
+  end
 
+  module_function :argument
+  
+  def argmax(&action)
+    argument proc { |a,b| a > b }, &action
+  end
+
+  module_function :argmax
+
+  def argmin(&action)
+    argument proc { |a,b| a < b }, &action
+  end
+
+  module_function :argmin
+
+end
+ 

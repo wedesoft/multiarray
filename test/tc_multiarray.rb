@@ -52,6 +52,14 @@ class TC_MultiArray < Test::Unit::TestCase
     Hornetseye::sum *args, &action
   end
 
+  def argmin( *args, &action )
+    Hornetseye::argmin *args, &action
+  end
+
+  def argmax( *args, &action )
+    Hornetseye::argmax *args, &action
+  end
+
   def finalise( *args, &action )
     Hornetseye::finalise *args, &action
   end
@@ -359,6 +367,18 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal [ 5, 7, 9 ], sum { |i| m[ i ] }.to_a
     assert_equal [ 6, 15 ], finalise { |j| sum { |i| m[ i, j ] } }.to_a
     assert_equal [ [ 1, 2, 3 ] , [ 4, 5, 6 ] ], sum { || m }.to_a
+  end
+
+  def test_argmin
+    assert_equal [[0, 0, 1]],
+                 argmin { |i| M[[1, 2, 3], [4, 3, 2]][i] }.collect { |x| x.to_a }
+    assert_equal [2, 1], argmin { |i,j| M[[1, 2, 3], [4, 3, 0]][i,j] }
+    m = M[[[1,0,3,4],[5,4,3,2],[1,2,1,0]],[[3,2,4,1],[7,4,8,2],[2,1,9,1]]]
+    assert_equal [[[0, 0, 0, 1], [0, 0, 0, 0], [0, 1, 0, 0]]],
+                 argmin { |i| m[i] }.collect { |x| x.to_a }
+    assert_equal [[0, 0, 2, 2], [0, 0, 0, 0]],
+                 argmin { |i,j| m[i,j] }.collect { |x| x.to_a }
+    assert_equal [1, 0, 0], argmin { |i,j,k| m[i,j,k] }
   end
 
   def test_min

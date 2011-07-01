@@ -48,6 +48,14 @@ class TC_Sequence < Test::Unit::TestCase
     Hornetseye::sum *args, &action
   end
 
+  def argmin( *args, &action )
+    Hornetseye::argmin *args, &action
+  end
+
+  def argmax( *args, &action )
+    Hornetseye::argmax *args, &action
+  end
+
   def setup
   end
 
@@ -305,6 +313,22 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal X( 4, 6 ), sum { |i| S[ X( 1, 2 ), X( 3, 4 ) ][i] }
     assert_equal 384, S[ 128, 128, 128 ].sum
     assert_equal 384, sum { |i| S[ 128, 128, 128 ][i] }
+  end
+
+  def test_argmin
+    [S(O), S(I)].each do |t|
+      assert_equal [], argmin { t[1, 0, 2] }
+      assert_equal [], argmin { || t[1, 0, 2] }
+      assert_equal [1], argmin { |i| t[1, 0, 2][i] }
+    end
+  end
+
+  def test_argmax
+    [S(O), S(I)].each do |t|
+      assert_equal [], argmax { t[1, 3, 2] }
+      assert_equal [], argmax { || t[1, 3, 2] }
+      assert_equal [1], argmax { |i| t[1, 3, 2][i] }
+    end
   end
 
   def test_min
