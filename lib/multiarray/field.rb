@@ -151,9 +151,9 @@ module Hornetseye
         n = typecode.maxint.new n unless n.matched?
         retval = new *shape
         unless compilable? and dimension > 0
-          Random.new(retval.sexp, n).demand
+          Random.new(retval, n).demand
         else
-          GCCFunction.run Random.new(retval.sexp, n)
+          GCCFunction.run Random.new(retval, n)
         end
         retval
       end

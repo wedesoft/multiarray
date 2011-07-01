@@ -598,9 +598,9 @@ module Hornetseye
       if indices.empty?
         check_shape value
         unless compilable? and value.compilable? and dimension > 0
-          Store.new(self, value.sexp).demand
+          Store.new(self, value).demand
         else
-          GCCFunction.run Store.new(self, value.sexp)
+          GCCFunction.run Store.new(self, value)
         end
         value
       else
@@ -660,11 +660,11 @@ module Hornetseye
         self
       elsif compilable?
         retval = allocate
-        GCCFunction.run Store.new(retval.sexp, self)
+        GCCFunction.run Store.new(retval, self)
         retval.demand.get
       else
         retval = allocate
-        Store.new(retval.sexp, self).demand
+        Store.new(retval, self).demand
         retval.demand.get
       end
     end
@@ -689,7 +689,7 @@ module Hornetseye
     # @private
     def coerce(other)
       if other.matched?
-        return other.sexp, self
+        return other, self
       else
         return Node.match(other, self).new(other), self
       end

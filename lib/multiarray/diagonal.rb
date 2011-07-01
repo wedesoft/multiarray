@@ -53,10 +53,6 @@ module Hornetseye
         value, index0, index1, index2, initial, block, var1, var2
     end
 
-    def sexp?
-      true
-    end
-
     # Get unique descriptor of this object
     #
     # @param [Hash] hash Labels for any variables.

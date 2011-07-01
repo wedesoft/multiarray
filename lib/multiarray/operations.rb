@@ -63,7 +63,7 @@ module Hornetseye
           else
             Hornetseye::ElementWise(proc { |x,y| x.send op, y }, op,
                                     proc { |t,u| t.send coercion, u } ).
-              new(sexp, other.sexp).force
+              new(self, other).force
           end
         end
       end
@@ -221,7 +221,7 @@ module Hornetseye
       else
         Hornetseye::ElementWise(proc { |x,y,z| x.conditional y, z }, :conditional,
                                 proc { |t,u,v| t.cond u, v }).
-          new(self, a.sexp, b.sexp).force
+          new(self, a, b).force
       end
     end
 
@@ -368,7 +368,7 @@ module Hornetseye
       block = options[ :block ] || action.call( var1, var2 )
       if dimension == 0
         if initial
-          block.subst( var1 => initial, var2 => self ).simplify
+          block.subst(var1 => initial, var2 => self).simplify
         else
           demand
         end
@@ -577,7 +577,7 @@ module Hornetseye
       filter = Node.match( filter, typecode ).new filter unless filter.matched?
       array = self
       (dimension - filter.dimension).times { array = array.roll }
-      array.table(filter.sexp) { |a,b| a * b }.diagonal { |s,x| s + x }
+      array.table(filter) { |a,b| a * b }.diagonal { |s,x| s + x }
     end
 
     # Erosion
@@ -723,7 +723,7 @@ module Hornetseye
     # @return [Node] The integral image of this array.
     def integral
       left = allocate
-      block = Integral.new left.sexp, self
+      block = Integral.new left, self
       if block.compilable?
         GCCFunction.run block
       else
@@ -750,8 +750,8 @@ module Hornetseye
       labels = Sequence.new target, size; labels[0] = 0
       rank = Sequence.uint size; rank[0] = 0
       n = Hornetseye::Pointer( INT ).new; n.store INT.new( 0 )
-      block = Components.new left.sexp, self, default.sexp, target.new(0),
-                             labels.sexp, rank.sexp, n
+      block = Components.new left, self, default, target.new(0),
+                             labels, rank, n
       if block.compilable?
         Hornetseye::GCCFunction.run block
       else
@@ -773,7 +773,7 @@ module Hornetseye
                                          [ m.size ] )
       index = Hornetseye::Pointer( INT ).new
       index.store INT.new( 0 )
-      block = Mask.new left.sexp, self, m.sexp, index
+      block = Mask.new left, self, m, index
       if block.compilable?
         GCCFunction.run block
       else
@@ -806,7 +806,7 @@ module Hornetseye
         coercion(default.typecode).new *(shape[1 .. -1] + m.shape)
       index = Hornetseye::Pointer(INT).new
       index.store INT.new(0)
-      block = Unmask.new left.sexp, self, m.sexp, index, default.sexp
+      block = Unmask.new left, self, m, index, default
       if block.compilable?
         GCCFunction.run block
       else
@@ -955,7 +955,7 @@ class Array
     end
     left = Hornetseye::MultiArray(weight.typecode, ret_shape.size).new *ret_shape
     left[] = 0
-    block = Hornetseye::Histogram.new left.sexp, weight.sexp, *self
+    block = Hornetseye::Histogram.new left, weight, *self
     if block.compilable?
       Hornetseye::GCCFunction.run block
     else

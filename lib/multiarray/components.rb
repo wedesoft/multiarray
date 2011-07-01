@@ -47,10 +47,6 @@ module Hornetseye
         dest, source, default, zero, labels, rank, n
     end
 
-    def sexp?
-      true
-    end
-
     # Get unique descriptor of this object
     #
     # @param [Hash] hash Labels for any variables.

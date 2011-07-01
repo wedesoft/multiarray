@@ -66,7 +66,7 @@ module Hornetseye
               Hornetseye::ElementWise( proc { |x| mod.send op, x },
                                        "#{mod}.#{op}",
                                        proc { |x| x.send conversion } ).
-                new(a.sexp).force
+                new(a).force
             end
           else
             send "#{op}_without_hornetseye", a
@@ -102,7 +102,7 @@ module Hornetseye
               Hornetseye::ElementWise( proc { |x,y| mod.send op, x, y },
                                        "#{mod}.#{op}",
                                        proc { |t,u| t.send coercion, u } ).
-                new(a.sexp, b.sexp).force
+                new(a, b).force
             end
           else
             send "#{op}_without_hornetseye", a, b

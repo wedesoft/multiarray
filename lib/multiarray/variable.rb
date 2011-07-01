@@ -38,10 +38,6 @@ module Hornetseye
       @meta = meta
     end
 
-    def sexp?
-      true
-    end
-
     # Display string with information about this object
     #
     # @return [String] String with information about this object (e.g.

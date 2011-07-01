@@ -98,14 +98,6 @@ class Object
 
   end
 
-  def sexp
-    self
-  end
-
-  def sexp?
-    false
-  end
-
   def matched?
     false
   end
@@ -786,7 +778,7 @@ module Hornetseye
           action.call *( args + [ index ] )
         end
         term = Node.match(term).new term unless term.matched?
-        Lambda.new index, term.sexp
+        Lambda.new index, term
       end
     ensure
       Thread.current[ :lazy ] = previous

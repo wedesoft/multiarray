@@ -127,10 +127,6 @@ module Hornetseye
       @value = value
     end
 
-    def sexp?
-      true
-    end
-
     # Get access to storage object
     #
     # @return [Malloc,List] The object used to store the data.
