@@ -438,6 +438,13 @@ module Hornetseye
       Hornetseye::lazy { to_type typecode.maxint }.inject :+
     end
 
+    # Compute average of array
+    #
+    # @return [Object] Mean of array.
+    def mean
+      sum / size
+    end
+
     # Find range of values of array
     #
     # @return [Object] Range of values of array.
