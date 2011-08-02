@@ -315,6 +315,10 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal 384, sum { |i| S[ 128, 128, 128 ][i] }
   end
 
+  def test_mean
+    assert_equal 2, S(I)[1, 2, 3].mean
+  end
+
   def test_argmin
     [S(O), S(I)].each do |t|
       assert_equal [], argmin { t[1, 0, 2] }
@@ -822,6 +826,12 @@ class TC_Sequence < Test::Unit::TestCase
     [ Math.log( X( 1, 2 ) ) ].zip( Math.log( S[ X( 1, 2 ) ] ).to_a ).each do |x,y|
       assert_in_delta x.real, y.real, 1.0e-5
       assert_in_delta x.imag, y.imag, 1.0e-5
+    end
+    [ Math.log( C( 1, 2, 3 ) ), Math.log( C( 2, 4, 6 ) ) ].
+      zip( Math.log( S[ C( 1, 2, 3 ), C( 2, 4, 6 ) ] ).to_a ).each do |x,y|
+      assert_in_delta x.r, y.r, 1.0e-5
+      assert_in_delta x.g, y.g, 1.0e-5
+      assert_in_delta x.b, y.b, 1.0e-5
     end
   end
 

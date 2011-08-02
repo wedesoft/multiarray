@@ -949,5 +949,17 @@ module Math
   module_function :sqrt_without_rgb
   module_function :sqrt
 
+  def log_with_rgb(c)
+    if c.is_a? Hornetseye::RGB
+      Hornetseye::RGB.new log( c.r ), log( c.g ), log( c.b )
+    else
+      log_without_rgb c
+    end
+  end
+
+  alias_method_chain :log, :rgb
+  module_function :log_without_rgb
+  module_function :log
+
 end
 
