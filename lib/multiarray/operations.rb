@@ -498,6 +498,29 @@ module Hornetseye
       collect { |x| x.major( range.begin ).minor range.end }
     end
 
+    # Stretch values from one range to another
+    #
+    # @param [Range] from Target range of values.
+    # @param [Range] to Source range of values.
+    #
+    # @return [Node] Array with stretched values.
+    def stretch(from = 0 .. 0xFF, to = 0 .. 0xFF)
+      if from.exclude_end?
+        raise "Stretching does not support ranges with end value " +
+              "excluded (such as #{from})"
+      end
+      if to.exclude_end?
+        raise "Stretching does not support ranges with end value " +
+              "excluded (such as #{to})"
+      end
+      if from.last != from.first
+        factor = (to.last - to.first).to_f / (from.last - from.first)
+        collect { |x| ((x - from.first) * factor).major(to.first).minor to.last }
+      else
+        (self <= from.first).conditional to.first, to.last
+      end
+    end
+
     # Fill array with a value
     #
     # @param [Object] value Value to fill array with.

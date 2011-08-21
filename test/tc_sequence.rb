@@ -363,6 +363,13 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal [ C( 3, 4, 5 ) ], S[ C( 2, 4, 6 ) ].clip( 3 .. 5 ).to_a
   end
 
+  def test_stretch
+    assert_equal [0.0, 127.5, 255.0], S[1, 2, 3].stretch(1 .. 3).to_a
+    assert_equal [0, 0, 255], S[1, 2, 3].stretch(2 .. 2).to_a
+    assert_equal [0.0, 0.5, 1.0], S[1, 2, 3].stretch(1 .. 3, 0 .. 1).to_a
+    assert_equal [0, 0, 1], S[1, 2, 3].stretch(2 .. 2, 0 .. 1).to_a
+  end
+
   def test_sum
     [ S(O), S(I) ].each do |t|
       assert_equal 9, t[ 4, 2, 3 ].sum
