@@ -911,10 +911,10 @@ module Hornetseye
       elsif sub_arg.first.is_a? Integer
         sub_arg + [lut[*sub_arg]]
       else
-        id = (sub_arg.size ... lut.dimension).collect do |i|
-          lazy(*sub_arg.first.shape) { |*j| j[i - lut.dimension + sub_arg.first.dimension] }
+        id = (0 ... sub_arg.first.dimension).collect do |i|
+          lazy(*sub_arg.first.shape) { |*j| j[i] }
         end
-        sub_arg + [lut.warp(*(sub_arg + id))]
+        sub_arg + [lut.warp(*(id + sub_arg))]
       end
     else
       []
