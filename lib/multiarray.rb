@@ -808,32 +808,84 @@ module Hornetseye
 
   module_function :finalise
 
-  # Method for summing values
+  # Method for specifying injections in a different way
   #
-  # @param [Array<Integer>] *shape Optional shape of result. The method
-  # attempts to infer the shape if not specified.
-  # @yield Operation returning array elements.
+  # @overload inject(*shape, op, &action)
+  #   @param [Array<Integer>] *shape Optional shape of result.
+  #   @param [Proc] op Block of injection.
+  #   @yield Operation returning array elements.
   #
   # @return [Object,Node] Sum of values.
-  def sum( *shape, &action )
-    options = shape.last.is_a?( Hash ) ? shape.pop : {}
-    arity = options[ :arity ] || [ action.arity, shape.size ].max
+  #
+  # @private
+  def inject(*shape, &action)
+    op = shape.pop
+    options = shape.last.is_a?(Hash) ? shape.pop : {}
+    arity = options[:arity] || [action.arity, shape.size].max
     if arity <= 0
       term = action.call
       term.matched? ? term.to_type(term.typecode.maxint) : term
     else
-      index = Variable.new shape.empty? ? Hornetseye::INDEX( nil ) :
-                           Hornetseye::INDEX( shape.pop )
-      term = sum *( shape + [ :arity => arity - 1 ] ) do |*args|
-        action.call *( args + [ index ] )
+      index = Variable.new shape.empty? ? Hornetseye::INDEX(nil) :
+                           Hornetseye::INDEX(shape.pop)
+      term = inject *(shape + [:arity => arity - 1] + [op]) do |*args|
+        action.call *(args + [index])
       end
       var1 = Variable.new term.typecode
       var2 = Variable.new term.typecode
-      Inject.new( term, index, nil, var1 + var2, var1, var2 ).force
+      Inject.new(term, index, nil, op.call(var1, var2), var1, var2).force
     end
   end
 
+  module_function :inject
+
+  # Method for summing values
+  #
+  # @param [Array<Integer>] *shape Optional shape of result.
+  # @yield Operation returning array elements.
+  #
+  # @return [Object,Node] Sum of values.
+  def sum(*shape, &action)
+    inject *(shape + [proc { |a,b| a + b }]), &action
+  end
+
   module_function :sum
+
+  # Method for computing product of values
+  #
+  # @param [Array<Integer>] *shape Optional shape of result.
+  # @yield Operation returning array elements.
+  #
+  # @return [Object,Node] Product of values.
+  def prod(*shape, &action)
+    inject *(shape + [proc { |a,b| a * b }]), &action
+  end
+
+  module_function :prod
+
+  # Method for computing minimum of values
+  #
+  # @param [Array<Integer>] *shape Optional shape of result.
+  # @yield Operation returning array elements.
+  #
+  # @return [Object,Node] Minimum of values.
+  def min(*shape, &action)
+    inject *(shape + [proc { |a,b| a.minor b }]), &action
+  end
+
+  module_function :min
+
+  # Method for computing maximum of values
+  #
+  # @param [Array<Integer>] *shape Optional shape of result.
+  # @yield Operation returning array elements.
+  #
+  # @return [Object,Node] Maximum of values.
+  def max(*shape, &action)
+    inject *(shape + [proc { |a,b| a.major b }]), &action
+  end
+
+  module_function :max
 
   def argument(block, options = {}, &action)
     arity = options[:arity] || action.arity
@@ -859,8 +911,10 @@ module Hornetseye
       elsif sub_arg.first.is_a? Integer
         sub_arg + [lut[*sub_arg]]
       else
-        id = lazy(*sub_arg.first.shape) { |*i| i.last }
-        sub_arg + [lut.warp(*(sub_arg + [id]))]
+        id = (sub_arg.size ... lut.dimension).collect do |i|
+          lazy(*sub_arg.first.shape) { |*j| j[i - lut.dimension + sub_arg.first.dimension] }
+        end
+        sub_arg + [lut.warp(*(sub_arg + id))]
       end
     else
       []

@@ -48,6 +48,18 @@ class TC_Sequence < Test::Unit::TestCase
     Hornetseye::sum *args, &action
   end
 
+  def prod( *args, &action )
+    Hornetseye::prod *args, &action
+  end
+
+  def min( *args, &action )
+    Hornetseye::min *args, &action
+  end
+
+  def max( *args, &action )
+    Hornetseye::max *args, &action
+  end
+
   def argmin( *args, &action )
     Hornetseye::argmin *args, &action
   end
@@ -315,6 +327,13 @@ class TC_Sequence < Test::Unit::TestCase
     assert_equal 384, sum { |i| S[ 128, 128, 128 ][i] }
   end
 
+  def test_prod
+    [ S(O), S(I) ].each do |t|
+      assert_equal 6, t[ 1, 2, 3 ].prod
+      assert_equal 6, prod { |i| t[ 1, 2, 3 ][ i ] }
+    end
+  end
+ 
   def test_mean
     assert_equal 2, S(I)[1, 2, 3].mean
   end
@@ -338,6 +357,7 @@ class TC_Sequence < Test::Unit::TestCase
   def test_min
     [O, I].each do |t|
       assert_equal 2, S(t)[4, 2, 3].min
+      assert_equal 2, min { |i| S(t)[4, 2, 3][i] }
     end
     assert_equal C(1, 2, 1), S[C(1, 2, 3), C(3, 2, 1)].min
   end
@@ -345,6 +365,7 @@ class TC_Sequence < Test::Unit::TestCase
   def test_max
     [O, I].each do |t|
       assert_equal 4, S(t)[4, 2, 3].max
+      assert_equal 4, max { |i| S(t)[4, 2, 3][i] }
     end
     assert_equal C(3, 2, 3), S[C(1, 2, 3), C(3, 2, 1)].max
   end

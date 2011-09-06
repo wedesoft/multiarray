@@ -438,6 +438,13 @@ module Hornetseye
       Hornetseye::lazy { to_type typecode.maxint }.inject :+
     end
 
+    # Compute product of array
+    #
+    # @return [Object] Product of array.
+    def prod
+      Hornetseye::lazy { to_type typecode.maxint }.inject :*
+    end
+
     # Compute average of array
     #
     # @return [Object] Mean of array.
