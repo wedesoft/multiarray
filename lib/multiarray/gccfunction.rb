@@ -76,6 +76,8 @@ module Hornetseye
       @param_types = param_types
       @indent = 1
       @ids = 0
+      @c_decl = ''
+      @c_body = ''
     end
 
     # Close the function and compile it
@@ -84,7 +86,8 @@ module Hornetseye
     #
     # @private
     def compile
-      self << '}'
+      @context << @c_decl << @c_body
+      @context << '}'
       @context.compile
       self
     end
@@ -111,7 +114,7 @@ module Hornetseye
     # @private
     def variable( typecode, prefix )
       retval = GCCValue.new( self, id( prefix ) )
-      self << "#{indent}#{GCCType.new( typecode ).identifier} #{retval};\n"
+      @c_decl << "  #{GCCType.new( typecode ).identifier} #{retval};\n"
       retval
     end
 
@@ -182,7 +185,7 @@ module Hornetseye
     #
     # @private
     def <<( str )
-      @context << str
+      @c_body << str
       self
     end
 
