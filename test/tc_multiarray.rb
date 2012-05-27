@@ -173,24 +173,24 @@ class TC_MultiArray < Test::Unit::TestCase
           assert_equal j * 3 + i + 1, m[ i, j ]
         end
       end
-      assert_raise( RuntimeError ) { m[ -1 ] }
-      assert_raise( RuntimeError ) { m[ 2 ] }
+      assert_raise(RuntimeError) { m[ -1 ] }
+      assert_raise(RuntimeError) { m[ 2 ] }
       assert_nothing_raised { m[ 0 ] }
       assert_nothing_raised { m[ 1 ] }
-      assert_raise( RuntimeError ) { m[ -1 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 2 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 3, 1 ] }
-      assert_raise( RuntimeError ) { m[ 3, 1 ]  = 0 }
-      assert_raise( RuntimeError ) { m[ -1, 1 ] }
-      assert_raise( RuntimeError ) { m[ -1, 1 ]  = 0 }
-      assert_raise( RuntimeError ) { m[ 2, -1 ] }
-      assert_raise( RuntimeError ) { m[ 2, -1 ]  = 0 }
-      assert_raise( RuntimeError ) { m[ 2, 2 ] }
-      assert_raise( RuntimeError ) { m[ 2, 2 ]  = 0 }
+      assert_raise(RuntimeError) { m[ -1 ] = 0 }
+      assert_raise(RuntimeError) { m[ 2 ] = 0 }
+      assert_raise(RuntimeError) { m[ 3, 1 ] }
+      assert_raise(RuntimeError) { m[ 3, 1 ]  = 0 }
+      assert_raise(RuntimeError) { m[ -1, 1 ] }
+      assert_raise(RuntimeError) { m[ -1, 1 ]  = 0 }
+      assert_raise(RuntimeError) { m[ 2, -1 ] }
+      assert_raise(RuntimeError) { m[ 2, -1 ]  = 0 }
+      assert_raise(RuntimeError) { m[ 2, 2 ] }
+      assert_raise(RuntimeError) { m[ 2, 2 ]  = 0 }
       assert_nothing_raised { m[ 0, 0 ] }
       assert_nothing_raised { m[ 2, 1 ] }
-      assert_raise( RuntimeError ) { m[ 0 ] = m }
-      assert_raise( RuntimeError ) { m[ 0 ] = S[ 0, 1 ] }
+      assert_raise(RuntimeError) { m[ 0 ] = m }
+      assert_raise(RuntimeError) { m[ 0 ] = S[ 0, 1 ] }
       assert_nothing_raised { m[ 0 ] = 0 }
       assert_nothing_raised { m[ 1 ] = 0 }
       assert_nothing_raised { m[ 0 ] = m[ 1 ] }
@@ -224,60 +224,60 @@ class TC_MultiArray < Test::Unit::TestCase
       m[ 1 ... 4, 1 ... 3 ] = 1
       assert_equal [ [ 0, 1, 2, 3, 4 ], [ 3, 1, 1, 1, 7 ],
                      [ 3, 1, 1, 1, 7 ], [ 15, 16, 17, 18, 19 ] ], m.to_a
-      assert_raise( RuntimeError ) { m[ 2 .. 4 ] }
-      assert_raise( RuntimeError ) { m[ 2 .. 4 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 2 .. 4 ] = m[ 1 .. 3 ] }
-      assert_raise( RuntimeError ) { m[ 2 .. 3 ] = m[ 1 .. 3 ] }
-      assert_raise( RuntimeError ) { m[ 2 ... 5 ] }
-      assert_raise( RuntimeError ) { m[ 2 ... 5 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 2 ... 5 ] = m[ 1 ... 4 ] }
-      assert_raise( RuntimeError ) { m[ 2 ... 4 ] = m[ 1 ... 4 ] }
-      assert_raise( RuntimeError ) { m[ -1 .. 0 ] }
-      assert_raise( RuntimeError ) { m[ -1 .. 0 ] = 0 }
-      assert_raise( RuntimeError ) { m[ -1 .. 0 ] = m[ 0 .. 1 ] }
-      assert_raise( RuntimeError ) { m[ -1 ... 1 ] }
-      assert_raise( RuntimeError ) { m[ -1 ... 1 ] = 0 }
-      assert_raise( RuntimeError ) { m[ -1 ... 1 ] = m[ 0 ... 2 ] }
+      assert_raise(RuntimeError) { m[ 2 .. 4 ] }
+      assert_raise(RuntimeError) { m[ 2 .. 4 ] = 0 }
+      assert_raise(RuntimeError) { m[ 2 .. 4 ] = m[ 1 .. 3 ] }
+      assert_raise(RuntimeError) { m[ 2 .. 3 ] = m[ 1 .. 3 ] }
+      assert_raise(RuntimeError) { m[ 2 ... 5 ] }
+      assert_raise(RuntimeError) { m[ 2 ... 5 ] = 0 }
+      assert_raise(RuntimeError) { m[ 2 ... 5 ] = m[ 1 ... 4 ] }
+      assert_raise(RuntimeError) { m[ 2 ... 4 ] = m[ 1 ... 4 ] }
+      assert_raise(RuntimeError) { m[ -1 .. 0 ] }
+      assert_raise(RuntimeError) { m[ -1 .. 0 ] = 0 }
+      assert_raise(RuntimeError) { m[ -1 .. 0 ] = m[ 0 .. 1 ] }
+      assert_raise(RuntimeError) { m[ -1 ... 1 ] }
+      assert_raise(RuntimeError) { m[ -1 ... 1 ] = 0 }
+      assert_raise(RuntimeError) { m[ -1 ... 1 ] = m[ 0 ... 2 ] }
       assert_nothing_raised { m[ 0 .. 3 ] }
       assert_nothing_raised { m[ 0 .. 3 ] = 0 }
       assert_nothing_raised { m[ 0 .. 3 ] = m[ 0 .. 3 ] }
       assert_nothing_raised { m[ 0 ... 4 ] }
       assert_nothing_raised { m[ 0 ... 4 ] = 0 }
       assert_nothing_raised { m[ 0 ... 4 ] = m[ 0 ... 4 ] }
-      assert_raise( RuntimeError ) { m[ 1 .. 5, 1 ] }
-      assert_raise( RuntimeError ) { m[ 1 .. 5, 1 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 1 .. 5, 1 ] = m[ 0 .. 4, 1 ] }
-      assert_raise( RuntimeError ) { m[ 1 .. 4, 1 ] = m[ 0 .. 4, 1 ] }
-      assert_raise( RuntimeError ) { m[ 1 ... 6, 1 ] }
-      assert_raise( RuntimeError ) { m[ 1 ... 6, 1 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 1 ... 6, 1 ] = m[ 0 ... 5, 1 ] }
-      assert_raise( RuntimeError ) { m[ 1 ... 5, 1 ] = m[ 0 ... 5, 1 ] }
-      assert_raise( RuntimeError ) { m[ -1 .. 3, 1 ] }
-      assert_raise( RuntimeError ) { m[ -1 .. 3, 1 ] = 0 }
-      assert_raise( RuntimeError ) { m[ -1 .. 3, 1 ] = m[ 0 .. 4, 1 ] }
-      assert_raise( RuntimeError ) { m[ -1 ... 3, 1 ] }
-      assert_raise( RuntimeError ) { m[ -1 ... 3, 1 ] = 0 }
-      assert_raise( RuntimeError ) { m[ -1 ... 3, 1 ] = m[ 0 ... 4, 1 ] }
+      assert_raise(RuntimeError) { m[ 1 .. 5, 1 ] }
+      assert_raise(RuntimeError) { m[ 1 .. 5, 1 ] = 0 }
+      assert_raise(RuntimeError) { m[ 1 .. 5, 1 ] = m[ 0 .. 4, 1 ] }
+      assert_raise(RuntimeError) { m[ 1 .. 4, 1 ] = m[ 0 .. 4, 1 ] }
+      assert_raise(RuntimeError) { m[ 1 ... 6, 1 ] }
+      assert_raise(RuntimeError) { m[ 1 ... 6, 1 ] = 0 }
+      assert_raise(RuntimeError) { m[ 1 ... 6, 1 ] = m[ 0 ... 5, 1 ] }
+      assert_raise(RuntimeError) { m[ 1 ... 5, 1 ] = m[ 0 ... 5, 1 ] }
+      assert_raise(RuntimeError) { m[ -1 .. 3, 1 ] }
+      assert_raise(RuntimeError) { m[ -1 .. 3, 1 ] = 0 }
+      assert_raise(RuntimeError) { m[ -1 .. 3, 1 ] = m[ 0 .. 4, 1 ] }
+      assert_raise(RuntimeError) { m[ -1 ... 3, 1 ] }
+      assert_raise(RuntimeError) { m[ -1 ... 3, 1 ] = 0 }
+      assert_raise(RuntimeError) { m[ -1 ... 3, 1 ] = m[ 0 ... 4, 1 ] }
       assert_nothing_raised { m[ 0 .. 4, 1 ] }
       assert_nothing_raised { m[ 0 .. 4, 1 ] = 0 }
       assert_nothing_raised { m[ 0 .. 4, 1 ] = m[ 0 .. 4, 0 ] }
       assert_nothing_raised { m[ 0 ... 5, 1 ] }
       assert_nothing_raised { m[ 0 ... 5, 1 ] = 0 }
       assert_nothing_raised { m[ 0 ... 5, 1 ] = m[ 0 ... 5, 0 ] }
-      assert_raise( RuntimeError ) { m[ 1, 1 .. 4 ] }
-      assert_raise( RuntimeError ) { m[ 1, 1 .. 4 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 1, 1 .. 4 ] = m[ 1, 0 .. 3 ] }
-      assert_raise( RuntimeError ) { m[ 1, 1 .. 3 ] = m[ 1, 0 .. 3 ] }
-      assert_raise( RuntimeError ) { m[ 1, 1 ... 5 ] }
-      assert_raise( RuntimeError ) { m[ 1, 1 ... 5 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 1, 1 ... 5 ] = m[ 1, 0 ... 4 ] }
-      assert_raise( RuntimeError ) { m[ 1, 1 ... 4 ] = m[ 1, 0 ... 4 ] }
-      assert_raise( RuntimeError ) { m[ 1, -1 .. 2 ] }
-      assert_raise( RuntimeError ) { m[ 1, -1 .. 2 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 1, -1 .. 2 ] = m[ 1, 0 .. 3 ] }
-      assert_raise( RuntimeError ) { m[ 1, -1 ... 2 ] }
-      assert_raise( RuntimeError ) { m[ 1, -1 ... 2 ] = 0 }
-      assert_raise( RuntimeError ) { m[ 1, -1 ... 2 ] = m[ 1, 0 ... 3 ] }
+      assert_raise(RuntimeError) { m[ 1, 1 .. 4 ] }
+      assert_raise(RuntimeError) { m[ 1, 1 .. 4 ] = 0 }
+      assert_raise(RuntimeError) { m[ 1, 1 .. 4 ] = m[ 1, 0 .. 3 ] }
+      assert_raise(RuntimeError) { m[ 1, 1 .. 3 ] = m[ 1, 0 .. 3 ] }
+      assert_raise(RuntimeError) { m[ 1, 1 ... 5 ] }
+      assert_raise(RuntimeError) { m[ 1, 1 ... 5 ] = 0 }
+      assert_raise(RuntimeError) { m[ 1, 1 ... 5 ] = m[ 1, 0 ... 4 ] }
+      assert_raise(RuntimeError) { m[ 1, 1 ... 4 ] = m[ 1, 0 ... 4 ] }
+      assert_raise(RuntimeError) { m[ 1, -1 .. 2 ] }
+      assert_raise(RuntimeError) { m[ 1, -1 .. 2 ] = 0 }
+      assert_raise(RuntimeError) { m[ 1, -1 .. 2 ] = m[ 1, 0 .. 3 ] }
+      assert_raise(RuntimeError) { m[ 1, -1 ... 2 ] }
+      assert_raise(RuntimeError) { m[ 1, -1 ... 2 ] = 0 }
+      assert_raise(RuntimeError) { m[ 1, -1 ... 2 ] = m[ 1, 0 ... 3 ] }
       assert_nothing_raised { m[ 1, 0 .. 3 ] }
       assert_nothing_raised { m[ 1, 0 .. 3 ] = 0 }
       assert_nothing_raised { m[ 1, 0 .. 3 ] = m[ 0, 0 .. 3 ] }
@@ -301,6 +301,9 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ].transpose(1, 0).to_a
     assert_equal [ [ [ 0, 3 ], [ 1, 4 ], [ 2, 5 ] ] ],
                  M(I, 3).indgen(3, 2, 1).transpose(1, 0, 2).to_a
+    assert_raise(RuntimeError) { M[[1, 2], [3, 4]].transpose }
+    assert_raise(RuntimeError) { M[[1, 2], [3, 4]].transpose 1, 2 }
+    assert_raise(RuntimeError) { M[[1, 2], [3, 4]].transpose 0, 0 }
    end
 
   def test_roll_unroll
@@ -431,7 +434,7 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal M[ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 1, 2, 3 ], [ 0, 0, 0 ], [ 0, 0, 0 ] ],
                  M[ [ 0, 0, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 0, 0 ] ].
                  convolve( s )
-    assert_raise( RuntimeError ) { S[ 1, 2, 3 ].convolve f }
+    assert_raise(RuntimeError) { S[ 1, 2, 3 ].convolve f }
   end
 
   def test_erode
@@ -464,15 +467,15 @@ class TC_MultiArray < Test::Unit::TestCase
     assert_equal [ [ [ 0, 1 ], [ 1, 0 ] ] ],
                  S[ C( 1, 0, 0 ), C( 0, 1, 0 ) ].
                  histogram( 2, 2, 1, :weight => 1 ).to_a
-    assert_raise( RuntimeError ) { S[ 1, 2, 3 ].histogram 4, 4 }
-    assert_raise( RuntimeError ) { M[ [ -1, 0 ] ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { M[ [ 0, -1 ] ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { M[ [ 3, 0 ] ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { M[ [ 0, 2 ] ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { [ S[ -1, 0 ], S[ 0, 1 ] ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { [ S[ 0, 3 ], S[ 0, 1 ] ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { [ S[ 0, 0, 1 ], S[ 0, 1 ] ].histogram 3, 2 }
-    assert_raise( RuntimeError ) { [ S[ 0, 1 ], S[ 0, 1 ] ].histogram 3 }
+    assert_raise(RuntimeError) { S[ 1, 2, 3 ].histogram 4, 4 }
+    assert_raise(RuntimeError) { M[ [ -1, 0 ] ].histogram 3, 2 }
+    assert_raise(RuntimeError) { M[ [ 0, -1 ] ].histogram 3, 2 }
+    assert_raise(RuntimeError) { M[ [ 3, 0 ] ].histogram 3, 2 }
+    assert_raise(RuntimeError) { M[ [ 0, 2 ] ].histogram 3, 2 }
+    assert_raise(RuntimeError) { [ S[ -1, 0 ], S[ 0, 1 ] ].histogram 3, 2 }
+    assert_raise(RuntimeError) { [ S[ 0, 3 ], S[ 0, 1 ] ].histogram 3, 2 }
+    assert_raise(RuntimeError) { [ S[ 0, 0, 1 ], S[ 0, 1 ] ].histogram 3, 2 }
+    assert_raise(RuntimeError) { [ S[ 0, 1 ], S[ 0, 1 ] ].histogram 3 }
   end
 
   def test_lut
@@ -486,19 +489,19 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 1 ], [ 0 ] ].lut( M[ [ 1, 2 ], [ 3, 4 ] ] )
     assert_equal S[ 2, 3 ], S[ C( 1, 0, 0 ), C( 0, 1, 0 ) ].
                  lut( M[ [ [ 1, 2 ], [ 3, 4 ] ] ] )
-    assert_raise( RuntimeError ) { S[ 0, 1, 2 ].lut M[ [ 1, 2 ], [ 3, 4 ] ] }
-    assert_raise( RuntimeError ) { M[ [ -1, 0 ] ].lut M[ [ 1, 2 ] ] }
-    assert_raise( RuntimeError ) { M[ [ 0, -1 ] ].lut M[ [ 1, 2 ] ] }
-    assert_raise( RuntimeError ) { M[ [ 2, 0 ] ].lut M[ [ 1, 2 ] ] }
-    assert_raise( RuntimeError ) { M[ [ 0, 1 ] ].lut M[ [ 1, 2 ] ] }
-    assert_raise( RuntimeError ) { M[ [ 1 ], [ 2 ] ].lut M[ [ 1, 2 ], [ 3, 4 ] ] }
-    assert_raise( RuntimeError ) { [ S[ -1, 0 ], S[ 0, 1 ] ].
+    assert_raise(RuntimeError) { S[ 0, 1, 2 ].lut M[ [ 1, 2 ], [ 3, 4 ] ] }
+    assert_raise(RuntimeError) { M[ [ -1, 0 ] ].lut M[ [ 1, 2 ] ] }
+    assert_raise(RuntimeError) { M[ [ 0, -1 ] ].lut M[ [ 1, 2 ] ] }
+    assert_raise(RuntimeError) { M[ [ 2, 0 ] ].lut M[ [ 1, 2 ] ] }
+    assert_raise(RuntimeError) { M[ [ 0, 1 ] ].lut M[ [ 1, 2 ] ] }
+    assert_raise(RuntimeError) { M[ [ 1 ], [ 2 ] ].lut M[ [ 1, 2 ], [ 3, 4 ] ] }
+    assert_raise(RuntimeError) { [ S[ -1, 0 ], S[ 0, 1 ] ].
                                    lut M[ [ 1, 2 ], [ 3, 4 ] ] }
-    assert_raise( RuntimeError ) { [ S[ 0, 0 ], S[ 0, 2 ] ].
+    assert_raise(RuntimeError) { [ S[ 0, 0 ], S[ 0, 2 ] ].
                                    lut M[ [ 1, 2 ], [ 3, 4 ] ] }
-    assert_raise( RuntimeError ) { [ S[ 0, 0, 1 ], S[ 0, 1 ] ].
+    assert_raise(RuntimeError) { [ S[ 0, 0, 1 ], S[ 0, 1 ] ].
                                    lut M[ [ 1, 2 ], [ 3, 4 ] ] }
-    assert_raise( RuntimeError ) { [ S[ 0, 1 ], S[ 0, 1 ] ].lut S[ 1, 2 ] }
+    assert_raise(RuntimeError) { [ S[ 0, 1 ], S[ 0, 1 ] ].lut S[ 1, 2 ] }
   end
 
   def test_warp
@@ -645,22 +648,22 @@ class TC_MultiArray < Test::Unit::TestCase
                  M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + S[ 1, 2 ]
     assert_equal M[ [ 2, 3, 4 ], [ 6, 7, 8 ] ],
                  S[ 1, 2 ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
-    assert_raise( RuntimeError ) do
+    assert_raise(RuntimeError) do
       M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + M[ [ 1, 2 ], [ 3, 4 ] ]
     end
-    assert_raise( RuntimeError ) do
+    assert_raise(RuntimeError) do
       M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + M[ [ 1, 2, 3 ] ]
     end
-    assert_raise( RuntimeError ) do
+    assert_raise(RuntimeError) do
       M[ [ 1, 2 ], [ 3, 4 ] ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] 
     end
-    assert_raise( RuntimeError ) do
+    assert_raise(RuntimeError) do
       M[ [ 1, 2, 3 ] ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
     end
-    assert_raise( RuntimeError ) do
+    assert_raise(RuntimeError) do
       M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ] + S[ 1, 2, 3 ]
     end
-    assert_raise( RuntimeError ) do
+    assert_raise(RuntimeError) do
       S[ 1, 2, 3 ] + M[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
     end
   end
@@ -716,7 +719,7 @@ class TC_MultiArray < Test::Unit::TestCase
                    M(t, 2)[[1, 2, 3], [4, 5, 6]].reshape(6)
       assert_equal M(t, 2)[[1, 2], [3, 4], [5, 6]],
                    M(t, 2)[[1, 2, 3], [4, 5, 6]].reshape(2, 3)
-      assert_raise( RuntimeError ) { M(t, 2)[[1, 2], [3, 4]].reshape 3 }
+      assert_raise(RuntimeError) { M(t, 2)[[1, 2], [3, 4]].reshape 3 }
     end
   end
 
@@ -739,7 +742,7 @@ class TC_MultiArray < Test::Unit::TestCase
                    mask(S[true, false, true])
       assert_equal S(t)[2, 5, 7], M(t, 2)[[1, 2, 3], [4, 5, 7]].
                    mask( M[[false, true, false], [false, true, true]])
-      assert_raise( RuntimeError ) do
+      assert_raise(RuntimeError) do
         M(t, 2)[[1, 2], [3, 4], [5, 7]].mask S[false, true]
       end
     end
@@ -754,7 +757,7 @@ class TC_MultiArray < Test::Unit::TestCase
                    S(t)[2, 5, 7].
                    unmask( M[[false, true, false], [false, true, true]],
                            :default => 0 )
-      assert_raise( RuntimeError ) { S(t)[1].unmask M[[true, true]] }
+      assert_raise(RuntimeError) { S(t)[1].unmask M[[true, true]] }
     end
   end
 

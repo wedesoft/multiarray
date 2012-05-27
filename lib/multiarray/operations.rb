@@ -272,7 +272,10 @@ module Hornetseye
     # @param [Array<Integer>] order New order of indices.
     #
     # @return [Node] Returns the transposed array.
-    def transpose( *order )
+    def transpose(*order)
+      if (0 ... dimension).to_a != order.sort
+        raise 'Each array index must be specified exactly once!'
+      end
       term = self
       variables = shape.reverse.collect do |i|
         var = Variable.new Hornetseye::INDEX( i )
