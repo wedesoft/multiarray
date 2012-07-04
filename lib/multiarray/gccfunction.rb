@@ -174,7 +174,7 @@ module Hornetseye
     #
     # @private
     def insn_return( value = nil )
-      self << "#{indent}return#{ value ? ' ' + value.get.to_s : '' };\n"
+      self << "#{indent}return #{ value ? value.get.to_s : 'Qnil' };\n"
     end
 
     # Add instructions to C function
