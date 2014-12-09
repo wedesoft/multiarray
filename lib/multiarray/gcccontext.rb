@@ -31,10 +31,10 @@ module Hornetseye
       # GCC compiler flags
       #
       # @private
-      CFLAGS = "-DNDEBUG #{CFG[ 'CFLAGS' ]} " +
+      CFLAGS = "-DNDEBUG -Wno-unused-function #{CFG[ 'CFLAGS' ]} " +
         "-I#{CFG['rubyhdrdir']} -I#{CFG['rubyhdrdir']}/#{CFG['arch']}"
     else
-      CFLAGS = "-DNDEBUG #{CFG[ 'CFLAGS' ]} " +
+      CFLAGS = "-DNDEBUG -Wno-unused-function #{CFG[ 'CFLAGS' ]} " +
         "-I#{CFG['archdir']}"
     end
 
