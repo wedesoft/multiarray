@@ -901,7 +901,7 @@ module Hornetseye
           close[i].call
         end
       end
-      retval[ *target ] = self[ *source ]
+      retval[ *target ] = self[ *source ] unless target.any? { |t| t.size == 0 }
       for i in 0 ... shape.size
         callcc do |c|
           close[i] = c
