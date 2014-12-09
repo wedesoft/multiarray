@@ -63,7 +63,7 @@ module Hornetseye
             source = @source.dimension == 0 ? @source :
                                               @source.element(INT.new(i))
             Store.new(dest, source).demand
-          end  
+          end
         elsif @dest.class < Pointer_
           @dest.store @source.demand
         else
@@ -111,7 +111,7 @@ module Hornetseye
       vars2, values2, term2 = @source.strip
       return vars1 + vars2, values1 + values2, Store.new( term1, term2 )
     end
-  
+
     # Check whether this term is compilable
     #
     # @return [Boolean] Returns whether this term is compilable.
