@@ -27,7 +27,10 @@ module Hornetseye
     # @private
     CFG = RbConfig::CONFIG
 
-    if CFG[ 'rubyhdrdir' ]
+    if CFG['rubyarchhdrdir']
+      CFLAGS = "-DNDEBUG -Wno-unused-function #{CFG[ 'CFLAGS' ]} " +
+        "-I#{CFG['rubyhdrdir']} -I#{CFG['rubyarchhdrdir']}"
+    elsif CFG[ 'rubyhdrdir' ]
       # GCC compiler flags
       #
       # @private
