@@ -14,5 +14,5 @@ DESCRIPTION = %q{This Ruby-extension defines Hornetseye::MultiArray and other na
 LICENSE = 'GPL-3+'
 AUTHOR = %q{Jan Wedekind}
 EMAIL = %q{jan@wedesoft.de}
-HOMEPAGE = %q{http://wedesoft.github.com/multiarray/}
+HOMEPAGE = %q{http://wedesoft.github.io/multiarray/}
 
