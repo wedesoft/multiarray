@@ -378,10 +378,10 @@ class FalseClass
 
 end
 
-# Some methods of +Fixnum+ are modified
+# Some methods of +Integer+ are modified
 #
 # @private
-class Fixnum
+class Integer
 
   # +&+ is modified to work with this library
   #

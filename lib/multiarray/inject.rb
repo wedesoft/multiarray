@@ -139,7 +139,7 @@ module Hornetseye
         values1 + values2 + values3 + meta_values,
         self.class.new( term1, var, term2, term3, @var1, @var2 )
     end
- 
+
     # Substitute variables
     #
     # Substitute the variables with the values given in the hash.
