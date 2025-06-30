@@ -1,7 +1,7 @@
 require 'rake'
 
 PKG_NAME = 'multiarray'
-PKG_VERSION = '1.0.4'
+PKG_VERSION = '1.0.5'
 RB_FILES = FileList[ 'config.rb', 'lib/**/*.rb' ]
 TC_FILES = FileList[ 'test/tc_*.rb' ]
 TS_FILES = FileList[ 'test/ts_*.rb' ]
